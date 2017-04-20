@@ -1,0 +1,12 @@
+# Eclipse
+.metadata
+.project
+.settings
+.classpath
+
+# Scala IDE (eclipse plugin)
+.cache-main
+.cache-tests
+
+# Build output
+**/target/**
