@@ -5,6 +5,11 @@ object Point2D {
 }
 
 class Point2D(var x:Double, var y:Double) {
+  def displace(components:Components2D) = {
+    this.x += components.x;
+    this.y += components.y;
+  }
+  
   override def clone = new Point2D(x, y);
   
   override def hashCode = x.hashCode + y.hashCode;
