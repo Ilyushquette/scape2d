@@ -8,5 +8,8 @@
 .cache-main
 .cache-tests
 
+# SBT
+.cache
+
 # Build output
 **/target/**
