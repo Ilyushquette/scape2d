@@ -15,5 +15,11 @@
       <version>1.01-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>scape.scape2d</groupId>
+      <artifactId>scape2d-debugger</artifactId>
+      <version>1.01-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 </project>
