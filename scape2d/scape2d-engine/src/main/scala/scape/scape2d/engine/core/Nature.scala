@@ -5,13 +5,13 @@ import scala.collection.mutable.LinkedHashSet
 import org.apache.log4j.Logger
 import scape.scape2d.engine.matter.Event
 import scape.scape2d.engine.matter.Particle
-import scape.scape2d.engine.motion.createMotionTransformer
+import scape.scape2d.engine.motion.moveParticle;
 
 class Nature(val fps:Integer) extends Actor {
   private val log = Logger.getLogger(getClass);
   private val particles = new LinkedHashSet[Particle];
   val transformation = new Transformation;
-  transformation += createMotionTransformer(fps);
+  transformation += (moveParticle(fps, _:Particle));
   
   def addParticle(particle:Particle) = particles.add(particle);
   
