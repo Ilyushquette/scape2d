@@ -63,6 +63,7 @@ class Nature(val fps:Integer) extends Actor {
   private def dispatchInputs() = {
     log.debug("Input dispatching phase starts...");
     receiveWithin(0) {
+      case ExertForce(p, f) => particleForces.get(p).get += f;
       case unknown => log.warn("Unknown input " + unknown);
     }
     log.debug("Input dispatching phase ended.");
