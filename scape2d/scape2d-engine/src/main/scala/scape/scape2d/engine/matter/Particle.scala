@@ -14,7 +14,7 @@ import scape.scape2d.engine.geom.Vector2D
  * 	<li>velocity - magnitude in meters, angle in degrees (meters per second at the direction)</li>
  * </ul>
  */
-class Particle(val position:Point2D, val radius:Double, val mass:Double, val velocity:Vector2D) {
+class Particle(val position:Point2D, val radius:Double, val mass:Double, var velocity:Vector2D) {
   private[engine] val motionListeners = new LinkedHashSet[MotionEvent => Unit];
   
   def addMotionListener(listener:MotionEvent => Unit) = motionListeners.add(listener);
