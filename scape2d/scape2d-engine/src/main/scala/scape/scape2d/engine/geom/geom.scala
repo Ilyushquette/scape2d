@@ -16,7 +16,7 @@ package object geom {
     new Vector2D(magnitude, angle);
   }
   
-  def sum(vectors:Vector2D*) = {
+  def sum(vectors:Iterable[Vector2D]) = {
     val foldedComponents = vectors.foldLeft(Components2D(0, 0))((acc, cur) => {
       val components = calculateComponents(cur);
       Components2D(acc.x + components.x, acc.y + components.y);
