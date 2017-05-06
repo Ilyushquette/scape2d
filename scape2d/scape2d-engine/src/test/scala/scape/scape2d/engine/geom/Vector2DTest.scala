@@ -6,8 +6,10 @@ import org.junit.Test
 class Vector2DTest {
   @Test
   def testVectorFromComponents = {
-    val components = Components2D(6.761480784023478, 1.8117333157176452);
-    Assert.assertEquals(new Vector2D(7, 15), Vector2D.from(components));
+    val components = Components2D(3, 3);
+    val vector = Vector2D.from(components);
+    Assert.assertEquals(4.24264, vector.magnitude, 0.00001);
+    Assert.assertEquals(45, vector.angle, 0.00001);
   }
   
   @Test
@@ -19,30 +21,37 @@ class Vector2DTest {
   @Test
   def testCalculateComponents = {
     val vector = new Vector2D(7, 15);
-    Assert.assertEquals(Components2D(6.761480784023478, 1.8117333157176452), vector.components);
+    val components = vector.components;
+    Assert.assertEquals(6.76148, components.x, 0.00001);
+    Assert.assertEquals(1.81173, components.y, 0.00001);
   }
   
   @Test
   def testSumOpposedVectors = {
     val vector = new Vector2D(20, 0) + new Vector2D(30, 180);
-    Assert.assertEquals(new Vector2D(10, 180), vector);
+    assertVectors(new Vector2D(10, 180), vector);
   }
   
   @Test
   def testSumUnidirectionalVectors = {
     val vector = new Vector2D(10, 45) + new Vector2D(7, 45) + new Vector2D(30, 45);
-    Assert.assertEquals(new Vector2D(47, 45), vector);
+    assertVectors(new Vector2D(47, 45), vector);
   }
   
   @Test
   def testSubtractOpposedVectors = {
     val vector = new Vector2D(4, 90) - new Vector2D(5, 270);
-    Assert.assertEquals(new Vector2D(9, 90), vector);
+    assertVectors(new Vector2D(9, 90), vector);
   }
   
   @Test
   def testSubtractUnidirectionalVectors = {
     val vector = new Vector2D(3, 315) - new Vector2D(4, 315) - new Vector2D(5, 315);
-    Assert.assertEquals(new Vector2D(6.000000000000001, 135), vector);
+    assertVectors(new Vector2D(6, 135), vector);
+  }
+  
+  private def assertVectors(expected:Vector2D, actual:Vector2D) = {
+    Assert.assertEquals(expected.magnitude, actual.magnitude, 0.00001);
+    Assert.assertEquals(expected.angle, actual.angle, 0.00001);
   }
 }
