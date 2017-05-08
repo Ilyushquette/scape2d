@@ -6,6 +6,6 @@ import scape.scape2d.engine.matter.Particle
 class Debugger(val view:DebugView) {
   def trackParticle(particle:Particle) = {
     view.renderParticle(particle);
-    particle.addMotionListener(view.renderMotion(_));
+    particle.addMotionListener(view.renderMotion(_, _));
   }
 }

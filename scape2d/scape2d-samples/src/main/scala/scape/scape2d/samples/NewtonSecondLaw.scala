@@ -19,11 +19,11 @@ object NewtonSecondLaw {
   def main(args:Array[String]):Unit = {
     val nature = new Nature(60);
     val metalParticle = new Particle(Point2D.origin, 5, 2, new Vector2D(1, 45));
-    metalParticle.addMotionListener(_ => {
+    metalParticle.addMotionListener((_, _) => {
       nature ! ExertForce(metalParticle, new Vector2D(0.064, 45));
       nature ! ExertForce(metalParticle, new Vector2D(0.034, 0));
     });
-    nature.addParticle(metalParticle);
+    nature.add(metalParticle);
     nature.start;
     
     val frame = new JFrame("Scape2D Debugger");

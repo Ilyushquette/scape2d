@@ -1,6 +1,5 @@
 package scape.scape2d.debugger.view
 
-import scape.scape2d.engine.matter.MotionEvent
 import scape.scape2d.engine.matter.Particle
 import scape.scape2d.engine.geom.Point2D
 
@@ -13,10 +12,10 @@ class ShapeDrawingDebugView(val shapeDrawer:ShapeDrawer, val cmpp:Double) extend
     shapeDrawer.draw(Circle(scaledCoords._1, scaledCoords._2, scaledRadius));
   }
   
-  override def renderMotion(event:MotionEvent) = {
-    val oldScaledCoords = scaleCoordinates(event.oldPosition);
-    val newScaledCoords = scaleCoordinates(event.updatedParticle.position);
-    val scaledRadius = scaleRadius(event.updatedParticle.radius);
+  override def renderMotion(oldPosition:Point2D, particle:Particle) = {
+    val oldScaledCoords = scaleCoordinates(oldPosition);
+    val newScaledCoords = scaleCoordinates(particle.position);
+    val scaledRadius = scaleRadius(particle.radius);
     val clearable = Circle(oldScaledCoords._1, oldScaledCoords._2, scaledRadius);
     val drawable = Circle(newScaledCoords._1, newScaledCoords._2, scaledRadius);
     shapeDrawer.clearAndDraw(clearable, drawable);

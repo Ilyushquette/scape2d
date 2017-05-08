@@ -1,26 +1,26 @@
 package scape.scape2d.engine.core
 
 import scala.actors.Actor
-import scala.actors.TIMEOUT;
-import scala.collection.mutable.HashMap
-import scala.collection.mutable.LinkedHashSet
-import org.apache.log4j.Logger
-import scape.scape2d.engine.matter.Event
-import scape.scape2d.engine.matter.Particle
-import scape.scape2d.engine.motion._;
+import scala.actors.TIMEOUT
 import scala.collection.mutable.ArrayBuffer
-import scape.scape2d.engine.geom.Vector2D
+
+import org.apache.log4j.Logger
+
+import scape.scape2d.engine.matter.Particle
+import scape.scape2d.engine.motion.Movable
+import scape.scape2d.engine.motion.integrateMotion
 
 class Nature(val fps:Integer) extends Actor {
   private val log = Logger.getLogger(getClass);
-  private val particles = new LinkedHashSet[Particle];
-  private val particleForces = new HashMap[Particle, ArrayBuffer[Vector2D]];
-  val transformation = new Transformation;
-  transformation += (moveParticle(fps, _:Particle));
+  private val integrations = new ArrayBuffer[Long => Unit];
   
-  def addParticle(particle:Particle) = {
-    particles.add(particle);
-    particleForces.put(particle, new ArrayBuffer);
+  def add(timeSubject:TimeDependent) = integrations += timeSubject.integrate _;
+  
+  def add(movable:Movable) = integrations += (integrateMotion(movable, _:Long));
+  
+  def add(particle:Particle) = {
+    integrations += particle.integrateForces _;
+    integrations += (integrateMotion(particle, _:Long));
   }
   
   override def act = {
@@ -28,9 +28,7 @@ class Nature(val fps:Integer) extends Actor {
     log.info("Nature has been started with timestep " + timestep);
     loop {
       val cycleStart = System.currentTimeMillis;
-      applyParticleForces();
-      val events = transform();
-      handleEvents(events);
+      integrate(timestep);
       dispatchInputs();
       val cycleMillis = System.currentTimeMillis - cycleStart;
       val cooldown = timestep - cycleMillis;
@@ -39,26 +37,10 @@ class Nature(val fps:Integer) extends Actor {
     }
   }
   
-  private def applyParticleForces() = {
-    log.debug("Forces application phase starts...");
-    particleForces.foreach { case(particle, forces) => 
-      applyForces(particle, forces);
-      forces.clear();
-    };
-    log.debug("Forces application phase ended.");
-  }
-  
-  private def transform() = {
-    log.debug("Transformation phase starts...");
-    val events = particles.flatMap(transformation(_));
-    log.debug("Transformation phase ended. %d events generated.".format(events.size));
-    events;
-  }
-  
-  private def handleEvents(events:LinkedHashSet[Event]) = {
-    log.debug("Event handling phase starts...");
-    events.foreach(_.triggerListeners);
-    log.debug("Event handling phase ended.");
+  private def integrate(timestep:Long) = {
+    log.debug("Time integration phase starts...");
+    integrations.foreach(_(timestep));
+    log.debug("Time integration phase ended.");
   }
   
   private def dispatchInputs() = {
@@ -66,7 +48,7 @@ class Nature(val fps:Integer) extends Actor {
     var endOfMailbox = false;
     while(!endOfMailbox) {
       receiveWithin(0) {
-        case ExertForce(p, f) => particleForces.get(p).get += f;
+        case ExertForce(p, f) => p.forces += f;
         case TIMEOUT => endOfMailbox = true;
         case unknown => log.warn("Unknown input " + unknown);
       }
