@@ -10,6 +10,11 @@ class Point2D(var x:Double, var y:Double) {
     this.y += components.y;
   }
   
+  def locate(point:Point2D) = {
+    this.x = point.x;
+    this.y = point.y;
+  }
+  
   override def clone = new Point2D(x, y);
   
   override def hashCode = x.hashCode + y.hashCode;
