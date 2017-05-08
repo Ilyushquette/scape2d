@@ -53,6 +53,7 @@ class Nature(fps:Double) extends Actor {
     while(!endOfMailbox) {
       receiveWithin(0) {
         case ExertForce(p, f) => p.forces += f;
+        case ScaleTime(fm, tm) => timescale = scaleTime(fm, tm);
         case TIMEOUT => endOfMailbox = true;
         case unknown => log.warn("Unknown input " + unknown);
       }
