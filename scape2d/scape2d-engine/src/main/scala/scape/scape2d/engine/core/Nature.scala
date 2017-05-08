@@ -10,9 +10,10 @@ import scape.scape2d.engine.matter.Particle
 import scape.scape2d.engine.motion.Movable
 import scape.scape2d.engine.motion.integrateMotion
 
-class Nature(val fps:Integer) extends Actor {
+class Nature(fps:Double) extends Actor {
   private val log = Logger.getLogger(getClass);
   private val integrations = new ArrayBuffer[Long => Unit];
+  private var timescale = scaleTime(1, 1);
   
   def add(timeSubject:TimeDependent) = integrations += timeSubject.integrate _;
   
@@ -23,16 +24,19 @@ class Nature(val fps:Integer) extends Actor {
     integrations += (integrateMotion(particle, _:Long));
   }
   
+  private def scaleTime(fm:Double, tm:Double) = 1000 / (fps * fm) <-> 1000 / fps * tm;
+  
+  implicit def toTimescaleBuilder(frequency:Double):TimescaleBuilder = new TimescaleBuilder(frequency);
+  
   override def act = {
-    val timestep = 1000 / fps;
-    log.info("Nature has been started with timestep " + timestep);
+    log.info("Nature has been started");
     loop {
       val cycleStart = System.currentTimeMillis;
-      integrate(timestep);
+      integrate(timescale.timestep);
       dispatchInputs();
       val cycleMillis = System.currentTimeMillis - cycleStart;
-      val cooldown = timestep - cycleMillis;
-      log.debug("Cycle finished! Took %d/%d ms".format(cycleMillis, timestep));
+      val cooldown = timescale.frequency - cycleMillis;
+      log.debug("Cycle finished! Took %d/%d ms".format(cycleMillis, timescale.frequency));
       Thread.sleep(if (cooldown > 0) cooldown else 0);
     }
   }
