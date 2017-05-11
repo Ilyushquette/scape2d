@@ -50,6 +50,12 @@ class Vector2DTest {
     assertVectors(new Vector2D(6, 135), vector);
   }
   
+  @Test
+  def testDotProduct = Assert.assertEquals(-9, new Vector2D(3, 90) * new Vector2D(4.24264, 315), 0.00001);
+  
+  @Test
+  def testDotProductWithZeroLength = Assert.assertEquals(0, new Vector2D(3, 90) * new Vector2D(0, 180), 0.00001);
+  
   private def assertVectors(expected:Vector2D, actual:Vector2D) = {
     Assert.assertEquals(expected.magnitude, actual.magnitude, 0.00001);
     Assert.assertEquals(expected.angle, actual.angle, 0.00001);
