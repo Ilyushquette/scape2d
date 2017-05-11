@@ -24,4 +24,13 @@ class Point2DTest {
     point.locate(target);
     Assert.assertEquals(target, point);
   }
+  
+  @Test
+  def testPointSubtraction = {
+    val p = new Point2D(1, 0);
+    val q = new Point2D(4, -3);
+    val vector = p - q;
+    Assert.assertEquals(vector.magnitude, 4.24264, 0.00001);
+    Assert.assertEquals(vector.angle, 135, 0.00001);
+  }
 }

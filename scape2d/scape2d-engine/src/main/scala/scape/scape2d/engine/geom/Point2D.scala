@@ -15,6 +15,8 @@ class Point2D(var x:Double, var y:Double) {
     this.y = point.y;
   }
   
+  def -(point:Point2D) = Vector2D.from(Components2D(x - point.x, y - point.y));
+  
   override def clone = new Point2D(x, y);
   
   override def hashCode = x.hashCode + y.hashCode;
