@@ -26,7 +26,7 @@ extends Movable with Spherical {
    * acceleration in meters per second per timestep too.
    * Final velocity of the particle in meters per second.
    */
-  def integrateForces(timestep:Long) = {
+  def integrateForces(timestep:Double) = {
     if(!forces.isEmpty) {
       val netforce = forces.reduce(_ + _);
       val acceleration = new Vector2D(netforce.magnitude / mass, netforce.angle);

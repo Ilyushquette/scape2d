@@ -7,7 +7,7 @@ import org.apache.log4j.Logger
 package object motion {
   private val log = Logger.getLogger(getClass);
   
-  def getPositionAfter(movable:Movable, timestep:Long) = {
+  def getPositionAfter(movable:Movable, timestep:Double) = {
     if(timestep <= 0) throw new IllegalArgumentException("Time is irreversible. Timestep=" + timestep);
     val currentPosition = movable.position.clone;
     if(movable.velocity.magnitude > 0) {
@@ -17,7 +17,7 @@ package object motion {
     }else currentPosition;
   }
   
-  private[engine] def integrateMotion(movable:Movable, timestep:Long) = {
+  private[engine] def integrateMotion(movable:Movable, timestep:Double) = {
     log.debug("Movable at %s with velocity %s".format(movable.position, movable.velocity));
     val nextPosition = getPositionAfter(movable, timestep);
     if(movable.position != nextPosition) {
@@ -28,7 +28,7 @@ package object motion {
     }
   }
   
-  def scaleVelocity(velocity:Vector2D, timestep:Long) = {
+  def scaleVelocity(velocity:Vector2D, timestep:Double) = {
     val timescale = 1000 / timestep;
     new Vector2D(velocity.magnitude / timescale, velocity.angle);
   }

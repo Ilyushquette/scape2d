@@ -12,16 +12,16 @@ import scape.scape2d.engine.motion.integrateMotion
 
 class Nature(fps:Double) extends Actor {
   private val log = Logger.getLogger(getClass);
-  private val integrations = new ArrayBuffer[Long => Unit];
+  private val integrations = new ArrayBuffer[Double => Unit];
   private var timescale = scaleTime(1, 1);
   
   def add(timeSubject:TimeDependent) = integrations += timeSubject.integrate _;
   
-  def add(movable:Movable) = integrations += (integrateMotion(movable, _:Long));
+  def add(movable:Movable) = integrations += (integrateMotion(movable, _:Double));
   
   def add(particle:Particle) = {
     integrations += particle.integrateForces _;
-    integrations += (integrateMotion(particle, _:Long));
+    integrations += (integrateMotion(particle, _:Double));
   }
   
   private def scaleTime(fm:Double, tm:Double) = 1000 / (fps * fm) <-> 1000 / fps * tm;
@@ -41,7 +41,7 @@ class Nature(fps:Double) extends Actor {
     }
   }
   
-  private def integrate(timestep:Long) = {
+  private def integrate(timestep:Double) = {
     log.debug("Time integration phase starts...");
     integrations.foreach(_(timestep));
     log.debug("Time integration phase ended.");

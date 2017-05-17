@@ -8,7 +8,7 @@ import scape.scape2d.engine.geom.Vector2D
 import scape.scape2d.engine.motion.Movable
 
 class DetectionStrategyValidator {
-  type CollisionDetector = (Movable with Spherical, Movable with Spherical, Long) => Option[Double];
+  type CollisionDetector = (Movable with Spherical, Movable with Spherical, Double) => Option[Double];
   
   def checkTrajectoriesOverlayFrontalCollision(detect:CollisionDetector) = {
     val s1 = new MovableSphere(5, new Point2D(10, 10), new Vector2D(15, 0));

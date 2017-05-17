@@ -12,7 +12,7 @@ import scape.scape2d.engine.motion.Movable
 import scape.scape2d.engine.motion.collision.DetectionStrategyValidator
 
 object DetectionStrategyTest {
-  type CollisionDetector = (Movable with Spherical, Movable with Spherical, Long) => Option[Double];
+  type CollisionDetector = (Movable with Spherical, Movable with Spherical, Double) => Option[Double];
   
   @Parameterized.Parameters
   def instancesToTest = Arrays.asList(Array(() => detectWithDiscriminant _));
