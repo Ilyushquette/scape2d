@@ -16,7 +16,7 @@ package object detection {
     val discriminant = (b * b) - (4 * a * c);
     if(discriminant > 0) {
       val coefficient = (-b - Math.sqrt(discriminant)) / (2 * a);
-      if(coefficient > 0 && coefficient <= 1) Some(coefficient);
+      if(coefficient > 0 && coefficient <= 1) Some(coefficient * timestep);
       else None;
     }else None;
   }
