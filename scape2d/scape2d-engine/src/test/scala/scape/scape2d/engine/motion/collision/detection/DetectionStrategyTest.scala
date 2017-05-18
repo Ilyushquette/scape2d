@@ -7,19 +7,15 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
 
-import scape.scape2d.engine.geom.Spherical
-import scape.scape2d.engine.motion.Movable
 import scape.scape2d.engine.motion.collision.DetectionStrategyValidator
 
 object DetectionStrategyTest {
-  type CollisionDetector = (Movable with Spherical, Movable with Spherical, Double) => Option[Double];
-  
   @Parameterized.Parameters
   def instancesToTest = Arrays.asList(Array(() => detectWithDiscriminant _));
 }
 
 @RunWith(classOf[Parameterized])
-class DetectionStrategyTest(val createDetector:() => DetectionStrategyTest.CollisionDetector) {
+class DetectionStrategyTest(val createDetector:() => DetectionStrategy) {
   @Test
   def testTrajectoriesOverlayFrontalCollision = {
     validator.checkTrajectoriesOverlayFrontalCollision(createDetector());
