@@ -1,10 +1,17 @@
 package scape.scape2d.engine.motion.collision
 
-import scape.scape2d.engine.motion._
 import scape.scape2d.engine.geom.Spherical
+import scape.scape2d.engine.motion.Movable
+import scape.scape2d.engine.motion.scaleVelocity
+import org.apache.log4j.Logger
 
 package object detection {
-  def detectWithDiscriminant[T <: Movable with Spherical](s1:T, s2:T, timestep:Double) = {
+  type MovableSphere = Movable with Spherical;
+  type DetectionStrategy = (MovableSphere, MovableSphere, Double) => Option[Double];
+  
+  private val log = Logger.getLogger(getClass);
+  
+  def detectWithDiscriminant[T <: MovableSphere](s1:T, s2:T, timestep:Double) = {
     val sumOfRadii = s1.radius + s2.radius;
     val A = s1.position - s2.position;
     val B = scaleVelocity(s1.velocity, timestep) - scaleVelocity(s2.velocity, timestep);
@@ -19,5 +26,17 @@ package object detection {
       if(coefficient > 0 && coefficient <= 1) Some(coefficient * timestep);
       else None;
     }else None;
+  }
+  
+  def bruteForce[T <: MovableSphere](detect:DetectionStrategy) = {
+    new DetectionStrategyValidator().check(detect);
+    log.info("Detection strategy is valid! Returning combination based brute force algorithm");
+    (mss:Iterable[T], timestep:Double) => {
+      val combinations = mss.toSeq.combinations(2);
+      val detections = combinations.map(c => (c, detect(c(0), c(1), timestep)));
+      detections.collect {
+        case (Seq(a, b), Some(time)) => Collision((a, b), time);
+      }
+    }
   }
 }
