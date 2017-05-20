@@ -8,12 +8,20 @@ import org.apache.log4j.Logger
 
 import scape.scape2d.engine.matter.Particle
 import scape.scape2d.engine.motion.Movable
-import scape.scape2d.engine.motion.integrateMotion
+import scape.scape2d.engine.motion.collision._
+import scape.scape2d.engine.motion.collision.detection._
+import scape.scape2d.engine.motion._
 
-class Nature(fps:Double) extends Actor {
+object Nature {
+  type CollisionDetector = (Iterable[Particle], Double) => Iterator[Collision[Particle]];
+}
+
+class Nature(val detectCollisions:Nature.CollisionDetector, fps:Double) extends Actor {
   private val log = Logger.getLogger(getClass);
   private val integrations = new ArrayBuffer[Double => Unit];
   private var timescale = scaleTime(1, 1);
+  
+  def this(fps:Double) = this(bruteForce(detectWithDiscriminant _), fps);
   
   def add(timeSubject:TimeDependent) = integrations += timeSubject.integrate _;
   
