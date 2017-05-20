@@ -23,7 +23,7 @@ class DetectionStrategyValidator {
     val s2 = new Mock(5, new Point2D(30, 10), new Vector2D(15, 180));
     val detection = detect(s1, s2, 1000);
     val time = detection.getOrElse(throw new NoDetectionException("Frontal collision not detected"));
-    if(!DoubleMath.fuzzyEquals(333.33333, time, 0.00001)) {
+    if(!DoubleMath.fuzzyEquals(663.33333, time, 0.00001)) {
       throw new ContactTimePredictionException("Frontal collision contact time prediction was incorrect");
     }
   }
@@ -52,7 +52,7 @@ class DetectionStrategyValidator {
     val s2 = new Mock(5, new Point2D(30, 10), new Vector2D(15, 0));
     val detection = detect(s1, s2, 1000);
     val time = detection.getOrElse(throw new NoDetectionException("Rear collision not detected"));
-    if(!DoubleMath.fuzzyEquals(500, time, 0.00001)) {
+    if(!DoubleMath.fuzzyEquals(995, time, 0.00001)) {
       throw new ContactTimePredictionException("Rear collision contact time prediction was incorrect");
     }
   }
@@ -72,7 +72,7 @@ class DetectionStrategyValidator {
     val s2 = new Mock(5, new Point2D(60, 150), new Vector2D(100, 270));
     val detection = detect(s1, s2, 1000);
     val time = detection.getOrElse(throw new NoDetectionException("No cross collision detected"));
-    if(!DoubleMath.fuzzyEquals(429.28932, time, 0.00001)) {
+    if(!DoubleMath.fuzzyEquals(499.29289, time, 0.00001)) {
       throw new ContactTimePredictionException("Crossed collision contact time prediction was incorrect");
     }
   }
