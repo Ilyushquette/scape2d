@@ -1,5 +1,7 @@
 package scape.scape2d.engine.geom
 
+import java.lang.Math._
+
 object Point2D {
   def origin = new Point2D(0, 0);
 }
@@ -14,6 +16,8 @@ class Point2D(var x:Double, var y:Double) {
     this.x = point.x;
     this.y = point.y;
   }
+  
+  def distanceTo(point:Point2D) = hypot(point.x - x, point.y - y);
   
   def -(point:Point2D) = Vector2D.from(Components2D(x - point.x, y - point.y));
   
