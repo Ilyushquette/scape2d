@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>scape2d</artifactId>
+    <groupId>scape.scape2d</groupId>
+    <version>1.01-SNAPSHOT</version>
+  </parent>
+  <artifactId>scape2d-benchmark</artifactId>
+  <!--
+  Warning from openjdk.java.net JMH subproject:
+  Running benchmarks from the IDE is generally not recommended
+  due to generally uncontrolled environment in which the benchmarks run.
+  So to run benchmarks:
+  java -jar target/scape2d-benchmark.jar
+  -->
+  <properties>
+    <jmh.version>1.8</jmh.version>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>scape.scape2d</groupId>
+      <artifactId>scape2d-engine</artifactId>
+      <version>1.01-SNAPSHOT</version>
+    </dependency>
+  
+    <!-- Java Microbenchmark Harness -->
+    <dependency>
+      <groupId>org.openjdk.jmh</groupId>
+      <artifactId>jmh-core</artifactId>
+      <version>${jmh.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.8</version>
+        <executions>
+          <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${project.basedir}/src/main/scala</source>
+                <source>${project.basedir}/target/generated-sources/jmh</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.2.1</version>
+        <executions>
+          <execution>
+            <phase>process-sources</phase>
+            <goals>
+              <goal>java</goal>
+            </goals>
+            <configuration>
+              <includePluginDependencies>true</includePluginDependencies>
+              <mainClass>org.openjdk.jmh.generators.bytecode.JmhBytecodeGenerator</mainClass>
+              <arguments>
+                <argument>${project.basedir}/target/classes/</argument>
+                <argument>${project.basedir}/target/generated-sources/jmh/</argument>
+                <argument>${project.basedir}/target/classes/</argument>
+                <argument>default</argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-generator-bytecode</artifactId>
+            <version>${jmh.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.2</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <finalName>scape2d-benchmark</finalName>
+              <transformers>
+                <transformer
+                  implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>org.openjdk.jmh.Main</mainClass>
+                </transformer>
+              </transformers>
+              <filters>
+                <filter>
+                  <!-- Shading signed JARs will fail without this. http://stackoverflow.com/questions/999489/invalid-signature-file-when-attempting-to-run-a-jar -->
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
