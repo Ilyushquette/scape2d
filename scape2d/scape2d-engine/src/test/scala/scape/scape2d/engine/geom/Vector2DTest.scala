@@ -62,6 +62,12 @@ class Vector2DTest {
     Assert.assertEquals(new Vector2D(16, 180), sourceVector * 4);
   }
   
+  @Test
+  def testOpposite = {
+    val sourceVector = new Vector2D(5, 320)
+    Assert.assertEquals(new Vector2D(5, 140), sourceVector.opposite);
+  }
+  
   private def assertVectors(expected:Vector2D, actual:Vector2D) = {
     Assert.assertEquals(expected.magnitude, actual.magnitude, 0.00001);
     Assert.assertEquals(expected.angle, actual.angle, 0.00001);
