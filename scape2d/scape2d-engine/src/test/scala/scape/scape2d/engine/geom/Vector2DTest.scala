@@ -56,6 +56,12 @@ class Vector2DTest {
   @Test
   def testDotProductWithZeroLength = Assert.assertEquals(0, new Vector2D(3, 90) * new Vector2D(0, 180), 0.00001);
   
+  @Test
+  def testVectorMagnitudeMultiplication = {
+    val sourceVector = new Vector2D(4, 180);
+    Assert.assertEquals(new Vector2D(16, 180), sourceVector * 4);
+  }
+  
   private def assertVectors(expected:Vector2D, actual:Vector2D) = {
     Assert.assertEquals(expected.magnitude, actual.magnitude, 0.00001);
     Assert.assertEquals(expected.angle, actual.angle, 0.00001);
