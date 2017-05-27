@@ -24,7 +24,7 @@ class SwingShapeDrawer(val dimension:Dimension, val backgroundColor:Color) exten
   
   override def getPreferredSize = new Dimension(dimension);
   
-  override def draw(shape:Shape) = this ! (render(shape, backgroundColor, _:Graphics2D));
+  override def draw(shape:Shape) = this ! (render(shape, Color.RED, _:Graphics2D));
   
   override def clearAndDraw(clearable:Shape, drawable:Shape) = {
     this ! (g => {

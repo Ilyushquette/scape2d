@@ -18,21 +18,15 @@ object Nature {
 
 class Nature(val detectCollisions:Nature.CollisionDetector, fps:Double) extends Actor {
   private val log = Logger.getLogger(getClass);
-  private val integrations = new ArrayBuffer[Double => Unit];
+  private val timeSubjects = new ArrayBuffer[TimeDependent];
   private val particles = new ArrayBuffer[Particle];
   private var timescale = scaleTime(1, 1);
   
   def this(fps:Double) = this(bruteForce(detectWithDiscriminant _), fps);
   
-  def add(timeSubject:TimeDependent) = integrations += timeSubject.integrate _;
+  def add(timeSubject:TimeDependent) = timeSubjects += timeSubject;
   
-  def add(movable:Movable) = integrations += (integrateMotion(movable, _:Double));
-  
-  def add(particle:Particle) = {
-    integrations += particle.integrateForces _;
-    integrations += (integrateMotion(particle, _:Double));
-    particles += particle;
-  }
+  def add(particle:Particle) = particles += particle;
   
   private def scaleTime(fm:Double, tm:Double) = 1000 / (fps * fm) <-> 1000 / fps * tm;
   
@@ -53,19 +47,32 @@ class Nature(val detectCollisions:Nature.CollisionDetector, fps:Double) extends 
   
   private def integrate(timestep:Double):Unit = {
     log.debug("Time integration phase starts...");
+    particles.foreach(_.integrateForces());
     val collisions = detectCollisions(particles, timestep);
     if(!collisions.isEmpty) {
       val earliestCollision = collisions.minBy(_.time);
       log.debug("Earliest COLLISION DETECTED! Time left: " + earliestCollision.time);
-      val safeTime = findSafeTime(earliestCollision, 0.005);
-      log.debug(safeTime + " time safe to be integrated to prevent intersection");
-      if(safeTime > 0) integrations.foreach(_(safeTime));
-      // collision response will be implemented later, for now set velocity to zero
-      earliestCollision.pair._1.velocity.magnitude = 0;
-      earliestCollision.pair._2.velocity.magnitude = 0;
-      integrate(timestep - safeTime);
-    }else integrations.foreach(_(timestep));
+      val integratedTime = handleCollisionAndIntegrate(earliestCollision);
+      integrate(timestep - integratedTime);
+    }else integrateMotionAndSubjects(timestep);
     log.debug("Time integration phase ended.");
+  }
+  
+  private def handleCollisionAndIntegrate(collision:Collision[Particle]) = {
+    val safeTime = findSafeTime(collision, 0.005);
+    log.debug(safeTime + " time safe to be integrated to prevent intersection");
+    val forces = resolveForces(collision);
+    if(safeTime > 0) {
+      integrateMotionAndSubjects(safeTime);
+      collision.pair._1.forces += forces._1;
+      collision.pair._2.forces += forces._2;
+    }
+    safeTime;
+  }
+  
+  private def integrateMotionAndSubjects(timestep:Double) = {
+    particles.foreach(integrateMotion(_, timestep));
+    timeSubjects.foreach(_.integrate(timestep));
   }
   
   private def dispatchInputs() = {

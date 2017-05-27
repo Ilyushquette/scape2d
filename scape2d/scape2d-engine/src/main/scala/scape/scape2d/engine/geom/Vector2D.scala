@@ -31,6 +31,10 @@ class Vector2D(var magnitude:Double, var angle:Double) {
     comps.x * otherComps.x + comps.y * otherComps.y;
   }
   
+  def *(magnitudeMultiplier:Double) = new Vector2D(magnitudeMultiplier * magnitude, angle);
+  
+  def opposite = new Vector2D(magnitude, normalizeAngle(angle + 180));
+  
   private def mergeWith(vector:Vector2D, merge:(Components2D, Components2D) => (Double, Double)) = {
     val merged = merge(components, vector.components);
     Vector2D.from(Components2D(merged._1, merged._2));

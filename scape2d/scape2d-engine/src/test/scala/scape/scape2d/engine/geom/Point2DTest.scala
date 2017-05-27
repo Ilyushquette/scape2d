@@ -38,6 +38,12 @@ class Point2DTest {
   }
   
   @Test
+  def testAngleTo = {
+    val perspective = new Point2D(10, 7);
+    Assert.assertEquals(225, perspective.angleTo(new Point2D(5, 2)), 0.00001);
+  }
+  
+  @Test
   def testPointSubtraction = {
     val p = new Point2D(1, 0);
     val q = new Point2D(4, -3);

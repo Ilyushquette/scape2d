@@ -19,6 +19,8 @@ class Point2D(var x:Double, var y:Double) {
   
   def distanceTo(point:Point2D) = hypot(point.x - x, point.y - y);
   
+  def angleTo(point:Point2D) = normalizeAngle(toDegrees(atan2(point.y - y, point.x - x)));
+  
   def -(point:Point2D) = Vector2D.from(Components2D(x - point.x, y - point.y));
   
   override def clone = new Point2D(x, y);
