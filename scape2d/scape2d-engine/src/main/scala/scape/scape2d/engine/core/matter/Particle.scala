@@ -16,10 +16,14 @@ import scape.scape2d.engine.geom.Spherical
  * 	<li>velocity - magnitude in meters, angle in degrees (meters per second at the direction)</li>
  * </ul>
  */
-final class Particle(val position:Point2D, val radius:Double, val mass:Double, var velocity:Vector2D)
+final class Particle private[matter] (
+  var position:Point2D,
+  var radius:Double,
+  var mass:Double,
+  var velocity:Vector2D,
+  var forces:ArrayBuffer[Vector2D] = new ArrayBuffer)
 extends Movable with Spherical {
   private val log = Logger.getLogger(getClass);
-  private[engine] val forces = new ArrayBuffer[Vector2D];
   
   /**
    * Since each force here is a representation of impulse J = N x timestep,
