@@ -1,10 +1,10 @@
 package scape.scape2d.engine.motion.collision
 
 import org.apache.log4j.Logger
-
 import scape.scape2d.engine.geom.Spherical
 import scape.scape2d.engine.motion.Movable
 import scape.scape2d.engine.motion.scaleVelocity
+import scape.scape2d.engine.motion.collision.detection.DetectionStrategyValidator
 
 package object detection {
   type MovableSphere = Movable with Spherical;

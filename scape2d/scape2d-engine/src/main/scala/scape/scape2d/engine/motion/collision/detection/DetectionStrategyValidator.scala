@@ -1,12 +1,10 @@
-package scape.scape2d.engine.motion.collision
+package scape.scape2d.engine.motion.collision.detection
 
 import com.google.common.math.DoubleMath
-
 import scape.scape2d.engine.geom.Point2D
 import scape.scape2d.engine.geom.Spherical
 import scape.scape2d.engine.geom.Vector2D
 import scape.scape2d.engine.motion.Movable
-import scape.scape2d.engine.motion.collision.detection.DetectionStrategy
 
 class DetectionStrategyValidator {
   def check(detect:DetectionStrategy) = {
