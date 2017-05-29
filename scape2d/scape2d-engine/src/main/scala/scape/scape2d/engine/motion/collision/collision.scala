@@ -43,7 +43,7 @@ package object collision {
     val velocities = resolveVelocities(collision);
     val particle1 = collision.pair._1;
     val momentumBefore = particle1.velocity * particle1.mass;
-    val momentumAfter = velocities._1.value * particle1.mass;
+    val momentumAfter = velocities._1 * particle1.mass;
     val force = momentumAfter - momentumBefore;
     (force, force.opposite);
   }

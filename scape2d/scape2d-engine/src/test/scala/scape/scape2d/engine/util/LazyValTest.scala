@@ -7,6 +7,6 @@ class LazyValTest {
   @Test
   def testLazyEvaluation = {
     val lazyVal = LazyVal(System.nanoTime());
-    Assert.assertTrue(System.nanoTime() < lazyVal.value);
+    Assert.assertTrue(System.nanoTime() < lazyVal);
   }
 }
