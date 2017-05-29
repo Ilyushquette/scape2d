@@ -1,7 +1,7 @@
 package scape.scape2d.engine.motion
 
 import scape.scape2d.engine.geom._
-import scape.scape2d.engine.matter.Particle
+import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.util.LazyVal
 
 package object collision {

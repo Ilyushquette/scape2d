@@ -5,7 +5,7 @@ import javax.swing.JFrame
 import scape.scape2d.engine.core.Nature
 import scape.scape2d.engine.geom.Point2D
 import scape.scape2d.engine.geom.Vector2D
-import scape.scape2d.engine.matter.Particle
+import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.debugger.view.swing.SwingShapeDrawer
 import scape.scape2d.debugger.Debugger
 import scape.scape2d.debugger.view.ShapeDrawingDebugView

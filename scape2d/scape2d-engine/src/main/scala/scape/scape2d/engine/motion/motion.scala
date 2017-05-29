@@ -1,6 +1,6 @@
 package scape.scape2d.engine
 
-import scape.scape2d.engine.matter.Particle
+import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.geom._
 import org.apache.log4j.Logger
 

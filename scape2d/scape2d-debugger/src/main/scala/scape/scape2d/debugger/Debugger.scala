@@ -1,7 +1,7 @@
 package scape.scape2d.debugger
 
 import scape.scape2d.debugger.view.DebugView
-import scape.scape2d.engine.matter.Particle
+import scape.scape2d.engine.core.matter.Particle
 
 class Debugger(val view:DebugView) {
   def trackParticle(particle:Particle) = {

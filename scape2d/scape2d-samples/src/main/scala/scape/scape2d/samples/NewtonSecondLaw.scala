@@ -13,7 +13,7 @@ import scape.scape2d.engine.core.ExertForce
 import scape.scape2d.engine.core.Nature
 import scape.scape2d.engine.geom.Point2D
 import scape.scape2d.engine.geom.Vector2D
-import scape.scape2d.engine.matter.Particle
+import scape.scape2d.engine.core.matter.Particle
 
 object NewtonSecondLaw {
   def main(args:Array[String]):Unit = {

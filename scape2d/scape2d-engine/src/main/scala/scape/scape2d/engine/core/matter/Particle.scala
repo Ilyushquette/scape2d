@@ -1,4 +1,4 @@
-package scape.scape2d.engine.matter
+package scape.scape2d.engine.core.matter
 
 import scala.collection.mutable.ArrayBuffer
 import org.apache.log4j.Logger
