@@ -10,12 +10,10 @@ package object motion {
   
   def getPositionAfter(movable:Movable, timestep:Double) = {
     if(timestep <= 0) throw new IllegalArgumentException("Time is irreversible. Timestep=" + timestep);
-    val currentPosition = movable.position.clone;
     if(movable.velocity.magnitude > 0) {
       val mpms = scaleVelocity(movable.velocity, timestep);
-      currentPosition.displace(mpms.components);
-      currentPosition;
-    }else currentPosition;
+      movable.position.displace(mpms.components);
+    }else movable.position;
   }
   
   def scaleVelocity(velocity:Vector2D, timestep:Double) = {

@@ -9,6 +9,8 @@ trait Movable {
   
   def position:Point2D;
   
+  private[core] def setPosition(nextPosition:Point2D);
+  
   def velocity:Vector2D;
   
   def addMotionListener(listener:(Point2D, this.type) => Unit) = motionListeners.add(listener);

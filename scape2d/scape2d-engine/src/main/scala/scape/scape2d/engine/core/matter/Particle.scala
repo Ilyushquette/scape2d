@@ -17,13 +17,17 @@ import scape.scape2d.engine.geom.Spherical
  * </ul>
  */
 final class Particle private[matter] (
-  var position:Point2D,
+  private var _position:Point2D,
   var radius:Double,
   var mass:Double,
   var velocity:Vector2D,
   var forces:ArrayBuffer[Vector2D] = new ArrayBuffer)
 extends Movable with Spherical {
   private val log = Logger.getLogger(getClass);
+  
+  def position = _position;
+  
+  private[core] def setPosition(nextPosition:Point2D) = _position = nextPosition;
   
   /**
    * Since each force here is a representation of impulse J = N x timestep,
