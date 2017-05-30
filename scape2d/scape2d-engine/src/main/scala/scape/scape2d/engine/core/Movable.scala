@@ -1,12 +1,11 @@
-package scape.scape2d.engine.motion
+package scape.scape2d.engine.core
 
 import scala.collection.mutable.LinkedHashSet
-
 import scape.scape2d.engine.geom.Point2D
 import scape.scape2d.engine.geom.Vector2D
 
 trait Movable {
-  private[motion] val motionListeners = new LinkedHashSet[(Point2D, this.type) => Unit];
+  private[engine] val motionListeners = new LinkedHashSet[(Point2D, this.type) => Unit];
   
   def position:Point2D;
   

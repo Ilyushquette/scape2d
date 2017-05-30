@@ -4,7 +4,6 @@ import scala.actors.Actor
 import scala.actors.TIMEOUT
 import scala.collection.mutable.ArrayBuffer
 import org.apache.log4j.Logger
-import scape.scape2d.engine.motion.Movable
 import scape.scape2d.engine.motion.collision._
 import scape.scape2d.engine.motion.collision.detection._
 import scape.scape2d.engine.motion._

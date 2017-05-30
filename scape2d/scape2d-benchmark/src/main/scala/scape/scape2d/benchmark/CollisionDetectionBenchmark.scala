@@ -12,10 +12,10 @@ import org.openjdk.jmh.annotations.Setup
 import org.openjdk.jmh.annotations.State
 import org.openjdk.jmh.infra.Blackhole
 
+import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.geom.Point2D
 import scape.scape2d.engine.geom.Spherical
 import scape.scape2d.engine.geom.Vector2D
-import scape.scape2d.engine.motion.Movable
 import scape.scape2d.engine.motion.collision.Collision
 import scape.scape2d.engine.motion.collision.detection._
 

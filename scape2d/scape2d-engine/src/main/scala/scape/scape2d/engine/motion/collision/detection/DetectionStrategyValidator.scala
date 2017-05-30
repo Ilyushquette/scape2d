@@ -4,7 +4,7 @@ import com.google.common.math.DoubleMath
 import scape.scape2d.engine.geom.Point2D
 import scape.scape2d.engine.geom.Spherical
 import scape.scape2d.engine.geom.Vector2D
-import scape.scape2d.engine.motion.Movable
+import scape.scape2d.engine.core.Movable
 
 class DetectionStrategyValidator {
   def check(detect:DetectionStrategy) = {

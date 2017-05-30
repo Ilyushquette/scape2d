@@ -4,7 +4,7 @@ import scala.collection.mutable.ArrayBuffer
 import org.apache.log4j.Logger
 import scape.scape2d.engine.geom.Point2D
 import scape.scape2d.engine.geom.Vector2D
-import scape.scape2d.engine.motion.Movable
+import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.geom.Spherical
 
 /**
