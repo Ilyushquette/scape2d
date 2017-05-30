@@ -18,17 +18,6 @@ package object motion {
     }else currentPosition;
   }
   
-  private[engine] def integrateMotion(movable:Movable, timestep:Double) = {
-    log.debug("Movable at %s with velocity %s".format(movable.position, movable.velocity));
-    val nextPosition = getPositionAfter(movable, timestep);
-    if(movable.position != nextPosition) {
-      val oldPosition = movable.position.clone;
-      movable.position.locate(nextPosition);
-      log.debug("Moved to " + nextPosition);
-      movable.motionListeners.foreach(_(oldPosition, movable));
-    }
-  }
-  
   def scaleVelocity(velocity:Vector2D, timestep:Double) = {
     val timescale = 1000 / timestep;
     new Vector2D(velocity.magnitude / timescale, velocity.angle);
