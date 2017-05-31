@@ -12,10 +12,8 @@ package object core {
     log.debug("Movable at %s with velocity %s".format(movable.position, movable.velocity));
     val nextPosition = getPositionAfter(movable, timestep);
     if(movable.position != nextPosition) {
-      val oldPosition = movable.position;
       movable.setPosition(nextPosition);
       log.debug("Moved to " + nextPosition);
-      movable.motionListeners.foreach(_(oldPosition, movable));
     }
   }
 }

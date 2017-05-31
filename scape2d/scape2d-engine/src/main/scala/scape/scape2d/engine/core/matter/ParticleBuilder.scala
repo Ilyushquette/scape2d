@@ -10,8 +10,7 @@ case class ParticleBuilder(
   radius:Double = 1,
   mass:Double = 1,
   velocity:Vector2D = new Vector2D(),
-  forces:ArrayBuffer[Vector2D] = new ArrayBuffer,
-  motionListeners:LinkedHashSet[(Point2D, Particle) => Unit] = new LinkedHashSet
+  forces:ArrayBuffer[Vector2D] = new ArrayBuffer
 ) {
   def at(p:Point2D) = copy(position = p);
   
@@ -23,11 +22,5 @@ case class ParticleBuilder(
   
   def withForces(fs:ArrayBuffer[Vector2D]) = copy(forces = fs);
   
-  def listenMotion(l:(Point2D, Particle) => Unit) = copy(motionListeners = motionListeners + l);
-  
-  def build = {
-    val particle = new Particle(position, radius, mass, velocity, forces);
-    motionListeners.foreach(particle.addMotionListener);
-    particle;
-  }
+  def build = new Particle(position, radius, mass, velocity, forces);
 }

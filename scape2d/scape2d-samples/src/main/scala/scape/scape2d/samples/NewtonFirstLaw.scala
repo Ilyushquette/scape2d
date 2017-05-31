@@ -2,7 +2,6 @@ package scape.scape2d.samples
 
 import java.awt.Color
 import java.awt.Toolkit
-
 import javax.swing.JFrame
 import scape.scape2d.debugger.Debugger
 import scape.scape2d.debugger.view.ShapeDrawingDebugView
@@ -11,6 +10,7 @@ import scape.scape2d.engine.core.Nature
 import scape.scape2d.engine.core.matter.ParticleBuilder
 import scape.scape2d.engine.geom.Point2D
 import scape.scape2d.engine.geom.Vector2D
+import scape.scape2d.engine.motion.MovableTrackerProxy
 
 object NewtonFirstLaw {
   def main(args:Array[String]):Unit = {
@@ -22,6 +22,8 @@ object NewtonFirstLaw {
       .withVelocity(new Vector2D(2, 45))
       .build;
     
+    val trackedMetalParticle = new MovableTrackerProxy(metalParticle);
+    
     val frame = new JFrame("Scape2D Debugger");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setBackground(Color.BLACK);
@@ -31,8 +33,8 @@ object NewtonFirstLaw {
     frame.pack();
     frame.setVisible(true);
     
-    debugger.trackParticle(metalParticle);
-    nature.add(metalParticle);
+    debugger.trackParticle(trackedMetalParticle);
+    nature.add(trackedMetalParticle);
     nature.start;
   }
 }
