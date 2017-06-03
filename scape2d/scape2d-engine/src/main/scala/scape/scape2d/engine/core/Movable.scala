@@ -10,4 +10,6 @@ trait Movable {
   private[core] def setPosition(nextPosition:Point2D);
   
   def velocity:Vector2D;
+  
+  private[core] def setVelocity(newVelocity:Vector2D);
 }

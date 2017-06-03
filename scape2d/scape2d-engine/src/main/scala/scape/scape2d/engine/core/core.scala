@@ -30,7 +30,7 @@ package object core {
       val netforce = forces.reduce(_ + _);
       val acceleration = new Vector2D(netforce.magnitude / particle.mass, netforce.angle);
       log.debug("Netforce %s sum of %s caused acceleration %s".format(netforce, forces, acceleration));
-      particle.velocity = particle.velocity + acceleration;
+      particle.setVelocity(particle.velocity + acceleration);
       forces.clear();
     }
   }

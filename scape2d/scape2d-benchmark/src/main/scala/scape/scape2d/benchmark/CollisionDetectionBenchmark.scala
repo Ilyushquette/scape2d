@@ -43,4 +43,5 @@ class CollisionDetectionBenchmark {
 private[benchmark] case class Mock(val radius:Double, val position:Point2D, val velocity:Vector2D)
 extends Movable with Spherical {
   def setPosition(nextPosition:Point2D) = {}
+  def setVelocity(newVelocity:Vector2D) = {}
 }

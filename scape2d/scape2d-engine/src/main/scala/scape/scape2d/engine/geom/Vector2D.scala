@@ -11,7 +11,7 @@ object Vector2D {
   }
 }
 
-class Vector2D(var magnitude:Double, var angle:Double) {
+class Vector2D(val magnitude:Double, val angle:Double) {
   def this() = this(0, 0);
   
   def components = {

@@ -20,7 +20,7 @@ class Particle private[matter] (
   private var _position:Point2D,
   val radius:Double,
   val mass:Double,
-  var velocity:Vector2D,
+  private var _velocity:Vector2D,
   var forces:ArrayBuffer[Vector2D] = new ArrayBuffer)
 extends Movable with Spherical {
   private val log = Logger.getLogger(getClass);
@@ -30,4 +30,8 @@ extends Movable with Spherical {
   def position = _position;
   
   private[core] def setPosition(nextPosition:Point2D) = _position = nextPosition;
+  
+  def velocity = _velocity;
+  
+  private[core] def setVelocity(newVelocity:Vector2D) = _velocity = newVelocity;
 }
