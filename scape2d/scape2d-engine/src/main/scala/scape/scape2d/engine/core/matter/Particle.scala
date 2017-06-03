@@ -18,8 +18,8 @@ import scape.scape2d.engine.geom.Spherical
  */
 class Particle private[matter] (
   private var _position:Point2D,
-  var radius:Double,
-  var mass:Double,
+  val radius:Double,
+  val mass:Double,
   var velocity:Vector2D,
   var forces:ArrayBuffer[Vector2D] = new ArrayBuffer)
 extends Movable with Spherical {
