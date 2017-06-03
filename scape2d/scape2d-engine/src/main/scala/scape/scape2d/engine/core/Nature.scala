@@ -44,7 +44,7 @@ class Nature(val detectCollisions:Nature.CollisionDetector, fps:Double) extends 
   
   private def integrate(timestep:Double):Unit = {
     log.debug("Time integration phase starts...");
-    particles.foreach(_.integrateForces());
+    particles.foreach(integrateAcceleration(_));
     val collisions = detectCollisions(particles, timestep);
     if(!collisions.isEmpty) {
       val earliestCollision = collisions.minBy(_.time);

@@ -30,19 +30,4 @@ extends Movable with Spherical {
   def position = _position;
   
   private[core] def setPosition(nextPosition:Point2D) = _position = nextPosition;
-  
-  /**
-   * Since each force here is a representation of impulse J = N x timestep,
-   * acceleration in meters per second per timestep too.
-   * Final velocity of the particle in meters per second.
-   */
-  def integrateForces() = {
-    if(!forces.isEmpty) {
-      val netforce = forces.reduce(_ + _);
-      val acceleration = new Vector2D(netforce.magnitude / mass, netforce.angle);
-      log.debug("Netforce %s sum of %s caused acceleration %s".format(netforce, forces, acceleration));
-      velocity = velocity + acceleration;
-      forces.clear();
-    }
-  }
 }
