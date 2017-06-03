@@ -1,11 +1,11 @@
 package scape.scape2d.engine.core.matter
 
-import scala.collection.mutable.ArrayBuffer
 import org.apache.log4j.Logger
-import scape.scape2d.engine.geom.Point2D
-import scape.scape2d.engine.geom.Vector2D
+
 import scape.scape2d.engine.core.Movable
+import scape.scape2d.engine.geom.Point2D
 import scape.scape2d.engine.geom.Spherical
+import scape.scape2d.engine.geom.Vector2D
 
 /**
  * Units:
@@ -21,11 +21,11 @@ class Particle private[matter] (
   val radius:Double,
   val mass:Double,
   private var _velocity:Vector2D,
-  var forces:ArrayBuffer[Vector2D] = new ArrayBuffer)
+  private var _forces:Array[Vector2D])
 extends Movable with Spherical {
   private val log = Logger.getLogger(getClass);
   
-  private[matter] def this() = this(Point2D.origin, 1, 1, new Vector2D, new ArrayBuffer);
+  private[matter] def this() = this(Point2D.origin, 1, 1, new Vector2D, Array.empty);
   
   def position = _position;
   
@@ -34,4 +34,8 @@ extends Movable with Spherical {
   def velocity = _velocity;
   
   private[core] def setVelocity(newVelocity:Vector2D) = _velocity = newVelocity;
+  
+  def forces = _forces;
+  
+  private[core] def setForces(forces:Array[Vector2D]) = _forces = forces;
 }

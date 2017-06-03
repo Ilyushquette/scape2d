@@ -61,8 +61,10 @@ class Nature(val detectCollisions:Nature.CollisionDetector, fps:Double) extends 
     val forces = resolveForces(collision);
     if(safeTime > 0) {
       integrateMotionAndSubjects(safeTime);
-      collision.pair._1.forces += forces._1;
-      collision.pair._2.forces += forces._2;
+      val particle1 = collision.pair._1;
+      val particle2 = collision.pair._2;
+      particle1.setForces(particle1.forces :+ forces._1);
+      particle2.setForces(particle2.forces :+ forces._2);
     }
     safeTime;
   }
@@ -77,7 +79,7 @@ class Nature(val detectCollisions:Nature.CollisionDetector, fps:Double) extends 
     var endOfMailbox = false;
     while(!endOfMailbox) {
       receiveWithin(0) {
-        case ExertForce(p, f) => p.forces += f;
+        case ExertForce(p, f) => p.setForces(p.forces :+ f);
         case ScaleTime(fm, tm) => timescale = scaleTime(fm, tm);
         case TIMEOUT => endOfMailbox = true;
         case unknown => log.warn("Unknown input " + unknown);
