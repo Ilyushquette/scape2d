@@ -8,13 +8,7 @@ import scape.scape2d.engine.geom.Spherical
 import scape.scape2d.engine.geom.Vector2D
 
 /**
- * Units:
- * <ul>
- * 	<li>position in meters</li>
- * 	<li>radius in cantimeters</li>
- * 	<li>mass in kilograms</li>
- * 	<li>velocity - magnitude in meters, angle in degrees (meters per second at the direction)</li>
- * </ul>
+ * mass in kilograms
  */
 class Particle private[matter] (
   private var _position:Point2D,
@@ -35,6 +29,9 @@ extends Movable with Spherical {
   
   private[core] def setVelocity(newVelocity:Vector2D) = _velocity = newVelocity;
   
+  /**
+   * magnitude in Newtons, angle in degrees (Newtons per last integrated timestep at the direction)
+   */
   def forces = _forces;
   
   private[core] def setForces(forces:Array[Vector2D]) = _forces = forces;
