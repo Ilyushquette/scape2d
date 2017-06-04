@@ -15,15 +15,15 @@ object Nature {
 
 class Nature(val detectCollisions:Nature.CollisionDetector, fps:Double) extends Actor {
   private val log = Logger.getLogger(getClass);
-  private val timeSubjects = new ArrayBuffer[TimeDependent];
-  private val particles = new ArrayBuffer[Particle];
+  private var timeSubjects = Set[TimeDependent]();
+  private var particles = Set[Particle]();
   private var timescale = scaleTime(1, 1);
   
   def this(fps:Double) = this(bruteForce(detectWithDiscriminant _), fps);
   
-  def add(timeSubject:TimeDependent) = timeSubjects += timeSubject;
+  def add(timeSubject:TimeDependent) = this ! AddTimeSubject(timeSubject);
   
-  def add(particle:Particle) = particles += particle;
+  def add(particle:Particle) = this ! AddParticle(particle);
   
   private def scaleTime(fm:Double, tm:Double) = 1000 / (fps * fm) <-> 1000 / fps * tm;
   
@@ -81,6 +81,8 @@ class Nature(val detectCollisions:Nature.CollisionDetector, fps:Double) extends 
       receiveWithin(0) {
         case ExertForce(p, f) => p.setForces(p.forces :+ f);
         case ScaleTime(fm, tm) => timescale = scaleTime(fm, tm);
+        case AddTimeSubject(ts) => timeSubjects = timeSubjects + ts;
+        case AddParticle(p) => particles = particles + p;
         case TIMEOUT => endOfMailbox = true;
         case unknown => log.warn("Unknown input " + unknown);
       }
