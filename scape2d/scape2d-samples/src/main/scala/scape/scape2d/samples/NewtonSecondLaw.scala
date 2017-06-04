@@ -10,8 +10,8 @@ import scape.scape2d.engine.core.Nature
 import scape.scape2d.engine.geom.Point2D
 import scape.scape2d.engine.geom.Vector2D
 import scape.scape2d.engine.core.matter.ParticleBuilder
-import scape.scape2d.engine.core.ExertForce
 import scape.scape2d.engine.motion.MovableTrackerProxy
+import scape.scape2d.engine.core.Impulse
 
 object NewtonSecondLaw {
   def main(args:Array[String]):Unit = {
@@ -24,10 +24,8 @@ object NewtonSecondLaw {
       .build;
     
     val trackedMetalParticle = new MovableTrackerProxy(metalParticle);
-    trackedMetalParticle.addMotionListener((_, mp) => {
-      nature ! ExertForce(mp, new Vector2D(0.064, 45));
-      nature ! ExertForce(mp, new Vector2D(0.034, 0));
-    });
+    val impulse = new Impulse(trackedMetalParticle, new Vector2D(7.68, 45), 2000);
+    val impulse2 = new Impulse(trackedMetalParticle, new Vector2D(3.84, 0), 2000);
     
     val frame = new JFrame("Scape2D Debugger");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,6 +38,8 @@ object NewtonSecondLaw {
     
     debugger.trackParticle(trackedMetalParticle);
     nature.add(trackedMetalParticle);
+    nature.add(impulse);
+    nature.add(impulse2);
     nature.start;
   }
 }

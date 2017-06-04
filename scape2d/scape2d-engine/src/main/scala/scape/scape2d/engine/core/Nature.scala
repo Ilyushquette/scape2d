@@ -80,7 +80,6 @@ class Nature(val detectCollisions:Nature.CollisionDetector, fps:Double) extends 
     var endOfMailbox = false;
     while(!endOfMailbox) {
       receiveWithin(0) {
-        case ExertForce(p, f) => p.setForces(p.forces :+ f);
         case ScaleTime(fm, tm) => timescale = scaleTime(fm, tm);
         case AddTimeSubject(ts) => timeSubjects = timeSubjects + ts;
         case AddParticle(p) => particles = particles + p;
