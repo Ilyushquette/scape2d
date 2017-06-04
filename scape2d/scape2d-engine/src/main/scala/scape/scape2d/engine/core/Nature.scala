@@ -71,7 +71,8 @@ class Nature(val detectCollisions:Nature.CollisionDetector, fps:Double) extends 
   
   private def integrateMotionAndSubjects(timestep:Double) = {
     particles.foreach(integrateMotion(_, timestep));
-    timeSubjects.foreach(_.integrate(timestep));
+    val validTimeSubjects = timeSubjects.filter(_.integrate(timestep));
+    timeSubjects = validTimeSubjects;
   }
   
   private def dispatchInputs() = {
