@@ -36,7 +36,7 @@ class MovableTrackerProxy[T <: Movable[T]](private val delegate:T) extends Metho
       case (proxy:T, Array(nextPosition:Point2D)) =>
         val oldPosition = proxy.position;
         methodProxy.invokeSuper(obj, args);
-        motionListeners.foreach(_(oldPosition, proxy));
+        motionListeners.foreach(_(oldPosition, proxy.snapshot));
         Nil;
       case _ => methodProxy.invokeSuper(obj, args);
     }else methodProxy.invokeSuper(obj, args);
