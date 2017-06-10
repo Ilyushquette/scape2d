@@ -77,7 +77,8 @@ class DetectionStrategyValidator {
 }
 
 private class Mock(val radius:Double, val position:Point2D, val velocity:Vector2D)
-extends Movable with Spherical {
+extends Movable[Mock] with Spherical {
   def setPosition(nextPosition:Point2D) = {}
   def setVelocity(newVelocity:Vector2D) = {}
+  def snapshot = this;
 }

@@ -8,7 +8,7 @@ import scape.scape2d.engine.core.Movable
 package object motion {
   private val log = Logger.getLogger(getClass);
   
-  def getPositionAfter(movable:Movable, timestep:Double) = {
+  def getPositionAfter(movable:Movable[_], timestep:Double) = {
     if(timestep <= 0) throw new IllegalArgumentException("Time is irreversible. Timestep=" + timestep);
     if(movable.velocity.magnitude > 0) {
       val mpms = scaleVelocity(movable.velocity, timestep);

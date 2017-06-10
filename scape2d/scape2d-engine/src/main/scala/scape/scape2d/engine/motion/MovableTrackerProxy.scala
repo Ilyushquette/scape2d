@@ -10,7 +10,7 @@ import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.geom.Point2D
 
 object MovableTrackerProxy {
-  private def enhance[T <: Movable](interceptor:MovableTrackerProxy[T]) = {
+  private def enhance[T <: Movable[T]](interceptor:MovableTrackerProxy[T]) = {
     val delegateClass = interceptor.delegate.getClass;
     val enhanced = Enhancer.create(delegateClass, interceptor);
     delegateClass.getDeclaredFields.foreach(field => if(!isStatic(field.getModifiers)) {
@@ -20,10 +20,10 @@ object MovableTrackerProxy {
     enhanced.asInstanceOf[T];
   }
   
-  implicit def autoEnhance[T <: Movable](proxy:MovableTrackerProxy[T]) = proxy.enhanced;
+  implicit def autoEnhance[T <: Movable[T]](proxy:MovableTrackerProxy[T]) = proxy.enhanced;
 }
 
-class MovableTrackerProxy[T <: Movable](private val delegate:T) extends MethodInterceptor {
+class MovableTrackerProxy[T <: Movable[T]](private val delegate:T) extends MethodInterceptor {
   private var motionListeners:Set[(Point2D, T) => Unit] = Set();
   lazy val enhanced = MovableTrackerProxy.enhance(this);
   

@@ -9,7 +9,7 @@ import scape.scape2d.engine.geom.Vector2D
 package object core {
   private val log = Logger.getLogger(getClass);
   
-  private[core] def integrateMotion(movable:Movable, timestep:Double) = {
+  private[core] def integrateMotion(movable:Movable[_], timestep:Double) = {
     log.debug("Movable at %s with velocity %s".format(movable.position, movable.velocity));
     val nextPosition = getPositionAfter(movable, timestep);
     if(movable.position != nextPosition) {

@@ -16,7 +16,7 @@ class Particle private[matter] (
   val mass:Double,
   private var _velocity:Vector2D,
   private var _forces:Array[Vector2D])
-extends Movable with Spherical {
+extends Movable[Particle] with Spherical {
   private val log = Logger.getLogger(getClass);
   
   private[matter] def this() = this(Point2D.origin, 1, 1, new Vector2D, Array.empty);
@@ -35,4 +35,6 @@ extends Movable with Spherical {
   def forces = _forces;
   
   private[core] def setForces(forces:Array[Vector2D]) = _forces = forces;
+  
+  def snapshot = new Particle(position, radius, mass, velocity, forces);
 }
