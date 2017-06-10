@@ -61,8 +61,8 @@ class Nature(val detectCollisions:Nature.CollisionDetector, fps:Double) extends 
     val forces = resolveForces(collision);
     if(safeTime > 0) {
       integrateMotionAndSubjects(safeTime);
-      val particle1 = collision.pair._1;
-      val particle2 = collision.pair._2;
+      val particle1 = collision.concurrentPair._1;
+      val particle2 = collision.concurrentPair._2;
       particle1.setForces(particle1.forces :+ forces._1);
       particle2.setForces(particle2.forces :+ forces._2);
     }
