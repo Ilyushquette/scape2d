@@ -1,4 +1,4 @@
-package scape.scape2d.engine.motion.collision
+package scape.scape2d.engine.motion.collision.detection
 
 class CollisionDetectionException(reason:String) extends Exception(reason);
 case class NoDetectionException(reason:String) extends CollisionDetectionException(reason);

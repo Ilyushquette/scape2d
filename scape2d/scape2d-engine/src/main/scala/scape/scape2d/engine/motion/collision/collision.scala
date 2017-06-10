@@ -1,12 +1,14 @@
 package scape.scape2d.engine.motion
 
 import scape.scape2d.engine.geom._
-import scape.scape2d.engine.matter.Particle
+import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.util.LazyVal
+import scape.scape2d.engine.core.Movable
 
 package object collision {
-  def findSafeTime[T <: Movable with Spherical](collision:Collision[T], closestDistance:Double) = {
-    val faster = Seq(collision.pair._1, collision.pair._2).maxBy(_.velocity.magnitude);
+  def findSafeTime[T <: Movable[T] with Spherical](collision:Collision[T], closestDistance:Double) = {
+    val snapshotPair = collision.snapshotPair;
+    val faster = Seq(snapshotPair._1, snapshotPair._2).maxBy(_.velocity.magnitude);
     val scaledVelocity = scaleVelocity(faster.velocity, collision.time);
     val distance = scaledVelocity.magnitude * collision.time;
     if(distance > closestDistance) {
@@ -16,8 +18,9 @@ package object collision {
   }
   
   def resolveVelocities(collision:Collision[Particle]) = {
-    val particle1 = collision.pair._1;
-    val particle2 = collision.pair._2;
+    val snapshotPair = collision.snapshotPair;
+    val particle1 = snapshotPair._1;
+    val particle2 = snapshotPair._2;
     val p1 = getPositionAfter(particle1, collision.time);
     val p2 = getPositionAfter(particle2, collision.time);
     val phi = p1.angleTo(p2);
@@ -40,10 +43,11 @@ package object collision {
   }
   
   def resolveForces(collision:Collision[Particle]) = {
+    val snapshotPair = collision.snapshotPair;
     val velocities = resolveVelocities(collision);
-    val particle1 = collision.pair._1;
+    val particle1 = snapshotPair._1;
     val momentumBefore = particle1.velocity * particle1.mass;
-    val momentumAfter = velocities._1.value * particle1.mass;
+    val momentumAfter = velocities._1 * particle1.mass;
     val force = momentumAfter - momentumBefore;
     (force, force.opposite);
   }

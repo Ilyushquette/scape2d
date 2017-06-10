@@ -3,14 +3,11 @@ package scape.scape2d.engine.core
 import scala.actors.Actor
 import scala.actors.TIMEOUT
 import scala.collection.mutable.ArrayBuffer
-
 import org.apache.log4j.Logger
-
-import scape.scape2d.engine.matter.Particle
-import scape.scape2d.engine.motion.Movable
 import scape.scape2d.engine.motion.collision._
 import scape.scape2d.engine.motion.collision.detection._
 import scape.scape2d.engine.motion._
+import scape.scape2d.engine.core.matter.Particle
 
 object Nature {
   type CollisionDetector = (Iterable[Particle], Double) => Iterator[Collision[Particle]];
@@ -18,15 +15,15 @@ object Nature {
 
 class Nature(val detectCollisions:Nature.CollisionDetector, fps:Double) extends Actor {
   private val log = Logger.getLogger(getClass);
-  private val timeSubjects = new ArrayBuffer[TimeDependent];
-  private val particles = new ArrayBuffer[Particle];
+  private var timeSubjects = Set[TimeDependent]();
+  private var particles = Set[Particle]();
   private var timescale = scaleTime(1, 1);
   
   def this(fps:Double) = this(bruteForce(detectWithDiscriminant _), fps);
   
-  def add(timeSubject:TimeDependent) = timeSubjects += timeSubject;
+  def add(timeSubject:TimeDependent) = this ! AddTimeSubject(timeSubject);
   
-  def add(particle:Particle) = particles += particle;
+  def add(particle:Particle) = this ! AddParticle(particle);
   
   private def scaleTime(fm:Double, tm:Double) = 1000 / (fps * fm) <-> 1000 / fps * tm;
   
@@ -47,7 +44,7 @@ class Nature(val detectCollisions:Nature.CollisionDetector, fps:Double) extends 
   
   private def integrate(timestep:Double):Unit = {
     log.debug("Time integration phase starts...");
-    particles.foreach(_.integrateForces());
+    particles.foreach(integrateAcceleration(_));
     val collisions = detectCollisions(particles, timestep);
     if(!collisions.isEmpty) {
       val earliestCollision = collisions.minBy(_.time);
@@ -64,15 +61,18 @@ class Nature(val detectCollisions:Nature.CollisionDetector, fps:Double) extends 
     val forces = resolveForces(collision);
     if(safeTime > 0) {
       integrateMotionAndSubjects(safeTime);
-      collision.pair._1.forces += forces._1;
-      collision.pair._2.forces += forces._2;
+      val particle1 = collision.concurrentPair._1;
+      val particle2 = collision.concurrentPair._2;
+      particle1.setForces(particle1.forces :+ forces._1);
+      particle2.setForces(particle2.forces :+ forces._2);
     }
     safeTime;
   }
   
   private def integrateMotionAndSubjects(timestep:Double) = {
     particles.foreach(integrateMotion(_, timestep));
-    timeSubjects.foreach(_.integrate(timestep));
+    val validTimeSubjects = timeSubjects.filter(_.integrate(timestep));
+    timeSubjects = validTimeSubjects;
   }
   
   private def dispatchInputs() = {
@@ -80,8 +80,9 @@ class Nature(val detectCollisions:Nature.CollisionDetector, fps:Double) extends 
     var endOfMailbox = false;
     while(!endOfMailbox) {
       receiveWithin(0) {
-        case ExertForce(p, f) => p.forces += f;
         case ScaleTime(fm, tm) => timescale = scaleTime(fm, tm);
+        case AddTimeSubject(ts) => timeSubjects = timeSubjects + ts;
+        case AddParticle(p) => particles = particles + p;
         case TIMEOUT => endOfMailbox = true;
         case unknown => log.warn("Unknown input " + unknown);
       }

@@ -1,6 +1,6 @@
 package scape.scape2d.debugger.view
 
-import scape.scape2d.engine.matter.Particle
+import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.geom.Point2D
 
 class ShapeDrawingDebugView(val shapeDrawer:ShapeDrawer, val cmpp:Double) extends DebugView {

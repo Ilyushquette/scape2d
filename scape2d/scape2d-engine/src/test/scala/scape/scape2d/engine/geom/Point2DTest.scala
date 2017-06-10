@@ -13,16 +13,8 @@ class Point2DTest {
   @Test
   def testDisplace = {
     val position = new Point2D(1, 4);
-    position.displace(Components2D(4, 1));
-    Assert.assertEquals(new Point2D(5, 5), position);
-  }
-  
-  @Test
-  def testLocate = {
-    val point = new Point2D(780, 320.5);
-    val target = new Point2D(1001.3, -2);
-    point.locate(target);
-    Assert.assertEquals(target, point);
+    val displaced = position.displace(Components2D(4, 1));
+    Assert.assertEquals(new Point2D(5, 5), displaced);
   }
   
   @Test

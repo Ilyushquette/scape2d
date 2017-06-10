@@ -1,13 +1,13 @@
 package scape.scape2d.engine.motion.collision
 
 import org.apache.log4j.Logger
-
 import scape.scape2d.engine.geom.Spherical
-import scape.scape2d.engine.motion.Movable
+import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.motion.scaleVelocity
+import scape.scape2d.engine.motion.collision.detection.DetectionStrategyValidator
 
 package object detection {
-  type MovableSphere = Movable with Spherical;
+  type MovableSphere = Movable[_] with Spherical;
   type DetectionStrategy = (MovableSphere, MovableSphere, Double) => Option[Double];
   
   private val log = Logger.getLogger(getClass);
@@ -29,7 +29,7 @@ package object detection {
     }else None;
   }
   
-  def bruteForce[T <: MovableSphere](detect:DetectionStrategy) = {
+  def bruteForce[T <: Movable[T] with Spherical](detect:DetectionStrategy) = {
     new DetectionStrategyValidator().check(detect);
     log.info("Detection strategy is valid! Returning combination based brute force algorithm");
     (mss:Iterable[T], timestep:Double) => {

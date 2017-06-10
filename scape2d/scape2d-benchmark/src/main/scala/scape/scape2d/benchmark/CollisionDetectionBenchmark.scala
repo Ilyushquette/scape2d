@@ -12,10 +12,10 @@ import org.openjdk.jmh.annotations.Setup
 import org.openjdk.jmh.annotations.State
 import org.openjdk.jmh.infra.Blackhole
 
+import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.geom.Point2D
 import scape.scape2d.engine.geom.Spherical
 import scape.scape2d.engine.geom.Vector2D
-import scape.scape2d.engine.motion.Movable
 import scape.scape2d.engine.motion.collision.Collision
 import scape.scape2d.engine.motion.collision.detection._
 
@@ -40,5 +40,9 @@ class CollisionDetectionBenchmark {
   }
 }
 
-private[benchmark] case class Mock(val radius:Double, val position:Point2D, val velocity:Vector2D)
-extends Movable with Spherical;
+private[benchmark] class Mock(val radius:Double, val position:Point2D, val velocity:Vector2D)
+extends Movable[Mock] with Spherical {
+  def setPosition(nextPosition:Point2D) = {}
+  def setVelocity(newVelocity:Vector2D) = {}
+  def snapshot = this;
+}
