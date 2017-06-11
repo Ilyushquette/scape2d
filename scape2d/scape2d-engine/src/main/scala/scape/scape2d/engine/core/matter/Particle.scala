@@ -3,7 +3,7 @@ package scape.scape2d.engine.core.matter
 import org.apache.log4j.Logger
 
 import scape.scape2d.engine.core.Movable
-import scape.scape2d.engine.geom.Point2D
+import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.Spherical
 import scape.scape2d.engine.geom.Vector2D
 
@@ -11,7 +11,7 @@ import scape.scape2d.engine.geom.Vector2D
  * mass in kilograms
  */
 class Particle private[matter] (
-  private var _position:Point2D,
+  private var _position:Point,
   val radius:Double,
   val mass:Double,
   private var _velocity:Vector2D,
@@ -19,11 +19,11 @@ class Particle private[matter] (
 extends Movable[Particle] with Spherical {
   private val log = Logger.getLogger(getClass);
   
-  private[matter] def this() = this(Point2D.origin, 1, 1, new Vector2D, Array.empty);
+  private[matter] def this() = this(Point.origin, 1, 1, new Vector2D, Array.empty);
   
   def position = _position;
   
-  private[core] def setPosition(nextPosition:Point2D) = _position = nextPosition;
+  private[core] def setPosition(nextPosition:Point) = _position = nextPosition;
   
   def velocity = _velocity;
   

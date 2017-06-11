@@ -9,7 +9,7 @@ import scape.scape2d.debugger.view.ShapeDrawingDebugView
 import scape.scape2d.debugger.view.swing.SwingShapeDrawer
 import scape.scape2d.engine.core.Nature
 import scape.scape2d.engine.core.matter.ParticleBuilder
-import scape.scape2d.engine.geom.Point2D
+import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.Vector2D
 import scape.scape2d.engine.motion.MovableTrackerProxy
 
@@ -17,13 +17,13 @@ object TwoHundredParticles {
   def main(args:Array[String]):Unit = {
     val nature = new Nature(60);
     val metalParticles = for(i <- 0 to 100) yield ParticleBuilder()
-      .at(new Point2D(i * 0.11, i * 0.11))
+      .at(Point(i * 0.11, i * 0.11))
       .withRadius(5)
       .withMass(2)
       .withVelocity(new Vector2D(2, 0))
       .build;
     val metalParticles2 = for(i <- 0 to 100) yield ParticleBuilder()
-      .at(new Point2D(25 - i * 0.11, i * 0.11))
+      .at(Point(25 - i * 0.11, i * 0.11))
       .withRadius(5)
       .withMass(2)
       .withVelocity(new Vector2D(2, 180))

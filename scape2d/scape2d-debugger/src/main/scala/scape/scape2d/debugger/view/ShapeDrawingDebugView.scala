@@ -1,7 +1,7 @@
 package scape.scape2d.debugger.view
 
 import scape.scape2d.engine.core.matter.Particle
-import scape.scape2d.engine.geom.Point2D
+import scape.scape2d.engine.geom.shape.Point
 
 class ShapeDrawingDebugView(val shapeDrawer:ShapeDrawer, val cmpp:Double) extends DebugView {
   private val mpp = cmpp / 100;
@@ -12,7 +12,7 @@ class ShapeDrawingDebugView(val shapeDrawer:ShapeDrawer, val cmpp:Double) extend
     shapeDrawer.draw(Circle(scaledCoords._1, scaledCoords._2, scaledRadius));
   }
   
-  override def renderMotion(oldPosition:Point2D, particle:Particle) = {
+  override def renderMotion(oldPosition:Point, particle:Particle) = {
     val oldScaledCoords = scaleCoordinates(oldPosition);
     val newScaledCoords = scaleCoordinates(particle.position);
     val scaledRadius = scaleRadius(particle.radius);
@@ -21,7 +21,7 @@ class ShapeDrawingDebugView(val shapeDrawer:ShapeDrawer, val cmpp:Double) extend
     shapeDrawer.clearAndDraw(clearable, drawable);
   }
   
-  private def scaleCoordinates(position:Point2D) = ((position.x / mpp).toInt, (position.y / mpp).toInt);
+  private def scaleCoordinates(position:Point) = ((position.x / mpp).toInt, (position.y / mpp).toInt);
   
   private def scaleRadius(radius:Double) = radius / cmpp;
 }
