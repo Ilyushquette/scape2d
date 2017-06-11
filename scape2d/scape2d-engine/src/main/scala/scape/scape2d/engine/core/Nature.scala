@@ -50,22 +50,21 @@ class Nature(val detectCollisions:Nature.CollisionDetector, fps:Double) extends 
       val earliestCollision = collisions.minBy(_.time);
       log.debug("Earliest COLLISION DETECTED! Time left: " + earliestCollision.time);
       val integratedTime = handleCollisionAndIntegrate(earliestCollision);
-      integrate(timestep - integratedTime);
+      val remainingTime = timestep - integratedTime;
+      if(remainingTime > 0) integrate(remainingTime);
     }else integrateMotionAndSubjects(timestep);
     log.debug("Time integration phase ended.");
   }
   
   private def handleCollisionAndIntegrate(collision:Collision[Particle]) = {
+    val particle1 = collision.concurrentPair._1;
+    val particle2 = collision.concurrentPair._2;
     val safeTime = findSafeTime(collision, 0.005);
     log.debug(safeTime + " time safe to be integrated to prevent intersection");
     val forces = resolveForces(collision);
-    if(safeTime > 0) {
-      integrateMotionAndSubjects(safeTime);
-      val particle1 = collision.concurrentPair._1;
-      val particle2 = collision.concurrentPair._2;
-      particle1.setForces(particle1.forces :+ forces._1);
-      particle2.setForces(particle2.forces :+ forces._2);
-    }
+    if(safeTime > 0) integrateMotionAndSubjects(safeTime);
+    particle1.setForces(particle1.forces :+ forces._1);
+    particle2.setForces(particle2.forces :+ forces._2);
     safeTime;
   }
   
