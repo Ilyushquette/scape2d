@@ -63,6 +63,27 @@ class Vector2DTest {
   }
   
   @Test
+  def testScalarProjection = {
+    val vector1 = Vector2D.from(Components2D(0, -6));
+    val vector2 = Vector2D.from(Components2D(4, -4));
+    Assert.assertEquals(0.66666, vector2.scalarProjection(vector1), 0.00001);
+  }
+  
+  @Test
+  def testScalarProjectionSameVectors = {
+    val vector1 = Vector2D.from(Components2D(0, -6));
+    val vector2 = Vector2D.from(Components2D(0, -6));
+    Assert.assertEquals(1, vector2.scalarProjection(vector1), 0.00001);
+  }
+  
+  @Test
+  def testScalarProjectionPerpendicularVectors = {
+    val vector1 = Vector2D.from(Components2D(0, -6));
+    val vector2 = Vector2D.from(Components2D(6, 0));
+    Assert.assertEquals(0, vector2.scalarProjection(vector1), 0.00001);
+  }
+  
+  @Test
   def testOpposite = {
     val sourceVector = new Vector2D(5, 320)
     Assert.assertEquals(new Vector2D(5, 140), sourceVector.opposite);
