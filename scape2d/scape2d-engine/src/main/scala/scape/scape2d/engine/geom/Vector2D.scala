@@ -31,9 +31,15 @@ class Vector2D(val magnitude:Double, val angle:Double) {
     comps.x * otherComps.x + comps.y * otherComps.y;
   }
   
-  def *(magnitudeMultiplier:Double) = new Vector2D(magnitudeMultiplier * magnitude, angle);
+  def *(magnitudeMultiplier:Double) = {
+    val newMagnitude = magnitude * abs(magnitudeMultiplier);
+    val newAngle = if(magnitudeMultiplier >= 0) angle else normalizeAngle(angle + 180);
+    new Vector2D(newMagnitude, newAngle);
+  }
   
   def scalarProjection(target:Vector2D) = (this * target) / (target.magnitude * target.magnitude);
+  
+  def projection(target:Vector2D) = target * scalarProjection(target);
   
   def opposite = new Vector2D(magnitude, normalizeAngle(angle + 180));
   

@@ -63,6 +63,12 @@ class Vector2DTest {
   }
   
   @Test
+  def testVectorNegativeMagnitudeMultiplication = {
+    val sourceVector = new Vector2D(3, 270);
+    Assert.assertEquals(new Vector2D(3, 90), sourceVector * -1);
+  }
+  
+  @Test
   def testScalarProjection = {
     val vector1 = Vector2D.from(Components2D(0, -6));
     val vector2 = Vector2D.from(Components2D(4, -4));
@@ -81,6 +87,15 @@ class Vector2DTest {
     val vector1 = Vector2D.from(Components2D(0, -6));
     val vector2 = Vector2D.from(Components2D(6, 0));
     Assert.assertEquals(0, vector2.scalarProjection(vector1), 0.00001);
+  }
+  
+  @Test
+  def testVectorProjection = {
+    val vector1 = Vector2D.from(Components2D(-4, 0));
+    val vector2 = Vector2D.from(Components2D(-7, 10));
+    val projectionVector = vector2.projection(vector1);
+    Assert.assertEquals(7, projectionVector.magnitude, 0.00001);
+    Assert.assertEquals(180, projectionVector.angle, 0.00001);
   }
   
   @Test
