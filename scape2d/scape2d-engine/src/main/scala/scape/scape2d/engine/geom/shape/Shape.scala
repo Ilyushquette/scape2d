@@ -35,3 +35,26 @@ case class Point(x:Double, y:Double) extends Shape {
   
   override def toString = "Point2D [x=%f, y=%f]".format(x, y);
 }
+
+case class Line(p1:Point, p2:Point) {
+  private lazy val dx = p2.x - p1.x;
+  private lazy val dy = p2.y - p1.y;
+  lazy val slope = if(dx != 0) Some(dy / dx) else None; // slope is undefined for vertical lines
+  lazy val yIntercept = if(slope.isDefined) Some(p1.y - slope.get * p1.x) else None;
+  
+  def horizontal = dy == 0;
+  
+  def vertical = dx == 0;
+  
+  def forX(x:Double) = {
+    if(horizontal) p1.y;
+    else if(!vertical) slope.get * x + yIntercept.get;
+    else throw new ArithmeticException("Y resolution on vertical line has either no or infinite solutions");
+  }
+  
+  def forY(y:Double) = {
+    if(vertical) p1.x;
+    else if(!horizontal) (y - yIntercept.get) / slope.get;
+    else throw new ArithmeticException("X resolution on horizontal line has either no or infinite solutions");
+  }
+}
