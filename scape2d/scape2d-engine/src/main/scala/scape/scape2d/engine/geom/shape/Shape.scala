@@ -59,8 +59,16 @@ case class Line(p1:Point, p2:Point) extends Shape {
     else throw new ArithmeticException("X resolution on horizontal line has either no or infinite solutions");
   }
   
+  def clampAbscissa(x1:Double, x2:Double) = Segment(Point(x1, forX(x1)), Point(x2, forX(x2)));
+  
+  def clampOrdinate(y1:Double, y2:Double) = Segment(Point(forY(y1), y1), Point(forY(y2), y2));
+  
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
     case line:Line => testIntersection(this, line);
   }
+}
+
+case class Segment(p1:Point, p2:Point) {
+  lazy val line = Line(p1, p2);
 }

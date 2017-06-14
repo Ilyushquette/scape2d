@@ -39,4 +39,16 @@ class LineTest {
     val line = Line(Point(7, 1), Point(7, 13));
     Assert.assertEquals(7, line.forY(100), 0.00001);
   }
+  
+  @Test
+  def testClampByAbscissaInterval = {
+    val line = Line(Point(3, 3), Point(6, 6));
+    Assert.assertEquals(Segment(Point(100, 100), Point(105, 105)), line.clampAbscissa(100, 105));
+  }
+  
+  @Test
+  def testClampByOrdinateInterval = {
+    val line = Line(Point(3, 3), Point(3, 6));
+    Assert.assertEquals(Segment(Point(3, 5), Point(3, 8)), line.clampOrdinate(5, 8));
+  }
 }
