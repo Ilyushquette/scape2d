@@ -25,6 +25,7 @@ case class Point(x:Double, y:Double) extends Shape {
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
     case line:Line => testIntersection(line, this);
+    case segment:Segment => testIntersection(segment, this);
   }
   
   override def hashCode = x.hashCode + y.hashCode;
@@ -69,6 +70,10 @@ case class Line(p1:Point, p2:Point) extends Shape {
   }
 }
 
-case class Segment(p1:Point, p2:Point) {
+case class Segment(p1:Point, p2:Point) extends Shape {
   lazy val line = Line(p1, p2);
+  
+  def intersects(shape:Shape) = shape match {
+    case point:Point => testIntersection(this, point);
+  }
 }
