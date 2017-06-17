@@ -67,6 +67,7 @@ case class Line(p1:Point, p2:Point) extends Shape {
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
     case line:Line => testIntersection(this, line);
+    case segment:Segment => testIntersection(segment, this);
   }
 }
 
@@ -75,6 +76,7 @@ case class Segment(p1:Point, p2:Point) extends Shape {
   
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
+    case line:Line => testIntersection(this, line);
     case segment:Segment => testIntersection(this, segment);
   }
 }

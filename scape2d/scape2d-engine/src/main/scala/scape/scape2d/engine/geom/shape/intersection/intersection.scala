@@ -42,4 +42,13 @@ package object intersection {
       mutualX <= min(max(s1.p1.x, s1.p2.x), max(s2.p1.x, s2.p2.x));
     }
   }
+  
+  def testIntersection(segment:Segment, line:Line):Boolean = {
+    if(line.vertical) min(segment.p1.x, segment.p2.x) <= line.p1.x &&
+                      max(segment.p1.x, segment.p2.x) >= line.p1.x;
+    else if(line.horizontal) min(segment.p1.y, segment.p2.y) <= line.p1.y &&
+                             max(segment.p1.y, segment.p2.y) >= line.p1.y;
+    else if(segment.line.vertical) segment.intersects(line.clampOrdinate(segment.p1.y, segment.p2.y));
+    else segment.intersects(line.clampAbscissa(segment.p1.x, segment.p2.x));
+  }
 }
