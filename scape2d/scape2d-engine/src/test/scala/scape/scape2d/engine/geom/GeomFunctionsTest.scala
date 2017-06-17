@@ -3,6 +3,9 @@ package scape.scape2d.engine.geom
 import org.junit.Assert
 import org.junit.Test
 
+import scape.scape2d.engine.geom.shape.Line
+import scape.scape2d.engine.geom.shape.Point
+
 class TestGeomFunctions {
   @Test
   def testNormalizePositiveAngle = {
@@ -19,4 +22,25 @@ class TestGeomFunctions {
   
   @Test
   def testSinDeg = Assert.assertEquals(0.2588, sinDeg(15), 0.0001);
+  
+  @Test
+  def testFindDiagonalCrossedLinesMutualX = {
+    val l1 = Line(Point(0, 100), Point(100, 0));
+    val l2 = Line(Point(100, 100), Point(0, 0));
+    Assert.assertEquals(50, findMutualX(l1, l2), 0.00001);
+  }
+  
+  @Test
+  def testFindVerticalWithDiagonalLinesMutualX = {
+    val l1 = Line(Point(0, 100), Point(0, 0));
+    val l2 = Line(Point(100, 100), Point(5, 50));
+    Assert.assertEquals(0, findMutualX(l1, l2), 0.00001);
+  }
+  
+  @Test(expected=classOf[ArithmeticException])
+  def testFindParallelLinesMutualX:Unit = {
+    val l1 = Line(Point(10, 100), Point(10, 0));
+    val l2 = Line(Point(10, 100), Point(10, 0));
+    findMutualX(l1, l2);
+  }
 }
