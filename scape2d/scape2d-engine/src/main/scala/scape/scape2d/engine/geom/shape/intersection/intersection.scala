@@ -73,4 +73,8 @@ package object intersection {
       }else false;
     }else true;
   }
+  
+  def testIntersection(c1:Circle, c2:Circle):Boolean = {
+    c1.center.distanceTo(c2.center) <= c1.radius + c2.radius;
+  }
 }

@@ -89,5 +89,6 @@ case class Circle(center:Point, radius:Double) extends Shape {
     case point:Point => testIntersection(this, point);
     case line:Line => testIntersection(this, line);
     case segment:Segment => testIntersection(this, segment);
+    case circle:Circle => testIntersection(this, circle);
   }
 }
