@@ -61,4 +61,16 @@ package object intersection {
     val nearestPoint = line.p1.displace(projectionVector.components);
     circle.intersects(nearestPoint);
   }
+  
+  def testIntersection(circle:Circle, segment:Segment):Boolean = {
+    if(!circle.intersects(segment.p1) && !circle.intersects(segment.p2)) {
+      val p1c = circle.center - segment.p1;
+      val p1p2 = segment.p2 - segment.p1;
+      val projectionVector = p1c.projection(p1p2);
+      if(projectionVector.angle == p1p2.angle && projectionVector.magnitude < p1p2.magnitude) {
+        val nearestPoint = segment.p1.displace(projectionVector.components);
+        circle.intersects(nearestPoint);
+      }else false;
+    }else true;
+  }
 }
