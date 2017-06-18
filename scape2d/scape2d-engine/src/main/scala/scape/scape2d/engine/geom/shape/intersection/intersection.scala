@@ -51,4 +51,6 @@ package object intersection {
     else if(segment.line.vertical) segment.intersects(line.clampOrdinate(segment.p1.y, segment.p2.y));
     else segment.intersects(line.clampAbscissa(segment.p1.x, segment.p2.x));
   }
+  
+  def testIntersection(circle:Circle, point:Point):Boolean = circle.center.distanceTo(point) <= circle.radius;
 }
