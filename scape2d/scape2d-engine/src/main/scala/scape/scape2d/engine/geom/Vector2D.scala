@@ -12,14 +12,14 @@ object Vector2D {
 }
 
 class Vector2D(val magnitude:Double, val angle:Double) {
-  def this() = this(0, 0);
-  
-  def components = {
+  lazy val components = {
     val radians = toRadians(angle);
     val offsetX = magnitude * cos(radians);
     val offsetY = magnitude * sin(radians);
     Components2D(offsetX, offsetY);
   }
+  
+  def this() = this(0, 0);
   
   def +(vector:Vector2D) = mergeWith(vector, (v1, v2) => (v1.x + v2.x, v1.y + v2.y));
   

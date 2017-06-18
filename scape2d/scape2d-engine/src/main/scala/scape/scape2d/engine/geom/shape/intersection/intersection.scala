@@ -53,4 +53,12 @@ package object intersection {
   }
   
   def testIntersection(circle:Circle, point:Point):Boolean = circle.center.distanceTo(point) <= circle.radius;
+  
+  def testIntersection(circle:Circle, line:Line):Boolean = {
+    val p1c = circle.center - line.p1;
+    val p1p2 = line.p2 - line.p1;
+    val projectionVector = p1c.projection(p1p2);
+    val nearestPoint = line.p1.displace(projectionVector.components);
+    circle.intersects(nearestPoint);
+  }
 }
