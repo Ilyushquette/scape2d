@@ -28,19 +28,14 @@ package object intersection {
   }
   
   def testIntersection(s1:Segment, s2:Segment):Boolean = {
-    if(s1.line.vertical && s2.line.vertical)
-      s1.p1.x == s2.p1.x &&
-      max(s1.p1.y, s1.p2.y) >= min(s2.p1.y, s2.p2.y) && // mutual vertical interval
-      min(s1.p1.y, s1.p2.y) <= max(s2.p1.y, s2.p2.y);
-    else if(!s1.line.vertical && !s2.line.vertical && s1.line.slope.get == s2.line.slope.get)
-      s1.line.yIntercept.get == s2.line.yIntercept.get &&
-      max(s1.p1.x, s1.p2.x) >= min(s2.p1.x, s2.p2.x) && // mutual horizontal interval
-      min(s1.p1.x, s1.p2.x) <= max(s2.p1.x, s2.p2.x);
-    else {
-      val mutualX = findMutualX(s1.line, s2.line);
-      mutualX >= max(min(s1.p1.x, s1.p2.x), min(s2.p1.x, s2.p2.x)) && // lies within mutual abscissa
-      mutualX <= min(max(s1.p1.x, s1.p2.x), max(s2.p1.x, s2.p2.x));
-    }
+    val orientation1 = TripletOrientation(s1.p1, s1.p2, s2.p1);
+    val orientation2 = TripletOrientation(s1.p1, s1.p2, s2.p2);
+    val orientation3 = TripletOrientation(s2.p1, s2.p2, s1.p1);
+    val orientation4 = TripletOrientation(s2.p1, s2.p2, s1.p2);
+    if(orientation1 == Collinear && orientation1 == orientation2) { // all orientations are collinear then
+      max(s1.p1.x, s1.p2.x) >= min(s2.p1.x, s2.p2.x) && min(s1.p1.x, s1.p2.x) <= max(s2.p1.x, s2.p2.x) &&
+      max(s1.p1.y, s1.p2.y) >= min(s2.p1.y, s2.p2.y) && min(s1.p1.y, s1.p2.y) <= max(s2.p1.y, s2.p2.y);
+    }else orientation1 != orientation2 && orientation3 != orientation4;
   }
   
   def testIntersection(segment:Segment, line:Line):Boolean = {
