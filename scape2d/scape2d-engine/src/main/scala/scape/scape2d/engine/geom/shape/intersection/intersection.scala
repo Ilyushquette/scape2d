@@ -44,12 +44,9 @@ package object intersection {
   }
   
   def testIntersection(segment:Segment, line:Line):Boolean = {
-    if(line.vertical) min(segment.p1.x, segment.p2.x) <= line.p1.x &&
-                      max(segment.p1.x, segment.p2.x) >= line.p1.x;
-    else if(line.horizontal) min(segment.p1.y, segment.p2.y) <= line.p1.y &&
-                             max(segment.p1.y, segment.p2.y) >= line.p1.y;
-    else if(segment.line.vertical) segment.intersects(line.clampOrdinate(segment.p1.y, segment.p2.y));
-    else segment.intersects(line.clampAbscissa(segment.p1.x, segment.p2.x));
+    val l1l2s1orientation = TripletOrientation(line.p1, line.p2, segment.p1);
+    val l1l2s2orientation = TripletOrientation(line.p1, line.p2, segment.p2);
+    l1l2s1orientation != l1l2s2orientation || l1l2s1orientation == Collinear;
   }
   
   def testIntersection(circle:Circle, point:Point):Boolean = circle.center.distanceTo(point) <= circle.radius;

@@ -62,4 +62,11 @@ class SegmentLineIntersection {
     val line = Line(Point(5, 5), Point(10, 10));
     Assert.assertTrue(segment.intersects(line));
   }
+  
+  @Test
+  def testDiagonalSegmentTouchedByDiagonalLineDoIntersect = {
+    val segment = Segment(Point(5, 5), Point(4, 6));
+    val line = Line(Point(3, 3), Point(2, 2));
+    Assert.assertTrue(segment.intersects(line));
+  }
 }
