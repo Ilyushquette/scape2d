@@ -22,6 +22,17 @@ package object intersection {
     ray.origin == point || DoubleMath.fuzzyEquals(ray.angle, ray.origin.angleTo(point), 1E-10);
   }
   
+  def testIntersection(ray:Ray, line:Line):Boolean = {
+    if(ray.line.vertical && line.vertical) DoubleMath.fuzzyEquals(ray.origin.x, line.p1.x, 1E-10);
+    else if(!line.vertical && !ray.line.vertical && line.slope.get == ray.line.slope.get)
+      ray.line.yIntercept == line.yIntercept;
+    else {
+      val mutualX = findMutualX(ray.line, line);
+      if(90 < ray.angle && ray.angle < 270) mutualX <= ray.origin.x;
+      else mutualX >= ray.origin.x;
+    }
+  }
+  
   def testIntersection(segment:Segment, point:Point):Boolean = {
     val mutualAxes = point.x >= min(segment.p1.x, segment.p2.x) &&
                      point.x <= max(segment.p1.x, segment.p2.x) &&

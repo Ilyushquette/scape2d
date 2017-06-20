@@ -1,9 +1,9 @@
 package scape.scape2d.engine.geom.shape
 
 import java.lang.Math._
-
 import scape.scape2d.engine.geom._
 import scape.scape2d.engine.geom.shape.intersection._
+import com.google.common.math.DoubleMath
 
 sealed trait Shape {
   def intersects(shape:Shape):Boolean;
@@ -46,9 +46,9 @@ case class Line(p1:Point, p2:Point) extends Shape {
   lazy val slope = if(dx != 0) Some(dy / dx) else None; // slope is undefined for vertical lines
   lazy val yIntercept = if(slope.isDefined) Some(p1.y - slope.get * p1.x) else None;
   
-  def horizontal = dy == 0;
+  def horizontal = DoubleMath.fuzzyEquals(dy, 0, 1E-10);
   
-  def vertical = dx == 0;
+  def vertical = DoubleMath.fuzzyEquals(dx, 0, 1E-10);
   
   def forX(x:Double) = {
     if(horizontal) p1.y;
@@ -69,6 +69,7 @@ case class Line(p1:Point, p2:Point) extends Shape {
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
     case line:Line => testIntersection(this, line);
+    case ray:Ray => testIntersection(ray, this);
     case segment:Segment => testIntersection(segment, this);
     case circle:Circle => testIntersection(circle, this);
   }
@@ -82,6 +83,7 @@ case class Ray(origin:Point, angle:Double) extends Shape {
   
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
+    case line:Line => testIntersection(this, line);
   }
 }
 
