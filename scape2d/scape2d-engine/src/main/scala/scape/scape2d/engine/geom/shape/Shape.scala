@@ -25,6 +25,7 @@ case class Point(x:Double, y:Double) extends Shape {
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
     case line:Line => testIntersection(line, this);
+    case ray:Ray => testIntersection(ray, this);
     case segment:Segment => testIntersection(segment, this);
     case circle:Circle => testIntersection(circle, this);
   }
@@ -73,10 +74,14 @@ case class Line(p1:Point, p2:Point) extends Shape {
   }
 }
 
-case class Ray(origin:Point, angle:Double) {
+case class Ray(origin:Point, angle:Double) extends Shape {
   lazy val line = {
     val unitVector = new Vector2D(1, angle);
     Line(origin, origin.displace(unitVector.components));
+  }
+  
+  def intersects(shape:Shape) = shape match {
+    case point:Point => testIntersection(this, point);
   }
 }
 

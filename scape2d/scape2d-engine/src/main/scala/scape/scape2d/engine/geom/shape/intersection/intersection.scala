@@ -18,6 +18,10 @@ package object intersection {
     else true;
   }
   
+  def testIntersection(ray:Ray, point:Point):Boolean = {
+    ray.origin == point || DoubleMath.fuzzyEquals(ray.angle, ray.origin.angleTo(point), 1E-10);
+  }
+  
   def testIntersection(segment:Segment, point:Point):Boolean = {
     val mutualAxes = point.x >= min(segment.p1.x, segment.p2.x) &&
                      point.x <= max(segment.p1.x, segment.p2.x) &&
