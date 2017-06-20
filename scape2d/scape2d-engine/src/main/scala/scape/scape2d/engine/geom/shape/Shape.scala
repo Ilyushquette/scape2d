@@ -73,6 +73,13 @@ case class Line(p1:Point, p2:Point) extends Shape {
   }
 }
 
+case class Ray(origin:Point, angle:Double) {
+  lazy val line = {
+    val unitVector = new Vector2D(1, angle);
+    Line(origin, origin.displace(unitVector.components));
+  }
+}
+
 case class Segment(p1:Point, p2:Point) extends Shape {
   lazy val line = Line(p1, p2);
   
