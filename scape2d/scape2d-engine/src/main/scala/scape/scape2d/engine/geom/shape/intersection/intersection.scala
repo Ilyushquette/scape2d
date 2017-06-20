@@ -33,6 +33,13 @@ package object intersection {
     }
   }
   
+  def testIntersection(r1:Ray, r2:Ray):Boolean = {
+    val parallel = (r1.line.vertical && r2.line.vertical) ||
+                   (!r1.line.vertical && !r2.line.vertical && r1.line.slope.get == r2.line.slope.get);
+    if(parallel) r1.intersects(r2.origin)
+    else r1.intersects(r2.line) && r2.intersects(r1.line);
+  }
+  
   def testIntersection(segment:Segment, point:Point):Boolean = {
     val mutualAxes = point.x >= min(segment.p1.x, segment.p2.x) &&
                      point.x <= max(segment.p1.x, segment.p2.x) &&

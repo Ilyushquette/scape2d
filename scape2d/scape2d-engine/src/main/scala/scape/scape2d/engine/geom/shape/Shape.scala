@@ -84,6 +84,7 @@ case class Ray(origin:Point, angle:Double) extends Shape {
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
     case line:Line => testIntersection(this, line);
+    case ray:Ray => testIntersection(this, ray);
   }
 }
 
