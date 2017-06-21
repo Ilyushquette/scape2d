@@ -88,6 +88,18 @@ package object intersection {
     circle.intersects(nearestPoint);
   }
   
+  def testIntersection(circle:Circle, ray:Ray):Boolean = {
+    if(!circle.intersects(ray.origin)) {
+      val sc = circle.center - ray.origin;
+      val rayUnitVector = new Vector2D(1, ray.angle);
+      val projectionVector = sc.projection(rayUnitVector);
+      if(projectionVector.angle == ray.angle) {
+        val nearestPoint = ray.origin.displace(projectionVector.components);
+        circle.intersects(nearestPoint);
+      }else false;
+    }else true;
+  }
+  
   def testIntersection(circle:Circle, segment:Segment):Boolean = {
     if(!circle.intersects(segment.p1) && !circle.intersects(segment.p2)) {
       val p1c = circle.center - segment.p1;
