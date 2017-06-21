@@ -43,4 +43,11 @@ class TestGeomFunctions {
     val l2 = Line(Point(10, 100), Point(10, 0));
     findMutualX(l1, l2);
   }
+  
+  @Test
+  def testFindMutualPoint = {
+    val l1 = Line(Point(0, 100), Point(100, 0));
+    val l2 = Line(Point(100, 100), Point(0, 0));
+    Assert.assertEquals(Point(50, 50), findMutualPoint(l1, l2));
+  }
 }
