@@ -66,6 +66,18 @@ package object intersection {
     l1l2s1orientation != l1l2s2orientation || l1l2s1orientation == Collinear;
   }
   
+  def testIntersection(segment:Segment, ray:Ray):Boolean = {
+    val r1r2s1orientation = TripletOrientation(ray.line.p1, ray.line.p2, segment.p1);
+    val r1r2s2orientation = TripletOrientation(ray.line.p1, ray.line.p2, segment.p2);
+    if(r1r2s1orientation == Collinear && r1r2s1orientation == r1r2s2orientation)
+      ray.intersects(segment.p1) || ray.intersects(segment.p2);
+    else if(r1r2s1orientation != r1r2s2orientation) {
+      val mutualX = findMutualX(ray.line, segment.line);
+      if(90 < ray.angle && ray.angle < 270) mutualX <= ray.origin.x;
+      else mutualX >= ray.origin.x;
+    }else false;
+  }
+  
   def testIntersection(circle:Circle, point:Point):Boolean = circle.center.distanceTo(point) <= circle.radius;
   
   def testIntersection(circle:Circle, line:Line):Boolean = {
