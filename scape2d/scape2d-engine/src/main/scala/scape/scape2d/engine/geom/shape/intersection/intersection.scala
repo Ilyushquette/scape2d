@@ -2,30 +2,32 @@ package scape.scape2d.engine.geom.shape
 
 import java.lang.Math._
 import scape.scape2d.engine.geom._
-import com.google.common.math.DoubleMath
+import com.google.common.math.DoubleMath._
 
 package object intersection {
   def testIntersection(p1:Point, p2:Point) = p1 == p2;
   
   def testIntersection(line:Line, point:Point):Boolean = {
-    if(line.vertical) DoubleMath.fuzzyEquals(point.x, line.forY(point.y), 0.00001);
-    else DoubleMath.fuzzyEquals(point.y, line.forX(point.x), 0.00001);
+    if(line.vertical) fuzzyEquals(point.x, line.forY(point.y), Epsilon);
+    else fuzzyEquals(point.y, line.forX(point.x), Epsilon);
   }
   
   def testIntersection(l1:Line, l2:Line):Boolean = {
-    if(!l1.vertical && !l2.vertical) l1.slope.get != l2.slope.get || l1.yIntercept.get == l2.yIntercept.get;
-    else if(l1.vertical && l2.vertical) l1.p1.x == l2.p1.x;
+    if(!l1.vertical && !l2.vertical) 
+      !fuzzyEquals(l1.slope.get, l2.slope.get, Epsilon) ||
+      fuzzyEquals(l1.yIntercept.get, l2.yIntercept.get, Epsilon);
+    else if(l1.vertical && l2.vertical) fuzzyEquals(l1.p1.x, l2.p1.x, Epsilon);
     else true;
   }
   
   def testIntersection(ray:Ray, point:Point):Boolean = {
-    ray.origin == point || DoubleMath.fuzzyEquals(ray.angle, ray.origin.angleTo(point), 1E-10);
+    ray.origin == point || fuzzyEquals(ray.angle, ray.origin.angleTo(point), Epsilon);
   }
   
   def testIntersection(ray:Ray, line:Line):Boolean = {
-    if(ray.line.vertical && line.vertical) DoubleMath.fuzzyEquals(ray.origin.x, line.p1.x, 1E-10);
-    else if(!line.vertical && !ray.line.vertical && line.slope.get == ray.line.slope.get)
-      ray.line.yIntercept == line.yIntercept;
+    if(ray.line.vertical && line.vertical) fuzzyEquals(ray.origin.x, line.p1.x, Epsilon);
+    else if(!line.vertical && !ray.line.vertical && fuzzyEquals(line.slope.get, ray.line.slope.get, Epsilon))
+      fuzzyEquals(ray.line.yIntercept.get, line.yIntercept.get, Epsilon);
     else {
       val mutualX = findMutualX(ray.line, line);
       if(90 < ray.angle && ray.angle < 270) mutualX <= ray.origin.x;
@@ -35,8 +37,9 @@ package object intersection {
   
   def testIntersection(r1:Ray, r2:Ray):Boolean = {
     val parallel = (r1.line.vertical && r2.line.vertical) ||
-                   (!r1.line.vertical && !r2.line.vertical && r1.line.slope.get == r2.line.slope.get);
-    if(parallel) r1.intersects(r2.origin)
+                   (!r1.line.vertical && !r2.line.vertical &&
+                    fuzzyEquals(r1.line.slope.get, r2.line.slope.get, Epsilon));
+    if(parallel) r1.intersects(r2.origin) || r2.intersects(r1.origin);
     else r1.intersects(r2.line) && r2.intersects(r1.line);
   }
   
@@ -93,7 +96,7 @@ package object intersection {
       val sc = circle.center - ray.origin;
       val rayUnitVector = new Vector2D(1, ray.angle);
       val projectionVector = sc.projection(rayUnitVector);
-      if(projectionVector.angle == ray.angle) {
+      if(fuzzyEquals(projectionVector.angle, ray.angle, Epsilon)) {
         val nearestPoint = ray.origin.displace(projectionVector.components);
         circle.intersects(nearestPoint);
       }else false;
@@ -105,7 +108,8 @@ package object intersection {
       val p1c = circle.center - segment.p1;
       val p1p2 = segment.p2 - segment.p1;
       val projectionVector = p1c.projection(p1p2);
-      if(projectionVector.angle == p1p2.angle && projectionVector.magnitude < p1p2.magnitude) {
+      if(fuzzyEquals(projectionVector.angle, p1p2.angle, Epsilon) &&
+         projectionVector.magnitude < p1p2.magnitude) {
         val nearestPoint = segment.p1.displace(projectionVector.components);
         circle.intersects(nearestPoint);
       }else false;

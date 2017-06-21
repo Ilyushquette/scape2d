@@ -3,7 +3,7 @@ package scape.scape2d.engine.geom.shape
 import java.lang.Math._
 import scape.scape2d.engine.geom._
 import scape.scape2d.engine.geom.shape.intersection._
-import com.google.common.math.DoubleMath
+import com.google.common.math.DoubleMath._
 
 sealed trait Shape {
   def intersects(shape:Shape):Boolean;
@@ -33,8 +33,8 @@ case class Point(x:Double, y:Double) extends Shape {
   override def hashCode = x.hashCode + y.hashCode;
   
   override def equals(a:Any) = a match {
-    case Point(ox, oy) => x == ox && y == oy
-    case _ => false
+    case Point(ox, oy) => fuzzyEquals(x, ox, Epsilon) && fuzzyEquals(y, oy, Epsilon);
+    case _ => false;
   }
   
   override def toString = "Point2D [x=%f, y=%f]".format(x, y);
@@ -46,9 +46,9 @@ case class Line(p1:Point, p2:Point) extends Shape {
   lazy val slope = if(dx != 0) Some(dy / dx) else None; // slope is undefined for vertical lines
   lazy val yIntercept = if(slope.isDefined) Some(p1.y - slope.get * p1.x) else None;
   
-  def horizontal = DoubleMath.fuzzyEquals(dy, 0, 1E-10);
+  def horizontal = fuzzyEquals(dy, 0, Epsilon);
   
-  def vertical = DoubleMath.fuzzyEquals(dx, 0, 1E-10);
+  def vertical = fuzzyEquals(dx, 0, Epsilon);
   
   def forX(x:Double) = {
     if(horizontal) p1.y;

@@ -1,6 +1,7 @@
 package scape.scape2d.engine.geom
 
-import java.lang.Math._;
+import java.lang.Math._
+import com.google.common.math.DoubleMath._
 
 object Vector2D {
   def from(components:Components2D) = {
@@ -25,11 +26,7 @@ class Vector2D(val magnitude:Double, val angle:Double) {
   
   def -(vector:Vector2D) = mergeWith(vector, (v1, v2) => (v1.x - v2.x, v1.y - v2.y));
   
-  def *(vector:Vector2D) = {
-    val comps = components;
-    val otherComps = vector.components;
-    comps.x * otherComps.x + comps.y * otherComps.y;
-  }
+  def *(vector:Vector2D) = components.x * vector.components.x + components.y * vector.components.y;
   
   def *(magnitudeMultiplier:Double) = {
     val newMagnitude = magnitude * abs(magnitudeMultiplier);
@@ -51,7 +48,8 @@ class Vector2D(val magnitude:Double, val angle:Double) {
   override def hashCode = magnitude.hashCode + angle.hashCode;
   
   override def equals(a:Any) = a match {
-    case vector:Vector2D => magnitude == vector.magnitude && angle == vector.angle;
+    case vector:Vector2D => fuzzyEquals(magnitude, vector.magnitude, Epsilon) &&
+                            fuzzyEquals(angle, vector.angle, Epsilon);
     case _ => false;
   }
   

@@ -45,7 +45,7 @@ class RaysIntersectionTest {
   def testNonVerticalParallelRaysSameDirectionsDoIntersect = {
     val r1 = Ray(Point(3, 3), 45);
     val r2 = Ray(Point(1, 1), 45);
-    Assert.assertFalse(r1.intersects(r2));
+    Assert.assertTrue(r1.intersects(r2));
   }
   
   @Test
