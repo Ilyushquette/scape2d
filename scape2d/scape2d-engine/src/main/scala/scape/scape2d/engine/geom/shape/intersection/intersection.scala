@@ -141,4 +141,11 @@ package object intersection {
   def testIntersection(polygon:Polygon, circle:Circle):Boolean = {
     polygon.intersects(circle.center) || polygon.segments.exists(_.intersects(circle));
   }
+  
+  def testIntersection(p1:Polygon, p2:Polygon):Boolean = {
+    val anyVertex1 = p1.segments.iterator.next;
+    val anyVertex2 = p2.segments.iterator.next;
+    anyVertex1.intersects(p2) || anyVertex2.intersects(p1) ||
+    p1.segments.exists(s => p2.segments.exists(_.intersects(s)));
+  }
 }

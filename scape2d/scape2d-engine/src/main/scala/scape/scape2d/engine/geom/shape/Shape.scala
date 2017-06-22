@@ -124,5 +124,6 @@ case class Polygon private[shape] (segments:Array[Segment]) extends Shape {
     case ray:Ray => testIntersection(this, ray);
     case segment:Segment => testIntersection(this, segment);
     case circle:Circle => testIntersection(this, circle);
+    case polygon:Polygon => testIntersection(this, polygon);
   }
 }
