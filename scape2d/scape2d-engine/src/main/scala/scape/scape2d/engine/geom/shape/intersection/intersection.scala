@@ -137,4 +137,8 @@ package object intersection {
     polygon.intersects(segment.p1) || polygon.intersects(segment.p2) ||
     polygon.segments.exists(_.intersects(segment));
   }
+  
+  def testIntersection(polygon:Polygon, circle:Circle):Boolean = {
+    polygon.intersects(circle.center) || polygon.segments.exists(_.intersects(circle));
+  }
 }
