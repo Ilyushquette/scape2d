@@ -128,4 +128,6 @@ package object intersection {
       (intersectedSegments.size & 1) == 1;
     }else true;
   }
+  
+  def testIntersection(polygon:Polygon, line:Line):Boolean = polygon.segments.exists(_.intersects(line));
 }
