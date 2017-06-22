@@ -132,4 +132,9 @@ package object intersection {
   def testIntersection(polygon:Polygon, line:Line):Boolean = polygon.segments.exists(_.intersects(line));
   
   def testIntersection(polygon:Polygon, ray:Ray):Boolean = polygon.segments.exists(_.intersects(ray));
+  
+  def testIntersection(polygon:Polygon, segment:Segment):Boolean = {
+    polygon.intersects(segment.p1) || polygon.intersects(segment.p2) ||
+    polygon.segments.exists(_.intersects(segment));
+  }
 }

@@ -102,6 +102,7 @@ case class Segment(p1:Point, p2:Point) extends Shape {
     case ray:Ray => testIntersection(this, ray);
     case segment:Segment => testIntersection(this, segment);
     case circle:Circle => testIntersection(circle, this);
+    case polygon:Polygon => testIntersection(polygon, this);
   }
 }
 
@@ -120,5 +121,6 @@ case class Polygon private[shape] (segments:Array[Segment]) extends Shape {
     case point:Point => testIntersection(this, point);
     case line:Line => testIntersection(this, line);
     case ray:Ray => testIntersection(this, ray);
+    case segment:Segment => testIntersection(this, segment);
   }
 }
