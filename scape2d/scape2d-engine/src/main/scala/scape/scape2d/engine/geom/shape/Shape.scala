@@ -112,4 +112,4 @@ case class Circle(center:Point, radius:Double) extends Shape {
   }
 }
 
-case class Polygon(segments:Array[Segment]);
+case class Polygon private[shape] (segments:Array[Segment]);
