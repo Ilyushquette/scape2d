@@ -28,6 +28,7 @@ case class Point(x:Double, y:Double) extends Shape {
     case ray:Ray => testIntersection(ray, this);
     case segment:Segment => testIntersection(segment, this);
     case circle:Circle => testIntersection(circle, this);
+    case polygon:Polygon => testIntersection(polygon, this);
   }
   
   override def hashCode = x.hashCode + y.hashCode;
@@ -112,4 +113,8 @@ case class Circle(center:Point, radius:Double) extends Shape {
   }
 }
 
-case class Polygon private[shape] (segments:Array[Segment]);
+case class Polygon private[shape] (segments:Array[Segment]) extends Shape {
+  def intersects(shape:Shape) = shape match {
+    case point:Point => testIntersection(this, point);
+  }
+}

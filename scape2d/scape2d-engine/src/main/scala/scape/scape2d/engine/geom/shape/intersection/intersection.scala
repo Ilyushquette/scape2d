@@ -119,4 +119,13 @@ package object intersection {
   def testIntersection(c1:Circle, c2:Circle):Boolean = {
     c1.center.distanceTo(c2.center) <= c1.radius + c2.radius;
   }
+  
+  def testIntersection(polygon:Polygon, point:Point):Boolean = {
+    val onTheVertex = polygon.segments.exists(s => s.p1 == point || s.p2 == point);
+    if(!onTheVertex) {
+      val ray = Ray(point, 180);
+      val intersectedSegments = polygon.segments.filter(_.intersects(ray));
+      (intersectedSegments.size & 1) == 1;
+    }else true;
+  }
 }
