@@ -130,4 +130,6 @@ package object intersection {
   }
   
   def testIntersection(polygon:Polygon, line:Line):Boolean = polygon.segments.exists(_.intersects(line));
+  
+  def testIntersection(polygon:Polygon, ray:Ray):Boolean = polygon.segments.exists(_.intersects(ray));
 }
