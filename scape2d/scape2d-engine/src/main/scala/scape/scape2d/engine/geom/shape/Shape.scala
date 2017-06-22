@@ -111,3 +111,5 @@ case class Circle(center:Point, radius:Double) extends Shape {
     case circle:Circle => testIntersection(this, circle);
   }
 }
+
+case class Polygon(segments:Array[Segment]);
