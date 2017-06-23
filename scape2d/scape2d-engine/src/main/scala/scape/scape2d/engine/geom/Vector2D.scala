@@ -20,6 +20,8 @@ class Vector2D(val magnitude:Double, val angle:Double) {
     Components2D(offsetX, offsetY);
   }
   
+  lazy val opposite = new Vector2D(magnitude, normalizeAngle(angle + 180));
+  
   def this() = this(0, 0);
   
   def +(vector:Vector2D) = mergeWith(vector, (v1, v2) => (v1.x + v2.x, v1.y + v2.y));
@@ -37,8 +39,6 @@ class Vector2D(val magnitude:Double, val angle:Double) {
   def scalarProjection(target:Vector2D) = (this * target) / (target.magnitude * target.magnitude);
   
   def projection(target:Vector2D) = target * scalarProjection(target);
-  
-  def opposite = new Vector2D(magnitude, normalizeAngle(angle + 180));
   
   private def mergeWith(vector:Vector2D, merge:(Components2D, Components2D) => (Double, Double)) = {
     val merged = merge(components, vector.components);

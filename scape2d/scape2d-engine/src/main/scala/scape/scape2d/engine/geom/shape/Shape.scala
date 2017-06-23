@@ -1,9 +1,11 @@
 package scape.scape2d.engine.geom.shape
 
 import java.lang.Math._
+
+import com.google.common.math.DoubleMath._
+
 import scape.scape2d.engine.geom._
 import scape.scape2d.engine.geom.shape.intersection._
-import com.google.common.math.DoubleMath._
 
 sealed trait Shape {
   def intersects(shape:Shape):Boolean;
@@ -122,6 +124,11 @@ case class Circle(center:Point, radius:Double) extends Shape {
 }
 
 case class Polygon private[shape] (segments:Array[Segment]) extends Shape {
+  override def equals(any:Any) = any match {
+    case Polygon(osegments) => segments.deep == osegments.deep;
+    case _ => false;
+  }
+  
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
     case line:Line => testIntersection(this, line);
@@ -129,5 +136,19 @@ case class Polygon private[shape] (segments:Array[Segment]) extends Shape {
     case segment:Segment => testIntersection(this, segment);
     case circle:Circle => testIntersection(this, circle);
     case polygon:Polygon => testIntersection(this, polygon);
+  }
+}
+
+case class CircleSweep(circle:Circle, sweepVector:Vector2D) {
+  lazy val destinationCircle = Circle(circle.center.displace(sweepVector.components), circle.radius);
+  lazy val connector = {
+    val origin = circle.center;
+    val destination = origin.displace(sweepVector.components);
+    val sweepPerpendicularToRadius = new Vector2D(circle.radius, normalizeAngle(sweepVector.angle + 90));
+    val connector1 = Segment(origin.displace(sweepPerpendicularToRadius.components), 
+                             destination.displace(sweepPerpendicularToRadius.components));
+    val connector2 = Segment(destination.displace(sweepPerpendicularToRadius.opposite.components),
+                             origin.displace(sweepPerpendicularToRadius.opposite.components));
+    (connector1, connector2);
   }
 }
