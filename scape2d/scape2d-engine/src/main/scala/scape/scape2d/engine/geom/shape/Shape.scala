@@ -35,6 +35,7 @@ case class Point(x:Double, y:Double) extends Shape {
     case segment:Segment => testIntersection(segment, this);
     case circle:Circle => testIntersection(circle, this);
     case polygon:Polygon => testIntersection(polygon, this);
+    case circleSweep:CircleSweep => testIntersection(circleSweep, this);
   }
   
   override def hashCode = x.hashCode + y.hashCode;
@@ -112,7 +113,9 @@ case class Segment(p1:Point, p2:Point) extends Shape {
   }
 }
 
-case class Circle(center:Point, radius:Double) extends Shape {
+case class Circle(center:Point, radius:Double) extends Sweepable[CircleSweep] {
+  def sweep(sweepVector:Vector2D) = CircleSweep(this, sweepVector);
+  
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
     case line:Line => testIntersection(this, line);
@@ -139,7 +142,7 @@ case class Polygon private[shape] (segments:Array[Segment]) extends Shape {
   }
 }
 
-case class CircleSweep(circle:Circle, sweepVector:Vector2D) {
+case class CircleSweep(circle:Circle, sweepVector:Vector2D) extends Shape {
   lazy val destinationCircle = Circle(circle.center.displace(sweepVector.components), circle.radius);
   lazy val connector = {
     val origin = circle.center;
@@ -150,5 +153,9 @@ case class CircleSweep(circle:Circle, sweepVector:Vector2D) {
     val connector2 = Segment(destination.displace(sweepPerpendicularToRadius.opposite.components),
                              origin.displace(sweepPerpendicularToRadius.opposite.components));
     (connector1, connector2);
+  }
+  
+  def intersects(shape:Shape) = shape match {
+    case point:Point => testIntersection(this, point);
   }
 }

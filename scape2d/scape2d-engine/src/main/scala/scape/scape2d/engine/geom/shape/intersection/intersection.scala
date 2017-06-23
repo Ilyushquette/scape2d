@@ -148,4 +148,11 @@ package object intersection {
     anyVertex1.intersects(p2) || anyVertex2.intersects(p1) ||
     p1.segments.exists(s => p2.segments.exists(_.intersects(s)));
   }
+  
+  def testIntersection(circleSweep:CircleSweep, point:Point):Boolean = {
+    if(!circleSweep.circle.intersects(point) && !circleSweep.destinationCircle.intersects(point)) {
+      val ray = Ray(point, normalizeAngle(circleSweep.sweepVector.angle + 90));
+      ray.intersects(circleSweep.connector._1) ^ ray.intersects(circleSweep.connector._2);
+    }else true;
+  }
 }
