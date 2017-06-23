@@ -9,6 +9,10 @@ sealed trait Shape {
   def intersects(shape:Shape):Boolean;
 }
 
+sealed trait Sweepable[T <: Shape] extends Shape {
+  def sweep(sweepVector:Vector2D):T;
+}
+
 object Point {
   def origin = Point(0, 0);
 }
