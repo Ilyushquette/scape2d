@@ -178,4 +178,13 @@ package object intersection {
       ray.intersects(circleSweep.connector._1) ^ ray.intersects(circleSweep.connector._2);
     }else true;
   }
+  
+  def testIntersection(circleSweep:CircleSweep, polygon:Polygon):Boolean = {
+    val pointInside = circleSweep.intersects(polygon.segments(0).p1);
+    if(!pointInside) {
+      polygon.intersects(circleSweep.circle) || polygon.intersects(circleSweep.destinationCircle) ||
+      polygon.segments.exists(s =>
+        s.intersects(circleSweep.connector._1) || s.intersects(circleSweep.connector._2));
+    }else true;
+  }
 }
