@@ -122,6 +122,11 @@ package object intersection {
     }else true;
   }
   
+  def testIntersection(aabb:AxisAlignedRectangle, point:Point):Boolean = {
+    point.x >= aabb.bottomLeft.x && point.x <= aabb.bottomRight.x &&
+    point.y >= aabb.bottomLeft.y && point.y <= aabb.topLeft.y;
+  }
+  
   def testIntersection(polygon:Polygon, line:Line):Boolean = polygon.segments.exists(_.intersects(line));
   
   def testIntersection(polygon:Polygon, ray:Ray):Boolean = polygon.segments.exists(_.intersects(ray));

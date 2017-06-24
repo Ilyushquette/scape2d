@@ -38,6 +38,7 @@ case class Point(x:Double, y:Double) extends Shape {
     case ray:Ray => testIntersection(ray, this);
     case segment:Segment => testIntersection(segment, this);
     case circle:Circle => testIntersection(circle, this);
+    case rectangle:AxisAlignedRectangle => testIntersection(rectangle, this);
     case polygon:Polygon => testIntersection(polygon, this);
     case circleSweep:CircleSweep => testIntersection(circleSweep, this);
   }
@@ -151,11 +152,17 @@ case class CustomPolygon private[shape] (segments:Array[Segment]) extends Polygo
   }
 }
 
-case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) {
+case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) extends Polygon {
   lazy val topLeft = Point(bottomLeft.x, bottomLeft.y + height);
   lazy val topRight = Point(bottomLeft.x + width, bottomLeft.y + height);
   lazy val bottomRight = Point(bottomLeft.x + width, bottomLeft.y);
   lazy val polygon = PolygonBuilder(bottomLeft, topLeft, topRight).to(bottomRight).build;
+  
+  def segments = polygon.segments;
+  
+  def intersects(shape:Shape) = shape match {
+    case point:Point => testIntersection(this, point);
+  }
 }
 
 case class CircleSweep(circle:Circle, sweepVector:Vector2D) extends Shape {
