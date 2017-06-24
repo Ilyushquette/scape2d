@@ -98,6 +98,7 @@ case class Ray(origin:Point, angle:Double) extends Shape {
     case segment:Segment => testIntersection(segment, this);
     case circle:Circle => testIntersection(circle, this);
     case polygon:Polygon => testIntersection(polygon, this);
+    case circleSweep:CircleSweep => testIntersection(circleSweep, this);
   }
 }
 
@@ -159,5 +160,6 @@ case class CircleSweep(circle:Circle, sweepVector:Vector2D) extends Shape {
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
     case line:Line => testIntersection(this, line);
+    case ray:Ray => testIntersection(this, ray);
   }
 }

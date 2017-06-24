@@ -161,4 +161,11 @@ package object intersection {
     line.intersects(circleSweep.destinationCircle) ||
     line.intersects(circleSweep.connector._1);
   }
+  
+  def testIntersection(circleSweep:CircleSweep, ray:Ray):Boolean = {
+    ray.intersects(circleSweep.circle) ||
+    ray.intersects(circleSweep.destinationCircle) ||
+    ray.intersects(circleSweep.connector._1) ||
+    ray.intersects(circleSweep.connector._2);
+  }
 }
