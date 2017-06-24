@@ -12,7 +12,7 @@ case class PolygonBuilder private[shape] (segments:Array[Segment]) {
   def build = {
     val firstSegment = segments(0);
     val lastSegment = segments(segments.size - 1);
-    if(firstSegment.p1 == lastSegment.p2) Polygon(segments);
-    else Polygon(segments :+ Segment(lastSegment.p2, firstSegment.p1));
+    if(firstSegment.p1 == lastSegment.p2) CustomPolygon(segments);
+    else CustomPolygon(segments :+ Segment(lastSegment.p2, firstSegment.p1));
   }
 }

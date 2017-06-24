@@ -15,6 +15,10 @@ sealed trait Sweepable[T <: Shape] extends Shape {
   def sweep(sweepVector:Vector2D):T;
 }
 
+sealed trait Polygon extends Shape {
+  def segments:Array[Segment];
+}
+
 object Point {
   def origin = Point(0, 0);
 }
@@ -130,9 +134,9 @@ case class Circle(center:Point, radius:Double) extends Sweepable[CircleSweep] {
   }
 }
 
-case class Polygon private[shape] (segments:Array[Segment]) extends Shape {
+case class CustomPolygon private[shape] (segments:Array[Segment]) extends Polygon {
   override def equals(any:Any) = any match {
-    case Polygon(osegments) => segments.deep == osegments.deep;
+    case polygon:Polygon => segments.deep == polygon.segments.deep;
     case _ => false;
   }
   
