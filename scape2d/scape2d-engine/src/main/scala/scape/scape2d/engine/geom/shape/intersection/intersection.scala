@@ -28,11 +28,7 @@ package object intersection {
     if(ray.line.vertical && line.vertical) fuzzyEquals(ray.origin.x, line.p1.x, Epsilon);
     else if(!line.vertical && !ray.line.vertical && fuzzyEquals(line.slope.get, ray.line.slope.get, Epsilon))
       fuzzyEquals(ray.line.yIntercept.get, line.yIntercept.get, Epsilon);
-    else {
-      val mutualX = findMutualX(ray.line, line);
-      if(90 < ray.angle && ray.angle < 270) mutualX <= ray.origin.x;
-      else mutualX >= ray.origin.x;
-    }
+    else ray.intersects(findMutualPoint(ray.line, line));
   }
   
   def testIntersection(r1:Ray, r2:Ray):Boolean = {
@@ -74,11 +70,8 @@ package object intersection {
     val r1r2s2orientation = TripletOrientation(ray.line.p1, ray.line.p2, segment.p2);
     if(r1r2s1orientation == Collinear && r1r2s1orientation == r1r2s2orientation)
       ray.intersects(segment.p1) || ray.intersects(segment.p2);
-    else if(r1r2s1orientation != r1r2s2orientation) {
-      val mutualX = findMutualX(ray.line, segment.line);
-      if(90 < ray.angle && ray.angle < 270) mutualX <= ray.origin.x;
-      else mutualX >= ray.origin.x;
-    }else false;
+    else if(r1r2s1orientation != r1r2s2orientation) ray.intersects(findMutualPoint(ray.line, segment.line));
+    else false;
   }
   
   def testIntersection(circle:Circle, point:Point):Boolean = circle.center.distanceTo(point) <= circle.radius;
@@ -167,5 +160,14 @@ package object intersection {
     ray.intersects(circleSweep.destinationCircle) ||
     ray.intersects(circleSweep.connector._1) ||
     ray.intersects(circleSweep.connector._2);
+  }
+  
+  def testIntersection(circleSweep:CircleSweep, segment:Segment):Boolean = {
+    if(!segment.intersects(circleSweep.circle) && !segment.intersects(circleSweep.destinationCircle)) {
+      val ray = Ray(segment.p1, normalizeAngle(circleSweep.sweepVector.angle + 90));
+      segment.intersects(circleSweep.connector._1) ||
+      segment.intersects(circleSweep.connector._2) ||
+      circleSweep.connector._1.intersects(ray) ^ circleSweep.connector._2.intersects(ray);
+    }else true;
   }
 }
