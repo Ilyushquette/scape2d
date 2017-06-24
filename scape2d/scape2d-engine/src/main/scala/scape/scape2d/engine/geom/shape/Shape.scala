@@ -167,5 +167,6 @@ case class CircleSweep(circle:Circle, sweepVector:Vector2D) extends Shape {
     case segment:Segment => testIntersection(this, segment);
     case circle:Circle => testIntersection(this, circle);
     case polygon:Polygon => testIntersection(this, polygon);
+    case circleSweep:CircleSweep => testIntersection(this, circleSweep);
   }
 }

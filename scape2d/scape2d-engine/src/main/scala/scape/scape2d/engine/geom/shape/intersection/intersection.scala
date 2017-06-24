@@ -187,4 +187,11 @@ package object intersection {
         s.intersects(circleSweep.connector._1) || s.intersects(circleSweep.connector._2));
     }else true;
   }
+  
+  def testIntersection(cs1:CircleSweep, cs2:CircleSweep):Boolean = {
+    if(!cs1.intersects(cs2.circle.center)) {
+      cs1.intersects(cs2.circle) || cs1.intersects(cs2.destinationCircle) ||
+      cs1.intersects(cs2.connector._1) || cs1.intersects(cs2.connector._2);
+    }else true;
+  }
 }
