@@ -151,6 +151,13 @@ case class CustomPolygon private[shape] (segments:Array[Segment]) extends Polygo
   }
 }
 
+case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) {
+  lazy val topLeft = Point(bottomLeft.x, bottomLeft.y + height);
+  lazy val topRight = Point(bottomLeft.x + width, bottomLeft.y + height);
+  lazy val bottomRight = Point(bottomLeft.x + width, bottomLeft.y);
+  lazy val polygon = PolygonBuilder(bottomLeft, topLeft, topRight).to(bottomRight).build;
+}
+
 case class CircleSweep(circle:Circle, sweepVector:Vector2D) extends Shape {
   lazy val destinationCircle = Circle(circle.center.displace(sweepVector.components), circle.radius);
   lazy val connector = {
