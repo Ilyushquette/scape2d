@@ -170,4 +170,12 @@ package object intersection {
       circleSweep.connector._1.intersects(ray) ^ circleSweep.connector._2.intersects(ray);
     }else true;
   }
+  
+  def testIntersection(circleSweep:CircleSweep, circle:Circle):Boolean = {
+    if(!circle.intersects(circleSweep.circle) && !circle.intersects(circleSweep.destinationCircle)) {
+      val ray = Ray(circle.center, normalizeAngle(circleSweep.sweepVector.angle + 90));
+      circle.intersects(circleSweep.connector._1) || circle.intersects(circleSweep.connector._2) ||
+      ray.intersects(circleSweep.connector._1) ^ ray.intersects(circleSweep.connector._2);
+    }else true;
+  }
 }

@@ -126,6 +126,7 @@ case class Circle(center:Point, radius:Double) extends Sweepable[CircleSweep] {
     case segment:Segment => testIntersection(this, segment);
     case circle:Circle => testIntersection(this, circle);
     case polygon:Polygon => testIntersection(polygon, this);
+    case circleSweep:CircleSweep => testIntersection(circleSweep, this);
   }
 }
 
@@ -163,5 +164,6 @@ case class CircleSweep(circle:Circle, sweepVector:Vector2D) extends Shape {
     case line:Line => testIntersection(this, line);
     case ray:Ray => testIntersection(this, ray);
     case segment:Segment => testIntersection(this, segment);
+    case circle:Circle => testIntersection(this, circle);
   }
 }
