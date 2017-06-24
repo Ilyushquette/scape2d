@@ -147,6 +147,11 @@ package object intersection {
     p1.segments.exists(s => p2.segments.exists(_.intersects(s)));
   }
   
+  def testIntersection(aabb1:AxisAlignedRectangle, aabb2:AxisAlignedRectangle):Boolean = {
+    aabb1.bottomLeft.x <= aabb2.bottomRight.x && aabb1.bottomRight.x >= aabb2.bottomLeft.x &&
+    aabb1.bottomLeft.y <= aabb2.topLeft.y && aabb1.topLeft.y >= aabb2.bottomLeft.y;
+  }
+  
   def testIntersection(circleSweep:CircleSweep, point:Point):Boolean = {
     if(!circleSweep.circle.intersects(point) && !circleSweep.destinationCircle.intersects(point)) {
       val ray = Ray(point, normalizeAngle(circleSweep.sweepVector.angle + 90));

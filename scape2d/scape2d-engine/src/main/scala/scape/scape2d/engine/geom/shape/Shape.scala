@@ -162,6 +162,8 @@ case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) e
   
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
+    case aabb:AxisAlignedRectangle => testIntersection(this, aabb);
+    case untuned => polygon.intersects(untuned);
   }
 }
 
