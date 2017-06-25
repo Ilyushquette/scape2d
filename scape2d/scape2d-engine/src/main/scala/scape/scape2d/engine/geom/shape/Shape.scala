@@ -241,5 +241,14 @@ case class CircleSweep(circle:Circle, sweepVector:Vector2D) extends Shape {
     case circleSweep:CircleSweep => testIntersection(this, circleSweep);
   }
   
-  def contains(shape:Shape) = throw new RuntimeException("NOT IMPLEMENTED!");
+  def contains(shape:Shape) = shape match {
+    case point:Point => intersects(point);
+    case Segment(p1, p2) => intersects(p1) && intersects(p2);
+    case ocircle:Circle => intersects(ocircle.center) &&
+                           ((circle.contains(ocircle) || destinationCircle.contains(ocircle)) ||
+                            (!ocircle.intersects(connector._1) && !ocircle.intersects(connector._2)));
+    case polygon:Polygon => polygon.points.forall(contains);
+    case cs:CircleSweep => contains(cs.circle) && contains(cs.destinationCircle);
+    case _ => false;
+  }
 }
