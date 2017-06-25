@@ -119,7 +119,12 @@ case class Ray(origin:Point, angle:Double) extends Shape {
     case circleSweep:CircleSweep => testIntersection(circleSweep, this);
   }
   
-  def contains(shape:Shape) = throw new RuntimeException("NOT IMPLEMENTED!");
+  def contains(shape:Shape) = shape match {
+    case point:Point => intersects(point);
+    case Ray(origin2, angle2) => fuzzyEquals(angle, angle2, Epsilon) && intersects(origin2);
+    case Segment(p1, p2) => intersects(p1) && intersects(p2);
+    case _ => false;
+  }
 }
 
 case class Segment(p1:Point, p2:Point) extends Shape {
