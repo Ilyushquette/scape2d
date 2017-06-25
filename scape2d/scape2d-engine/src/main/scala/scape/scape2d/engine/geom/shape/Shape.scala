@@ -9,6 +9,7 @@ import scape.scape2d.engine.geom.shape.intersection._
 
 sealed trait Shape {
   def intersects(shape:Shape):Boolean;
+  def contains(shape:Shape):Boolean;
 }
 
 sealed trait Sweepable[T <: Shape] extends Shape {
@@ -43,14 +44,12 @@ case class Point(x:Double, y:Double) extends Shape {
     case circleSweep:CircleSweep => testIntersection(circleSweep, this);
   }
   
-  override def hashCode = x.hashCode + y.hashCode;
+  def contains(shape:Shape) = throw new RuntimeException("NOT IMPLEMENTED!");
   
   override def equals(a:Any) = a match {
     case Point(ox, oy) => fuzzyEquals(x, ox, Epsilon) && fuzzyEquals(y, oy, Epsilon);
     case _ => false;
   }
-  
-  override def toString = "Point2D [x=%f, y=%f]".format(x, y);
 }
 
 case class Line(p1:Point, p2:Point) extends Shape {
@@ -88,6 +87,8 @@ case class Line(p1:Point, p2:Point) extends Shape {
     case polygon:Polygon => testIntersection(polygon, this);
     case circleSweep:CircleSweep => testIntersection(circleSweep, this);
   }
+  
+  def contains(shape:Shape) = throw new RuntimeException("NOT IMPLEMENTED!");
 }
 
 case class Ray(origin:Point, angle:Double) extends Shape {
@@ -105,6 +106,8 @@ case class Ray(origin:Point, angle:Double) extends Shape {
     case polygon:Polygon => testIntersection(polygon, this);
     case circleSweep:CircleSweep => testIntersection(circleSweep, this);
   }
+  
+  def contains(shape:Shape) = throw new RuntimeException("NOT IMPLEMENTED!");
 }
 
 case class Segment(p1:Point, p2:Point) extends Shape {
@@ -119,6 +122,8 @@ case class Segment(p1:Point, p2:Point) extends Shape {
     case polygon:Polygon => testIntersection(polygon, this);
     case circleSweep:CircleSweep => testIntersection(circleSweep, this);
   }
+  
+  def contains(shape:Shape) = throw new RuntimeException("NOT IMPLEMENTED!");
 }
 
 case class Circle(center:Point, radius:Double) extends Sweepable[CircleSweep] {
@@ -133,6 +138,8 @@ case class Circle(center:Point, radius:Double) extends Sweepable[CircleSweep] {
     case polygon:Polygon => testIntersection(polygon, this);
     case circleSweep:CircleSweep => testIntersection(circleSweep, this);
   }
+  
+  def contains(shape:Shape) = throw new RuntimeException("NOT IMPLEMENTED!");
 }
 
 case class CustomPolygon private[shape] (segments:Array[Segment]) extends Polygon {
@@ -150,6 +157,8 @@ case class CustomPolygon private[shape] (segments:Array[Segment]) extends Polygo
     case polygon:Polygon => testIntersection(this, polygon);
     case circleSweep:CircleSweep => testIntersection(circleSweep, this);
   }
+  
+  def contains(shape:Shape) = throw new RuntimeException("NOT IMPLEMENTED!");
 }
 
 case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) extends Polygon {
@@ -165,6 +174,8 @@ case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) e
     case aabb:AxisAlignedRectangle => testIntersection(this, aabb);
     case untuned => polygon.intersects(untuned);
   }
+  
+  def contains(shape:Shape) = throw new RuntimeException("NOT IMPLEMENTED!");
 }
 
 case class CircleSweep(circle:Circle, sweepVector:Vector2D) extends Shape {
@@ -189,4 +200,6 @@ case class CircleSweep(circle:Circle, sweepVector:Vector2D) extends Shape {
     case polygon:Polygon => testIntersection(this, polygon);
     case circleSweep:CircleSweep => testIntersection(this, circleSweep);
   }
+  
+  def contains(shape:Shape) = throw new RuntimeException("NOT IMPLEMENTED!");
 }
