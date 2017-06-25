@@ -215,7 +215,15 @@ case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) e
     case untuned => polygon.intersects(untuned);
   }
   
-  def contains(shape:Shape) = throw new RuntimeException("NOT IMPLEMENTED!");
+  def contains(shape:Shape) = shape match {
+    case point:Point => intersects(point);
+    case Segment(p1, p2) => intersects(p1) && intersects(p2);
+    case Circle(center, radius) => center.x >= bottomLeft.x + radius && center.x <= bottomRight.x - radius &&
+                                   center.y >= bottomRight.y + radius && center.y <= topLeft.y - radius;
+    case polygon:Polygon => polygon.points.forall(intersects);
+    case circleSweep:CircleSweep => contains(circleSweep.circle) && contains(circleSweep.destinationCircle);
+    case untuned => polygon.contains(untuned);
+  }
 }
 
 case class CircleSweep(circle:Circle, sweepVector:Vector2D) extends Shape {
