@@ -1,9 +1,14 @@
 package scape.scape2d.engine
 
-import java.lang.Math._
+import java.lang.Math.cos
+import java.lang.Math.sin
+import java.lang.Math.toRadians
+
+import com.google.common.math.DoubleMath.fuzzyEquals
+
 import scape.scape2d.engine.geom.shape.Line
 import scape.scape2d.engine.geom.shape.Point
-import com.google.common.math.DoubleMath._;
+import scape.scape2d.engine.geom.shape.Segment
 
 package object geom {
   val Epsilon = 1E-10;
@@ -27,5 +32,9 @@ package object geom {
     val mutualX = findMutualX(l1, l2);
     val mutualY = if(!l1.vertical) l1.forX(mutualX) else l2.forX(mutualX);
     Point(mutualX, mutualY);
+  }
+  
+  def fetchWaypoints(segmentsIterator:Iterator[Segment]) = {
+    segmentsIterator.foldLeft(Set[Point]())((acc, cur) => acc + cur.p1 + cur.p2);
   }
 }
