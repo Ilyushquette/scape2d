@@ -44,7 +44,10 @@ case class Point(x:Double, y:Double) extends Shape {
     case circleSweep:CircleSweep => testIntersection(circleSweep, this);
   }
   
-  def contains(shape:Shape) = throw new RuntimeException("NOT IMPLEMENTED!");
+  def contains(shape:Shape) = shape match {
+    case point:Point => intersects(point);
+    case _ => false;
+  }
   
   override def equals(a:Any) = a match {
     case Point(ox, oy) => fuzzyEquals(x, ox, Epsilon) && fuzzyEquals(y, oy, Epsilon);
