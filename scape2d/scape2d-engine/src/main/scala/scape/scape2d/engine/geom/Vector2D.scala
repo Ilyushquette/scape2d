@@ -1,6 +1,7 @@
 package scape.scape2d.engine.geom
 
-import java.lang.Math._;
+import java.lang.Math._
+import com.google.common.math.DoubleMath._
 
 object Vector2D {
   def from(components:Components2D) = {
@@ -12,28 +13,32 @@ object Vector2D {
 }
 
 class Vector2D(val magnitude:Double, val angle:Double) {
-  def this() = this(0, 0);
-  
-  def components = {
+  lazy val components = {
     val radians = toRadians(angle);
     val offsetX = magnitude * cos(radians);
     val offsetY = magnitude * sin(radians);
     Components2D(offsetX, offsetY);
   }
   
+  lazy val opposite = new Vector2D(magnitude, normalizeAngle(angle + 180));
+  
+  def this() = this(0, 0);
+  
   def +(vector:Vector2D) = mergeWith(vector, (v1, v2) => (v1.x + v2.x, v1.y + v2.y));
   
   def -(vector:Vector2D) = mergeWith(vector, (v1, v2) => (v1.x - v2.x, v1.y - v2.y));
   
-  def *(vector:Vector2D) = {
-    val comps = components;
-    val otherComps = vector.components;
-    comps.x * otherComps.x + comps.y * otherComps.y;
+  def *(vector:Vector2D) = components.x * vector.components.x + components.y * vector.components.y;
+  
+  def *(magnitudeMultiplier:Double) = {
+    val newMagnitude = magnitude * abs(magnitudeMultiplier);
+    val newAngle = if(magnitudeMultiplier >= 0) angle else normalizeAngle(angle + 180);
+    new Vector2D(newMagnitude, newAngle);
   }
   
-  def *(magnitudeMultiplier:Double) = new Vector2D(magnitudeMultiplier * magnitude, angle);
+  def scalarProjection(target:Vector2D) = (this * target) / (target.magnitude * target.magnitude);
   
-  def opposite = new Vector2D(magnitude, normalizeAngle(angle + 180));
+  def projection(target:Vector2D) = target * scalarProjection(target);
   
   private def mergeWith(vector:Vector2D, merge:(Components2D, Components2D) => (Double, Double)) = {
     val merged = merge(components, vector.components);
@@ -43,7 +48,8 @@ class Vector2D(val magnitude:Double, val angle:Double) {
   override def hashCode = magnitude.hashCode + angle.hashCode;
   
   override def equals(a:Any) = a match {
-    case vector:Vector2D => magnitude == vector.magnitude && angle == vector.angle;
+    case vector:Vector2D => fuzzyEquals(magnitude, vector.magnitude, Epsilon) &&
+                            fuzzyEquals(angle, vector.angle, Epsilon);
     case _ => false;
   }
   

@@ -7,7 +7,7 @@ import net.sf.cglib.proxy.Enhancer
 import net.sf.cglib.proxy.MethodInterceptor
 import net.sf.cglib.proxy.MethodProxy
 import scape.scape2d.engine.core.Movable
-import scape.scape2d.engine.geom.Point2D
+import scape.scape2d.engine.geom.shape.Point
 
 object MovableTrackerProxy {
   private def enhance[T <: Movable[T]](interceptor:MovableTrackerProxy[T]) = {
@@ -24,16 +24,16 @@ object MovableTrackerProxy {
 }
 
 class MovableTrackerProxy[T <: Movable[T]](private val delegate:T) extends MethodInterceptor {
-  private var motionListeners:Set[(Point2D, T) => Unit] = Set();
+  private var motionListeners:Set[(Point, T) => Unit] = Set();
   lazy val enhanced = MovableTrackerProxy.enhance(this);
   
-  def addMotionListener(listener:(Point2D, T) => Unit) = motionListeners = motionListeners + listener;
+  def addMotionListener(listener:(Point, T) => Unit) = motionListeners = motionListeners + listener;
   
-  def removeMotionListener(listener:(Point2D, T) => Unit) = motionListeners = motionListeners - listener;
+  def removeMotionListener(listener:(Point, T) => Unit) = motionListeners = motionListeners - listener;
   
   def intercept(obj:Object, method:Method, args:Array[Object], methodProxy:MethodProxy) = {
     if("setPosition" == method.getName()) (obj, args) match {
-      case (proxy:T, Array(nextPosition:Point2D)) =>
+      case (proxy:T, Array(nextPosition:Point)) =>
         val oldPosition = proxy.position;
         methodProxy.invokeSuper(obj, args);
         motionListeners.foreach(_(oldPosition, proxy.snapshot));

@@ -13,7 +13,7 @@ import org.openjdk.jmh.annotations.State
 import org.openjdk.jmh.infra.Blackhole
 
 import scape.scape2d.engine.core.Movable
-import scape.scape2d.engine.geom.Point2D
+import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.Spherical
 import scape.scape2d.engine.geom.Vector2D
 import scape.scape2d.engine.motion.collision.Collision
@@ -30,7 +30,7 @@ class CollisionDetectionBenchmark {
   
   @Setup
   def prepare = {
-    mocks = for(i <- 1 to 10) yield new Mock(5, new Point2D(i, i - 10), new Vector2D(i, i));
+    mocks = for(i <- 1 to 10) yield new Mock(5, Point(i, i - 10), new Vector2D(i, i));
     bruteForceWithDiscriminantStrategy = bruteForce[Mock](detectWithDiscriminant _);
   }
   
@@ -40,9 +40,9 @@ class CollisionDetectionBenchmark {
   }
 }
 
-private[benchmark] class Mock(val radius:Double, val position:Point2D, val velocity:Vector2D)
+private[benchmark] class Mock(val radius:Double, val position:Point, val velocity:Vector2D)
 extends Movable[Mock] with Spherical {
-  def setPosition(nextPosition:Point2D) = {}
+  def setPosition(nextPosition:Point) = {}
   def setVelocity(newVelocity:Vector2D) = {}
   def snapshot = this;
 }

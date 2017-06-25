@@ -8,7 +8,7 @@ import scape.scape2d.debugger.view.ShapeDrawingDebugView
 import scape.scape2d.debugger.view.swing.SwingShapeDrawer
 import scape.scape2d.engine.core.Nature
 import scape.scape2d.engine.core.matter.ParticleBuilder
-import scape.scape2d.engine.geom.Point2D
+import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.Vector2D
 import scape.scape2d.engine.motion.MovableTrackerProxy
 
@@ -16,7 +16,7 @@ object NewtonFirstLaw {
   def main(args:Array[String]):Unit = {
     val nature = new Nature(60);
     val metalParticle = ParticleBuilder()
-      .at(Point2D.origin)
+      .at(Point.origin)
       .withRadius(5)
       .withMass(2)
       .withVelocity(new Vector2D(2, 45))
