@@ -123,7 +123,7 @@ case class Ray(origin:Point, angle:Double) extends Shape {
   
   def contains(shape:Shape) = shape match {
     case point:Point => intersects(point);
-    case Ray(origin2, angle2) => fuzzyEquals(angle, angle2, Epsilon) && intersects(origin2);
+    case Ray(origin2, angle2) => angle == angle2 && intersects(origin2);
     case Segment(p1, p2) => intersects(p1) && intersects(p2);
     case _ => false;
   }

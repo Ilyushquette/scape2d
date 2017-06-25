@@ -70,8 +70,7 @@ package object intersection {
     val r1r2s2orientation = TripletOrientation(ray.line.p1, ray.line.p2, segment.p2);
     if(r1r2s1orientation == Collinear && r1r2s1orientation == r1r2s2orientation)
       ray.intersects(segment.p1) || ray.intersects(segment.p2);
-    else if(r1r2s1orientation != r1r2s2orientation) ray.intersects(findMutualPoint(ray.line, segment.line));
-    else false;
+    else r1r2s1orientation != r1r2s2orientation && ray.intersects(findMutualPoint(ray.line, segment.line));
   }
   
   def testIntersection(circle:Circle, point:Point):Boolean = circle.center.distanceTo(point) <= circle.radius;
@@ -177,7 +176,7 @@ package object intersection {
       val ray = Ray(segment.p1, normalizeAngle(circleSweep.sweepVector.angle + 90));
       segment.intersects(circleSweep.connector._1) ||
       segment.intersects(circleSweep.connector._2) ||
-      circleSweep.connector._1.intersects(ray) ^ circleSweep.connector._2.intersects(ray);
+      circleSweep.connector._1.intersects(ray) ^ circleSweep.connector._2.intersects(ray); // in connector
     }else true;
   }
   
@@ -185,7 +184,7 @@ package object intersection {
     if(!circle.intersects(circleSweep.circle) && !circle.intersects(circleSweep.destinationCircle)) {
       val ray = Ray(circle.center, normalizeAngle(circleSweep.sweepVector.angle + 90));
       circle.intersects(circleSweep.connector._1) || circle.intersects(circleSweep.connector._2) ||
-      ray.intersects(circleSweep.connector._1) ^ ray.intersects(circleSweep.connector._2);
+      ray.intersects(circleSweep.connector._1) ^ ray.intersects(circleSweep.connector._2); // in connector
     }else true;
   }
   
@@ -199,9 +198,8 @@ package object intersection {
   }
   
   def testIntersection(cs1:CircleSweep, cs2:CircleSweep):Boolean = {
-    if(!cs1.intersects(cs2.circle.center)) {
-      cs1.intersects(cs2.circle) || cs1.intersects(cs2.destinationCircle) ||
-      cs1.intersects(cs2.connector._1) || cs1.intersects(cs2.connector._2);
-    }else true;
+    cs1.intersects(cs2.circle.center) ||
+    cs1.intersects(cs2.circle) || cs1.intersects(cs2.destinationCircle) ||
+    cs1.intersects(cs2.connector._1) || cs1.intersects(cs2.connector._2);
   }
 }
