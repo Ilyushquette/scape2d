@@ -17,6 +17,8 @@ sealed trait Sweepable[T <: Shape] extends Shape {
 }
 
 sealed trait Polygon extends Shape {
+  lazy val points = fetchWaypoints(segments.iterator);
+  
   def segments:Array[Segment];
 }
 
@@ -160,7 +162,14 @@ case class Circle(center:Point, radius:Double) extends Sweepable[CircleSweep] {
     case circleSweep:CircleSweep => testIntersection(circleSweep, this);
   }
   
-  def contains(shape:Shape) = throw new RuntimeException("NOT IMPLEMENTED!");
+  def contains(shape:Shape) = shape match {
+    case point:Point => intersects(point);
+    case Segment(p1, p2) => intersects(p1) && intersects(p2);
+    case Circle(center2, radius2) => center.distanceTo(center2) + radius2 <= radius;
+    case polygon:Polygon => polygon.points.forall(intersects);
+    case circleSweep:CircleSweep => contains(circleSweep.circle) && contains(circleSweep.destinationCircle);
+    case _ => false;
+  }
 }
 
 case class CustomPolygon private[shape] (segments:Array[Segment]) extends Polygon {
