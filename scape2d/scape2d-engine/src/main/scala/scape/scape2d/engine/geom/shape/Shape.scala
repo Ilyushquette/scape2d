@@ -188,7 +188,17 @@ case class CustomPolygon private[shape] (segments:Array[Segment]) extends Polygo
     case circleSweep:CircleSweep => testIntersection(circleSweep, this);
   }
   
-  def contains(shape:Shape) = throw new RuntimeException("NOT IMPLEMENTED!");
+  def contains(shape:Shape) = shape match {
+    case point:Point => intersects(point);
+    case segment:Segment => segments.forall(!_.intersects(segment));
+    case circle:Circle => intersects(circle.center) && segments.forall(!_.intersects(circle));
+    case polygon:Polygon => polygon.segments.forall(contains);
+    case circleSweep:CircleSweep => contains(circleSweep.circle) &&
+                                    contains(circleSweep.destinationCircle) &&
+                                    contains(circleSweep.connector._1) &&
+                                    contains(circleSweep.connector._2);
+    case _ => false;
+  }
 }
 
 case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) extends Polygon {
