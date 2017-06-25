@@ -91,7 +91,16 @@ case class Line(p1:Point, p2:Point) extends Shape {
     case circleSweep:CircleSweep => testIntersection(circleSweep, this);
   }
   
-  def contains(shape:Shape) = throw new RuntimeException("NOT IMPLEMENTED!");
+  def contains(shape:Shape) = shape match {
+    case point:Point => intersects(point);
+    case line:Line => if(vertical && line.vertical) fuzzyEquals(p1.x, line.p1.x, Epsilon);
+                      else if(!vertical && !line.vertical && fuzzyEquals(slope.get, line.slope.get, Epsilon))
+                        fuzzyEquals(yIntercept.get, line.yIntercept.get, Epsilon);
+                      else false;
+    case ray:Ray => contains(ray.line);
+    case segment:Segment => contains(segment.line);
+    case _ => false;
+  }
 }
 
 case class Ray(origin:Point, angle:Double) extends Shape {
