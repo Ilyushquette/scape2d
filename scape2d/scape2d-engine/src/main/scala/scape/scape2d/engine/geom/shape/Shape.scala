@@ -140,7 +140,11 @@ case class Segment(p1:Point, p2:Point) extends Shape {
     case circleSweep:CircleSweep => testIntersection(circleSweep, this);
   }
   
-  def contains(shape:Shape) = throw new RuntimeException("NOT IMPLEMENTED!");
+  def contains(shape:Shape) = shape match {
+    case point:Point => intersects(point);
+    case Segment(p3, p4) => intersects(p3) && intersects(p4);
+    case _ => false;
+  }
 }
 
 case class Circle(center:Point, radius:Double) extends Sweepable[CircleSweep] {
