@@ -207,6 +207,16 @@ case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) e
   lazy val bottomRight = Point(bottomLeft.x + width, bottomLeft.y);
   lazy val polygon = PolygonBuilder(bottomLeft, topLeft, topRight).to(bottomRight).build;
   
+  def slice(pieces:Int) = {
+    if(pieces < 4) throw new IllegalArgumentException("Pieces param must be greater than or equal to 4");
+    val floor = sqrt(pieces).toInt;
+    if(floor * floor != pieces) throw new IllegalArgumentException("Pieces param must be perfectly squared");
+    val pieceWidth = width / floor;
+    val pieceHeight = height / floor;
+    for(v <- 0 to floor - 1; h <- 0 to floor - 1)
+    yield AxisAlignedRectangle(Point(bottomLeft.x + v * pieceWidth, bottomLeft.y + h * pieceHeight), pieceWidth, pieceHeight);
+  }
+  
   def segments = polygon.segments;
   
   def intersects(shape:Shape) = shape match {
