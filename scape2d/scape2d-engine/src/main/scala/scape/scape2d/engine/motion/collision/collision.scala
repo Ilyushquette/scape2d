@@ -6,7 +6,7 @@ import scape.scape2d.engine.util.LazyVal
 import scape.scape2d.engine.core.Movable
 
 package object collision {
-  def findSafeTime[T <: Movable[T] with Spherical](collision:Collision[T], closestDistance:Double) = {
+  def findSafeTime[T <: Movable[T] with Formed[_]](collision:Collision[T], closestDistance:Double) = {
     val snapshotPair = collision.snapshotPair;
     val faster = Seq(snapshotPair._1, snapshotPair._2).maxBy(_.velocity.magnitude);
     val scaledVelocity = scaleVelocity(faster.velocity, collision.time);

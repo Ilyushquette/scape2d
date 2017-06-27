@@ -12,13 +12,13 @@ import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.Vector2D
 import scape.scape2d.engine.core.matter.ParticleBuilder
 import scape.scape2d.engine.motion.MovableTrackerProxy
+import scape.scape2d.engine.geom.shape.Circle
 
 object NewtonFirstLawFastmotion {
   def main(args:Array[String]):Unit = {
     val nature = new Nature(60);
     val metalParticle = ParticleBuilder()
-      .at(Point.origin)
-      .withRadius(5)
+      .as(Circle(Point.origin, 5))
       .withMass(2)
       .withVelocity(new Vector2D(2, 45))
       .build;

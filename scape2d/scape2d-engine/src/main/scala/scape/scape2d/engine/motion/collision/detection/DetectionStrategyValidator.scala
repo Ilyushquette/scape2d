@@ -2,9 +2,10 @@ package scape.scape2d.engine.motion.collision.detection
 
 import com.google.common.math.DoubleMath
 import scape.scape2d.engine.geom.shape.Point
-import scape.scape2d.engine.geom.Spherical
 import scape.scape2d.engine.geom.Vector2D
 import scape.scape2d.engine.core.Movable
+import scape.scape2d.engine.geom.Formed
+import scape.scape2d.engine.geom.shape.Circle
 
 class DetectionStrategyValidator {
   def check(detect:DetectionStrategy) = {
@@ -77,8 +78,9 @@ class DetectionStrategyValidator {
 }
 
 private class Mock(val radius:Double, val position:Point, val velocity:Vector2D)
-extends Movable[Mock] with Spherical {
+extends Movable[Mock] with Formed[Circle] {
   def setPosition(nextPosition:Point) = {}
   def setVelocity(newVelocity:Vector2D) = {}
+  def shape = Circle(position, radius);
   def snapshot = this;
 }
