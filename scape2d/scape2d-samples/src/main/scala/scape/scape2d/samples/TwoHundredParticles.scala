@@ -17,12 +17,12 @@ object TwoHundredParticles {
   def main(args:Array[String]):Unit = {
     val nature = new Nature(60);
     val metalParticles = for(i <- 0 to 100) yield ParticleBuilder()
-      .as(Circle(Point(i * 0.11, i * 0.11), 5))
+      .as(Circle(Point(i * 0.11, i * 0.11), 0.05))
       .withMass(2)
       .withVelocity(new Vector2D(2, 0))
       .build;
     val metalParticles2 = for(i <- 0 to 100) yield ParticleBuilder()
-      .as(Circle(Point(25 - i * 0.11, i * 0.11), 5))
+      .as(Circle(Point(25 - i * 0.11, i * 0.11), 0.05))
       .withMass(2)
       .withVelocity(new Vector2D(2, 180))
       .build;
@@ -34,7 +34,7 @@ object TwoHundredParticles {
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setBackground(Color.BLACK);
     val shapeDrawer = new SwingShapeDrawer(Toolkit.getDefaultToolkit().getScreenSize(), Color.BLACK);
-    val debugger = new Debugger(new ShapeDrawingDebugView(shapeDrawer, 2));
+    val debugger = new Debugger(new ShapeDrawingDebugView(shapeDrawer, 0.02));
     frame.add(shapeDrawer);
     frame.pack();
     frame.setVisible(true);

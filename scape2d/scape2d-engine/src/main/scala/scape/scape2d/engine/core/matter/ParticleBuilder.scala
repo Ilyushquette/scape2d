@@ -11,7 +11,7 @@ case class ParticleBuilder(
   forces:Array[Vector2D] = Array.empty
 ) {
   /**
-   * position in meters, radius in centimeters
+   * position in meters, radius in meters
    */
   def as(s:Circle) = copy(shape = s);
   

@@ -18,7 +18,7 @@ object NewtonSecondLaw {
   def main(args:Array[String]):Unit = {
     val nature = new Nature(60);
     val metalParticle = ParticleBuilder()
-      .as(Circle(Point.origin, 5))
+      .as(Circle(Point.origin, 0.05))
       .withMass(2)
       .withVelocity(new Vector2D(1, 45))
       .build;
@@ -31,7 +31,7 @@ object NewtonSecondLaw {
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setBackground(Color.BLACK);
     val shapeDrawer = new SwingShapeDrawer(Toolkit.getDefaultToolkit().getScreenSize(), Color.BLACK);
-    val debugger = new Debugger(new ShapeDrawingDebugView(shapeDrawer, 3));
+    val debugger = new Debugger(new ShapeDrawingDebugView(shapeDrawer, 0.03));
     frame.add(shapeDrawer);
     frame.pack();
     frame.setVisible(true);

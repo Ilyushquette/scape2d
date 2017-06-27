@@ -17,12 +17,12 @@ object TwoParticlesFrontalCollision {
   def main(args:Array[String]):Unit = {
     val nature = new Nature(60);
     val metalParticle = ParticleBuilder()
-      .as(Circle(Point(0, 7), 5))
+      .as(Circle(Point(0, 7), 0.05))
       .withMass(2)
       .withVelocity(new Vector2D(2, 0))
       .build;
     val metalParticle2 = ParticleBuilder()
-      .as(Circle(Point(10, 7), 5))
+      .as(Circle(Point(10, 7), 0.05))
       .withMass(2)
       .withVelocity(new Vector2D(2, 180))
       .build;
@@ -34,7 +34,7 @@ object TwoParticlesFrontalCollision {
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setBackground(Color.BLACK);
     val shapeDrawer = new SwingShapeDrawer(Toolkit.getDefaultToolkit().getScreenSize(), Color.BLACK);
-    val debugger = new Debugger(new ShapeDrawingDebugView(shapeDrawer, 2));
+    val debugger = new Debugger(new ShapeDrawingDebugView(shapeDrawer, 0.02));
     frame.add(shapeDrawer);
     frame.pack();
     frame.setVisible(true);

@@ -15,7 +15,7 @@ package object detection {
   private val log = Logger.getLogger(getClass);
   
   def detectWithDiscriminant[T <: MovableSphere](s1:T, s2:T, timestep:Double) = {
-    val sumOfRadii = (s1.shape.radius + s2.shape.radius) / 100;
+    val sumOfRadii = s1.shape.radius + s2.shape.radius;
     val A = s1.position - s2.position;
     val B = scaleVelocity(s1.velocity, timestep) - scaleVelocity(s2.velocity, timestep);
     

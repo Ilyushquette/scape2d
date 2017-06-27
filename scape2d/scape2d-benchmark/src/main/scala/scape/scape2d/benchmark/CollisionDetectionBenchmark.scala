@@ -29,7 +29,7 @@ class CollisionDetectionBenchmark {
   
   @Setup
   def prepare = {
-    mocks = for(i <- 1 to 10) yield new Mock(5, Point(i, i - 10), new Vector2D(i, i));
+    mocks = for(i <- 1 to mocksCount) yield new Mock(0.05, Point(i, i - 10), new Vector2D(i, i));
     bruteForceWithDiscriminantStrategy = bruteForce[Mock](detectWithDiscriminant _);
   }
   
