@@ -24,8 +24,8 @@ object NewtonFirstLawSlowmotion {
       .build;
     
     val trackedMetalParticle = new MovableTrackerProxy(metalParticle);
-    trackedMetalParticle.addMotionListener((_, mp) => {
-      if(mp.position.x > 5) nature ! ScaleTime(1, 0.5);
+    trackedMetalParticle.addMotionListener(motion => {
+      if(motion.snapshot.position.x > 5) nature ! ScaleTime(1, 0.5);
     });
     
     val frame = new JFrame("Scape2D Debugger");

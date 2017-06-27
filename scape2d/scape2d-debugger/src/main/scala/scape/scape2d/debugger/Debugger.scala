@@ -7,6 +7,6 @@ import scape.scape2d.engine.motion.MovableTrackerProxy
 class Debugger(val view:DebugView) {
   def trackParticle(trackedParticle:MovableTrackerProxy[Particle]) = {
     view.renderParticle(trackedParticle);
-    trackedParticle.addMotionListener(view.renderMotion(_, _));
+    trackedParticle.addMotionListener(view.renderMotion);
   }
 }
