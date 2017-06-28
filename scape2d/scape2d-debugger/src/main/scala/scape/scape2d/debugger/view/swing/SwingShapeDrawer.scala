@@ -62,6 +62,8 @@ extends JPanel with ShapeDrawer {
     var updates = 0;
     while(!renderingQueue.isEmpty()) {
       val gBuffer = buffer.createGraphics();
+      gBuffer.translate(0, dimension.height - 30);
+      gBuffer.scale(1, -1);
       renderingQueue.poll()(gBuffer);
       gBuffer.dispose();
       updates += 1;
