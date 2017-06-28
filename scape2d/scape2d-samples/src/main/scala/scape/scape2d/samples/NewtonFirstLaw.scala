@@ -27,8 +27,8 @@ object NewtonFirstLaw {
     val frame = new JFrame("Scape2D Debugger");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setBackground(Color.BLACK);
-    val shapeDrawer = new SwingShapeDrawer(Toolkit.getDefaultToolkit().getScreenSize(), Color.BLACK);
-    val debugger = new Debugger(new ShapeDrawingDebugView(shapeDrawer, 0.02));
+    val shapeDrawer = new SwingShapeDrawer(Toolkit.getDefaultToolkit().getScreenSize(), Color.BLACK, 0.02);
+    val debugger = new Debugger(new ShapeDrawingDebugView(shapeDrawer));
     frame.add(shapeDrawer);
     frame.pack();
     frame.setVisible(true);
