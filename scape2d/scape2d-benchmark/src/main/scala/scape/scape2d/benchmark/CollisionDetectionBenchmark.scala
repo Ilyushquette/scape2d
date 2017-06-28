@@ -15,8 +15,8 @@ import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.Vector2D
 import scape.scape2d.engine.motion.collision.Collision
 import scape.scape2d.engine.motion.collision.detection._
-import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.Formed
+import scape.scape2d.engine.geom.shape.Circle
 
 @BenchmarkMode(Array(Mode.AverageTime))
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
@@ -25,17 +25,17 @@ class CollisionDetectionBenchmark {
   @Param(Array("10", "100", "1000"))
   var mocksCount:Int = 0;
   var mocks:Iterable[Mock] = null;
-  var bruteForceWithDiscriminantStrategy:(Iterable[Mock], Double) => Iterator[Collision[Mock]] = null;
+  var bruteForceWithDiscriminantDetector:BruteForceBasedCollisionDetector[Mock] = null;
   
   @Setup
   def prepare = {
-    mocks = for(i <- 1 to mocksCount) yield new Mock(0.05, Point(i, i - 10), new Vector2D(i, i));
-    bruteForceWithDiscriminantStrategy = bruteForce[Mock](detectWithDiscriminant _);
+    mocks = for(i <- 1 to mocksCount) yield new Mock(5, Point(i, i - 10), new Vector2D(i, i));
+    bruteForceWithDiscriminantDetector = new BruteForceBasedCollisionDetector[Mock](detectWithDiscriminant _);
   }
   
   @Benchmark
   def measureBruteForceWithDiscriminantStrategy(blackhole:Blackhole) {
-    blackhole.consume(bruteForceWithDiscriminantStrategy(mocks, 16));
+    blackhole.consume(bruteForceWithDiscriminantDetector.detect(mocks, 16));
   }
 }
 

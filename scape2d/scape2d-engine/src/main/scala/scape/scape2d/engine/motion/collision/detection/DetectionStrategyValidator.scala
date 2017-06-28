@@ -7,7 +7,7 @@ import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.geom.Formed
 import scape.scape2d.engine.geom.shape.Circle
 
-class DetectionStrategyValidator {
+object DetectionStrategyValidator {
   def check(detect:DetectionStrategy) = {
     checkTrajectoriesOverlayFrontalCollision(detect);
     checkTrajectoriesOverlayFrontalNoCollision(detect);

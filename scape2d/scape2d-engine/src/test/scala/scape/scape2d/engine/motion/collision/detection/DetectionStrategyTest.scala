@@ -16,33 +16,31 @@ object DetectionStrategyTest {
 class DetectionStrategyTest(val createDetector:() => DetectionStrategy) {
   @Test
   def testTrajectoriesOverlayFrontalCollision = {
-    validator.checkTrajectoriesOverlayFrontalCollision(createDetector());
+    DetectionStrategyValidator.checkTrajectoriesOverlayFrontalCollision(createDetector());
   }
   
   @Test
   def testTrajectoriesOverlayFrontalNoCollision = {
-    validator.checkTrajectoriesOverlayFrontalNoCollision(createDetector());
+    DetectionStrategyValidator.checkTrajectoriesOverlayFrontalNoCollision(createDetector());
   }
   
   @Test
   def testTrajectoriesOverlayUnidirectionalNoCollision = {
-    validator.checkTrajectoriesOverlayUnidirectionalNoCollision(createDetector());
+    DetectionStrategyValidator.checkTrajectoriesOverlayUnidirectionalNoCollision(createDetector());
   }
   
   @Test
   def testTrajectoriesOverlayUnidirectionalCollision = {
-    validator.checkTrajectoriesOverlayUnidirectionalCollision(createDetector());
+    DetectionStrategyValidator.checkTrajectoriesOverlayUnidirectionalCollision(createDetector());
   }
   
   @Test
   def testTrajectoriesCrossedNoCollision = {
-    validator.checkTrajectoriesCrossedNoCollision(createDetector());
+    DetectionStrategyValidator.checkTrajectoriesCrossedNoCollision(createDetector());
   }
   
   @Test
   def testTrajectoriesCrossedCollision = {
-    validator.checkTrajectoriesCrossedCollision(createDetector());
+    DetectionStrategyValidator.checkTrajectoriesCrossedCollision(createDetector());
   }
-  
-  private def validator = new DetectionStrategyValidator;
 }

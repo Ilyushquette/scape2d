@@ -12,8 +12,6 @@ package object detection {
   type MovableSphere = Movable[_] with Formed[Circle];
   type DetectionStrategy = (MovableSphere, MovableSphere, Double) => Option[Double];
   
-  private val log = Logger.getLogger(getClass);
-  
   def detectWithDiscriminant[T <: MovableSphere](s1:T, s2:T, timestep:Double) = {
     val sumOfRadii = s1.shape.radius + s2.shape.radius;
     val A = s1.position - s2.position;
@@ -29,17 +27,5 @@ package object detection {
       if(coefficient > 0 && coefficient <= 1) Some(coefficient * timestep);
       else None;
     }else None;
-  }
-  
-  def bruteForce[T <: Movable[T] with Formed[Circle]](detect:DetectionStrategy) = {
-    new DetectionStrategyValidator().check(detect);
-    log.info("Detection strategy is valid! Returning combination based brute force algorithm");
-    (mss:Iterable[T], timestep:Double) => {
-      val combinations = mss.toSeq.combinations(2);
-      val detections = combinations.map(c => (c, detect(c(0), c(1), timestep)));
-      detections.collect {
-        case (Seq(a, b), Some(time)) => Collision((a, b), time);
-      }
-    }
   }
 }

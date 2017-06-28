@@ -9,17 +9,13 @@ import scape.scape2d.engine.motion.collision.detection._
 import scape.scape2d.engine.motion._
 import scape.scape2d.engine.core.matter.Particle
 
-object Nature {
-  type CollisionDetector = (Iterable[Particle], Double) => Iterator[Collision[Particle]];
-}
-
-class Nature(val detectCollisions:Nature.CollisionDetector, fps:Double) extends Actor {
+class Nature(val collisionDetector:CollisionDetector[Particle], fps:Double) extends Actor {
   private val log = Logger.getLogger(getClass);
   private var timeSubjects = Set[TimeDependent]();
   private var particles = Set[Particle]();
   private var timescale = scaleTime(1, 1);
   
-  def this(fps:Double) = this(bruteForce(detectWithDiscriminant _), fps);
+  def this(fps:Double) = this(new BruteForceBasedCollisionDetector(detectWithDiscriminant), fps);
   
   def add(timeSubject:TimeDependent) = this ! AddTimeSubject(timeSubject);
   
@@ -45,7 +41,7 @@ class Nature(val detectCollisions:Nature.CollisionDetector, fps:Double) extends 
   private def integrate(timestep:Double):Unit = {
     log.debug("Time integration phase starts...");
     particles.foreach(integrateAcceleration(_));
-    val collisions = detectCollisions(particles, timestep);
+    val collisions = collisionDetector.detect(particles, timestep);
     if(!collisions.isEmpty) {
       val earliestCollision = collisions.minBy(_.time);
       log.debug("Earliest COLLISION DETECTED! Time left: " + earliestCollision.time);
