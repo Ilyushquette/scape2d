@@ -13,6 +13,7 @@ import scape.scape2d.debugger.swing._
 import scape.scape2d.debugger.view.ShapeDrawer
 import scape.scape2d.engine.geom.shape.Shape
 import scape.scape2d.debugger.view.CustomizedShape
+import java.awt.AlphaComposite
 
 class SwingShapeDrawer(
   val dimension:Dimension,
@@ -37,14 +38,20 @@ extends JPanel with ShapeDrawer {
     val mappedDrawable = map(drawableCustomizedShape.shape, pixelate);
     val color = new Color(drawableCustomizedShape.rgbHexcode);
     this ! (g => {
+      val oldComposite = g.getComposite;
+      g.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR));
       render(mappedClearable, backgroundColor, true, g);
+      g.setComposite(oldComposite);
       render(mappedDrawable, color, drawableCustomizedShape.fill, g);
     });
   }
   
   def clear(shape:Shape) = {
     val mappedShape = map(shape, pixelate);
-    this ! (render(mappedShape, backgroundColor, true, _:Graphics2D));
+    this ! (g => {
+      g.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR));
+      render(mappedShape, backgroundColor, true, g);
+    });
   }
   
   private def !(update:Graphics2D => Unit) = {
@@ -53,7 +60,7 @@ extends JPanel with ShapeDrawer {
   }
   
   private def render(swingShape:SwingShape, color:Color, fill:Boolean, g:Graphics2D) = {
-    g.setColor(color);
+    if(g.getComposite != AlphaComposite.CLEAR) g.setColor(color);
     if(fill) g.fill(swingShape) else g.draw(swingShape);
   }
   

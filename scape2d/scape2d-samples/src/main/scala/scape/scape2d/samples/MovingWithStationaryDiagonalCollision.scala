@@ -33,8 +33,9 @@ object MovingWithStationaryDiagonalCollision {
     
     val frame = new JFrame("Scape2D Debugger");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.setBackground(Color.BLACK);
+    frame.getContentPane.setBackground(Color.BLACK);
     val shapeDrawer = new SwingShapeDrawer(Toolkit.getDefaultToolkit().getScreenSize(), Color.BLACK, 0.02);
+    shapeDrawer.setOpaque(false);
     val debugger = new ParticleDebugger(new ShapeDrawingParticleTrackingView(shapeDrawer));
     frame.add(shapeDrawer);
     frame.pack();
