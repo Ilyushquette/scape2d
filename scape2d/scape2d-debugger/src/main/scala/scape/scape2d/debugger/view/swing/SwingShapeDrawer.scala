@@ -65,7 +65,6 @@ extends JPanel with ShapeDrawer {
   }
   
   override def paint(g:Graphics) = {
-    log.debug("Rendering graphics phase starts...");
     var updates = 0;
     while(!renderingQueue.isEmpty()) {
       val gBuffer = buffer.createGraphics();
@@ -76,6 +75,6 @@ extends JPanel with ShapeDrawer {
       updates += 1;
     }
     g.drawImage(buffer, 0, 0, null);
-    log.debug("Rendering graphics phase ended. %d updates performed".format(updates));
+    log.info("Rendering graphics phase ended. %d updates performed".format(updates));
   }
 }

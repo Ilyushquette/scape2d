@@ -1,7 +1,5 @@
 package scape.scape2d.engine.motion.collision
 
-import org.apache.log4j.Logger
-
 import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.motion.scaleVelocity
 import scape.scape2d.engine.motion.collision.detection.DetectionStrategyValidator

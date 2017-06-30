@@ -1,21 +1,14 @@
 package scape.scape2d.engine
 
-import org.apache.log4j.Logger
 import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.motion.getPositionAfter
 import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.geom.Vector2D
 
 package object core {
-  private val log = Logger.getLogger(getClass);
-  
   private[core] def integrateMotion(movable:Movable[_], timestep:Double) = {
-    log.debug("Movable at %s with velocity %s".format(movable.position, movable.velocity));
     val nextPosition = getPositionAfter(movable, timestep);
-    if(movable.position != nextPosition) {
-      movable.setPosition(nextPosition);
-      log.debug("Moved to " + nextPosition);
-    }
+    if(movable.position != nextPosition) movable.setPosition(nextPosition);
   }
   
   /**
@@ -29,7 +22,6 @@ package object core {
     if(!forces.isEmpty) {
       val netforce = forces.reduce(_ + _);
       val acceleration = new Vector2D(netforce.magnitude / particle.mass, netforce.angle);
-      log.debug("Netforce %s sum of %s caused acceleration %s".format(netforce, forces, acceleration));
       particle.setVelocity(particle.velocity + acceleration);
       particle.setForces(Array.empty);
     }
