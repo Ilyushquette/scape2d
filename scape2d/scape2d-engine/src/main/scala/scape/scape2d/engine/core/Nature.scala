@@ -8,6 +8,9 @@ import scape.scape2d.engine.motion.collision._
 import scape.scape2d.engine.motion.collision.detection._
 import scape.scape2d.engine.motion._
 import scape.scape2d.engine.core.matter.Particle
+import scape.scape2d.engine.core.input.ScaleTime
+import scape.scape2d.engine.core.input.AddTimeSubject
+import scape.scape2d.engine.core.input.AddParticle
 
 class Nature(val collisionDetector:CollisionDetector[Particle], fps:Double) extends Actor {
   private val log = Logger.getLogger(getClass);

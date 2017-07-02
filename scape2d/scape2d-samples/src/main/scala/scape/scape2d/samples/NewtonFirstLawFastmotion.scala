@@ -8,7 +8,7 @@ import scape.scape2d.debugger.ParticleDebugger
 import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
 import scape.scape2d.debugger.view.swing.SwingShapeDrawer
 import scape.scape2d.engine.core.Nature
-import scape.scape2d.engine.core.ScaleTime
+import scape.scape2d.engine.core.input.ScaleTime
 import scape.scape2d.engine.core.matter.ParticleBuilder
 import scape.scape2d.engine.geom.Vector2D
 import scape.scape2d.engine.geom.shape.Circle

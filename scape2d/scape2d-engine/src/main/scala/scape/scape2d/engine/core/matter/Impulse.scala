@@ -1,7 +1,7 @@
-package scape.scape2d.engine.core
+package scape.scape2d.engine.core.matter
 
-import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.geom.Vector2D
+import scape.scape2d.engine.core.TimeDependent
 
 /**
  * Units:

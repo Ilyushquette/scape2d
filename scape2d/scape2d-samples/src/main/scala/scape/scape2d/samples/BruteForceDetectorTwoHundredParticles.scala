@@ -14,7 +14,7 @@ import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.motion.MovableTrackerProxy
 
-object TwoHundredParticles {
+object BruteForceDetectorTwoHundredParticles {
   def main(args:Array[String]):Unit = {
     val nature = new Nature(60);
     val metalParticles = for(i <- 0 to 100) yield ParticleBuilder()
