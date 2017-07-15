@@ -69,6 +69,8 @@ class Nature(val collisionDetector:CollisionDetector[Particle], fps:Double) exte
   
   private def integrateMotionAndSubjects(timestep:Double) = {
     particles.foreach(integrateMotion(_, timestep));
+    val bonds = particles.flatMap(_.bonds);
+    bonds.foreach(integrateDeformation(_));
     val validTimeSubjects = timeSubjects.filter(_.integrate(timestep));
     timeSubjects = validTimeSubjects;
   }
