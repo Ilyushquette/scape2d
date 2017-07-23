@@ -21,10 +21,13 @@ object BondBuilder {
 case class BondBuilder private[matter] (
   particles:Combination2[Particle, Particle],
   restLength:Double,
-  linearElastic:LinearElastic = LinearElastic(10)) {
+  linearElastic:LinearElastic = LinearElastic(10),
+  dampingCoefficient:Double = 0.1) {
   def withLengthAtRest(rl:Double) = copy(restLength = rl);
   
   def asLinearElastic(le:LinearElastic) = copy(linearElastic = le);
   
-  def build = Bond(particles, linearElastic, restLength);
+  def withDampingCoefficient(dc:Double) = copy(dampingCoefficient = dc);
+  
+  def build = Bond(particles, linearElastic, restLength, dampingCoefficient);
 }
