@@ -33,25 +33,9 @@ extends JPanel with ShapeDrawer {
     this ! (render(mappedShape, color, customizedShape.fill, _:Graphics2D));
   }
   
-  def clearAndDraw(clearable:Shape, drawableCustomizedShape:CustomizedShape) = {
-    val mappedClearable = map(clearable, pixelate);
-    val mappedDrawable = map(drawableCustomizedShape.shape, pixelate);
-    val color = new Color(drawableCustomizedShape.rgbHexcode);
-    this ! (g => {
-      val oldComposite = g.getComposite;
-      g.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR));
-      render(mappedClearable, backgroundColor, true, g);
-      g.setComposite(oldComposite);
-      render(mappedDrawable, color, drawableCustomizedShape.fill, g);
-    });
-  }
-  
-  def clear(shape:Shape) = {
+  def clear(shape:Shape, fill:Boolean) = {
     val mappedShape = map(shape, pixelate);
-    this ! (g => {
-      g.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR));
-      render(mappedShape, backgroundColor, true, g);
-    });
+    this ! (render(mappedShape, backgroundColor, fill, _:Graphics2D));
   }
   
   private def !(update:Graphics2D => Unit) = {
@@ -60,7 +44,7 @@ extends JPanel with ShapeDrawer {
   }
   
   private def render(swingShape:SwingShape, color:Color, fill:Boolean, g:Graphics2D) = {
-    if(g.getComposite != AlphaComposite.CLEAR) g.setColor(color);
+    g.setColor(color);
     if(fill) g.fill(swingShape) else g.draw(swingShape);
   }
   

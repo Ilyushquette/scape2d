@@ -7,7 +7,7 @@ extends QuadTreeNodesView {
   val quadTreeColor = 0xffffff; // WHITE
   
   def renderTree(quadTree:QuadTree[_]) = {
-    shapeDrawer.clear(quadTree.bounds);
+    shapeDrawer.clear(quadTree.bounds, false);
     shapeDrawer.draw(CustomizedShape(quadTree.bounds, quadTreeColor, false));
     quadTree.nodes.foreach(renderTree);
   }

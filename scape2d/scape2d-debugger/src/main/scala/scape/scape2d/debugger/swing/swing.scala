@@ -19,7 +19,11 @@ import scape.scape2d.engine.geom.shape.Shape
 package object swing {
   def map(shape:Shape, pixelate:Double => Double):SwingShape = shape match {
     case point:Point => new Line2D.Double(mapPoint(point, pixelate), mapPoint(point, pixelate));
-    case Segment(p1, p2) => new Line2D.Double(mapPoint(p1, pixelate), mapPoint(p2, pixelate));
+    case Segment(p1, p2) => // Swing is not consistent about drawing same segment but with swapped points.
+      if(p1.distanceTo(Point.origin) <= p2.distanceTo(Point.origin))
+        new Line2D.Double(mapPoint(p1, pixelate), mapPoint(p2, pixelate));
+      else
+        new Line2D.Double(mapPoint(p2, pixelate), mapPoint(p1, pixelate));
     case Circle(Point(cx, cy), radius) =>
       val r = pixelate(radius);
       new Ellipse2D.Double(pixelate(cx).toInt - r, pixelate(cy).toInt - r, r * 2, r * 2);

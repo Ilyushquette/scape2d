@@ -11,6 +11,8 @@ import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.core.input.ScaleTime
 import scape.scape2d.engine.core.input.AddTimeSubject
 import scape.scape2d.engine.core.input.AddParticle
+import scape.scape2d.engine.core.input.AddBond
+import scape.scape2d.engine.core.matter.Bond
 
 class Nature(val collisionDetector:CollisionDetector[Particle], fps:Double) extends Actor {
   private val log = Logger.getLogger(getClass);
@@ -23,6 +25,8 @@ class Nature(val collisionDetector:CollisionDetector[Particle], fps:Double) exte
   def add(timeSubject:TimeDependent) = this ! AddTimeSubject(timeSubject);
   
   def add(particle:Particle) = this ! AddParticle(particle);
+  
+  def add(bond:Bond) = this ! AddBond(bond);
   
   private def scaleTime(fm:Double, tm:Double) = 1000 / (fps * fm) <-> 1000 / fps * tm;
   
@@ -65,6 +69,8 @@ class Nature(val collisionDetector:CollisionDetector[Particle], fps:Double) exte
   
   private def integrateMotionAndSubjects(timestep:Double) = {
     particles.foreach(integrateMotion(_, timestep));
+    val bonds = particles.flatMap(_.bonds);
+    bonds.foreach(integrateDeformation(_));
     val validTimeSubjects = timeSubjects.filter(_.integrate(timestep));
     timeSubjects = validTimeSubjects;
   }
@@ -76,6 +82,9 @@ class Nature(val collisionDetector:CollisionDetector[Particle], fps:Double) exte
         case ScaleTime(fm, tm) => timescale = scaleTime(fm, tm);
         case AddTimeSubject(ts) => timeSubjects = timeSubjects + ts;
         case AddParticle(p) => particles = particles + p;
+        case AddBond(bond) => 
+          bond.particles._1.setBonds(bond.particles._1.bonds + bond);
+          bond.particles._2.setBonds(bond.particles._2.bonds + bond.reversed);
         case TIMEOUT => endOfMailbox = true;
         case unknown => log.warn("Unknown input " + unknown);
       }
