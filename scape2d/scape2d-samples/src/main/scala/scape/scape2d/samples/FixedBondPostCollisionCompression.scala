@@ -40,6 +40,7 @@ object FixedBondPostCollisionCompression {
     
     val bond = BondBuilder(trackedMetalParticle, trackedMetalParticle2)
       .asLinearElastic(LinearElastic(10))
+      .withDampingCoefficient(0.1)
       .build;
     
     val frame = new JFrame("Scape2D Debugger");

@@ -42,4 +42,11 @@ package object core {
       particles._2.setForces(particles._2.forces :+ restoringForces._2);
     }
   }
+  
+  private[core] def integrateOscillationsDamping(bond:Bond) = {
+    val particles = bond.particles;
+    val frictionalForces = resolveFrictionalForces(bond);
+    particles._1.setForces(particles._1.forces :+ frictionalForces._1);
+    particles._2.setForces(particles._2.forces :+ frictionalForces._2);
+  }
 }
