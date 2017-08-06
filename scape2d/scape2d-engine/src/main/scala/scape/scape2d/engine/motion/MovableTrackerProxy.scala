@@ -24,19 +24,19 @@ object MovableTrackerProxy {
 }
 
 class MovableTrackerProxy[T <: Movable[T]](private val delegate:T) extends MethodInterceptor {
-  private var motionListeners:Set[Motion[T] => Unit] = Set();
+  private var motionListeners:Set[MotionEvent[T] => Unit] = Set();
   lazy val enhanced = MovableTrackerProxy.enhance(this);
   
-  def addMotionListener(listener:Motion[T] => Unit) = motionListeners = motionListeners + listener;
+  def addMotionListener(listener:MotionEvent[T] => Unit) = motionListeners = motionListeners + listener;
   
-  def removeMotionListener(listener:Motion[T] => Unit) = motionListeners = motionListeners - listener;
+  def removeMotionListener(listener:MotionEvent[T] => Unit) = motionListeners = motionListeners - listener;
   
   def intercept(obj:Object, method:Method, args:Array[Object], methodProxy:MethodProxy) = {
     if("setPosition" == method.getName()) (obj, args) match {
       case (proxy:T, Array(nextPosition:Point)) =>
         val old = proxy.snapshot;
         methodProxy.invokeSuper(obj, args);
-        motionListeners.foreach(_(Motion(old, proxy.snapshot, proxy)));
+        motionListeners.foreach(_(MotionEvent(old, proxy.snapshot, proxy)));
         Nil;
       case _ => methodProxy.invokeSuper(obj, args);
     }else methodProxy.invokeSuper(obj, args);

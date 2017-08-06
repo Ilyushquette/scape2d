@@ -56,7 +56,7 @@ class Nature(val collisionDetector:CollisionDetector[Particle], fps:Double) exte
     }else integrateMotionAndSubjects(timestep);
   }
   
-  private def handleCollisionAndIntegrate(collision:Collision[Particle]) = {
+  private def handleCollisionAndIntegrate(collision:CollisionEvent[Particle]) = {
     val particle1 = collision.concurrentPair._1;
     val particle2 = collision.concurrentPair._2;
     val safeTime = findSafeTime(collision, 0.005);

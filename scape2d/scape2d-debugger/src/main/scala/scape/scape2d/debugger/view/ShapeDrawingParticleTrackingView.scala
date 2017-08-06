@@ -1,7 +1,7 @@
 package scape.scape2d.debugger.view
 
 import scape.scape2d.engine.core.matter.Particle
-import scape.scape2d.engine.motion.Motion
+import scape.scape2d.engine.motion.MotionEvent
 import scape.scape2d.engine.geom.shape.Segment
 import scape.scape2d.engine.core.matter.Bond
 import scape.scape2d.engine.geom.shape.Point
@@ -16,7 +16,7 @@ extends ParticleTrackingView {
     particle.bonds.foreach(bond => shapeDrawer.draw(createShapeFrom(bond)));
   }
   
-  def renderMotion(motion:Motion[Particle]) = {
+  def renderMotion(motion:MotionEvent[Particle]) = {
     shapeDrawer.clear(motion.old.shape, true);
     motion.old.bonds.foreach(bond => shapeDrawer.clear(createSegmentFrom(bond), false));
     

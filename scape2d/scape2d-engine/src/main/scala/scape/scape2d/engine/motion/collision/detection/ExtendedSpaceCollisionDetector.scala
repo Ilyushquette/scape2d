@@ -5,7 +5,7 @@ import scape.scape2d.engine.geom.shape.AxisAlignedRectangle
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.Formed
 import scape.scape2d.engine.geom.shape.Sweepable
-import scape.scape2d.engine.motion.collision.Collision
+import scape.scape2d.engine.motion.collision.CollisionEvent
 import scala.collection.mutable.HashSet
 
 class ExtendedSpaceCollisionDetector[T <: Movable[T] with Formed[_ <: Sweepable[_]]] (
@@ -43,7 +43,7 @@ extends FiniteSpaceCollisionDetector[T] {
     val edgeDetections = for (swept <- onTheEdge; swept2 <- all)
                          yield (swept.entity, swept2.entity, edgeCaseDetect(swept, swept2, timestep));
     val edgeCollisions = edgeDetections.collect {
-      case (e1, e2, Some(t)) => Collision((e1, e2), t);
+      case (e1, e2, Some(t)) => CollisionEvent((e1, e2), t);
     }
     val bucketCollisions = buckets.flatMap(_.detectCollisions(timestep));
     edgeCollisions ++ bucketCollisions;

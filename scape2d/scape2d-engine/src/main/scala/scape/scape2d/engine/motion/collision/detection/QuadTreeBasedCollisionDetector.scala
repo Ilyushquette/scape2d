@@ -7,7 +7,7 @@ import scape.scape2d.engine.geom.shape.AxisAlignedRectangle
 import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.geom.shape.Sweepable
 import scala.collection.mutable.HashSet
-import scape.scape2d.engine.motion.collision.Collision
+import scape.scape2d.engine.motion.collision.CollisionEvent
 
 class QuadTreeBasedCollisionDetector[T <: Movable[T] with Formed[_ <: Sweepable[_]]](
   val bounds:AxisAlignedRectangle,
@@ -24,7 +24,7 @@ class QuadTreeBasedCollisionDetector[T <: Movable[T] with Formed[_ <: Sweepable[
     collisions.iterator;
   }
   
-  private def detectNodeCollisions(tree:Tree, timestep:Double):Seq[Collision[T]] = {
+  private def detectNodeCollisions(tree:Tree, timestep:Double):Seq[CollisionEvent[T]] = {
     if(tree.entities.isEmpty)
       tree.nodes.flatMap(detectNodeCollisions(_, timestep));
     else {
@@ -32,7 +32,7 @@ class QuadTreeBasedCollisionDetector[T <: Movable[T] with Formed[_ <: Sweepable[
       val entityDetections = detectEntityCollisions(tree, timestep);
       val detections = subEntityDetections ++ entityDetections;
       val nodeCollisions = detections.collect {
-        case (e1, e2, Some(t)) => Collision((e1, e2), t);
+        case (e1, e2, Some(t)) => CollisionEvent((e1, e2), t);
       }
       nodeCollisions ++ tree.nodes.flatMap(detectNodeCollisions(_, timestep));
     }
