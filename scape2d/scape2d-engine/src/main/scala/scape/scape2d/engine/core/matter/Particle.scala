@@ -40,7 +40,7 @@ extends Movable[Particle] with Formed[Circle] {
   def snapshot = {
     val snapshot = snapshotExcludingBonds;
     // only snapshot of the current particle's bonds structure is taken performance wise
-    snapshot._bonds = bonds.map(bond => bond.copy(
+    snapshot._bonds = bonds.map(bond => bond.snapshot(
       particles = Combination2(snapshotExcludingBonds, bond.particles._2.snapshotExcludingBonds)
     ));
     snapshot;

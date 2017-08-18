@@ -5,7 +5,7 @@ import com.google.common.math.DoubleMath.fuzzyEquals
 import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.core.matter.Bond
 import scape.scape2d.engine.core.matter.Particle
-import scape.scape2d.engine.elasticity._
+import scape.scape2d.engine.deformation.elasticity.resolveFrictionalForces
 import scape.scape2d.engine.geom.Epsilon
 import scape.scape2d.engine.geom.Vector2D
 import scape.scape2d.engine.motion.getPositionAfter
@@ -37,9 +37,19 @@ package object core {
     val currentLength = particles._1.position distanceTo particles._2.position;
     val strain = currentLength - bond.restLength;
     if(!fuzzyEquals(0, strain, Epsilon)) {
-      val restoringForces = resolveRestoringForces(bond);
-      particles._1.setForces(particles._1.forces :+ restoringForces._1);
-      particles._2.setForces(particles._2.forces :+ restoringForces._2);
+      if(Math.abs(strain) <= bond.deformationDescriptor.plastic.limit) {
+        val deformation = bond.deformationDescriptor.strained(strain);
+        val restoringForce1 = (particles._1.position - particles._2.position) * -deformation.stress;
+        val restoringForce2 = restoringForce1.opposite;
+        val plasticStrain = bond.deformationDescriptor.plastic.limit - deformation.evolvedDescriptor.plastic.limit;
+        particles._1.setForces(particles._1.forces :+ restoringForce1);
+        particles._2.setForces(particles._2.forces :+ restoringForce2);
+        bond.setRestLength(bond.restLength + plasticStrain);
+        bond.setDeformationDescriptor(deformation.evolvedDescriptor);
+      }else{
+        particles._1.setBonds(particles._1.bonds - bond);
+        particles._2.setBonds(particles._2.bonds - bond);
+      }
     }
   }
   

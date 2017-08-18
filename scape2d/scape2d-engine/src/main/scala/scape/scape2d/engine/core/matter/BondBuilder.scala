@@ -1,7 +1,12 @@
 package scape.scape2d.engine.core.matter
 
-import java.lang.Math._
-import scape.scape2d.engine.elasticity.LinearElastic
+import java.lang.Math.PI
+import java.lang.Math.toRadians
+
+import scape.scape2d.engine.deformation.DeformationDescriptor
+import scape.scape2d.engine.deformation.LinearStressStrainGraph
+import scape.scape2d.engine.deformation.elasticity.Elastic
+import scape.scape2d.engine.deformation.plasticity.Plastic
 import scape.scape2d.engine.util.Combination2
 
 object BondBuilder {
@@ -10,7 +15,12 @@ object BondBuilder {
     // average cross-sectional area viewed along central axis
     val crossSectionalArea = PI * (radius * radius);
     val length = p1.position distanceTo p2.position;
-    new BondBuilder(Combination2(p1, p2), length, LinearElastic(youngModulus, crossSectionalArea, length));
+    val linearGraph = LinearStressStrainGraph(youngModulus, crossSectionalArea, length);
+    val bondBuilder = new BondBuilder(Combination2(p1, p2), length);
+    // retain default limits but replace graphs
+    bondBuilder.asElastic(bondBuilder.elastic.copy(graph = linearGraph));
+    bondBuilder.asPlastic(bondBuilder.plastic.copy(graph = linearGraph));
+    bondBuilder;
   }
   
   def apply(p1:Particle, p2:Particle) = {
@@ -21,13 +31,17 @@ object BondBuilder {
 case class BondBuilder private[matter] (
   particles:Combination2[Particle, Particle],
   restLength:Double,
-  linearElastic:LinearElastic = LinearElastic(10),
+  elastic:Elastic = Elastic(LinearStressStrainGraph(1), 3),
+  plastic:Plastic = Plastic(LinearStressStrainGraph(1), 5),
   dampingCoefficient:Double = 0.1) {
+  
   def withLengthAtRest(rl:Double) = copy(restLength = rl);
   
-  def asLinearElastic(le:LinearElastic) = copy(linearElastic = le);
+  def asElastic(e:Elastic) = copy(elastic = e);
+  
+  def asPlastic(p:Plastic) = copy(plastic = p);
   
   def withDampingCoefficient(dc:Double) = copy(dampingCoefficient = dc);
   
-  def build = Bond(particles, linearElastic, restLength, dampingCoefficient);
+  def build = new Bond(particles, restLength, DeformationDescriptor(elastic, plastic), dampingCoefficient);
 }

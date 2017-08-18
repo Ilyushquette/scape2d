@@ -2,7 +2,6 @@ package scape.scape2d.samples
 
 import java.awt.Color
 import java.awt.Toolkit
-
 import javax.swing.JFrame
 import scape.scape2d.debugger.ParticleDebugger
 import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
@@ -10,12 +9,14 @@ import scape.scape2d.debugger.view.swing.SwingShapeDrawer
 import scape.scape2d.engine.core.Nature
 import scape.scape2d.engine.core.matter.BondBuilder
 import scape.scape2d.engine.core.matter.ParticleBuilder
-import scape.scape2d.engine.elasticity.LinearElastic
 import scape.scape2d.engine.geom.Vector2D
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.motion.MovableTrackerProxy
 import scape.scape2d.engine.motion.MovableTrackerProxy.autoEnhance
+import scape.scape2d.engine.deformation.LinearStressStrainGraph
+import scape.scape2d.engine.deformation.elasticity.Elastic
+import scape.scape2d.engine.deformation.plasticity.Plastic
 
 object BondPostDiagonalCollisionCompression {
   def main(args:Array[String]):Unit = {
@@ -39,7 +40,8 @@ object BondPostDiagonalCollisionCompression {
     val trackedMetalParticle3 = new MovableTrackerProxy(metalParticle3);
     
     val bond = BondBuilder(trackedMetalParticle, trackedMetalParticle2)
-      .asLinearElastic(LinearElastic(10))
+      .asElastic(Elastic(LinearStressStrainGraph(10), 99))
+      .asPlastic(Plastic(LinearStressStrainGraph(10), 100))
       .withDampingCoefficient(0.1)
       .build;
     
