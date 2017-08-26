@@ -11,18 +11,13 @@ extends ParticleTrackingView {
   val particleColor = 0xff0000; // RED
   val bondColor = 0x0000ff; // BLUE
   
-  def renderParticle(particle:Particle) = {
-    shapeDrawer.draw(CustomizedShape(particle.shape, particleColor, true));
-    particle.bonds.foreach(bond => shapeDrawer.draw(createShapeFrom(bond)));
-  }
+  def renderParticle(particle:Particle) = shapeDrawer.draw(CustomizedShape(particle.shape, particleColor, true));
   
-  def renderMotion(motion:MotionEvent[Particle]) = {
-    shapeDrawer.clear(motion.old.shape, true);
-    motion.old.bonds.foreach(bond => shapeDrawer.clear(createSegmentFrom(bond), false));
-    
-    shapeDrawer.draw(CustomizedShape(motion.snapshot.shape, particleColor, true));
-    motion.snapshot.bonds.foreach(bond => shapeDrawer.draw(createShapeFrom(bond)));
-  }
+  def clearParticle(particle:Particle) = shapeDrawer.clear(particle.shape, true);
+  
+  def renderBond(bond:Bond) = shapeDrawer.draw(createShapeFrom(bond));
+  
+  def clearBond(bond:Bond) = shapeDrawer.clear(createSegmentFrom(bond), false);
   
   private def createShapeFrom(bond:Bond) = CustomizedShape(createSegmentFrom(bond), bondColor, false);
   
