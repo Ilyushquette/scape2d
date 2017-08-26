@@ -43,6 +43,11 @@ class BondStructureTrackerProxy(val delegate:Bond) extends MethodInterceptor {
         handleStructureEvolution(obj.asInstanceOf[Bond], methodProxy, evolved);
       case _ =>
         methodProxy.invokeSuper(obj, args);
+    }else if("reversed" == methodName) args match {
+      case Array() =>
+        reverseAndEnhanceBond(obj.asInstanceOf[Bond], methodProxy);
+      case _ =>
+        methodProxy.invokeSuper(obj, args);
     }else methodProxy.invokeSuper(obj, args);
   }
   
@@ -52,5 +57,12 @@ class BondStructureTrackerProxy(val delegate:Bond) extends MethodInterceptor {
     if(old != evolved)
       structureEvolutionListeners.foreach(_(StructureEvolutionEvent(old, evolved)));
     result;
+  }
+  
+  private def reverseAndEnhanceBond(proxy:Bond, methodProxy:MethodProxy) = {
+    val reversedBond = methodProxy.invokeSuper(proxy, Array.empty).asInstanceOf[Bond];
+    val structureTrackedReversedBond = new BondStructureTrackerProxy(reversedBond);
+    structureTrackedReversedBond.structureEvolutionListeners = structureEvolutionListeners;
+    structureTrackedReversedBond.enhanced;
   }
 }

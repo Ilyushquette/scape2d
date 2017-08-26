@@ -46,6 +46,7 @@ package object core {
         particles._2.setForces(particles._2.forces :+ restoringForce2);
         bond.setRestLength(bond.restLength + plasticStrain);
         bond.setDeformationDescriptor(deformation.evolvedDescriptor);
+        particles._2.setBonds(particles._2.bonds - bond + bond.reversed);
       }else{
         particles._1.setBonds(particles._1.bonds - bond);
         particles._2.setBonds(particles._2.bonds - bond);
