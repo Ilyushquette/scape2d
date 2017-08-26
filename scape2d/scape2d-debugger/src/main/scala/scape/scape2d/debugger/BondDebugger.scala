@@ -2,12 +2,12 @@ package scape.scape2d.debugger
 
 import java.lang.Math.abs
 import java.lang.Math.signum
-
 import scape.scape2d.debugger.view.GraphView
 import scape.scape2d.engine.deformation.BondStructureTrackerProxy
 import scape.scape2d.engine.deformation.DeformationDescriptor
+import scape.scape2d.debugger.view.ParticleTrackingView
 
-class BondDebugger(val graphViewFactory:() => GraphView) {
+class BondDebugger(val particleTrackingView:ParticleTrackingView, val graphViewFactory:() => GraphView) {
   def trackStructureEvolution(structureTrackedBond:BondStructureTrackerProxy) = {
     val graphView = graphViewFactory();
     val initial = structureTrackedBond.deformationDescriptor;
@@ -17,6 +17,8 @@ class BondDebugger(val graphViewFactory:() => GraphView) {
       graphView.clear(fxOf(event.old), 0d to event.old.plastic.limit by 0.005);
       graphView.render(fxOf(event.evolved), 0d to event.evolved.plastic.limit by 0.005);
     });
+    
+    structureTrackedBond.addStructureBreakListener(event => particleTrackingView.clearBond(event.broken));
   }
   
   private def fxOf(deformationDescriptor:DeformationDescriptor) = (x:Double) => {
