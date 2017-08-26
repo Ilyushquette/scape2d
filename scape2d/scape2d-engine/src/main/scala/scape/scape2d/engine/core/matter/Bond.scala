@@ -3,6 +3,9 @@ package scape.scape2d.engine.core.matter
 import scape.scape2d.engine.util.Combination2
 import scape.scape2d.engine.deformation.DeformationDescriptor
 import scape.scape2d.engine.core.Volatile
+import scape.scape2d.engine.deformation.elasticity.Elastic
+import scape.scape2d.engine.deformation.plasticity.Plastic
+import scape.scape2d.engine.deformation.LinearStressStrainGraph
 
 class Bond private[matter] (
   val particles:Combination2[Particle, Particle],
@@ -10,6 +13,13 @@ class Bond private[matter] (
   private var _deformationDescriptor:DeformationDescriptor,
   val dampingCoefficient:Double)
 extends Volatile[Bond] {
+  private[matter] def this() = this(
+      particles = Combination2(new Particle, new Particle), 
+      _restLength = 0, 
+      _deformationDescriptor = DeformationDescriptor(
+          elastic = Elastic(LinearStressStrainGraph(1), 3), 
+          plastic = Plastic(LinearStressStrainGraph(1), 5)), 
+      dampingCoefficient = 0.1);
   
   def reversed = new Bond(particles.reversed, _restLength, _deformationDescriptor, dampingCoefficient);
   
