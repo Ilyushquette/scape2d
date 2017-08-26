@@ -33,6 +33,15 @@ extends Volatile[Bond] {
     _deformationDescriptor = deformationDescriptor;
   }
   
+  private[core] def break() = {
+    if(connected) {
+      particles._1.setBonds(particles._1.bonds - this);
+      particles._2.setBonds(particles._2.bonds - this);
+    }else throw new IllegalStateException("Already broken");
+  }
+  
+  def connected = particles._1.bonds.contains(this) && particles._2.bonds.contains(this);
+  
   override def hashCode = particles.hashCode;
   
   override def equals(any:Any) = {
