@@ -240,6 +240,13 @@ case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) e
     case circleSweep:CircleSweep => contains(circleSweep.circle) && contains(circleSweep.destinationCircle);
     case untuned => polygon.contains(untuned);
   }
+  
+  override def equals(any:Any) = any match {
+    case AxisAlignedRectangle(obottomLeft, owidth, oheight) => bottomLeft == obottomLeft &&
+                                                               fuzzyEquals(width, owidth, Epsilon) &&
+                                                               fuzzyEquals(height, oheight, Epsilon);
+    case _ => false;
+  }
 }
 
 case class CircleSweep(circle:Circle, sweepVector:Vector2D) extends Shape {
