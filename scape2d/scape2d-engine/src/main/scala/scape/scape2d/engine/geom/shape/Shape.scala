@@ -170,6 +170,11 @@ case class Circle(center:Point, radius:Double) extends Sweepable[CircleSweep] {
     case circleSweep:CircleSweep => contains(circleSweep.circle) && contains(circleSweep.destinationCircle);
     case _ => false;
   }
+  
+  override def equals(any:Any) = any match {
+    case Circle(ocenter, oradius) => center == ocenter && fuzzyEquals(radius, oradius, Epsilon);
+    case _ => false;
+  }
 }
 
 case class CustomPolygon private[shape] (segments:Array[Segment]) extends Polygon {
