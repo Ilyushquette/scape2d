@@ -13,4 +13,6 @@ trait Raster {
   def setRgb(point:PointInteger, rgb:Int):Unit = setRgb(point.x, point.y, rgb);
   
   def setRgb(x:Int, y:Int, rgb:Int):Unit;
+  
+  def createViewport(viewportBounds:AxisAlignedRectangleInteger) = new ViewportRaster(this, viewportBounds);
 }
