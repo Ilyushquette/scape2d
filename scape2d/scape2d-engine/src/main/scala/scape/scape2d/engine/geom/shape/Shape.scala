@@ -139,6 +139,8 @@ case class Ray(origin:Point, angle:Double) extends Shape {
 case class Segment(p1:Point, p2:Point) extends Shape {
   lazy val line = Line(p1, p2);
   
+  def length = p1 distanceTo p2;
+  
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
     case line:Line => testIntersection(this, line);
