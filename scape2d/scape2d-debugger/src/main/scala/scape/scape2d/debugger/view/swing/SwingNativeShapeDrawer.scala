@@ -15,7 +15,7 @@ import scape.scape2d.engine.geom.shape.Shape
 import java.awt.AlphaComposite
 import scape.scape2d.graphics.CustomizedShape
 
-class SwingShapeDrawer(
+class SwingNativeShapeDrawer(
   val dimension:Dimension,
   val backgroundColor:Color,
   val unitsPerPixel:Double)
