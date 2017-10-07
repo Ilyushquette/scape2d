@@ -6,4 +6,4 @@ object CustomizedShape {
   implicit def toShape[S <: Shape](customizedShape:CustomizedShape[S]):S = customizedShape.shape;
 }
 
-case class CustomizedShape[S <: Shape](shape:S, rgb:Int, mixColors:Boolean = true);
+case class CustomizedShape[S <: Shape](shape:S, rgb:Int, mixColors:Boolean = false);

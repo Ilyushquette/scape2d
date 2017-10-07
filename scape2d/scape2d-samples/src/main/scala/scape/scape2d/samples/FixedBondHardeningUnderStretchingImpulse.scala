@@ -1,32 +1,40 @@
 package scape.scape2d.samples
 
 import java.awt.Color
+import java.awt.Dimension
 import java.awt.Toolkit
 import java.util.Timer
 import java.util.TimerTask
+
 import javax.swing.JFrame
+import javax.swing.JPanel
+import javax.swing.border.EmptyBorder
+import scape.scape2d.debugger.BondDebugger
 import scape.scape2d.debugger.ParticleDebugger
+import scape.scape2d.debugger.view.ParticleTrackingView
+import scape.scape2d.debugger.view.ShapeDrawingGraphView
 import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
-import scape.scape2d.debugger.view.swing.SwingShapeDrawer
+import scape.scape2d.debugger.view.swing.SwingBuffer
+import scape.scape2d.debugger.view.swing.SwingMixingRastersShapeDrawer
 import scape.scape2d.engine.core.Nature
 import scape.scape2d.engine.core.matter.BondBuilder
 import scape.scape2d.engine.core.matter.Impulse
 import scape.scape2d.engine.core.matter.ParticleBuilder
+import scape.scape2d.engine.deformation.BondStructureTrackerProxy
 import scape.scape2d.engine.deformation.LinearStressStrainGraph
 import scape.scape2d.engine.deformation.elasticity.Elastic
 import scape.scape2d.engine.deformation.plasticity.Plastic
 import scape.scape2d.engine.geom.Vector2D
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
+import scape.scape2d.engine.geom.shape.ShapeUnitConverter
 import scape.scape2d.engine.motion.MovableTrackerProxy
 import scape.scape2d.engine.motion.MovableTrackerProxy.autoEnhance
-import java.awt.Dimension
-import scape.scape2d.debugger.view.ShapeDrawingGraphView
-import scape.scape2d.engine.deformation.BondStructureTrackerProxy
-import scape.scape2d.debugger.BondDebugger
-import javax.swing.JPanel
-import javax.swing.border.EmptyBorder
-import scape.scape2d.debugger.view.ParticleTrackingView
+import scape.scape2d.graphics.rasterizer.UnitConvertingRasterizer
+import scape.scape2d.graphics.rasterizer.cache.CachingRasterizers
+import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
+import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
+import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
 
 object FixedBondHardeningUnderStretchingImpulse {
   def main(args:Array[String]):Unit = {
@@ -73,7 +81,14 @@ object FixedBondHardeningUnderStretchingImpulse {
     val frame = new JFrame("Scape2D Debugger");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.getContentPane.setBackground(Color.BLACK);
-    val shapeDrawer = new SwingShapeDrawer(Toolkit.getDefaultToolkit().getScreenSize(), Color.BLACK, 0.02);
+    val converter = ShapeUnitConverter(50);
+    val rasterizer = RecursiveRasterizer(
+        segmentRasterizer = CachingRasterizers.enhanceSegmentRasterizer(NaiveSegmentRasterizer()),
+        circleRasterizer = CachingRasterizers.enhanceCircleRasterizer(MidpointCircleRasterizer())
+    );
+    val buffer = new SwingBuffer(Toolkit.getDefaultToolkit().getScreenSize(), true);
+    val unitConvertingRecursiveRasterizer = UnitConvertingRasterizer(converter, rasterizer);
+    val shapeDrawer = new SwingMixingRastersShapeDrawer(buffer, unitConvertingRecursiveRasterizer);
     shapeDrawer.setOpaque(false);
     val debugger = new ParticleDebugger(new ShapeDrawingParticleTrackingView(shapeDrawer));
     frame.add(shapeDrawer);
@@ -89,7 +104,10 @@ object FixedBondHardeningUnderStretchingImpulse {
       contentPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
       frame.setContentPane(contentPanel);
       frame.getContentPane.setBackground(Color.BLACK);
-      val shapeDrawer = new SwingShapeDrawer(new Dimension(300, 250), Color.BLACK, 0.05);
+      val converter = ShapeUnitConverter(20);
+      val buffer = new SwingBuffer(new Dimension(300, 250), true);
+      val unitConvertingRecursiveRasterizer = UnitConvertingRasterizer(converter, RecursiveRasterizer());
+      val shapeDrawer = new SwingMixingRastersShapeDrawer(buffer, unitConvertingRecursiveRasterizer);
       shapeDrawer.setOpaque(false);
       frame.add(shapeDrawer);
       frame.pack();

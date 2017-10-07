@@ -3,14 +3,12 @@ package scape.scape2d.samples
 import java.awt.Color
 import java.awt.Rectangle
 import java.awt.Toolkit
-
 import javax.swing.JFrame
 import javax.swing.JLayeredPane
 import scape.scape2d.debugger.ParticleDebugger
 import scape.scape2d.debugger.QuadTreeCollisionDetectorDebugger
 import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
 import scape.scape2d.debugger.view.ShapeDrawingQuadTreeNodesView
-import scape.scape2d.debugger.view.swing.SwingShapeDrawer
 import scape.scape2d.engine.core.Nature
 import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.core.matter.ParticleBuilder
@@ -20,6 +18,15 @@ import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.motion.MovableTrackerProxy
 import scape.scape2d.engine.motion.collision.detection._
+import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
+import scape.scape2d.debugger.view.swing.SwingMixingRastersShapeDrawer
+import scape.scape2d.engine.geom.shape.ShapeUnitConverter
+import scape.scape2d.debugger.view.swing.SwingBuffer
+import scape.scape2d.graphics.rasterizer.UnitConvertingRasterizer
+import scape.scape2d.graphics.rasterizer.cache.CachingRasterizers
+import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
+import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
+import javax.swing.JPanel
 
 object ExtendedSpaceLocatedCollision {
   def main(args:Array[String]):Unit = {
@@ -33,12 +40,12 @@ object ExtendedSpaceLocatedCollision {
     
     val screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     
-    val quadTreeNodesDrawer = new SwingShapeDrawer(screenSize, Color.BLACK, 0.02);
+    val quadTreeNodesDrawer = prepareShapeDrawer();
     val quadTreeNodesView = new ShapeDrawingQuadTreeNodesView(quadTreeNodesDrawer);
     val collisionDetectorDebugger = new QuadTreeCollisionDetectorDebugger(quadTreeNodesView);
     collisionDetectorDebugger.trackNodes(coreDetector);
     
-    val particlesDrawer = new SwingShapeDrawer(screenSize, Color.BLACK, 0.02);
+    val particlesDrawer = prepareShapeDrawer();
     val particleTrackingView = new ShapeDrawingParticleTrackingView(particlesDrawer);
     val particleDebugger = new ParticleDebugger(particleTrackingView);
     trackedMetalParticles.foreach(particleDebugger.trackParticle(_));
@@ -71,17 +78,30 @@ object ExtendedSpaceLocatedCollision {
           new MovableTrackerProxy(metalParticle3));
   }
   
-  private def initFrame(swingShapeDrawers:SwingShapeDrawer*) = {
+  private def prepareShapeDrawer() = {
+    val converter = ShapeUnitConverter(50);
+    val rasterizer = RecursiveRasterizer(
+        segmentRasterizer = CachingRasterizers.enhanceSegmentRasterizer(NaiveSegmentRasterizer()),
+        circleRasterizer = CachingRasterizers.enhanceCircleRasterizer(MidpointCircleRasterizer())
+    );
+    val buffer = new SwingBuffer(Toolkit.getDefaultToolkit().getScreenSize(), true);
+    val unitConvertingRecursiveRasterizer = UnitConvertingRasterizer(converter, rasterizer);
+    val shapeDrawer = new SwingMixingRastersShapeDrawer(buffer, unitConvertingRecursiveRasterizer);
+    shapeDrawer.setOpaque(false);
+    shapeDrawer;
+  }
+  
+  private def initFrame(panels:JPanel*) = {
     val layeredPane = new JLayeredPane;
     val screenSize = Toolkit.getDefaultToolkit.getScreenSize;
     val frame = new JFrame("Scape2D Debugger");
     layeredPane.setPreferredSize(screenSize);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.getContentPane.setBackground(Color.BLACK);
-    swingShapeDrawers.foreach(drawer => {
+    panels.foreach(drawer => {
       drawer.setOpaque(false);
       drawer.setBounds(new Rectangle(screenSize));
-      layeredPane.add(drawer, swingShapeDrawers.indexOf(drawer), 0);
+      layeredPane.add(drawer, panels.indexOf(drawer), 0);
     });
     frame.add(layeredPane);
     frame.pack();
