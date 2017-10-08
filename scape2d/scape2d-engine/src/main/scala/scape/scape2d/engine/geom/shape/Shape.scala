@@ -10,6 +10,7 @@ import scape.scape2d.engine.geom.shape.intersection._
 sealed trait Shape {
   def intersects(shape:Shape):Boolean;
   def contains(shape:Shape):Boolean;
+  def toInt:ShapeInteger[_ <: Shape];
 }
 
 sealed trait Sweepable[T <: Shape] extends Shape {
@@ -55,6 +56,8 @@ case class Point(x:Double, y:Double) extends Shape {
     case Point(ox, oy) => fuzzyEquals(x, ox, Epsilon) && fuzzyEquals(y, oy, Epsilon);
     case _ => false;
   }
+  
+  lazy val toInt = PointInteger(round(x).toInt, round(y).toInt);
 }
 
 case class Line(p1:Point, p2:Point) extends Shape {
@@ -103,6 +106,8 @@ case class Line(p1:Point, p2:Point) extends Shape {
     case segment:Segment => contains(segment.line);
     case _ => false;
   }
+  
+  lazy val toInt = LineInteger(p1.toInt, p2.toInt);
 }
 
 case class Ray(origin:Point, angle:Double) extends Shape {
@@ -127,10 +132,14 @@ case class Ray(origin:Point, angle:Double) extends Shape {
     case Segment(p1, p2) => intersects(p1) && intersects(p2);
     case _ => false;
   }
+  
+  lazy val toInt = RayInteger(origin.toInt, angle);
 }
 
 case class Segment(p1:Point, p2:Point) extends Shape {
   lazy val line = Line(p1, p2);
+  
+  def length = p1 distanceTo p2;
   
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
@@ -147,6 +156,8 @@ case class Segment(p1:Point, p2:Point) extends Shape {
     case Segment(p3, p4) => intersects(p3) && intersects(p4);
     case _ => false;
   }
+  
+  lazy val toInt = SegmentInteger(p1.toInt, p2.toInt);
 }
 
 case class Circle(center:Point, radius:Double) extends Sweepable[CircleSweep] {
@@ -170,6 +181,13 @@ case class Circle(center:Point, radius:Double) extends Sweepable[CircleSweep] {
     case circleSweep:CircleSweep => contains(circleSweep.circle) && contains(circleSweep.destinationCircle);
     case _ => false;
   }
+  
+  override def equals(any:Any) = any match {
+    case Circle(ocenter, oradius) => center == ocenter && fuzzyEquals(radius, oradius, Epsilon);
+    case _ => false;
+  }
+  
+  lazy val toInt = CircleInteger(center.toInt, round(radius).toInt);
 }
 
 case class CustomPolygon private[shape] (segments:Array[Segment]) extends Polygon {
@@ -199,6 +217,8 @@ case class CustomPolygon private[shape] (segments:Array[Segment]) extends Polygo
                                     contains(circleSweep.connector._2);
     case _ => false;
   }
+  
+  lazy val toInt = PolygonInteger(segments.map(_.toInt));
 }
 
 case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) extends Polygon {
@@ -235,6 +255,15 @@ case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) e
     case circleSweep:CircleSweep => contains(circleSweep.circle) && contains(circleSweep.destinationCircle);
     case untuned => polygon.contains(untuned);
   }
+  
+  override def equals(any:Any) = any match {
+    case AxisAlignedRectangle(obottomLeft, owidth, oheight) => bottomLeft == obottomLeft &&
+                                                               fuzzyEquals(width, owidth, Epsilon) &&
+                                                               fuzzyEquals(height, oheight, Epsilon);
+    case _ => false;
+  }
+  
+  lazy val toInt = AxisAlignedRectangleInteger(bottomLeft.toInt, round(width).toInt, round(height).toInt);
 }
 
 case class CircleSweep(circle:Circle, sweepVector:Vector2D) extends Shape {
@@ -270,4 +299,6 @@ case class CircleSweep(circle:Circle, sweepVector:Vector2D) extends Shape {
     case cs:CircleSweep => contains(cs.circle) && contains(cs.destinationCircle);
     case _ => false;
   }
+  
+  lazy val toInt = CircleSweepInteger(circle.toInt, sweepVector);
 }

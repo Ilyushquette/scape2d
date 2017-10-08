@@ -12,10 +12,10 @@ import javax.swing.JPanel
 import scape.scape2d.debugger.swing._
 import scape.scape2d.debugger.view.ShapeDrawer
 import scape.scape2d.engine.geom.shape.Shape
-import scape.scape2d.debugger.view.CustomizedShape
 import java.awt.AlphaComposite
+import scape.scape2d.graphics.CustomizedShape
 
-class SwingShapeDrawer(
+class SwingNativeShapeDrawer(
   val dimension:Dimension,
   val backgroundColor:Color,
   val unitsPerPixel:Double)
@@ -27,15 +27,15 @@ extends JPanel with ShapeDrawer {
   
   override def getPreferredSize = new Dimension(dimension);
   
-  def draw(customizedShape:CustomizedShape) = {
+  def draw(customizedShape:CustomizedShape[_ <: Shape]) = {
     val mappedShape = map(customizedShape.shape, pixelate);
-    val color = new Color(customizedShape.rgbHexcode);
-    this ! (render(mappedShape, color, customizedShape.fill, _:Graphics2D));
+    val color = new Color(customizedShape.rgb);
+    this ! (render(mappedShape, color, _:Graphics2D));
   }
   
-  def clear(shape:Shape, fill:Boolean) = {
+  override def clear(shape:Shape) = {
     val mappedShape = map(shape, pixelate);
-    this ! (render(mappedShape, backgroundColor, fill, _:Graphics2D));
+    this ! (render(mappedShape, backgroundColor, _:Graphics2D));
   }
   
   private def !(update:Graphics2D => Unit) = {
@@ -43,9 +43,9 @@ extends JPanel with ShapeDrawer {
     repaint();
   }
   
-  private def render(swingShape:SwingShape, color:Color, fill:Boolean, g:Graphics2D) = {
+  private def render(swingShape:SwingShape, color:Color, g:Graphics2D) = {
     g.setColor(color);
-    if(fill) g.fill(swingShape) else g.draw(swingShape);
+    g.draw(swingShape);
   }
   
   override def paint(g:Graphics) = {

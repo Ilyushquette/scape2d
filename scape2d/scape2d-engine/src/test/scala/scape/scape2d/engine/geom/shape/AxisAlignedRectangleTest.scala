@@ -4,6 +4,26 @@ import org.junit.Test
 import org.junit.Assert
 
 class AxisAlignedRectangleTest {
+  @Test
+  def testAxisAlignedRectanglesNotEqualByBottomLeft = {
+    Assert.assertNotEquals(AxisAlignedRectangle(Point(3, 1), 3, 2), AxisAlignedRectangle(Point(3, -1), 3, 2));
+  }
+  
+  @Test
+  def testAxisAlignedRectanglesNotEqualByWidth = {
+    Assert.assertNotEquals(AxisAlignedRectangle(Point(3, 1), 3, 2), AxisAlignedRectangle(Point(3, 1), 3.1, 2));
+  }
+  
+  @Test
+  def testAxisAlignedRectanglesNotEqualByHeight = {
+    Assert.assertNotEquals(AxisAlignedRectangle(Point(3, 1), 3, 2), AxisAlignedRectangle(Point(3, 1), 3, 4));
+  }
+  
+  @Test
+  def testAxisAlignedRectanglesEqual = {
+    Assert.assertEquals(AxisAlignedRectangle(Point(3, 1), 3, 2), AxisAlignedRectangle(Point(3, 1), 3, 2));
+  }
+  
   @Test(expected=classOf[IllegalArgumentException])
   def testSlicePiecesNegativeValue:Unit = {
     val aabb = AxisAlignedRectangle(Point(10, 10), 100, 100);
