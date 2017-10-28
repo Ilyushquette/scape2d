@@ -48,8 +48,9 @@ class Vector2D(val magnitude:Double, val angle:Double) {
   override def hashCode = magnitude.hashCode + angle.hashCode;
   
   override def equals(a:Any) = a match {
-    case vector:Vector2D => fuzzyEquals(magnitude, vector.magnitude, Epsilon) &&
-                            fuzzyEquals(angle, vector.angle, Epsilon);
+    case vector:Vector2D =>
+      (fuzzyEquals(magnitude, 0, Epsilon) && fuzzyEquals(vector.magnitude, 0, Epsilon)) ||
+      (fuzzyEquals(magnitude, vector.magnitude, Epsilon) && fuzzyEquals(angle, vector.angle, Epsilon));
     case _ => false;
   }
   
