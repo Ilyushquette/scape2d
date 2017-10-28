@@ -75,6 +75,20 @@ class Vector2DTest {
   }
   
   @Test
+  def testCrossProduct = {
+    val v1 = Vector2D.from(Components2D(-2, 3));
+    val v2 = Vector2D.from(Components2D(0, 1));
+    Assert.assertEquals(-2, v1 x v2, 0.00001);
+  }
+  
+  @Test
+  def testCrossProductZeroMagnitude = {
+    val v1 = Vector2D.from(Components2D(2, 3));
+    val v2 = new Vector2D(0, 90);
+    Assert.assertEquals(0, v1 x v2, 0.00001);
+  }
+  
+  @Test
   def testScalarProjection = {
     val vector1 = Vector2D.from(Components2D(0, -6));
     val vector2 = Vector2D.from(Components2D(4, -4));

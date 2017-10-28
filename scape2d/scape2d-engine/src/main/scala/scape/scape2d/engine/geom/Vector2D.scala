@@ -36,6 +36,8 @@ class Vector2D(val magnitude:Double, val angle:Double) {
     new Vector2D(newMagnitude, newAngle);
   }
   
+  def x(vector:Vector2D) = components.x * vector.components.y - components.y * vector.components.x;
+  
   def scalarProjection(target:Vector2D) = (this * target) / (target.magnitude * target.magnitude);
   
   def projection(target:Vector2D) = target * scalarProjection(target);
