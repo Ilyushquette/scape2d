@@ -12,7 +12,7 @@ class Bond private[matter] (
   private var _restLength:Double,
   private var _deformationDescriptor:DeformationDescriptor,
   val dampingCoefficient:Double)
-extends Volatile[Bond] {
+extends Volatile {
   private[matter] def this() = this(
       particles = Combination2(new Particle, new Particle), 
       _restLength = 0, 

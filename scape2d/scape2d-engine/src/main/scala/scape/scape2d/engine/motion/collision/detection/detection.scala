@@ -7,7 +7,7 @@ import scape.scape2d.engine.geom.Formed
 import scape.scape2d.engine.geom.shape.Circle
 
 package object detection {
-  type MovableSphere = Movable[_] with Formed[Circle];
+  type MovableSphere = Movable with Formed[Circle];
   type DetectionStrategy = (MovableSphere, MovableSphere, Double) => Option[Double];
   
   def detectWithDiscriminant[T <: MovableSphere](s1:T, s2:T, timestep:Double) = {

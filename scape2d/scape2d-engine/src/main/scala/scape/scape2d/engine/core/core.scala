@@ -11,7 +11,7 @@ import scape.scape2d.engine.geom.Vector2D
 import scape.scape2d.engine.motion.getPositionAfter
 
 package object core {
-  private[core] def integrateMotion(movable:Movable[_], timestep:Double) = {
+  private[core] def integrateMotion(movable:Movable, timestep:Double) = {
     val nextPosition = getPositionAfter(movable, timestep);
     if(movable.position != nextPosition) movable.setPosition(nextPosition);
   }

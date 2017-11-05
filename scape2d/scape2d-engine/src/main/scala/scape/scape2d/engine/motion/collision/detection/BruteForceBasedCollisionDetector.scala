@@ -5,7 +5,7 @@ import scala.collection.Iterable
 import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.motion.collision.CollisionEvent
 
-class BruteForceBasedCollisionDetector[T <: Movable[T]](
+class BruteForceBasedCollisionDetector[T <: Movable](
   val detect:(T, T, Double) => Option[Double])
 extends CollisionDetector[T] {  
   def detect(movables:Iterable[T], timestep:Double) = {

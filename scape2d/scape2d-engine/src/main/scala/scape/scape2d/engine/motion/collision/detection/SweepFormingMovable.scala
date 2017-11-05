@@ -9,12 +9,12 @@ import scape.scape2d.engine.motion.scaleVelocity
 object SweepFormingMovable {
   implicit def toShape(swept:SweepFormingMovable[_]) = swept.shape;
   
-  implicit def toEntity[T <: Movable[T] with Formed[_ <: Sweepable[_]]](swept:SweepFormingMovable[T]) = {
+  implicit def toEntity[T <: Movable with Formed[_ <: Sweepable[_]]](swept:SweepFormingMovable[T]) = {
     swept.entity;
   }
 }
 
-case class SweepFormingMovable[T <: Movable[T] with Formed[_ <: Sweepable[_]]](
+case class SweepFormingMovable[T <: Movable with Formed[_ <: Sweepable[_]]](
   entity:T,
   timestep:Double = 0)
 extends Formed[Shape] {
