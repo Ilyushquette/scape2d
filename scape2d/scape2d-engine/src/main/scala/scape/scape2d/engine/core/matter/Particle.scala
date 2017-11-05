@@ -37,6 +37,8 @@ extends Movable with Formed[Circle] {
   
   private[core] def setBonds(bonds:Set[Bond]) = _bonds = bonds;
   
+  def rotatable = bonds.firstOption.flatMap(_.body);
+  
   def snapshot = {
     val snapshot = snapshotExcludingBonds;
     // only snapshot of the current particle's bonds structure is taken performance wise

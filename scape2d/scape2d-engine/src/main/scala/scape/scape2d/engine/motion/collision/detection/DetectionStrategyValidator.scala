@@ -82,5 +82,6 @@ extends Movable with Formed[Circle] {
   def setPosition(nextPosition:Point) = {}
   def setVelocity(newVelocity:Vector2D) = {}
   def shape = Circle(position, radius);
+  def rotatable = None;
   def snapshot = this;
 }

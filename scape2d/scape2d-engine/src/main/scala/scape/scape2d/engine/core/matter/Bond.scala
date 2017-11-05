@@ -9,19 +9,26 @@ import scape.scape2d.engine.deformation.LinearStressStrainGraph
 
 class Bond private[matter] (
   val particles:Combination2[Particle, Particle],
+  private var _body:Option[Body],
   private var _restLength:Double,
   private var _deformationDescriptor:DeformationDescriptor,
   val dampingCoefficient:Double)
 extends Volatile {
+  // this package private default constructor is only exists for cglib proxy support
   private[matter] def this() = this(
       particles = Combination2(new Particle, new Particle), 
-      _restLength = 0, 
+      _body = None,
+      _restLength = 0,
       _deformationDescriptor = DeformationDescriptor(
           elastic = Elastic(LinearStressStrainGraph(1), 3), 
           plastic = Plastic(LinearStressStrainGraph(1), 5)), 
       dampingCoefficient = 0.1);
   
-  def reversed = new Bond(particles.reversed, _restLength, _deformationDescriptor, dampingCoefficient);
+  def reversed = new Bond(particles.reversed, _body, _restLength, _deformationDescriptor, dampingCoefficient);
+  
+  def body = _body;
+  
+  private[core] def setBody(newBody:Option[Body]) = _body = newBody;
   
   def restLength = _restLength;
   
@@ -56,9 +63,10 @@ extends Volatile {
   def snapshot = snapshot();
   
   def snapshot(particles:Combination2[Particle, Particle] = particles,
+               body:Option[Body] = _body,
                restLength:Double = _restLength,
                deformationDescriptor:DeformationDescriptor = _deformationDescriptor,
                dampingCoefficient:Double = dampingCoefficient) = {
-    new Bond(particles, restLength, deformationDescriptor, dampingCoefficient);
+    new Bond(particles, body, restLength, deformationDescriptor, dampingCoefficient);
   }
 }

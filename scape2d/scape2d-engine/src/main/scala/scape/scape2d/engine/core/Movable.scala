@@ -18,4 +18,6 @@ trait Movable extends Volatile {
   def velocity:Vector2D;
   
   private[core] def setVelocity(newVelocity:Vector2D);
+  
+  def rotatable:Option[Rotatable];
 }
