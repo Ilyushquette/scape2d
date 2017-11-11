@@ -4,7 +4,7 @@ import scape.scape2d.engine.geom.Formed
 import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.geom.shape.Sweepable
 import scape.scape2d.engine.geom.shape.Shape
-import scape.scape2d.engine.motion.linear.scaleVelocity
+import scape.scape2d.engine.motion.linear.asMetersPerTimestep
 
 object SweepFormingMovable {
   implicit def toShape(swept:SweepFormingMovable[_]) = swept.shape;
@@ -19,7 +19,7 @@ case class SweepFormingMovable[T <: Movable with Formed[_ <: Sweepable[_]]](
   timestep:Double = 0)
 extends Formed[Shape] {
   lazy val shape = {
-    val sweepVector = scaleVelocity(entity.velocity, timestep);
+    val sweepVector = asMetersPerTimestep(entity.velocity, timestep);
     if(sweepVector.magnitude > 0) entity.shape.sweep(sweepVector).asInstanceOf[Shape];
     else entity.shape;
   }

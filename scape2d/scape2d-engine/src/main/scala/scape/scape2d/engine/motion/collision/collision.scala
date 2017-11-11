@@ -5,13 +5,13 @@ import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.util.LazyVal
 import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.motion.linear.getPositionAfter
-import scape.scape2d.engine.motion.linear.scaleVelocity
+import scape.scape2d.engine.motion.linear.asMetersPerTimestep
 
 package object collision {
   def findSafeTime[T <: Movable with Formed[_]](collision:CollisionEvent[T], closestDistance:Double) = {
     val snapshotPair = collision.snapshotPair;
     val faster = Seq(snapshotPair._1, snapshotPair._2).maxBy(_.velocity.magnitude);
-    val scaledVelocity = scaleVelocity(faster.velocity, collision.time);
+    val scaledVelocity = asMetersPerTimestep(faster.velocity, collision.time);
     val distance = scaledVelocity.magnitude * collision.time;
     if(distance > closestDistance) {
       val safeDistance = distance - closestDistance;
