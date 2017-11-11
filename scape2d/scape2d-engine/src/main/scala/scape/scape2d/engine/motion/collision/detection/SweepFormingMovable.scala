@@ -4,7 +4,7 @@ import scape.scape2d.engine.geom.Formed
 import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.geom.shape.Sweepable
 import scape.scape2d.engine.geom.shape.Shape
-import scape.scape2d.engine.motion.scaleVelocity
+import scape.scape2d.engine.motion.linear.scaleVelocity
 
 object SweepFormingMovable {
   implicit def toShape(swept:SweepFormingMovable[_]) = swept.shape;

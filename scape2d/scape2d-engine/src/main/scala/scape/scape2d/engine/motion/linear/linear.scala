@@ -1,10 +1,10 @@
-package scape.scape2d.engine
+package scape.scape2d.engine.motion
 
 import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.geom._
 import scape.scape2d.engine.core.Movable
 
-package object motion {
+package object linear {
   def getPositionAfter(movable:Movable, timestep:Double) = {
     if(timestep <= 0) throw new IllegalArgumentException("Time is irreversible. Timestep=" + timestep);
     if(movable.velocity.magnitude > 0) {

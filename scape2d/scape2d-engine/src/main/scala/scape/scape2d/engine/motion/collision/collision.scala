@@ -4,6 +4,8 @@ import scape.scape2d.engine.geom._
 import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.util.LazyVal
 import scape.scape2d.engine.core.Movable
+import scape.scape2d.engine.motion.linear.getPositionAfter
+import scape.scape2d.engine.motion.linear.scaleVelocity
 
 package object collision {
   def findSafeTime[T <: Movable with Formed[_]](collision:CollisionEvent[T], closestDistance:Double) = {

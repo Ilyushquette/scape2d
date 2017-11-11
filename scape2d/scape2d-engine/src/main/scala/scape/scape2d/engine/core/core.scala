@@ -8,7 +8,7 @@ import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.deformation.elasticity.resolveFrictionalForces
 import scape.scape2d.engine.geom.Epsilon
 import scape.scape2d.engine.geom.Vector2D
-import scape.scape2d.engine.motion.getPositionAfter
+import scape.scape2d.engine.motion.linear.getPositionAfter
 
 package object core {
   private[core] def integrateMotion(movable:Movable, timestep:Double) = {

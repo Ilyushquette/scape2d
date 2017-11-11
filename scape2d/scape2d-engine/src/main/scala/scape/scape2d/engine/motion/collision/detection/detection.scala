@@ -1,7 +1,7 @@
 package scape.scape2d.engine.motion.collision
 
 import scape.scape2d.engine.core.Movable
-import scape.scape2d.engine.motion.scaleVelocity
+import scape.scape2d.engine.motion.linear.scaleVelocity
 import scape.scape2d.engine.motion.collision.detection.DetectionStrategyValidator
 import scape.scape2d.engine.geom.Formed
 import scape.scape2d.engine.geom.shape.Circle
