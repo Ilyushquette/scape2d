@@ -5,8 +5,7 @@ import scape.scape2d.engine.geom._
 import scape.scape2d.engine.core.Movable
 
 package object linear {
-  def getPositionAfter(movable:Movable, timestep:Double) = {
-    if(timestep <= 0) throw new IllegalArgumentException("Time is irreversible. Timestep=" + timestep);
+  def getPostLinearMotionPosition(movable:Movable, timestep:Double) = {
     if(movable.velocity.magnitude > 0) {
       val metersPerTimestep = asMetersPerTimestep(movable.velocity, timestep);
       movable.position.displace(metersPerTimestep.components);

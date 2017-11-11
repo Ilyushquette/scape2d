@@ -8,11 +8,11 @@ import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.deformation.elasticity.resolveFrictionalForces
 import scape.scape2d.engine.geom.Epsilon
 import scape.scape2d.engine.geom.Vector2D
-import scape.scape2d.engine.motion.linear.getPositionAfter
+import scape.scape2d.engine.motion.linear.getPostLinearMotionPosition
 
 package object core {
   private[core] def integrateMotion(movable:Movable, timestep:Double) = {
-    val nextPosition = getPositionAfter(movable, timestep);
+    val nextPosition = getPostLinearMotionPosition(movable, timestep);
     if(movable.position != nextPosition) movable.setPosition(nextPosition);
   }
   
