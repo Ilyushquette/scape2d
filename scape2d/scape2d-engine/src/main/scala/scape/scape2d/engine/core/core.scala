@@ -9,10 +9,16 @@ import scape.scape2d.engine.deformation.elasticity.resolveFrictionalForces
 import scape.scape2d.engine.geom.Epsilon
 import scape.scape2d.engine.geom.Vector2D
 import scape.scape2d.engine.motion.linear.getPostLinearMotionPosition
+import scape.scape2d.engine.motion.rotational.getPostRotationPosition
 
 package object core {
   private[core] def moveLinear(movable:Movable, timestep:Double) = {
     val nextPosition = getPostLinearMotionPosition(movable, timestep);
+    if(movable.position != nextPosition) movable.setPosition(nextPosition);
+  }
+  
+  private[core] def rotate(movable:Movable, timestep:Double) = {
+    val nextPosition = getPostRotationPosition(movable, timestep);
     if(movable.position != nextPosition) movable.setPosition(nextPosition);
   }
   
