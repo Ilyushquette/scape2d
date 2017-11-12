@@ -14,12 +14,14 @@ import scape.scape2d.engine.core.input.AddParticle
 import scape.scape2d.engine.core.input.AddBond
 import scape.scape2d.engine.core.matter.Bond
 import scape.scape2d.engine.core.integral.LinearMotionIntegral
+import scape.scape2d.engine.core.integral.RotationIntegral
 import scape.scape2d.engine.core.input.AddBody
 import scape.scape2d.engine.core.matter.Body
 
 class Nature(val collisionDetector:CollisionDetector[Particle], fps:Double) extends Actor {
   private val log = Logger.getLogger(getClass);
   private val linearMotionIntegral = LinearMotionIntegral(collisionDetector);
+  private val rotationIntegral = RotationIntegral();
   private var timeSubjects = Set[TimeDependent]();
   private var particles = Set[Particle]();
   private var timescale = scaleTime(1, 1);
@@ -43,6 +45,7 @@ class Nature(val collisionDetector:CollisionDetector[Particle], fps:Double) exte
     loop {
       val cycleStart = System.currentTimeMillis;
       linearMotionIntegral.integrate(particles, timescale.timestep);
+      rotationIntegral.integrate(particles, timescale.timestep);
       timeSubjects = timeSubjects.filter(_.integrate(timescale.timestep));
       dispatchInputs();
       val cycleMillis = System.currentTimeMillis - cycleStart;
