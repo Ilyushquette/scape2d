@@ -14,6 +14,8 @@ import scape.scape2d.engine.core.input.AddParticle
 import scape.scape2d.engine.core.input.AddBond
 import scape.scape2d.engine.core.matter.Bond
 import scape.scape2d.engine.core.integral.LinearMotionIntegral
+import scape.scape2d.engine.core.input.AddBody
+import scape.scape2d.engine.core.matter.Body
 
 class Nature(val collisionDetector:CollisionDetector[Particle], fps:Double) extends Actor {
   private val log = Logger.getLogger(getClass);
@@ -29,6 +31,8 @@ class Nature(val collisionDetector:CollisionDetector[Particle], fps:Double) exte
   def add(particle:Particle) = this ! AddParticle(particle);
   
   def add(bond:Bond) = this ! AddBond(bond);
+  
+  def add(body:Body) = this ! AddBody(body);
   
   private def scaleTime(fm:Double, tm:Double) = 1000 / (fps * fm) <-> 1000 / fps * tm;
   
@@ -58,6 +62,9 @@ class Nature(val collisionDetector:CollisionDetector[Particle], fps:Double) exte
         case AddBond(bond) => 
           bond.particles._1.setBonds(bond.particles._1.bonds + bond);
           bond.particles._2.setBonds(bond.particles._2.bonds + bond.reversed);
+        case AddBody(body) =>
+          body.bonds.foreach(add);
+          body.movables.foreach(add);
         case TIMEOUT => endOfMailbox = true;
         case unknown => log.warn("Unknown input " + unknown);
       }
