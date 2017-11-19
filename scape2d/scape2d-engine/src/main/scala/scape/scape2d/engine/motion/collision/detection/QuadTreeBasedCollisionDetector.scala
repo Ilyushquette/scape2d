@@ -9,7 +9,7 @@ import scape.scape2d.engine.geom.shape.Sweepable
 import scala.collection.mutable.HashSet
 import scape.scape2d.engine.motion.collision.CollisionEvent
 
-class QuadTreeBasedCollisionDetector[T <: Movable[T] with Formed[_ <: Sweepable[_]]](
+class QuadTreeBasedCollisionDetector[T <: Movable with Formed[_ <: Sweepable[_]]](
   val bounds:AxisAlignedRectangle,
   val detect:(T, T, Double) => Option[Double]
 ) extends FiniteSpaceCollisionDetector[T] {

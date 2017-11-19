@@ -36,6 +36,8 @@ class Vector2D(val magnitude:Double, val angle:Double) {
     new Vector2D(newMagnitude, newAngle);
   }
   
+  def x(vector:Vector2D) = components.x * vector.components.y - components.y * vector.components.x;
+  
   def scalarProjection(target:Vector2D) = (this * target) / (target.magnitude * target.magnitude);
   
   def projection(target:Vector2D) = target * scalarProjection(target);
@@ -48,8 +50,9 @@ class Vector2D(val magnitude:Double, val angle:Double) {
   override def hashCode = magnitude.hashCode + angle.hashCode;
   
   override def equals(a:Any) = a match {
-    case vector:Vector2D => fuzzyEquals(magnitude, vector.magnitude, Epsilon) &&
-                            fuzzyEquals(angle, vector.angle, Epsilon);
+    case vector:Vector2D =>
+      (fuzzyEquals(magnitude, 0, Epsilon) && fuzzyEquals(vector.magnitude, 0, Epsilon)) ||
+      (fuzzyEquals(magnitude, vector.magnitude, Epsilon) && fuzzyEquals(angle, vector.angle, Epsilon));
     case _ => false;
   }
   

@@ -4,12 +4,14 @@ import scape.scape2d.engine.geom._
 import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.util.LazyVal
 import scape.scape2d.engine.core.Movable
+import scape.scape2d.engine.motion.linear.getPostLinearMotionPosition
+import scape.scape2d.engine.motion.linear.asMetersPerTimestep
 
 package object collision {
-  def findSafeTime[T <: Movable[T] with Formed[_]](collision:CollisionEvent[T], closestDistance:Double) = {
+  def findSafeTime[T <: Movable with Formed[_]](collision:CollisionEvent[T], closestDistance:Double) = {
     val snapshotPair = collision.snapshotPair;
     val faster = Seq(snapshotPair._1, snapshotPair._2).maxBy(_.velocity.magnitude);
-    val scaledVelocity = scaleVelocity(faster.velocity, collision.time);
+    val scaledVelocity = asMetersPerTimestep(faster.velocity, collision.time);
     val distance = scaledVelocity.magnitude * collision.time;
     if(distance > closestDistance) {
       val safeDistance = distance - closestDistance;
@@ -21,8 +23,8 @@ package object collision {
     val snapshotPair = collision.snapshotPair;
     val particle1 = snapshotPair._1;
     val particle2 = snapshotPair._2;
-    val p1 = getPositionAfter(particle1, collision.time);
-    val p2 = getPositionAfter(particle2, collision.time);
+    val p1 = getPostLinearMotionPosition(particle1, collision.time);
+    val p2 = getPostLinearMotionPosition(particle2, collision.time);
     val phi = p1.angleTo(p2);
     
     def vel(particle1:Particle, particle2:Particle) = {

@@ -13,7 +13,7 @@ class Particle private[matter] (
   private var _velocity:Vector2D,
   private var _forces:Array[Vector2D],
   private var _bonds:Set[Bond] = Set.empty)
-extends Movable[Particle] with Formed[Circle] {  
+extends Movable with Formed[Circle] {
   private[matter] def this() = this(Circle(Point.origin, 1), 1, new Vector2D, Array.empty);
   
   def position = _shape.center;
@@ -36,6 +36,8 @@ extends Movable[Particle] with Formed[Circle] {
   def bonds = _bonds;
   
   private[core] def setBonds(bonds:Set[Bond]) = _bonds = bonds;
+  
+  def rotatable = bonds.firstOption.flatMap(_.body);
   
   def snapshot = {
     val snapshot = snapshotExcludingBonds;

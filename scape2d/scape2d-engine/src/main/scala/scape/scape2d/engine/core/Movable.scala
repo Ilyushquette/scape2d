@@ -4,7 +4,7 @@ import scala.collection.mutable.LinkedHashSet
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.Vector2D
 
-trait Movable[T <: Movable[T]] extends Volatile[T] {  
+trait Movable extends Volatile {  
   /**
    * in meters
    */
@@ -18,4 +18,6 @@ trait Movable[T <: Movable[T]] extends Volatile[T] {
   def velocity:Vector2D;
   
   private[core] def setVelocity(newVelocity:Vector2D);
+  
+  def rotatable:Option[Rotatable];
 }

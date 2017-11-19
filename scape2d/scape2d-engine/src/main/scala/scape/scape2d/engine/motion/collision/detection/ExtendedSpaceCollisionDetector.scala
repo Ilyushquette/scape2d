@@ -8,7 +8,7 @@ import scape.scape2d.engine.geom.shape.Sweepable
 import scape.scape2d.engine.motion.collision.CollisionEvent
 import scala.collection.mutable.HashSet
 
-class ExtendedSpaceCollisionDetector[T <: Movable[T] with Formed[_ <: Sweepable[_]]] (
+class ExtendedSpaceCollisionDetector[T <: Movable with Formed[_ <: Sweepable[_]]] (
   val coreDetector:FiniteSpaceCollisionDetector[T],
   val regionalDetectorFactory:AxisAlignedRectangle => CollisionDetector[T],
   val edgeCaseDetect:(T, T, Double) => Option[Double],

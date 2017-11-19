@@ -8,11 +8,17 @@ import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.deformation.elasticity.resolveFrictionalForces
 import scape.scape2d.engine.geom.Epsilon
 import scape.scape2d.engine.geom.Vector2D
-import scape.scape2d.engine.motion.getPositionAfter
+import scape.scape2d.engine.motion.linear.getPostLinearMotionPosition
+import scape.scape2d.engine.motion.rotational.getPostRotationPosition
 
 package object core {
-  private[core] def integrateMotion(movable:Movable[_], timestep:Double) = {
-    val nextPosition = getPositionAfter(movable, timestep);
+  private[core] def moveLinear(movable:Movable, timestep:Double) = {
+    val nextPosition = getPostLinearMotionPosition(movable, timestep);
+    if(movable.position != nextPosition) movable.setPosition(nextPosition);
+  }
+  
+  private[core] def rotate(movable:Movable, timestep:Double) = {
+    val nextPosition = getPostRotationPosition(movable, timestep);
     if(movable.position != nextPosition) movable.setPosition(nextPosition);
   }
   
@@ -22,7 +28,7 @@ package object core {
    * In the other words: all forces collected since last time integration
    * Final velocity of the particle in meters per second.
    */
-  private[core] def integrateAcceleration(particle:Particle) = {
+  private[core] def accelerateLinear(particle:Particle) = {
     val forces = particle.forces;
     if(!forces.isEmpty) {
       val netforce = forces.reduce(_ + _);
@@ -32,7 +38,7 @@ package object core {
     }
   }
   
-  private[core] def integrateDeformation(bond:Bond) = {
+  private[core] def deform(bond:Bond) = {
     val particles = bond.particles;
     val currentLength = particles._1.position distanceTo particles._2.position;
     val strain = currentLength - bond.restLength;
@@ -51,7 +57,7 @@ package object core {
     }
   }
   
-  private[core] def integrateOscillationsDamping(bond:Bond) = {
+  private[core] def dampOscillations(bond:Bond) = {
     val particles = bond.particles;
     val frictionalForces = resolveFrictionalForces(bond);
     particles._1.setForces(particles._1.forces :+ frictionalForces._1);

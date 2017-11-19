@@ -16,7 +16,13 @@ class Vector2DTest {
   def testEqualsSame = Assert.assertEquals(new Vector2D(3, 55.5), new Vector2D(3, 55.5));
   
   @Test
-  def testEqualsNotSame = Assert.assertNotSame(new Vector2D(78, 13.23), new Vector2D(77, 13.23));
+  def testEqualsSameWithZeroMagnitude = Assert.assertEquals(new Vector2D(0, 55.5), new Vector2D(0, 90));
+  
+  @Test
+  def testEqualsNotSameByMagnitude = Assert.assertNotSame(Vector(78, 13.23), Vector(77, 13.23));
+  
+  @Test
+  def testEqualsNotSameByAngle = Assert.assertNotSame(Vector(78, 13.23), Vector(78, 13.23));
   
   @Test
   def testCalculateComponents = {
@@ -66,6 +72,20 @@ class Vector2DTest {
   def testVectorNegativeMagnitudeMultiplication = {
     val sourceVector = new Vector2D(3, 270);
     Assert.assertEquals(new Vector2D(3, 90), sourceVector * -1);
+  }
+  
+  @Test
+  def testCrossProduct = {
+    val v1 = Vector2D.from(Components2D(-2, 3));
+    val v2 = Vector2D.from(Components2D(0, 1));
+    Assert.assertEquals(-2, v1 x v2, 0.00001);
+  }
+  
+  @Test
+  def testCrossProductZeroMagnitude = {
+    val v1 = Vector2D.from(Components2D(2, 3));
+    val v2 = new Vector2D(0, 90);
+    Assert.assertEquals(0, v1 x v2, 0.00001);
   }
   
   @Test
