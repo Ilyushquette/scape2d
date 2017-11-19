@@ -2,7 +2,7 @@ package scape.scape2d.engine.core.matter
 
 import scape.scape2d.engine.core.Rotatable
 
-class Body(
+class Body private[matter] (
   val centerParticle:Particle,
   val bonds:Set[Bond],
   private var _angularVelocity:Double
