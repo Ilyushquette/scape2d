@@ -29,12 +29,10 @@ package object core {
    * Final velocity of the particle in meters per second.
    */
   private[core] def accelerateLinear(particle:Particle) = {
-    val forces = particle.forces;
-    if(!forces.isEmpty) {
-      val netforce = forces.reduce(_ + _);
-      val acceleration = new Vector2D(netforce.magnitude / particle.mass, netforce.angle);
+    if(particle.force.magnitude > 0) {
+      val acceleration = new Vector2D(particle.force.magnitude / particle.mass, particle.force.angle);
       particle.setVelocity(particle.velocity + acceleration);
-      particle.setForces(Array.empty);
+      particle.resetForce();
     }
   }
   
@@ -48,8 +46,8 @@ package object core {
         val restoringForce1 = (particles._1.position - particles._2.position) * -deformation.stress;
         val restoringForce2 = restoringForce1.opposite;
         val plasticStrain = bond.deformationDescriptor.plastic.limit - deformation.evolvedDescriptor.plastic.limit;
-        particles._1.setForces(particles._1.forces :+ restoringForce1);
-        particles._2.setForces(particles._2.forces :+ restoringForce2);
+        particles._1.exertForce(restoringForce1);
+        particles._2.exertForce(restoringForce2);
         bond.setRestLength(bond.restLength + plasticStrain);
         bond.setDeformationDescriptor(deformation.evolvedDescriptor);
         particles._2.setBonds(particles._2.bonds - bond + bond.reversed);
@@ -60,7 +58,7 @@ package object core {
   private[core] def dampOscillations(bond:Bond) = {
     val particles = bond.particles;
     val frictionalForces = resolveFrictionalForces(bond);
-    particles._1.setForces(particles._1.forces :+ frictionalForces._1);
-    particles._2.setForces(particles._2.forces :+ frictionalForces._2);
+    particles._1.exertForce(frictionalForces._1);
+    particles._2.exertForce(frictionalForces._2);
   }
 }

@@ -11,10 +11,10 @@ class Particle private[matter] (
   private var _shape:Circle,
   val mass:Double,
   private var _velocity:Vector2D,
-  private var _forces:Array[Vector2D],
+  private var _force:Vector2D,
   private var _bonds:Set[Bond] = Set.empty)
 extends Movable with Formed[Circle] {
-  private[matter] def this() = this(Circle(Point.origin, 1), 1, new Vector2D, Array.empty);
+  private[matter] def this() = this(Circle(Point.origin, 1), 1, new Vector2D, new Vector2D);
   
   def position = _shape.center;
   
@@ -29,9 +29,11 @@ extends Movable with Formed[Circle] {
   /**
    * magnitude in Newtons, angle in degrees (Newtons per last integrated timestep at the direction)
    */
-  def forces = _forces;
+  def force = _force;
   
-  private[core] def setForces(forces:Array[Vector2D]) = _forces = forces;
+  private[core] def exertForce(force:Vector2D) = _force = _force + force;
+  
+  private[core] def resetForce() = _force = new Vector2D();
   
   def bonds = _bonds;
   
@@ -48,5 +50,5 @@ extends Movable with Formed[Circle] {
     snapshot;
   }
   
-  private def snapshotExcludingBonds = new Particle(shape, mass, velocity, forces);
+  private def snapshotExcludingBonds = new Particle(shape, mass, velocity, force);
 }

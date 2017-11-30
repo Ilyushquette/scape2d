@@ -19,7 +19,7 @@ case class Impulse(particle:Particle, force:Vector2D, time:Double) extends TimeD
       val calibratedTime = if(timeleft < 0) timestep + timeleft else timestep;
       val multiplier = calibratedTime / time;
       val calibratedForce = force * multiplier;
-      particle.setForces(particle.forces :+ calibratedForce);
+      particle.exertForce(calibratedForce);
       true;
     }else false;
   }
