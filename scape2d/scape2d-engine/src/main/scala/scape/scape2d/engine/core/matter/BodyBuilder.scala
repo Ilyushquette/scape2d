@@ -9,7 +9,8 @@ import scape.scape2d.engine.geom.shape.Segment
 case class BodyBuilder(
   particleFactory:Point => Particle = point => ParticleBuilder().as(Circle(point, 1)).build,
   bondFactory:(Particle, Particle) => Bond = BondBuilder(_, _).build,
-  angularVelocity:Double = 0
+  angularVelocity:Double = 0,
+  torque:Double = 0
 ) {
   def withParticleFactory(pf:Point => Particle) = copy(particleFactory = pf);
   
@@ -17,12 +18,14 @@ case class BodyBuilder(
   
   def withAngularVelocity(av:Double) = copy(angularVelocity = av);
   
+  def withTorque(t:Double) = copy(torque = t);
+  
   def build(fixedPoint:Point, structure:SegmentedStructure) = {
     val points = fetchWaypoints(structure.segments.iterator);
     val centerOfMass = particleFactory(fixedPoint);
     val particles = points.map(particleFactory(_));
     val bonds = makeBonds(structure.segments, particles + centerOfMass);
-    val body = new Body(centerOfMass, bonds, angularVelocity);
+    val body = new Body(centerOfMass, bonds, angularVelocity, torque);
     bonds.foreach(_.setBody(Some(body)));
     body;
   }
