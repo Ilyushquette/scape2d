@@ -49,6 +49,15 @@ extends Movable with Formed[Circle] {
   
   def rotatable = bonds.firstOption.flatMap(_.body);
   
+  def momentOfInertia = {
+    val bodyOpt = rotatable;
+    if(bodyOpt.isDefined) {
+      val body = bodyOpt.get;
+      val distanceToCenterOfMass = body.center distanceTo shape.center;
+      distanceToCenterOfMass * distanceToCenterOfMass * mass;
+    }else 0;
+  }
+  
   def snapshot = {
     val snapshot = snapshotExcludingBonds;
     // only snapshot of the current particle's bonds structure is taken performance wise
