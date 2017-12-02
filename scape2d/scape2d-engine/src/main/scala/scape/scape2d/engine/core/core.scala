@@ -1,7 +1,6 @@
 package scape.scape2d.engine
 
 import com.google.common.math.DoubleMath.fuzzyEquals
-
 import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.core.matter.Bond
 import scape.scape2d.engine.core.matter.Particle
@@ -10,6 +9,7 @@ import scape.scape2d.engine.geom.Epsilon
 import scape.scape2d.engine.geom.Vector2D
 import scape.scape2d.engine.motion.linear.getPostLinearMotionPosition
 import scape.scape2d.engine.motion.rotational.getPostRotationPosition
+import scape.scape2d.engine.core.matter.Body
 
 package object core {
   private[core] def moveLinear(movable:Movable, timestep:Double) = {
@@ -23,7 +23,7 @@ package object core {
   }
   
   /**
-   * Since each force in the particle is a representation of impulse J = N x timestep,
+   * Since netforce in the particle is a representation of impulse J = N x timestep,
    * acceleration in meters per second per timestep too.
    * In the other words: all forces collected since last time integration
    * Final velocity of the particle in meters per second.
@@ -33,6 +33,20 @@ package object core {
       val acceleration = new Vector2D(particle.force.magnitude / particle.mass, particle.force.angle);
       particle.setVelocity(particle.velocity + acceleration);
       particle.resetForce();
+    }
+  }
+  
+  /**
+   * Since nettorque in the body is a representation of impulse J = N x timestep,
+   * acceleration in radians per second per timestep too.
+   * In the other words: all torques collected since last time integration.
+   * Final angular velocity of the body in radians per second.
+   */
+  private[core] def accelerateAngular(body:Body) = {
+    if(body.torque > 0) {
+      val acceleration = body.torque / body.momentsOfInertia;
+      body.setAngularVelocity(body.angularVelocity + acceleration);
+      body.resetTorque();
     }
   }
   
