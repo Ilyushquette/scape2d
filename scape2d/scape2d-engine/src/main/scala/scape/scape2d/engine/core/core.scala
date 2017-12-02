@@ -17,9 +17,13 @@ package object core {
     if(movable.position != nextPosition) movable.setPosition(nextPosition);
   }
   
-  private[core] def rotate(movable:Movable, timestep:Double) = {
+  private[core] def rotate(movable:Movable, timestep:Double):Unit = {
     val nextPosition = getPostRotationPosition(movable, timestep);
     if(movable.position != nextPosition) movable.setPosition(nextPosition);
+  }
+  
+  private[core] def rotate(rotatable:Rotatable, timestep:Double):Unit = {
+    rotatable.movables.foreach(rotate(_, timestep));
   }
   
   /**
