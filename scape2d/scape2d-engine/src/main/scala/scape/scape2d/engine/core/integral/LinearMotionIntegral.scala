@@ -33,7 +33,7 @@ case class LinearMotionIntegral(collisionDetector:CollisionDetector[Particle]) {
   }
   
   private def exertKnockingForces(particles:(Particle, Particle), forces:(Vector2D, Vector2D)) = {
-    particles._1.exertForce(forces._1);
-    particles._2.exertForce(forces._2);
+    particles._1.exertForce(forces._1, true);
+    particles._2.exertForce(forces._2, true);
   }
 }

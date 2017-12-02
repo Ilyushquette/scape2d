@@ -31,10 +31,10 @@ extends Movable with Formed[Circle] {
    */
   def force = _force;
   
-  private[core] def exertForce(force:Vector2D) = {
+  private[core] def exertForce(force:Vector2D, cascade:Boolean) = {
     _force = _force + force;
     val bodyOpt = rotatable;
-    if(bodyOpt.isDefined) {
+    if(cascade && bodyOpt.isDefined) {
       val body = bodyOpt.get;
       val levelArm = body.center - shape.center;
       body.exertTorque(levelArm x force);

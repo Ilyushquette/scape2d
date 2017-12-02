@@ -64,8 +64,8 @@ package object core {
         val restoringForce1 = (particles._1.position - particles._2.position) * -deformation.stress;
         val restoringForce2 = restoringForce1.opposite;
         val plasticStrain = bond.deformationDescriptor.plastic.limit - deformation.evolvedDescriptor.plastic.limit;
-        particles._1.exertForce(restoringForce1);
-        particles._2.exertForce(restoringForce2);
+        particles._1.exertForce(restoringForce1, false);
+        particles._2.exertForce(restoringForce2, false);
         bond.setRestLength(bond.restLength + plasticStrain);
         bond.setDeformationDescriptor(deformation.evolvedDescriptor);
         particles._2.setBonds(particles._2.bonds - bond + bond.reversed);
@@ -76,7 +76,7 @@ package object core {
   private[core] def dampOscillations(bond:Bond) = {
     val particles = bond.particles;
     val frictionalForces = resolveFrictionalForces(bond);
-    particles._1.exertForce(frictionalForces._1);
-    particles._2.exertForce(frictionalForces._2);
+    particles._1.exertForce(frictionalForces._1, false);
+    particles._2.exertForce(frictionalForces._2, false);
   }
 }
