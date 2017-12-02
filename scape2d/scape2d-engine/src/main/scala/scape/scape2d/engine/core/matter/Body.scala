@@ -23,6 +23,8 @@ class Body private[matter] (
   
   private[core] def resetTorque() = _torque = 0;
   
+  def momentsOfInertia = movables.foldLeft(0d)(_ + _.momentOfInertia);
+  
   def snapshot = snapshot();
   
   def snapshot(centerParticle:Particle = this.centerParticle,
