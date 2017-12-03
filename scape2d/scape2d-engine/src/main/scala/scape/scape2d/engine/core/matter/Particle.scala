@@ -11,10 +11,10 @@ class Particle private[matter] (
   private var _shape:Circle,
   val mass:Double,
   private var _velocity:Vector2D,
-  private var _forces:Array[Vector2D],
+  private var _force:Vector2D,
   private var _bonds:Set[Bond] = Set.empty)
 extends Movable with Formed[Circle] {
-  private[matter] def this() = this(Circle(Point.origin, 1), 1, new Vector2D, Array.empty);
+  private[matter] def this() = this(Circle(Point.origin, 1), 1, new Vector2D, new Vector2D);
   
   def position = _shape.center;
   
@@ -29,15 +29,34 @@ extends Movable with Formed[Circle] {
   /**
    * magnitude in Newtons, angle in degrees (Newtons per last integrated timestep at the direction)
    */
-  def forces = _forces;
+  def force = _force;
   
-  private[core] def setForces(forces:Array[Vector2D]) = _forces = forces;
+  private[core] def exertForce(force:Vector2D, cascade:Boolean) = {
+    _force = _force + force;
+    val bodyOpt = rotatable;
+    if(cascade && bodyOpt.isDefined) {
+      val body = bodyOpt.get;
+      val levelArm = body.center - shape.center;
+      body.exertTorque(levelArm x force);
+    }
+  }
+  
+  private[core] def resetForce() = _force = new Vector2D();
   
   def bonds = _bonds;
   
   private[core] def setBonds(bonds:Set[Bond]) = _bonds = bonds;
   
   def rotatable = bonds.firstOption.flatMap(_.body);
+  
+  def momentOfInertia = {
+    val bodyOpt = rotatable;
+    if(bodyOpt.isDefined) {
+      val body = bodyOpt.get;
+      val distanceToCenterOfMass = body.center distanceTo shape.center;
+      distanceToCenterOfMass * distanceToCenterOfMass * mass;
+    }else 0;
+  }
   
   def snapshot = {
     val snapshot = snapshotExcludingBonds;
@@ -48,5 +67,5 @@ extends Movable with Formed[Circle] {
     snapshot;
   }
   
-  private def snapshotExcludingBonds = new Particle(shape, mass, velocity, forces);
+  private def snapshotExcludingBonds = new Particle(shape, mass, velocity, force);
 }

@@ -8,6 +8,7 @@ import scape.scape2d.engine.core.moveLinear
 import scape.scape2d.engine.motion.collision.detection.CollisionDetector
 import scape.scape2d.engine.motion.collision.findSafeTime
 import scape.scape2d.engine.motion.collision.resolveForces
+import scape.scape2d.engine.geom.Vector2D
 
 case class LinearMotionIntegral(collisionDetector:CollisionDetector[Particle]) {
   def integrate(particles:Iterable[Particle], timestep:Double) = {
@@ -18,8 +19,7 @@ case class LinearMotionIntegral(collisionDetector:CollisionDetector[Particle]) {
       val safeTime = findSafeTime(earliestCollision, 0.005);
       val forces = resolveForces(earliestCollision);
       if(safeTime > 0) integrateLinearMotion(particles, safeTime);
-      earliestCollision.concurrentPair._1.setForces(earliestCollision.concurrentPair._1.forces :+ forces._1);
-      earliestCollision.concurrentPair._2.setForces(earliestCollision.concurrentPair._2.forces :+ forces._2);
+      exertKnockingForces(earliestCollision.concurrentPair, forces);
       val remainingTime = timestep - safeTime;
       if(remainingTime > 0) integrateLinearMotion(particles, remainingTime);
     }else integrateLinearMotion(particles, timestep);
@@ -30,5 +30,10 @@ case class LinearMotionIntegral(collisionDetector:CollisionDetector[Particle]) {
     val bonds = particles.flatMap(_.bonds);
     bonds.foreach(deform);
     bonds.foreach(dampOscillations);
+  }
+  
+  private def exertKnockingForces(particles:(Particle, Particle), forces:(Vector2D, Vector2D)) = {
+    particles._1.exertForce(forces._1, true);
+    particles._2.exertForce(forces._2, true);
   }
 }

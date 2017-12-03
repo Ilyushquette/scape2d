@@ -8,7 +8,7 @@ case class ParticleBuilder(
   shape:Circle = Circle(Point.origin, 1),
   mass:Double = 1,
   velocity:Vector2D = new Vector2D(),
-  forces:Array[Vector2D] = Array.empty
+  force:Vector2D = new Vector2D()
 ) {
   /**
    * position in meters, radius in meters
@@ -22,7 +22,7 @@ case class ParticleBuilder(
   
   def withVelocity(v:Vector2D) = copy(velocity = v);
   
-  def withForces(fs:Array[Vector2D]) = copy(forces = fs);
+  def withForce(f:Vector2D) = copy(force = f);
   
-  def build = new Particle(shape, mass, velocity, forces);
+  def build = new Particle(shape, mass, velocity, force);
 }

@@ -16,7 +16,7 @@ case class RectangularBodyBuilder(
   def build(bounds:AxisAlignedRectangle) = {
     val center = Point(bounds.bottomLeft.x + bounds.width / 2, bounds.bottomLeft.y + bounds.height / 2);
     val boundingPoints = makeBoundingPoints(bounds);
-    val rectangularStructure = SequentialSegmentedStructure(boundingPoints) ++
+    val rectangularStructure = SequentialSegmentedStructure.closed(boundingPoints) ++
                                HingedSegmentedStructure(center, boundingPoints);
     bodyBuilder.build(center, rectangularStructure);
   }
