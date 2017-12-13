@@ -10,7 +10,7 @@ import scape.scape2d.engine.core.matter.ParticleBuilder
 import scape.scape2d.engine.geom.Vector2D
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
-import scape.scape2d.engine.motion.MovableTrackerProxy
+import scape.scape2d.engine.core.MovableTrackerProxy
 import scape.scape2d.engine.core.matter.Bond
 import scape.scape2d.engine.core.matter.Impulse
 import scape.scape2d.engine.core.matter.BondBuilder

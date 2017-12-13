@@ -22,7 +22,7 @@ import scape.scape2d.engine.geom.shape.AxisAlignedRectangle
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.shape.ShapeUnitConverter
-import scape.scape2d.engine.motion.MovableTrackerProxy
+import scape.scape2d.engine.core.MovableTrackerProxy
 import scape.scape2d.engine.motion.collision.detection.QuadTreeBasedCollisionDetector
 import scape.scape2d.engine.motion.collision.detection.detectWithDiscriminant
 import scape.scape2d.graphics.rasterizer.UnitConvertingRasterizer

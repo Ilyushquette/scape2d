@@ -1,4 +1,4 @@
-package scape.scape2d.engine.motion
+package scape.scape2d.engine.core
 
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier.isStatic
@@ -6,7 +6,6 @@ import java.lang.reflect.Modifier.isStatic
 import net.sf.cglib.proxy.Enhancer
 import net.sf.cglib.proxy.MethodInterceptor
 import net.sf.cglib.proxy.MethodProxy
-import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.geom.shape.Point
 
 object MovableTrackerProxy {

@@ -17,8 +17,8 @@ import scape.scape2d.engine.deformation.plasticity.Plastic
 import scape.scape2d.engine.geom.Vector2D
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
-import scape.scape2d.engine.motion.MovableTrackerProxy
-import scape.scape2d.engine.motion.MovableTrackerProxy.autoEnhance
+import scape.scape2d.engine.core.MovableTrackerProxy
+import scape.scape2d.engine.core.MovableTrackerProxy.autoEnhance
 import java.awt.Dimension
 import scape.scape2d.debugger.view.ShapeDrawingGraphView
 import scape.scape2d.engine.core.matter.BondStructureTrackerProxy

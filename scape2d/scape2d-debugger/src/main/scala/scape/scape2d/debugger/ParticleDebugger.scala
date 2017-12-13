@@ -2,8 +2,8 @@ package scape.scape2d.debugger
 
 import scape.scape2d.debugger.view.ParticleTrackingView
 import scape.scape2d.engine.core.matter.Particle
-import scape.scape2d.engine.motion.MovableTrackerProxy
-import scape.scape2d.engine.motion.MotionEvent
+import scape.scape2d.engine.core.MovableTrackerProxy
+import scape.scape2d.engine.core.MotionEvent
 
 class ParticleDebugger(val particleTrackingView:ParticleTrackingView) {
   def trackParticle(trackedParticle:MovableTrackerProxy[Particle]) = {

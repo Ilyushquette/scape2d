@@ -16,7 +16,7 @@ import scape.scape2d.engine.geom.Vector2D
 import scape.scape2d.engine.geom.shape.AxisAlignedRectangle
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
-import scape.scape2d.engine.motion.MovableTrackerProxy
+import scape.scape2d.engine.core.MovableTrackerProxy
 import scape.scape2d.engine.motion.collision.detection._
 import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
 import scape.scape2d.debugger.view.swing.SwingMixingRastersShapeDrawer
