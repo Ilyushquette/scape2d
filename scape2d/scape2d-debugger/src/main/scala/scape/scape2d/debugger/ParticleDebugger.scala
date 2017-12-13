@@ -8,7 +8,7 @@ import scape.scape2d.engine.core.MotionEvent
 class ParticleDebugger(val particleTrackingView:ParticleTrackingView) {
   def trackParticle(trackedParticle:MovableTrackerProxy[Particle]) = {
     particleTrackingView.renderParticle(trackedParticle);
-    trackedParticle.addMotionListener(renderMotion);
+    trackedParticle.onMotion(renderMotion);
   }
   
   private def renderMotion(motion:MotionEvent[Particle]) = {

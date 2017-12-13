@@ -31,7 +31,7 @@ object NewtonFirstLawFastmotion {
       .build;
     
     val trackedMetalParticle = new MovableTrackerProxy(metalParticle);
-    trackedMetalParticle.addMotionListener(motion => {
+    trackedMetalParticle.onMotion(motion => {
       if(motion.snapshot.position.x > 5) nature ! ScaleTime(2, 1);
     });
     
