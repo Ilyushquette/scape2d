@@ -13,12 +13,12 @@ class BondDebugger(val particleTrackingView:ParticleTrackingView, val graphViewF
     val initial = structureTrackedBond.deformationDescriptor;
     graphView.render(fxOf(initial), 0d to initial.plastic.limit by 0.005);
     
-    structureTrackedBond.addStructureEvolutionListener(event => {
+    structureTrackedBond.onStructureEvolution(event => {
       graphView.clear(fxOf(event.old), 0d to event.old.plastic.limit by 0.005);
       graphView.render(fxOf(event.evolved), 0d to event.evolved.plastic.limit by 0.005);
     });
     
-    structureTrackedBond.addStructureBreakListener(event => particleTrackingView.clearBond(event.broken));
+    structureTrackedBond.onStructureBreak(event => particleTrackingView.clearBond(event.broken));
   }
   
   private def fxOf(deformationDescriptor:DeformationDescriptor) = (x:Double) => {
