@@ -20,7 +20,7 @@ import scape.scape2d.engine.core.Nature
 import scape.scape2d.engine.core.matter.BondBuilder
 import scape.scape2d.engine.core.matter.Impulse
 import scape.scape2d.engine.core.matter.ParticleBuilder
-import scape.scape2d.engine.deformation.BondStructureTrackerProxy
+import scape.scape2d.engine.core.matter.BondStructureTrackerProxy
 import scape.scape2d.engine.deformation.LinearStressStrainGraph
 import scape.scape2d.engine.deformation.elasticity.Elastic
 import scape.scape2d.engine.deformation.plasticity.Plastic

@@ -21,7 +21,7 @@ import scape.scape2d.engine.motion.MovableTrackerProxy
 import scape.scape2d.engine.motion.MovableTrackerProxy.autoEnhance
 import java.awt.Dimension
 import scape.scape2d.debugger.view.ShapeDrawingGraphView
-import scape.scape2d.engine.deformation.BondStructureTrackerProxy
+import scape.scape2d.engine.core.matter.BondStructureTrackerProxy
 import scape.scape2d.debugger.BondDebugger
 import javax.swing.JPanel
 import javax.swing.border.EmptyBorder

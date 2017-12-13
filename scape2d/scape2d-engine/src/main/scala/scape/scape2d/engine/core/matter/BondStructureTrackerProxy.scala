@@ -1,14 +1,12 @@
-package scape.scape2d.engine.deformation
+package scape.scape2d.engine.core.matter
 
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier.isStatic
-
 import scala.collection.mutable.HashSet
-
 import net.sf.cglib.proxy.Enhancer
 import net.sf.cglib.proxy.MethodInterceptor
 import net.sf.cglib.proxy.MethodProxy
-import scape.scape2d.engine.core.matter.Bond
+import scape.scape2d.engine.deformation.DeformationDescriptor
 
 object BondStructureTrackerProxy {
   private def enhance(interceptor:BondStructureTrackerProxy) = {
