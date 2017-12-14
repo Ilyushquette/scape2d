@@ -111,10 +111,7 @@ case class Line(p1:Point, p2:Point) extends Shape {
 }
 
 case class Ray(origin:Point, angle:Double) extends Shape {
-  lazy val line = {
-    val unitVector = Vector(1, angle);
-    Line(origin, origin.displace(unitVector.components));
-  }
+  lazy val line = Line(origin, origin.displace(Vector(1, angle)));
   
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
@@ -267,15 +264,15 @@ case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) e
 }
 
 case class CircleSweep(circle:Circle, sweepVector:Vector) extends Shape {
-  lazy val destinationCircle = Circle(circle.center.displace(sweepVector.components), circle.radius);
+  lazy val destinationCircle = Circle(circle.center.displace(sweepVector), circle.radius);
   lazy val connector = {
     val origin = circle.center;
-    val destination = origin.displace(sweepVector.components);
-    val sweepPerpendicularToRadius = Vector(circle.radius, normalizeAngle(sweepVector.angle + 90));
-    val connector1 = Segment(origin.displace(sweepPerpendicularToRadius.components), 
-                             destination.displace(sweepPerpendicularToRadius.components));
-    val connector2 = Segment(destination.displace(sweepPerpendicularToRadius.opposite.components),
-                             origin.displace(sweepPerpendicularToRadius.opposite.components));
+    val destination = origin.displace(sweepVector);
+    val radialVectorToConnector = Vector(circle.radius, normalizeAngle(sweepVector.angle + 90));
+    val connector1 = Segment(origin.displace(radialVectorToConnector), 
+                             destination.displace(radialVectorToConnector));
+    val connector2 = Segment(destination.displace(radialVectorToConnector.opposite),
+                             origin.displace(radialVectorToConnector.opposite));
     (connector1, connector2);
   }
   

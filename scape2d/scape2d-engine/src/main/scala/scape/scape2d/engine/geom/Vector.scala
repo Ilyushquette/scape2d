@@ -10,6 +10,8 @@ object Vector {
     val angle = normalizeAngle(toDegrees(radians));
     Vector(magnitude, angle);
   }
+  
+  implicit def toComponents(vector:Vector) = vector.components;
 }
 
 case class Vector(magnitude:Double = 0, angle:Double = 0) {
@@ -19,6 +21,10 @@ case class Vector(magnitude:Double = 0, angle:Double = 0) {
     val offsetY = magnitude * sin(radians);
     Components2D(offsetX, offsetY);
   }
+  
+  // though Vector is implicitly converted to Components,
+  // x cannot be accessed through conversion due to naming overlap with cross-product method
+  lazy val x = components.x;
   
   lazy val opposite = Vector(magnitude, normalizeAngle(angle + 180));
   

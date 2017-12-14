@@ -13,7 +13,7 @@ package object rotational {
       val degreesPerTimestep = normalizeAngle(toDegrees(radiansPerTimestep));
       val radialVector = movable.position - movable.rotatable.get.center;
       val nextRadialVector = Vector(radialVector.magnitude, radialVector.angle + degreesPerTimestep);
-      movable.rotatable.get.center.displace(nextRadialVector.components);
+      movable.rotatable.get.center.displace(nextRadialVector);
     }else movable.position;
   }
   
