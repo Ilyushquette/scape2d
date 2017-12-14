@@ -45,14 +45,10 @@ case class Vector(magnitude:Double = 0, angle:Double = 0) {
     Vector.from(Components2D(merged._1, merged._2));
   }
   
-  override def hashCode = magnitude.hashCode + angle.hashCode;
-  
   override def equals(a:Any) = a match {
-    case vector:Vector =>
-      (fuzzyEquals(magnitude, 0, Epsilon) && fuzzyEquals(vector.magnitude, 0, Epsilon)) ||
-      (fuzzyEquals(magnitude, vector.magnitude, Epsilon) && fuzzyEquals(angle, vector.angle, Epsilon));
+    case Vector(omagnitude, oangle) =>
+      (fuzzyEquals(magnitude, 0, Epsilon) && fuzzyEquals(omagnitude, 0, Epsilon)) ||
+      (fuzzyEquals(magnitude, omagnitude, Epsilon) && fuzzyEquals(angle, oangle, Epsilon));
     case _ => false;
   }
-  
-  override def toString = "Vector2D [magnitude=%f, angle=%f]".format(magnitude, angle);
 }
