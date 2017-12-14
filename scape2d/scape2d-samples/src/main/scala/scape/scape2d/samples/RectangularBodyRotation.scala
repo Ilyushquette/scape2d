@@ -17,7 +17,7 @@ import scape.scape2d.engine.core.matter.shell.RectangularBodyBuilder
 import scape.scape2d.engine.deformation.LinearStressStrainGraph
 import scape.scape2d.engine.deformation.elasticity.Elastic
 import scape.scape2d.engine.deformation.plasticity.Plastic
-import scape.scape2d.engine.geom.Vector2D
+import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.shape.AxisAlignedRectangle
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
@@ -75,7 +75,7 @@ object RectangularBodyRotation {
     val particle = ParticleBuilder()
                    .as(Circle(position, 0.05))
                    .withMass(2)
-                   .withVelocity(new Vector2D(1, 0))
+                   .withVelocity(Vector(1, 0))
                    .build;
     val trackedParticle = new MovableTrackerProxy(particle);
     debugger.trackParticle(trackedParticle);

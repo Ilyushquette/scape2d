@@ -7,7 +7,7 @@ import scape.scape2d.debugger.ParticleDebugger
 import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
 import scape.scape2d.engine.core.Nature
 import scape.scape2d.engine.core.matter.ParticleBuilder
-import scape.scape2d.engine.geom.Vector2D
+import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.core.MovableTrackerProxy
@@ -26,12 +26,12 @@ object BruteForceDetectorTwoHundredParticles {
     val metalParticles = for(i <- 0 to 100) yield ParticleBuilder()
       .as(Circle(Point(i * 0.11, i * 0.14), 0.05))
       .withMass(2)
-      .withVelocity(new Vector2D(2, 0))
+      .withVelocity(Vector(2, 0))
       .build;
     val metalParticles2 = for(i <- 0 to 100) yield ParticleBuilder()
       .as(Circle(Point(25 - i * 0.11, i * 0.14), 0.05))
       .withMass(2)
-      .withVelocity(new Vector2D(2, 180))
+      .withVelocity(Vector(2, 180))
       .build;
     
     val trackedMetalParticles = metalParticles.map(new MovableTrackerProxy(_));

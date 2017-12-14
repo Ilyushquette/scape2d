@@ -1,6 +1,6 @@
 package scape.scape2d.engine.geom.shape
 
-import scape.scape2d.engine.geom.Vector2D
+import scape.scape2d.engine.geom.Vector
 
 object ShapeInteger {
   implicit def widenShape[S <: Shape](shapeInteger:ShapeInteger[S]):S = shapeInteger.shapeDouble;
@@ -43,7 +43,7 @@ case class PolygonInteger(segments:Array[SegmentInteger]) extends ShapeInteger[P
   lazy val points = shapeDouble.points.map(_.toInt);
 }
 
-case class CircleSweepInteger(circle:CircleInteger, sweepVector:Vector2D) extends ShapeInteger[CircleSweep] {
+case class CircleSweepInteger(circle:CircleInteger, sweepVector:Vector) extends ShapeInteger[CircleSweep] {
   lazy val shapeDouble = CircleSweep(circle, sweepVector);
   lazy val destinationCircle = shapeDouble.destinationCircle.toInt;
   lazy val connector = (shapeDouble.connector._1.toInt, shapeDouble.connector._2.toInt);

@@ -12,13 +12,13 @@ package object linear {
     }else movable.position;
   }
   
-  def asMetersPerTimestep(velocity:Vector2D, timestep:Double) = {
+  def asMetersPerTimestep(velocity:Vector, timestep:Double) = {
     val stepsPerSecond = 1000 / timestep;
-    new Vector2D(velocity.magnitude / stepsPerSecond, velocity.angle);
+    Vector(velocity.magnitude / stepsPerSecond, velocity.angle);
   }
   
-  def asMetersPerSecond(metersPerTimestep:Vector2D, timestep:Double) = {
+  def asMetersPerSecond(metersPerTimestep:Vector, timestep:Double) = {
     val stepsPerSecond = 1000 / timestep;
-    new Vector2D(metersPerTimestep.magnitude * stepsPerSecond, metersPerTimestep.angle);
+    Vector(metersPerTimestep.magnitude * stepsPerSecond, metersPerTimestep.angle);
   }
 }

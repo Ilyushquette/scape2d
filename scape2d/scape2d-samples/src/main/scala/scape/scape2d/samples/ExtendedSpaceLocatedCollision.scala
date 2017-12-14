@@ -12,7 +12,7 @@ import scape.scape2d.debugger.view.ShapeDrawingQuadTreeNodesView
 import scape.scape2d.engine.core.Nature
 import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.core.matter.ParticleBuilder
-import scape.scape2d.engine.geom.Vector2D
+import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.shape.AxisAlignedRectangle
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
@@ -60,17 +60,17 @@ object ExtendedSpaceLocatedCollision {
     val metalParticle = ParticleBuilder()
       .as(Circle(Point(0, 7.03), 0.05))
       .withMass(2)
-      .withVelocity(new Vector2D(2, 0))
+      .withVelocity(Vector(2, 0))
       .build;
     val metalParticle2 = ParticleBuilder()
       .as(Circle(Point(22.32, 6.97), 0.05))
       .withMass(2)
-      .withVelocity(new Vector2D(0, 180))
+      .withVelocity(Vector(0, 180))
       .build;
     val metalParticle3 = ParticleBuilder()
       .as(Circle(Point(22.52, 6.77), 0.05))
       .withMass(2)
-      .withVelocity(new Vector2D(0, 180))
+      .withVelocity(Vector(0, 180))
       .build;
     
     Array(new MovableTrackerProxy(metalParticle),

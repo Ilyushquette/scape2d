@@ -16,7 +16,7 @@ import scape.scape2d.engine.core.matter.shell.RectangularBodyBuilder
 import scape.scape2d.engine.deformation.LinearStressStrainGraph
 import scape.scape2d.engine.deformation.elasticity.Elastic
 import scape.scape2d.engine.deformation.plasticity.Plastic
-import scape.scape2d.engine.geom.Vector2D
+import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.shape.AxisAlignedRectangle
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point

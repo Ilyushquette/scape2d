@@ -8,7 +8,7 @@ import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
 import scape.scape2d.engine.core.Nature
 import scape.scape2d.engine.core.input.ScaleTime
 import scape.scape2d.engine.core.matter.ParticleBuilder
-import scape.scape2d.engine.geom.Vector2D
+import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.core.MovableTrackerProxy
@@ -27,7 +27,7 @@ object NewtonFirstLawSlowmotion {
     val metalParticle = ParticleBuilder()
       .as(Circle(Point.origin, 0.05))
       .withMass(2)
-      .withVelocity(new Vector2D(2, 45))
+      .withVelocity(Vector(2, 45))
       .build;
     
     val trackedMetalParticle = new MovableTrackerProxy(metalParticle);

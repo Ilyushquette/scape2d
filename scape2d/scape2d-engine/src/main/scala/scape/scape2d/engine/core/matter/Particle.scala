@@ -2,7 +2,7 @@ package scape.scape2d.engine.core.matter
 
 import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.geom.Formed
-import scape.scape2d.engine.geom.Vector2D
+import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.util.Combination2
@@ -10,11 +10,11 @@ import scape.scape2d.engine.util.Combination2
 class Particle private[matter] (
   private var _shape:Circle,
   val mass:Double,
-  private var _velocity:Vector2D,
-  private var _force:Vector2D,
+  private var _velocity:Vector,
+  private var _force:Vector,
   private var _bonds:Set[Bond] = Set.empty)
 extends Movable with Formed[Circle] {
-  private[matter] def this() = this(Circle(Point.origin, 1), 1, new Vector2D, new Vector2D);
+  private[matter] def this() = this(Circle(Point.origin, 1), 1, Vector(), Vector());
   
   def position = _shape.center;
   
@@ -22,7 +22,7 @@ extends Movable with Formed[Circle] {
   
   def velocity = _velocity;
   
-  private[core] def setVelocity(newVelocity:Vector2D) = _velocity = newVelocity;
+  private[core] def setVelocity(newVelocity:Vector) = _velocity = newVelocity;
   
   def shape = _shape;
   
@@ -31,7 +31,7 @@ extends Movable with Formed[Circle] {
    */
   def force = _force;
   
-  private[core] def exertForce(force:Vector2D, cascade:Boolean) = {
+  private[core] def exertForce(force:Vector, cascade:Boolean) = {
     _force = _force + force;
     val bodyOpt = rotatable;
     if(cascade && bodyOpt.isDefined) {
@@ -41,7 +41,7 @@ extends Movable with Formed[Circle] {
     }
   }
   
-  private[core] def resetForce() = _force = new Vector2D();
+  private[core] def resetForce() = _force = Vector();
   
   def bonds = _bonds;
   

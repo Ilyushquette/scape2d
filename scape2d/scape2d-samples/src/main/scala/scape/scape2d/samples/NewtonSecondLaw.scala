@@ -8,7 +8,7 @@ import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
 import scape.scape2d.engine.core.matter.Impulse
 import scape.scape2d.engine.core.Nature
 import scape.scape2d.engine.core.matter.ParticleBuilder
-import scape.scape2d.engine.geom.Vector2D
+import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.core.MovableTrackerProxy
@@ -27,12 +27,12 @@ object NewtonSecondLaw {
     val metalParticle = ParticleBuilder()
       .as(Circle(Point.origin, 0.05))
       .withMass(2)
-      .withVelocity(new Vector2D(1, 45))
+      .withVelocity(Vector(1, 45))
       .build;
     
     val trackedMetalParticle = new MovableTrackerProxy(metalParticle);
-    val impulse = new Impulse(trackedMetalParticle, new Vector2D(7.68, 45), 2000);
-    val impulse2 = new Impulse(trackedMetalParticle, new Vector2D(3.84, 0), 2000);
+    val impulse = new Impulse(trackedMetalParticle, Vector(7.68, 45), 2000);
+    val impulse2 = new Impulse(trackedMetalParticle, Vector(3.84, 0), 2000);
     
     val frame = new JFrame("Scape2D Debugger");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

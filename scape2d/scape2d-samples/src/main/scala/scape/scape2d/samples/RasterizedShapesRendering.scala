@@ -7,7 +7,7 @@ import javax.swing.JFrame
 import scape.scape2d.debugger.view.ShapeDrawer
 import scape.scape2d.debugger.view.swing.SwingBuffer
 import scape.scape2d.debugger.view.swing.SwingMixingRastersShapeDrawer
-import scape.scape2d.engine.geom.Vector2D
+import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.shape.AxisAlignedRectangle
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.CircleSweep
@@ -80,7 +80,7 @@ object RasterizedShapesRendering {
   }
   
   private def drawCircleSweep(shapeDrawer:ShapeDrawer) = {
-    val circleSweep = CircleSweep(Circle(Point(5, 4.5), 0.5), new Vector2D(3, 20));
+    val circleSweep = CircleSweep(Circle(Point(5, 4.5), 0.5), Vector(3, 20));
     shapeDrawer.draw(CustomizedShape(circleSweep, 0xFFFFFFFF));
   }
 }

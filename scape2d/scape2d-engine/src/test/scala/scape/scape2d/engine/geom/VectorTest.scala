@@ -3,20 +3,20 @@ package scape.scape2d.engine.geom
 import org.junit.Assert
 import org.junit.Test
 
-class Vector2DTest {
+class VectorTest {
   @Test
   def testVectorFromComponents = {
     val components = Components2D(3, 3);
-    val vector = Vector2D.from(components);
+    val vector = Vector.from(components);
     Assert.assertEquals(4.24264, vector.magnitude, 0.00001);
     Assert.assertEquals(45, vector.angle, 0.00001);
   }
   
   @Test
-  def testEqualsSame = Assert.assertEquals(new Vector2D(3, 55.5), new Vector2D(3, 55.5));
+  def testEqualsSame = Assert.assertEquals(Vector(3, 55.5), Vector(3, 55.5));
   
   @Test
-  def testEqualsSameWithZeroMagnitude = Assert.assertEquals(new Vector2D(0, 55.5), new Vector2D(0, 90));
+  def testEqualsSameWithZeroMagnitude = Assert.assertEquals(Vector(0, 55.5), Vector(0, 90));
   
   @Test
   def testEqualsNotSameByMagnitude = Assert.assertNotSame(Vector(78, 13.23), Vector(77, 13.23));
@@ -26,7 +26,7 @@ class Vector2DTest {
   
   @Test
   def testCalculateComponents = {
-    val vector = new Vector2D(7, 15);
+    val vector = Vector(7, 15);
     val components = vector.components;
     Assert.assertEquals(6.76148, components.x, 0.00001);
     Assert.assertEquals(1.81173, components.y, 0.00001);
@@ -34,85 +34,85 @@ class Vector2DTest {
   
   @Test
   def testSumOpposedVectors = {
-    val vector = new Vector2D(20, 0) + new Vector2D(30, 180);
-    assertVectors(new Vector2D(10, 180), vector);
+    val vector = Vector(20, 0) + Vector(30, 180);
+    assertVectors(Vector(10, 180), vector);
   }
   
   @Test
   def testSumUnidirectionalVectors = {
-    val vector = new Vector2D(10, 45) + new Vector2D(7, 45) + new Vector2D(30, 45);
-    assertVectors(new Vector2D(47, 45), vector);
+    val vector = Vector(10, 45) + Vector(7, 45) + Vector(30, 45);
+    assertVectors(Vector(47, 45), vector);
   }
   
   @Test
   def testSubtractOpposedVectors = {
-    val vector = new Vector2D(4, 90) - new Vector2D(5, 270);
-    assertVectors(new Vector2D(9, 90), vector);
+    val vector = Vector(4, 90) - Vector(5, 270);
+    assertVectors(Vector(9, 90), vector);
   }
   
   @Test
   def testSubtractUnidirectionalVectors = {
-    val vector = new Vector2D(3, 315) - new Vector2D(4, 315) - new Vector2D(5, 315);
-    assertVectors(new Vector2D(6, 135), vector);
+    val vector = Vector(3, 315) - Vector(4, 315) - Vector(5, 315);
+    assertVectors(Vector(6, 135), vector);
   }
   
   @Test
-  def testDotProduct = Assert.assertEquals(-9, new Vector2D(3, 90) * new Vector2D(4.24264, 315), 0.00001);
+  def testDotProduct = Assert.assertEquals(-9, Vector(3, 90) * Vector(4.24264, 315), 0.00001);
   
   @Test
-  def testDotProductWithZeroLength = Assert.assertEquals(0, new Vector2D(3, 90) * new Vector2D(0, 180), 0.00001);
+  def testDotProductWithZeroLength = Assert.assertEquals(0, Vector(3, 90) * Vector(0, 180), 0.00001);
   
   @Test
   def testVectorMagnitudeMultiplication = {
-    val sourceVector = new Vector2D(4, 180);
-    Assert.assertEquals(new Vector2D(16, 180), sourceVector * 4);
+    val sourceVector = Vector(4, 180);
+    Assert.assertEquals(Vector(16, 180), sourceVector * 4);
   }
   
   @Test
   def testVectorNegativeMagnitudeMultiplication = {
-    val sourceVector = new Vector2D(3, 270);
-    Assert.assertEquals(new Vector2D(3, 90), sourceVector * -1);
+    val sourceVector = Vector(3, 270);
+    Assert.assertEquals(Vector(3, 90), sourceVector * -1);
   }
   
   @Test
   def testCrossProduct = {
-    val v1 = Vector2D.from(Components2D(-2, 3));
-    val v2 = Vector2D.from(Components2D(0, 1));
+    val v1 = Vector.from(Components2D(-2, 3));
+    val v2 = Vector.from(Components2D(0, 1));
     Assert.assertEquals(-2, v1 x v2, 0.00001);
   }
   
   @Test
   def testCrossProductZeroMagnitude = {
-    val v1 = Vector2D.from(Components2D(2, 3));
-    val v2 = new Vector2D(0, 90);
+    val v1 = Vector.from(Components2D(2, 3));
+    val v2 = Vector(0, 90);
     Assert.assertEquals(0, v1 x v2, 0.00001);
   }
   
   @Test
   def testScalarProjection = {
-    val vector1 = Vector2D.from(Components2D(0, -6));
-    val vector2 = Vector2D.from(Components2D(4, -4));
+    val vector1 = Vector.from(Components2D(0, -6));
+    val vector2 = Vector.from(Components2D(4, -4));
     Assert.assertEquals(0.66666, vector2.scalarProjection(vector1), 0.00001);
   }
   
   @Test
   def testScalarProjectionSameVectors = {
-    val vector1 = Vector2D.from(Components2D(0, -6));
-    val vector2 = Vector2D.from(Components2D(0, -6));
+    val vector1 = Vector.from(Components2D(0, -6));
+    val vector2 = Vector.from(Components2D(0, -6));
     Assert.assertEquals(1, vector2.scalarProjection(vector1), 0.00001);
   }
   
   @Test
   def testScalarProjectionPerpendicularVectors = {
-    val vector1 = Vector2D.from(Components2D(0, -6));
-    val vector2 = Vector2D.from(Components2D(6, 0));
+    val vector1 = Vector.from(Components2D(0, -6));
+    val vector2 = Vector.from(Components2D(6, 0));
     Assert.assertEquals(0, vector2.scalarProjection(vector1), 0.00001);
   }
   
   @Test
   def testVectorProjection = {
-    val vector1 = Vector2D.from(Components2D(-4, 0));
-    val vector2 = Vector2D.from(Components2D(-7, 10));
+    val vector1 = Vector.from(Components2D(-4, 0));
+    val vector2 = Vector.from(Components2D(-7, 10));
     val projectionVector = vector2.projection(vector1);
     Assert.assertEquals(7, projectionVector.magnitude, 0.00001);
     Assert.assertEquals(180, projectionVector.angle, 0.00001);
@@ -120,11 +120,11 @@ class Vector2DTest {
   
   @Test
   def testOpposite = {
-    val sourceVector = new Vector2D(5, 320)
-    Assert.assertEquals(new Vector2D(5, 140), sourceVector.opposite);
+    val sourceVector = Vector(5, 320)
+    Assert.assertEquals(Vector(5, 140), sourceVector.opposite);
   }
   
-  private def assertVectors(expected:Vector2D, actual:Vector2D) = {
+  private def assertVectors(expected:Vector, actual:Vector) = {
     Assert.assertEquals(expected.magnitude, actual.magnitude, 0.00001);
     Assert.assertEquals(expected.angle, actual.angle, 0.00001);
   }

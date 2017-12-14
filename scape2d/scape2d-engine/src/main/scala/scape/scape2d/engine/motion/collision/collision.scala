@@ -38,7 +38,7 @@ package object collision {
       val fraction = (u1 * cosDeg(a1 - phi) * (m1 - m2) + 2 * m2 * u2 * cosDeg(a2 - phi)) / (m1 + m2);
       val vx = fraction * cosDeg(phi) + u1 * sinDeg(a1 - phi) * cosDeg(phi + 90);
       val vy = fraction * sinDeg(phi) + u1 * sinDeg(a1 - phi) * sinDeg(phi + 90);
-      Vector2D.from(Components2D(vx, vy));
+      Vector.from(Components2D(vx, vy));
     }
     
     (LazyVal(vel(particle1, particle2)), LazyVal(vel(particle2, particle1)));

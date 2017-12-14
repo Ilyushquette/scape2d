@@ -6,7 +6,7 @@ import scape.scape2d.engine.core.matter.Bond
 import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.deformation.elasticity.resolveFrictionalForces
 import scape.scape2d.engine.geom.Epsilon
-import scape.scape2d.engine.geom.Vector2D
+import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.motion.linear.getPostLinearMotionPosition
 import scape.scape2d.engine.motion.rotational.getPostRotationPosition
 import scape.scape2d.engine.core.matter.Body
@@ -34,7 +34,7 @@ package object core {
    */
   private[core] def accelerateLinear(particle:Particle) = {
     if(particle.force.magnitude > 0) {
-      val acceleration = new Vector2D(particle.force.magnitude / particle.mass, particle.force.angle);
+      val acceleration = Vector(particle.force.magnitude / particle.mass, particle.force.angle);
       particle.setVelocity(particle.velocity + acceleration);
       particle.resetForce();
     }

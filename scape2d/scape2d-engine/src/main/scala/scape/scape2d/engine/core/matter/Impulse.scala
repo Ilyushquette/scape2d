@@ -1,6 +1,6 @@
 package scape.scape2d.engine.core.matter
 
-import scape.scape2d.engine.geom.Vector2D
+import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.core.TimeDependent
 
 /**
@@ -10,7 +10,7 @@ import scape.scape2d.engine.core.TimeDependent
  *  <li>time - in milliseconds</li>
  * </ul>
  */
-case class Impulse(particle:Particle, force:Vector2D, time:Double) extends TimeDependent {
+case class Impulse(particle:Particle, force:Vector, time:Double) extends TimeDependent {
   private var timeleft = time;
   
   private[core] def integrate(timestep:Double) = {

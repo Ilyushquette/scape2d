@@ -7,7 +7,7 @@ import scape.scape2d.debugger.ParticleDebugger
 import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
 import scape.scape2d.engine.core.Nature
 import scape.scape2d.engine.core.matter.ParticleBuilder
-import scape.scape2d.engine.geom.Vector2D
+import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.core.MovableTrackerProxy
@@ -57,7 +57,7 @@ object FixedBondChainUnderStretchingImpulse {
       .withDampingCoefficient(0.1)
       .build;
     
-    val impulse = new Impulse(trackedMetalParticle3, new Vector2D(500, 0), 10000);
+    val impulse = new Impulse(trackedMetalParticle3, Vector(500, 0), 10000);
     
     val frame = new JFrame("Scape2D Debugger");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

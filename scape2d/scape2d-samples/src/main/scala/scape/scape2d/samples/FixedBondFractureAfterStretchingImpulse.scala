@@ -14,7 +14,7 @@ import scape.scape2d.engine.core.matter.ParticleBuilder
 import scape.scape2d.engine.deformation.LinearStressStrainGraph
 import scape.scape2d.engine.deformation.elasticity.Elastic
 import scape.scape2d.engine.deformation.plasticity.Plastic
-import scape.scape2d.engine.geom.Vector2D
+import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.core.MovableTrackerProxy
@@ -71,7 +71,7 @@ object FixedBondFractureAfterStretchingImpulse {
     
     val timer = new Timer;
     timer.schedule(new TimerTask {
-      def run() = nature.add(new Impulse(trackedMetalParticle2, new Vector2D(45, 0), 50));
+      def run() = nature.add(new Impulse(trackedMetalParticle2, Vector(45, 0), 50));
     }, 3000);
   }
   

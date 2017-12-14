@@ -8,7 +8,7 @@ import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
 import scape.scape2d.engine.core.Nature
 import scape.scape2d.engine.core.matter.BondBuilder
 import scape.scape2d.engine.core.matter.ParticleBuilder
-import scape.scape2d.engine.geom.Vector2D
+import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.core.MovableTrackerProxy
@@ -38,7 +38,7 @@ object FixedBondPostCollisionCompression {
     val metalParticle3 = ParticleBuilder()
       .as(Circle(Point(14.8, 7), 0.05))
       .withMass(2)
-      .withVelocity(new Vector2D(3, 180))
+      .withVelocity(Vector(3, 180))
       .build;
     
     val trackedMetalParticle = new MovableTrackerProxy(metalParticle);

@@ -8,7 +8,7 @@ import scape.scape2d.engine.core.moveLinear
 import scape.scape2d.engine.motion.collision.detection.CollisionDetector
 import scape.scape2d.engine.motion.collision.findSafeTime
 import scape.scape2d.engine.motion.collision.resolveForces
-import scape.scape2d.engine.geom.Vector2D
+import scape.scape2d.engine.geom.Vector
 
 case class LinearMotionIntegral(collisionDetector:CollisionDetector[Particle]) {
   def integrate(particles:Iterable[Particle], timestep:Double) = {
@@ -32,7 +32,7 @@ case class LinearMotionIntegral(collisionDetector:CollisionDetector[Particle]) {
     bonds.foreach(dampOscillations);
   }
   
-  private def exertKnockingForces(particles:(Particle, Particle), forces:(Vector2D, Vector2D)) = {
+  private def exertKnockingForces(particles:(Particle, Particle), forces:(Vector, Vector)) = {
     particles._1.exertForce(forces._1, true);
     particles._2.exertForce(forces._2, true);
   }

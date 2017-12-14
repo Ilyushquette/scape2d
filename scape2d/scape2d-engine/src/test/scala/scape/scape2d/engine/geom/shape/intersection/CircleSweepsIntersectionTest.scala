@@ -4,7 +4,7 @@ import org.junit.Test
 import scape.scape2d.engine.geom.shape.CircleSweep
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
-import scape.scape2d.engine.geom.Vector2D
+import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.Components2D
 import org.junit.Assert
 
@@ -35,8 +35,8 @@ class CircleSweepsIntersectionTest {
    */
   @Test
   def testSeparatedCircleSweepsDontIntersect = {
-    val cs1 = CircleSweep(Circle(Point(0, 0), 2), Vector2D.from(Components2D(22, 0)));
-    val cs2 = CircleSweep(Circle(Point(4.5, 14), 2), Vector2D.from(Components2D(3.5, -8)));
+    val cs1 = CircleSweep(Circle(Point(0, 0), 2), Vector.from(Components2D(22, 0)));
+    val cs2 = CircleSweep(Circle(Point(4.5, 14), 2), Vector.from(Components2D(3.5, -8)));
     Assert.assertFalse(cs1.intersects(cs2));
   }
   
@@ -65,8 +65,8 @@ class CircleSweepsIntersectionTest {
    */
   @Test
   def testCircleSweepReachesDestinationCircleOfCircleSweepDoIntersect = {
-    val cs1 = CircleSweep(Circle(Point(0, 0), 2), Vector2D.from(Components2D(22, 0)));
-    val cs2 = CircleSweep(Circle(Point(28.5, 14), 2), Vector2D.from(Components2D(-6.5, -14)));
+    val cs1 = CircleSweep(Circle(Point(0, 0), 2), Vector.from(Components2D(22, 0)));
+    val cs2 = CircleSweep(Circle(Point(28.5, 14), 2), Vector.from(Components2D(-6.5, -14)));
     Assert.assertTrue(cs1.intersects(cs2));
   }
   
@@ -96,8 +96,8 @@ class CircleSweepsIntersectionTest {
    */
   @Test
   def testCircleSweepReachesRectangularConnectorOfCircleSweepDoIntersect = {
-    val cs1 = CircleSweep(Circle(Point(0, 0), 2), Vector2D.from(Components2D(22, 0)));
-    val cs2 = CircleSweep(Circle(Point(4.5, 14), 2), Vector2D.from(Components2D(5, -11)));
+    val cs1 = CircleSweep(Circle(Point(0, 0), 2), Vector.from(Components2D(22, 0)));
+    val cs2 = CircleSweep(Circle(Point(4.5, 14), 2), Vector.from(Components2D(5, -11)));
     Assert.assertTrue(cs1.intersects(cs2));
   }
   
@@ -114,8 +114,8 @@ class CircleSweepsIntersectionTest {
    */
   @Test
   def testCircleSweepInsideOfAnotherCircleSweepDoIntersect = {
-    val cs1 = CircleSweep(Circle(Point(0, 0), 2), Vector2D.from(Components2D(22, 0)));
-    val cs2 = CircleSweep(Circle(Point(10, 0), 1), Vector2D.from(Components2D(4, 0)));
+    val cs1 = CircleSweep(Circle(Point(0, 0), 2), Vector.from(Components2D(22, 0)));
+    val cs2 = CircleSweep(Circle(Point(10, 0), 1), Vector.from(Components2D(4, 0)));
     Assert.assertTrue(cs1.intersects(cs2));
   }
 }

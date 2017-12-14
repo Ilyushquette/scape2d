@@ -1,7 +1,6 @@
 package scape.scape2d.engine.core.matter
 
 import scape.scape2d.engine.core.Rotatable
-import scape.scape2d.engine.geom.Vector2D
 
 class Body private[matter] (
   val centerParticle:Particle,

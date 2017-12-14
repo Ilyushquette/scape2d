@@ -14,7 +14,7 @@ sealed trait Shape {
 }
 
 sealed trait Sweepable[T <: Shape] extends Shape {
-  def sweep(sweepVector:Vector2D):T;
+  def sweep(sweepVector:Vector):T;
 }
 
 sealed trait Polygon extends Shape {
@@ -34,7 +34,7 @@ case class Point(x:Double, y:Double) extends Shape {
   
   def angleTo(point:Point) = normalizeAngle(toDegrees(atan2(point.y - y, point.x - x)));
   
-  def -(point:Point) = Vector2D.from(Components2D(x - point.x, y - point.y));
+  def -(point:Point) = Vector.from(Components2D(x - point.x, y - point.y));
   
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
@@ -112,7 +112,7 @@ case class Line(p1:Point, p2:Point) extends Shape {
 
 case class Ray(origin:Point, angle:Double) extends Shape {
   lazy val line = {
-    val unitVector = new Vector2D(1, angle);
+    val unitVector = Vector(1, angle);
     Line(origin, origin.displace(unitVector.components));
   }
   
@@ -161,7 +161,7 @@ case class Segment(p1:Point, p2:Point) extends Shape {
 }
 
 case class Circle(center:Point, radius:Double) extends Sweepable[CircleSweep] {
-  def sweep(sweepVector:Vector2D) = CircleSweep(this, sweepVector);
+  def sweep(sweepVector:Vector) = CircleSweep(this, sweepVector);
   
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
@@ -266,12 +266,12 @@ case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) e
   lazy val toInt = AxisAlignedRectangleInteger(bottomLeft.toInt, round(width).toInt, round(height).toInt);
 }
 
-case class CircleSweep(circle:Circle, sweepVector:Vector2D) extends Shape {
+case class CircleSweep(circle:Circle, sweepVector:Vector) extends Shape {
   lazy val destinationCircle = Circle(circle.center.displace(sweepVector.components), circle.radius);
   lazy val connector = {
     val origin = circle.center;
     val destination = origin.displace(sweepVector.components);
-    val sweepPerpendicularToRadius = new Vector2D(circle.radius, normalizeAngle(sweepVector.angle + 90));
+    val sweepPerpendicularToRadius = Vector(circle.radius, normalizeAngle(sweepVector.angle + 90));
     val connector1 = Segment(origin.displace(sweepPerpendicularToRadius.components), 
                              destination.displace(sweepPerpendicularToRadius.components));
     val connector2 = Segment(destination.displace(sweepPerpendicularToRadius.opposite.components),

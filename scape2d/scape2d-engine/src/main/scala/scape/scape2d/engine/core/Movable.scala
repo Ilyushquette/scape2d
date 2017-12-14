@@ -2,7 +2,7 @@ package scape.scape2d.engine.core
 
 import scala.collection.mutable.LinkedHashSet
 import scape.scape2d.engine.geom.shape.Point
-import scape.scape2d.engine.geom.Vector2D
+import scape.scape2d.engine.geom.Vector
 
 trait Movable extends Volatile {  
   /**
@@ -15,9 +15,9 @@ trait Movable extends Volatile {
   /**
    * magnitude in meters, angle in degrees (meters per second at the direction)
    */
-  def velocity:Vector2D;
+  def velocity:Vector;
   
-  private[core] def setVelocity(newVelocity:Vector2D);
+  private[core] def setVelocity(newVelocity:Vector);
   
   def rotatable:Option[Rotatable];
 }

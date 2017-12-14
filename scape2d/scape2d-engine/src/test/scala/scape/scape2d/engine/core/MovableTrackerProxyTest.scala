@@ -3,14 +3,14 @@ package scape.scape2d.engine.core
 import org.junit.Test
 import scape.scape2d.engine.geom.shape.Point
 import org.junit.Assert
-import scape.scape2d.engine.geom.Vector2D
+import scape.scape2d.engine.geom.Vector
 
 object MovableTrackerProxyTest {
-  private class MovableMock(var position:Point, var velocity:Vector2D) extends Movable {
-    def this() = this(Point.origin, new Vector2D());
+  private class MovableMock(var position:Point, var velocity:Vector) extends Movable {
+    def this() = this(Point.origin, Vector());
     
     def setPosition(nextPosition:Point) = position = nextPosition;
-    def setVelocity(newVelocity:Vector2D) = velocity = newVelocity;
+    def setVelocity(newVelocity:Vector) = velocity = newVelocity;
     def rotatable = None;
     def snapshot = new MovableMock(position, velocity);
   }
@@ -23,7 +23,7 @@ class MovableTrackerProxyTest {
   def testSettingDifferingPositionEventInterception = {
     var event:Option[MotionEvent[MovableMock]] = None;
     
-    val movableMock = new MovableMock(Point(5, 5), new Vector2D());
+    val movableMock = new MovableMock(Point(5, 5), Vector());
     val trackedMovable = new MovableTrackerProxy(movableMock);
     trackedMovable.onMotion(e => event = Some(e));
     
@@ -35,7 +35,7 @@ class MovableTrackerProxyTest {
   def testSettingSamePositionNoEventInterception = {
     var event:Option[MotionEvent[MovableMock]] = None;
     
-    val movableMock = new MovableMock(Point(5, 5), new Vector2D());
+    val movableMock = new MovableMock(Point(5, 5), Vector());
     val trackedMovable = new MovableTrackerProxy(movableMock);
     trackedMovable.onMotion(e => event = Some(e));
     

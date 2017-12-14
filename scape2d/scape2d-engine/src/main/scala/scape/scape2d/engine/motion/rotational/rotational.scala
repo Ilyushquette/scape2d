@@ -4,7 +4,7 @@ import java.lang.Math.toDegrees
 
 import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.geom.normalizeAngle
-import scape.scape2d.engine.geom.Vector2D
+import scape.scape2d.engine.geom.Vector
 
 package object rotational {
   def getPostRotationPosition(movable:Movable, timestep:Double) = {
@@ -12,7 +12,7 @@ package object rotational {
       val radiansPerTimestep = asRadiansPerTimestep(movable.rotatable.get.angularVelocity, timestep);
       val degreesPerTimestep = normalizeAngle(toDegrees(radiansPerTimestep));
       val radialVector = movable.position - movable.rotatable.get.center;
-      val nextRadialVector = new Vector2D(radialVector.magnitude, radialVector.angle + degreesPerTimestep);
+      val nextRadialVector = Vector(radialVector.magnitude, radialVector.angle + degreesPerTimestep);
       movable.rotatable.get.center.displace(nextRadialVector.components);
     }else movable.position;
   }
