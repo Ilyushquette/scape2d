@@ -28,11 +28,11 @@ case class Vector(magnitude:Double = 0, angle:Double = 0) {
   
   lazy val opposite = Vector(magnitude, normalizeAngle(angle + 180));
   
-  def +(vector:Vector) = mergeWith(vector, (v1, v2) => (v1.x + v2.x, v1.y + v2.y));
+  def +(vector:Vector) = Vector.from(Components2D(this.x + vector.x, this.y + vector.y));
   
-  def -(vector:Vector) = mergeWith(vector, (v1, v2) => (v1.x - v2.x, v1.y - v2.y));
+  def -(vector:Vector) = Vector.from(Components2D(this.x - vector.x, this.y - vector.y));
   
-  def *(vector:Vector) = components.x * vector.components.x + components.y * vector.components.y;
+  def *(vector:Vector) = this.x * vector.x + this.y * vector.y;
   
   def *(magnitudeMultiplier:Double) = {
     val newMagnitude = magnitude * abs(magnitudeMultiplier);
@@ -40,16 +40,11 @@ case class Vector(magnitude:Double = 0, angle:Double = 0) {
     Vector(newMagnitude, newAngle);
   }
   
-  def x(vector:Vector) = components.x * vector.components.y - components.y * vector.components.x;
+  def x(vector:Vector):Double = this.x * vector.y - this.y * vector.x;
   
   def scalarProjection(target:Vector) = (this * target) / (target.magnitude * target.magnitude);
   
   def projection(target:Vector) = target * scalarProjection(target);
-  
-  private def mergeWith(vector:Vector, merge:(Components2D, Components2D) => (Double, Double)) = {
-    val merged = merge(components, vector.components);
-    Vector.from(Components2D(merged._1, merged._2));
-  }
   
   override def equals(a:Any) = a match {
     case Vector(omagnitude, oangle) =>
