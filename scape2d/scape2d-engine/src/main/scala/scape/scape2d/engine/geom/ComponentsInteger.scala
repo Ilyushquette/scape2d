@@ -1,6 +1,6 @@
 package scape.scape2d.engine.geom
 
-object Components2DInteger {
+object ComponentsInteger {
   implicit def widenComponents(componentsInteger:ComponentsInteger):Components = {
     componentsInteger.componentsDouble;
   }
