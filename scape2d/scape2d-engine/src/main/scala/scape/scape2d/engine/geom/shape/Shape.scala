@@ -28,13 +28,13 @@ object Point {
 }
 
 case class Point(x:Double, y:Double) extends Shape {
-  def displace(components:Components2D) = Point(x + components.x, y + components.y);
+  def displace(components:Components) = Point(x + components.x, y + components.y);
   
   def distanceTo(point:Point) = hypot(point.x - x, point.y - y);
   
   def angleTo(point:Point) = normalizeAngle(toDegrees(atan2(point.y - y, point.x - x)));
   
-  def -(point:Point) = Vector.from(Components2D(x - point.x, y - point.y));
+  def -(point:Point) = Vector.from(Components(x - point.x, y - point.y));
   
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);

@@ -4,7 +4,7 @@ import java.lang.Math._
 import com.google.common.math.DoubleMath._
 
 object Vector {
-  def from(components:Components2D) = {
+  def from(components:Components) = {
     val magnitude = hypot(components.x, components.y);
     val radians = atan2(components.y, components.x);
     val angle = normalizeAngle(toDegrees(radians));
@@ -19,7 +19,7 @@ case class Vector(magnitude:Double = 0, angle:Double = 0) {
     val radians = toRadians(angle);
     val offsetX = magnitude * cos(radians);
     val offsetY = magnitude * sin(radians);
-    Components2D(offsetX, offsetY);
+    Components(offsetX, offsetY);
   }
   
   // though Vector is implicitly converted to Components,
@@ -28,9 +28,9 @@ case class Vector(magnitude:Double = 0, angle:Double = 0) {
   
   lazy val opposite = Vector(magnitude, normalizeAngle(angle + 180));
   
-  def +(vector:Vector) = Vector.from(Components2D(this.x + vector.x, this.y + vector.y));
+  def +(vector:Vector) = Vector.from(Components(this.x + vector.x, this.y + vector.y));
   
-  def -(vector:Vector) = Vector.from(Components2D(this.x - vector.x, this.y - vector.y));
+  def -(vector:Vector) = Vector.from(Components(this.x - vector.x, this.y - vector.y));
   
   def *(vector:Vector) = this.x * vector.x + this.y * vector.y;
   

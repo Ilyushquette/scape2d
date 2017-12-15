@@ -3,7 +3,7 @@ package scape.scape2d.engine.geom.shape
 import org.junit.Test
 
 import junit.framework.Assert
-import scape.scape2d.engine.geom.Components2D
+import scape.scape2d.engine.geom.Components
 
 class PointTest {
   @Test
@@ -15,7 +15,7 @@ class PointTest {
   @Test
   def testDisplace = {
     val position = Point(1, 4);
-    val displaced = position.displace(Components2D(4, 1));
+    val displaced = position.displace(Components(4, 1));
     Assert.assertEquals(Point(5, 5), displaced);
   }
   

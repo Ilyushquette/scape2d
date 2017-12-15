@@ -2,7 +2,7 @@ package scape.scape2d.graphics.rasterizer.cache
 
 import scala.collection.mutable.HashMap
 
-import scape.scape2d.engine.geom.Components2D
+import scape.scape2d.engine.geom.Components
 import scape.scape2d.engine.geom.shape.PointInteger
 import scape.scape2d.engine.geom.shape.Shape
 import scape.scape2d.engine.geom.shape.ShapeBounds
@@ -23,7 +23,7 @@ class CachingRasterizer[S <: Shape](
   
   private def copyFromCache(cacheValue:CacheValue, currentShape:S) = {
     val currentBounds = ShapeBounds(currentShape);
-    val offset = Components2D(currentBounds.bottomLeft.x - cacheValue.bounds.bottomLeft.x,
+    val offset = Components(currentBounds.bottomLeft.x - cacheValue.bounds.bottomLeft.x,
                               currentBounds.bottomLeft.y - cacheValue.bounds.bottomLeft.y);
     cacheValue.points.map(_.displace(offset).toInt);
   }

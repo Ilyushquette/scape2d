@@ -5,7 +5,7 @@ import org.junit.Test
 import org.mockito.Mockito
 
 import scape.scape2d.engine.core.Movable
-import scape.scape2d.engine.geom.Components2D
+import scape.scape2d.engine.geom.Components
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.shape.Point
 
@@ -34,7 +34,7 @@ class LinearMotionFunctionsTest {
   def testPostLinearMotionPosition = {
     val movableMock = Mockito.mock(classOf[Movable]);
     Mockito.when(movableMock.position).thenReturn(Point(3, 5));
-    Mockito.when(movableMock.velocity).thenReturn(Vector.from(Components2D(-3, -5)));
+    Mockito.when(movableMock.velocity).thenReturn(Vector.from(Components(-3, -5)));
     Assert.assertEquals(Point(2.7, 4.5), getPostLinearMotionPosition(movableMock, 100))
   }
 }
