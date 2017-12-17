@@ -18,4 +18,10 @@ class DurationTest {
   
   @Test
   def testUnitConversionDuration = Assert.assertEquals(3000000(Nanosecond), 3(Millisecond) to Nanosecond);
+  
+  @Test
+  def testDurationSumWithAnotherDuration = Assert.assertEquals(1.5(Minute), 30(Second) + Minute);
+  
+  @Test
+  def testDurationSubtrationFromAnotherDuration = Assert.assertEquals(0.5(Second), Second - 500(Millisecond));
 }

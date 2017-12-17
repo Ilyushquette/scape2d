@@ -10,6 +10,16 @@ case class Duration(value:Double, unit:TimeUnit) {
     else this;
   }
   
+  def +(duration:Duration) = {
+    val convertedDuration = duration to unit;
+    copy(value = value + convertedDuration.value);
+  }
+  
+  def -(duration:Duration) = {
+    val convertedDuration = duration to unit;
+    copy(value = value - convertedDuration.value);
+  }
+  
   override def equals(any:Any) = any match {
     case duration:Duration =>
       DoubleMath.fuzzyEquals(milliseconds, duration.milliseconds, Epsilon);
