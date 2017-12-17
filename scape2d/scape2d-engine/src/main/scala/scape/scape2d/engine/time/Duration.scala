@@ -26,6 +26,14 @@ case class Duration(value:Double, unit:TimeUnit) {
   
   def /(divider:Double) = copy(value = value / divider);
   
+  def <(duration:Duration) = DoubleMath.fuzzyCompare(milliseconds, duration.milliseconds, Epsilon) == -1;
+  
+  def <=(duration:Duration) = DoubleMath.fuzzyCompare(milliseconds, duration.milliseconds, Epsilon) <= 0;
+  
+  def >(duration:Duration) = DoubleMath.fuzzyCompare(milliseconds, duration.milliseconds, Epsilon) == 1;
+  
+  def >=(duration:Duration) = DoubleMath.fuzzyCompare(milliseconds, duration.milliseconds, Epsilon) >= 0;
+  
   override def equals(any:Any) = any match {
     case duration:Duration =>
       DoubleMath.fuzzyEquals(milliseconds, duration.milliseconds, Epsilon);
