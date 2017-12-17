@@ -15,4 +15,7 @@ class DurationTest {
   
   @Test
   def testSameDurationWithDifferentTypes = Assert.assertTrue(10(Second) == 10000(Millisecond));
+  
+  @Test
+  def testUnitConversionDuration = Assert.assertEquals(3000000(Nanosecond), 3(Millisecond) to Nanosecond);
 }
