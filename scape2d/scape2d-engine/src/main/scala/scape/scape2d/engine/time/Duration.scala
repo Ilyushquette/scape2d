@@ -20,6 +20,12 @@ case class Duration(value:Double, unit:TimeUnit) {
     copy(value = value - convertedDuration.value);
   }
   
+  def *(multiplier:Double) = copy(value = value * multiplier);
+  
+  def /(duration:Duration) = milliseconds / duration.milliseconds;
+  
+  def /(divider:Double) = copy(value = value / divider);
+  
   override def equals(any:Any) = any match {
     case duration:Duration =>
       DoubleMath.fuzzyEquals(milliseconds, duration.milliseconds, Epsilon);

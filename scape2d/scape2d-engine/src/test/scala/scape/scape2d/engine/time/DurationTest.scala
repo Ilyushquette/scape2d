@@ -24,4 +24,13 @@ class DurationTest {
   
   @Test
   def testDurationSubtrationFromAnotherDuration = Assert.assertEquals(0.5(Second), Second - 500(Millisecond));
+  
+  @Test
+  def testDurationMultiplicationByNumber = Assert.assertEquals(3(Hour), 1.5(Hour) * 2);
+  
+  @Test
+  def testDurationDivisionByAnotherDuration = Assert.assertEquals(24, 2(Minute) / 5(Second), 0.00001);
+  
+  @Test
+  def testDurationDivisionByNumber = Assert.assertEquals(30(Second), Minute / 2);
 }
