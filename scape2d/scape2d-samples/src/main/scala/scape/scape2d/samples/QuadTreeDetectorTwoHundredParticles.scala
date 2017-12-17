@@ -33,7 +33,7 @@ object QuadTreeDetectorTwoHundredParticles {
   def main(args:Array[String]):Unit = {
     val bounds = AxisAlignedRectangle(Point(0, 0), 27.32, 15.36);
     val collisionDetector = new QuadTreeBasedCollisionDetector[Particle](bounds, detectWithDiscriminant);
-    val nature = new Nature(collisionDetector, 60);
+    val nature = new Nature(collisionDetector = collisionDetector);
     val trackedMetalParticles = prepareTrackedMetalParticles();
     
     val quadTreeNodesDrawer = prepareShapeDrawer();

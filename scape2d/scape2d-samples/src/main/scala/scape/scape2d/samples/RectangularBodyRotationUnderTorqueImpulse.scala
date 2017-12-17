@@ -35,7 +35,7 @@ object RectangularBodyRotationUnderTorqueImpulse {
   def main(args:Array[String]):Unit = {
     val bounds = AxisAlignedRectangle(Point.origin, 27.32, 15.36);
     val collisionDetector = new QuadTreeBasedCollisionDetector[Particle](bounds, detectWithDiscriminant);
-    val nature = new Nature(collisionDetector, 60);
+    val nature = new Nature(collisionDetector = collisionDetector);
     
     val shapeDrawer = createShapeDrawer();
     val debugger = new ParticleDebugger(new ShapeDrawingParticleTrackingView(shapeDrawer));

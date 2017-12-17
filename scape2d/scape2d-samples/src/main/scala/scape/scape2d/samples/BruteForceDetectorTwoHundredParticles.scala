@@ -22,7 +22,7 @@ import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
 
 object BruteForceDetectorTwoHundredParticles {
   def main(args:Array[String]):Unit = {
-    val nature = new Nature(60);
+    val nature = new Nature();
     val metalParticles = for(i <- 0 to 100) yield ParticleBuilder()
       .as(Circle(Point(i * 0.11, i * 0.14), 0.05))
       .withMass(2)

@@ -35,7 +35,7 @@ object ExtendedSpaceLocatedCollision {
     val bucketDetector = new BruteForceBasedCollisionDetector[Particle](detectWithDiscriminant);
     val collisionDetector = new ExtendedSpaceCollisionDetector(coreDetector, _ => bucketDetector,
                                                                detectWithDiscriminant, 100);
-    val nature = new Nature(collisionDetector, 60);
+    val nature = new Nature(collisionDetector = collisionDetector);
     val trackedMetalParticles = prepareTrackedMetalParticles();
     
     val screenSize = Toolkit.getDefaultToolkit().getScreenSize();

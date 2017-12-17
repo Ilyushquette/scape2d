@@ -1,7 +1,10 @@
 package scape.scape2d.engine.core
 
-class Timescale(val frequency:Long, val timestep:Long);
+import scape.scape2d.engine.time.Duration
+import scape.scape2d.engine.time.Frequency
 
-class TimescaleBuilder(val frequency:Double) {
-  def <->(timestep:Double) = new Timescale(frequency.toLong, timestep.toLong);
+object Timescale {
+  def apply(integrationFrequency:Frequency) = new Timescale(integrationFrequency, integrationFrequency.occurenceDuration);
 }
+
+case class Timescale(integrationFrequency:Frequency, timestep:Duration);

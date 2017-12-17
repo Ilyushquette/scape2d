@@ -2,28 +2,30 @@ package scape.scape2d.samples
 
 import java.awt.Color
 import java.awt.Toolkit
+
 import javax.swing.JFrame
 import scape.scape2d.debugger.ParticleDebugger
 import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
+import scape.scape2d.debugger.view.swing.SwingBuffer
+import scape.scape2d.debugger.view.swing.SwingMixingRastersShapeDrawer
+import scape.scape2d.engine.core.MovableTrackerProxy
 import scape.scape2d.engine.core.Nature
-import scape.scape2d.engine.core.input.ScaleTime
 import scape.scape2d.engine.core.matter.ParticleBuilder
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
-import scape.scape2d.engine.core.MovableTrackerProxy
-import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
-import scape.scape2d.debugger.view.swing.SwingMixingRastersShapeDrawer
 import scape.scape2d.engine.geom.shape.ShapeUnitConverter
-import scape.scape2d.debugger.view.swing.SwingBuffer
+import scape.scape2d.engine.time.Duration
+import scape.scape2d.engine.time.Millisecond
 import scape.scape2d.graphics.rasterizer.UnitConvertingRasterizer
 import scape.scape2d.graphics.rasterizer.cache.CachingRasterizers
-import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
+import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
+import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
 
 object NewtonFirstLawSlowmotion {
   def main(args:Array[String]):Unit = {
-    val nature = new Nature(60);
+    val nature = new Nature();
     val metalParticle = ParticleBuilder()
       .as(Circle(Point.origin, 0.05))
       .withMass(2)
@@ -32,7 +34,8 @@ object NewtonFirstLawSlowmotion {
     
     val trackedMetalParticle = new MovableTrackerProxy(metalParticle);
     trackedMetalParticle.onMotion(motion => {
-      if(motion.snapshot.position.x > 5) nature ! ScaleTime(1, 0.5);
+      if(motion.snapshot.position.x > 5)
+        nature.timescale = nature.timescale.copy(timestep = Duration(8, Millisecond));
     });
     
     val frame = new JFrame("Scape2D Debugger");

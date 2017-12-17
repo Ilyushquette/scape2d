@@ -22,7 +22,7 @@ import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
 
 object MovingWithStationaryDiagonalCollision {
   def main(args:Array[String]):Unit = {
-    val nature = new Nature(60);
+    val nature = new Nature();
     val metalParticle = ParticleBuilder()
       .as(Circle(Point(0, 7.03), 0.05))
       .withMass(2)

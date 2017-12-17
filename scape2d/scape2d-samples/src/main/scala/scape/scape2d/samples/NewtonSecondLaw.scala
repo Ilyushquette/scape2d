@@ -23,7 +23,7 @@ import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
 
 object NewtonSecondLaw {
   def main(args:Array[String]):Unit = {
-    val nature = new Nature(60);
+    val nature = new Nature();
     val metalParticle = ParticleBuilder()
       .as(Circle(Point.origin, 0.05))
       .withMass(2)
