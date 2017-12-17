@@ -1,5 +1,9 @@
 package scape.scape2d.engine.time
 
+object TimeUnit {
+  implicit def toDuration(unit:TimeUnit) = Duration(1, unit);
+}
+
 sealed trait TimeUnit {
   def milliseconds:Double;
 }
