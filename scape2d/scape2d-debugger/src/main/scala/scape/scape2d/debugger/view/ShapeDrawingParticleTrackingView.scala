@@ -14,13 +14,11 @@ extends ParticleTrackingView {
   
   def clearParticle(particle:Particle) = shapeDrawer.clear(particle.shape);
   
-  def renderBond(bond:Bond) = shapeDrawer.draw(createShapeFrom(bond));
+  def renderBond(bond:Bond) = shapeDrawer.draw(customizedSegmentOf(bond));
   
-  def clearBond(bond:Bond) = shapeDrawer.clear(createSegmentFrom(bond));
+  def clearBond(bond:Bond) = shapeDrawer.clear(segmentOf(bond));
   
-  private def createShapeFrom(bond:Bond) = CustomizedShape(createSegmentFrom(bond), bondColor);
+  private def customizedSegmentOf(bond:Bond) = CustomizedShape(segmentOf(bond), bondColor);
   
-  private def createSegmentFrom(bond:Bond) = {
-    Segment(bond.particles._1.position, bond.particles._2.position);
-  }
+  private def segmentOf(bond:Bond) = Segment(bond.particles._1.position, bond.particles._2.position);
 }
