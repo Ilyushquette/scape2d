@@ -9,12 +9,12 @@ import scape.scape2d.graphics.CustomizedShape
 class ShapeDrawingGraphView(val shapeDrawer:ShapeDrawer)
 extends GraphView {
   val axisColor = 0xFF00FF00; // GREEN
-  val graphColor = 0xFFFF0000; // RED
+  val curveColor = 0xFFFF0000; // RED
   shapeDrawer.draw(CustomizedShape(Segment(Point.origin, Point(0, 10)), axisColor));
   shapeDrawer.draw(CustomizedShape(Segment(Point.origin, Point(10, 0)), axisColor));
   
   def render(fx:Double => Double, range:NumericRange[Double]) = {
-    val customizedPoints = for(x <- range) yield CustomizedShape(Point(x, fx(x)), graphColor);
+    val customizedPoints = for(x <- range) yield CustomizedShape(Point(x, fx(x)), curveColor);
     customizedPoints.foreach(shapeDrawer.draw);
   }
   
