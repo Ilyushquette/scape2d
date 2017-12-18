@@ -22,9 +22,9 @@ case class BodyBuilder(
   
   def build(fixedPoint:Point, structure:SegmentedStructure) = {
     val points = fetchWaypoints(structure.segments.iterator);
-    val centerOfMass = particleFactory(fixedPoint);
     val particles = points.map(particleFactory(_));
-    val bonds = makeBonds(structure.segments, particles + centerOfMass);
+    val centerOfMass = particles.find(_.shape.center == fixedPoint).get;
+    val bonds = makeBonds(structure.segments, particles);
     val body = new Body(centerOfMass, bonds, angularVelocity, torque);
     bonds.foreach(_.setBody(Some(body)));
     body;

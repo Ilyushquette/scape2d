@@ -66,9 +66,10 @@ extends Actor {
         case AddBond(bond) => 
           bond.particles._1.setBonds(bond.particles._1.bonds + bond);
           bond.particles._2.setBonds(bond.particles._2.bonds + bond.reversed);
+          add(bond.particles._1);
+          add(bond.particles._2);
         case AddBody(body) =>
           body.bonds.foreach(add);
-          body.movables.foreach(add);
         case TIMEOUT => endOfMailbox = true;
         case unknown => log.warn("Unknown input " + unknown);
       }

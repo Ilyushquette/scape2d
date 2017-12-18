@@ -35,7 +35,7 @@ extends TimeDependent {
   }
   
   private def directionVector = {
-    val radialDirection = particle.shape.center angleTo particle.rotatable.get.center;
+    val radialDirection = particle.rotatable.get.center angleTo particle.shape.center;
     Vector(1, normalizeAngle(radialDirection + 90));
   }
 }

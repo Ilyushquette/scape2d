@@ -46,7 +46,8 @@ object RectangularBodyRotationUnderTorqueImpulse {
                                            .withBondFactory(makeBond))
                           .withStep(0.15)
                           .build(AxisAlignedRectangle(Point(1, 7), 0.75, 0.75));
-    val torqueImpulse = new TorqueImpulse(rectangularBody.movables.first, 60, 30000);
+    val particleNearestToOrigin = rectangularBody.movables.minBy(_.position distanceTo Point.origin);
+    val torqueImpulse = new TorqueImpulse(particleNearestToOrigin, 120, 60000);
     
     val frame = new JFrame("Scape2D Debugger");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

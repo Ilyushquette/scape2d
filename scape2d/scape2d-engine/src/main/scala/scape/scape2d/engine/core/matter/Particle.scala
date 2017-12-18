@@ -36,7 +36,7 @@ extends Movable with Formed[Circle] {
     val bodyOpt = rotatable;
     if(cascade && bodyOpt.isDefined) {
       val body = bodyOpt.get;
-      val levelArm = body.center - shape.center;
+      val levelArm = shape.center - body.center;
       body.exertTorque(levelArm x force);
     }
   }
