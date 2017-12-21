@@ -34,8 +34,8 @@ object TwoParticlesFrontalCollision {
       .withVelocity(Vector(2, 180))
       .build;
     
-    val trackedMetalParticle = new MovableTrackerProxy(metalParticle);
-    val trackedMetalParticle2 = new MovableTrackerProxy(metalParticle2);
+    val trackedMetalParticle = MovableTrackerProxy.track(metalParticle);
+    val trackedMetalParticle2 = MovableTrackerProxy.track(metalParticle2);
     
     val frame = new JFrame("Scape2D Debugger");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

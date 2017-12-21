@@ -29,7 +29,7 @@ object NewtonFirstLaw {
       .withVelocity(Vector(2, 45))
       .build;
     
-    val trackedMetalParticle = new MovableTrackerProxy(metalParticle);
+    val trackedMetalParticle = MovableTrackerProxy.track(metalParticle);
     
     val frame = new JFrame("Scape2D Debugger");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

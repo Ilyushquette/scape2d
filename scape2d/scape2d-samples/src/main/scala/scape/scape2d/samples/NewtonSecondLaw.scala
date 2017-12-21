@@ -30,7 +30,7 @@ object NewtonSecondLaw {
       .withVelocity(Vector(1, 45))
       .build;
     
-    val trackedMetalParticle = new MovableTrackerProxy(metalParticle);
+    val trackedMetalParticle = MovableTrackerProxy.track(metalParticle);
     val impulse = new Impulse(trackedMetalParticle, Vector(7.68, 45), 2000);
     val impulse2 = new Impulse(trackedMetalParticle, Vector(3.84, 0), 2000);
     

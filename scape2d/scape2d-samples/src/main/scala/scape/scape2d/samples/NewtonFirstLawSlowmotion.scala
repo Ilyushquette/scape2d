@@ -32,7 +32,7 @@ object NewtonFirstLawSlowmotion {
       .withVelocity(Vector(2, 45))
       .build;
     
-    val trackedMetalParticle = new MovableTrackerProxy(metalParticle);
+    val trackedMetalParticle = MovableTrackerProxy.track(metalParticle);
     trackedMetalParticle.onMotion(motion => {
       if(motion.snapshot.position.x > 5)
         nature.timescale = nature.timescale.copy(timestep = Duration(8, Millisecond));

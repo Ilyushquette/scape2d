@@ -77,7 +77,7 @@ object RectangularBodyRotation {
                    .withMass(2)
                    .withVelocity(Vector(1, 0))
                    .build;
-    val trackedParticle = new MovableTrackerProxy(particle);
+    val trackedParticle = MovableTrackerProxy.track(particle);
     debugger.trackParticle(trackedParticle);
     trackedParticle;
   }

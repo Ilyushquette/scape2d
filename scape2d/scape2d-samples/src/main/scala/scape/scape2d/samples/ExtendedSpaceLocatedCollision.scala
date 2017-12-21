@@ -73,9 +73,9 @@ object ExtendedSpaceLocatedCollision {
       .withVelocity(Vector(0, 180))
       .build;
     
-    Array(new MovableTrackerProxy(metalParticle),
-          new MovableTrackerProxy(metalParticle2),
-          new MovableTrackerProxy(metalParticle3));
+    Array(MovableTrackerProxy.track(metalParticle),
+          MovableTrackerProxy.track(metalParticle2),
+          MovableTrackerProxy.track(metalParticle3));
   }
   
   private def prepareShapeDrawer() = {

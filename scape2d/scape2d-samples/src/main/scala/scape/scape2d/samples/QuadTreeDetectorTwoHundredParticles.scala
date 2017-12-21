@@ -64,8 +64,8 @@ object QuadTreeDetectorTwoHundredParticles {
       .withVelocity(Vector(2, 180))
       .build;
     
-    val trackedMetalParticles = metalParticles.map(new MovableTrackerProxy(_));
-    val trackedMetalParticles2 = metalParticles2.map(new MovableTrackerProxy(_));
+    val trackedMetalParticles = metalParticles.map(MovableTrackerProxy.track(_));
+    val trackedMetalParticles2 = metalParticles2.map(MovableTrackerProxy.track(_));
     
     trackedMetalParticles ++ trackedMetalParticles2;
   }

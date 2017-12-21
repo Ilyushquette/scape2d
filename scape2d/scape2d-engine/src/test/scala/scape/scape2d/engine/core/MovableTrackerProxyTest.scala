@@ -24,7 +24,7 @@ class MovableTrackerProxyTest {
     var event:Option[MotionEvent[MovableMock]] = None;
     
     val movableMock = new MovableMock(Point(5, 5), Vector());
-    val trackedMovable = new MovableTrackerProxy(movableMock);
+    val trackedMovable = MovableTrackerProxy.track(movableMock);
     trackedMovable.onMotion(e => event = Some(e));
     
     trackedMovable.setPosition(Point(4, 5));
@@ -36,7 +36,7 @@ class MovableTrackerProxyTest {
     var event:Option[MotionEvent[MovableMock]] = None;
     
     val movableMock = new MovableMock(Point(5, 5), Vector());
-    val trackedMovable = new MovableTrackerProxy(movableMock);
+    val trackedMovable = MovableTrackerProxy.track(movableMock);
     trackedMovable.onMotion(e => event = Some(e));
     
     trackedMovable.setPosition(Point(5, 5));

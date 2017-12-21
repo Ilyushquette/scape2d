@@ -41,9 +41,9 @@ object BondPostDiagonalCollisionCompression {
       .withVelocity(Vector(3, 180))
       .build;
     
-    val trackedMetalParticle = new MovableTrackerProxy(metalParticle);
-    val trackedMetalParticle2 = new MovableTrackerProxy(metalParticle2);
-    val trackedMetalParticle3 = new MovableTrackerProxy(metalParticle3);
+    val trackedMetalParticle = MovableTrackerProxy.track(metalParticle);
+    val trackedMetalParticle2 = MovableTrackerProxy.track(metalParticle2);
+    val trackedMetalParticle3 = MovableTrackerProxy.track(metalParticle3);
     
     val bond = BondBuilder(trackedMetalParticle, trackedMetalParticle2)
       .asElastic(Elastic(LinearStressStrainGraph(10), 99))

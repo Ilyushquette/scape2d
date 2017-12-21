@@ -34,8 +34,8 @@ object BruteForceDetectorTwoHundredParticles {
       .withVelocity(Vector(2, 180))
       .build;
     
-    val trackedMetalParticles = metalParticles.map(new MovableTrackerProxy(_));
-    val trackedMetalParticles2 = metalParticles2.map(new MovableTrackerProxy(_));
+    val trackedMetalParticles = metalParticles.map(MovableTrackerProxy.track(_));
+    val trackedMetalParticles2 = metalParticles2.map(MovableTrackerProxy.track(_));
     
     val frame = new JFrame("Scape2D Debugger");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

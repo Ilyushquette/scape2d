@@ -4,8 +4,19 @@ import net.sf.cglib.proxy.MethodProxy
 import scape.scape2d.engine.util.Proxy
 import scala.collection.mutable.HashSet
 import scape.scape2d.engine.geom.shape.Point
+import scala.collection.mutable.WeakHashMap
+import scala.ref.WeakReference
+import scape.scape2d.engine.util.ProxyCache
 
-class MovableTrackerProxy[T <: Movable](val origin:T)
+object MovableTrackerProxy {
+  val cache = new ProxyCache[Movable, MovableTrackerProxy[Movable]](new MovableTrackerProxy(_));
+  
+  def track[T <: Movable](movable:T):MovableTrackerProxy[T] = {
+    cache.get(movable).asInstanceOf[MovableTrackerProxy[T]];
+  }
+}
+
+class MovableTrackerProxy[T <: Movable] private[MovableTrackerProxy](val origin:T)
 extends Proxy[T] {
   private val motionListeners = HashSet[MotionEvent[T] => Unit]();
   
