@@ -21,7 +21,7 @@ import scape.scape2d.engine.core.MovableTrackerProxy
 import java.awt.Dimension
 import scape.scape2d.debugger.view.ShapeDrawingGraphView
 import scape.scape2d.engine.core.matter.BondStructureTrackerProxy
-import scape.scape2d.debugger.BondDebugger
+import scape.scape2d.debugger.BondStructureDebugger
 import javax.swing.JPanel
 import javax.swing.border.EmptyBorder
 import scape.scape2d.debugger.view.ParticleTrackingView
@@ -112,6 +112,6 @@ object FixedBondFractureAfterStretchingImpulse {
       frame.setVisible(true);
       new ShapeDrawingGraphView(shapeDrawer);
     }
-    new BondDebugger(particleTrackingView, graphViewFactory);
+    new BondStructureDebugger(particleTrackingView, graphViewFactory);
   }
 }

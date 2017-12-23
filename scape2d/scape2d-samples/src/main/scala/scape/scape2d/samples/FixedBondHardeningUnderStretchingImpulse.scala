@@ -9,7 +9,7 @@ import java.util.TimerTask
 import javax.swing.JFrame
 import javax.swing.JPanel
 import javax.swing.border.EmptyBorder
-import scape.scape2d.debugger.BondDebugger
+import scape.scape2d.debugger.BondStructureDebugger
 import scape.scape2d.debugger.ParticleDebugger
 import scape.scape2d.debugger.view.ParticleTrackingView
 import scape.scape2d.debugger.view.ShapeDrawingGraphView
@@ -113,6 +113,6 @@ object FixedBondHardeningUnderStretchingImpulse {
       frame.setVisible(true);
       new ShapeDrawingGraphView(shapeDrawer);
     }
-    new BondDebugger(particleTrackingView, graphViewFactory);
+    new BondStructureDebugger(particleTrackingView, graphViewFactory);
   }
 }

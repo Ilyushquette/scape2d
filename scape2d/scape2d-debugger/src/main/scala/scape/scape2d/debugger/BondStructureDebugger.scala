@@ -7,7 +7,7 @@ import scape.scape2d.engine.core.matter.BondStructureTrackerProxy
 import scape.scape2d.engine.deformation.DeformationDescriptor
 import scape.scape2d.debugger.view.ParticleTrackingView
 
-class BondDebugger(val particleTrackingView:ParticleTrackingView, val graphViewFactory:() => GraphView) {
+class BondStructureDebugger(val particleTrackingView:ParticleTrackingView, val graphViewFactory:() => GraphView) {
   def trackStructureEvolution(structureTrackedBond:BondStructureTrackerProxy) = {
     val graphView = graphViewFactory();
     val initial = structureTrackedBond.deformationDescriptor;
