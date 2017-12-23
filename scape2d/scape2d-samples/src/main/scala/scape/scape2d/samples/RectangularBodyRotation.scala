@@ -2,8 +2,8 @@ package scape.scape2d.samples
 
 import java.awt.Color
 import java.awt.Toolkit
-
 import javax.swing.JFrame
+import scape.scape2d.debugger.BodyDebugger
 import scape.scape2d.debugger.ParticleDebugger
 import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
 import scape.scape2d.debugger.view.swing.SwingBuffer
@@ -22,7 +22,6 @@ import scape.scape2d.engine.geom.shape.AxisAlignedRectangle
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.shape.ShapeUnitConverter
-import scape.scape2d.engine.core.MovableTrackerProxy
 import scape.scape2d.engine.motion.collision.detection.QuadTreeBasedCollisionDetector
 import scape.scape2d.engine.motion.collision.detection.detectWithDiscriminant
 import scape.scape2d.graphics.rasterizer.UnitConvertingRasterizer
@@ -30,6 +29,7 @@ import scape.scape2d.graphics.rasterizer.cache.CachingRasterizers
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
+import scape.scape2d.engine.core.MovableTrackerProxy
 
 object RectangularBodyRotation {
   def main(args:Array[String]):Unit = {
@@ -38,11 +38,12 @@ object RectangularBodyRotation {
     val nature = new Nature(collisionDetector = collisionDetector);
     
     val shapeDrawer = createShapeDrawer();
-    val debugger = new ParticleDebugger(new ShapeDrawingParticleTrackingView(shapeDrawer));
+    val particleDebugger = new ParticleDebugger(new ShapeDrawingParticleTrackingView(shapeDrawer));
+    val bodyDebugger = new BodyDebugger(particleDebugger);
     
     val rectangularBody = RectangularBodyBuilder()
                           .withBodyBuilder(BodyBuilder()
-                                           .withParticleFactory(particleAt(_, debugger))
+                                           .withParticleFactory(makeParticle)
                                            .withBondFactory(makeBond)
                                            .withAngularVelocity(3.14))
                           .withStep(0.15)
@@ -56,6 +57,7 @@ object RectangularBodyRotation {
     frame.pack();
     frame.setVisible(true);
     
+    bodyDebugger.trackBody(rectangularBody);
     nature.add(rectangularBody);
     nature.start();
   }
@@ -71,16 +73,11 @@ object RectangularBodyRotation {
     new SwingMixingRastersShapeDrawer(buffer, unitConvertingRecursiveRasterizer);
   }
   
-  private def particleAt(position:Point, debugger:ParticleDebugger) = {
-    val particle = ParticleBuilder()
-                   .as(Circle(position, 0.05))
-                   .withMass(2)
-                   .withVelocity(Vector(1, 0))
-                   .build;
-    val trackedParticle = MovableTrackerProxy.track(particle);
-    debugger.trackParticle(trackedParticle);
-    trackedParticle;
-  }
+  private def makeParticle(position:Point) = MovableTrackerProxy.track(ParticleBuilder()
+                                                                       .as(Circle(position, 0.05))
+                                                                       .withMass(2)
+                                                                       .withVelocity(Vector(1, 0))
+                                                                       .build);
   
   private def makeBond(p1:Particle, p2:Particle) = BondBuilder(p1, p2)
                                                    .asElastic(Elastic(LinearStressStrainGraph(10), 99))

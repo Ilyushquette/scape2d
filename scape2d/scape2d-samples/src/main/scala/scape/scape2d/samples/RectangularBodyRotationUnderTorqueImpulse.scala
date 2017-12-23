@@ -30,6 +30,7 @@ import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
 import scape.scape2d.engine.core.matter.TorqueImpulse
+import scape.scape2d.debugger.BodyDebugger
 
 object RectangularBodyRotationUnderTorqueImpulse {
   def main(args:Array[String]):Unit = {
@@ -38,11 +39,12 @@ object RectangularBodyRotationUnderTorqueImpulse {
     val nature = new Nature(collisionDetector = collisionDetector);
     
     val shapeDrawer = createShapeDrawer();
-    val debugger = new ParticleDebugger(new ShapeDrawingParticleTrackingView(shapeDrawer));
+    val particleDebugger = new ParticleDebugger(new ShapeDrawingParticleTrackingView(shapeDrawer));
+    val bodyDebugger = new BodyDebugger(particleDebugger);
     
     val rectangularBody = RectangularBodyBuilder()
                           .withBodyBuilder(BodyBuilder()
-                                           .withParticleFactory(particleAt(_, debugger))
+                                           .withParticleFactory(makeParticle)
                                            .withBondFactory(makeBond))
                           .withStep(0.15)
                           .build(AxisAlignedRectangle(Point(1, 7), 0.75, 0.75));
@@ -57,6 +59,7 @@ object RectangularBodyRotationUnderTorqueImpulse {
     frame.pack();
     frame.setVisible(true);
     
+    bodyDebugger.trackBody(rectangularBody);
     nature.add(rectangularBody);
     nature.add(torqueImpulse);
     nature.start();
@@ -73,15 +76,10 @@ object RectangularBodyRotationUnderTorqueImpulse {
     new SwingMixingRastersShapeDrawer(buffer, unitConvertingRecursiveRasterizer);
   }
   
-  private def particleAt(position:Point, debugger:ParticleDebugger) = {
-    val particle = ParticleBuilder()
-                   .as(Circle(position, 0.05))
-                   .withMass(2)
-                   .build;
-    val trackedParticle = MovableTrackerProxy.track(particle);
-    debugger.trackParticle(trackedParticle);
-    trackedParticle;
-  }
+  private def makeParticle(position:Point) = MovableTrackerProxy.track(ParticleBuilder()
+                                                                       .as(Circle(position, 0.05))
+                                                                       .withMass(2)
+                                                                       .build);
   
   private def makeBond(p1:Particle, p2:Particle) = BondBuilder(p1, p2)
                                                    .asElastic(Elastic(LinearStressStrainGraph(10), 99))
