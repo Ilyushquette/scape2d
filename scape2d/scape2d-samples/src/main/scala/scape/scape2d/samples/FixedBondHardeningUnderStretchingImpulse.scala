@@ -5,7 +5,6 @@ import java.awt.Dimension
 import java.awt.Toolkit
 import java.util.Timer
 import java.util.TimerTask
-
 import javax.swing.JFrame
 import javax.swing.JPanel
 import javax.swing.border.EmptyBorder
@@ -34,6 +33,7 @@ import scape.scape2d.graphics.rasterizer.cache.CachingRasterizers
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
+import scape.scape2d.debugger.BondDebugger
 
 object FixedBondHardeningUnderStretchingImpulse {
   def main(args:Array[String]):Unit = {
@@ -58,16 +58,14 @@ object FixedBondHardeningUnderStretchingImpulse {
     
     val structureTrackedBond = BondStructureTrackerProxy.track(bond);
     
-    val particlesDebugger = initParticlesDebugger();
-    particlesDebugger.trackParticle(trackedMetalParticle);
-    particlesDebugger.trackParticle(trackedMetalParticle2);
+    val particleDebugger = initParticleDebugger();
+    val bondDebugger = new BondDebugger(particleDebugger);
+    val bondStructureDebugger = initBondStructureDebugger(particleDebugger.particleTrackingView);
     
-    val bondsDebugger = initBondsDebugger(particlesDebugger.particleTrackingView);
-    bondsDebugger.trackStructureEvolution(structureTrackedBond);
-    
-    // first particle is not a subject to the laws of nature to be able to simulate fixed point
+    bondDebugger.trackBond(bond);
+    bondStructureDebugger.trackStructureEvolution(structureTrackedBond);
+    // first particle is not a subject to the laws of nature to be able to emulate fixed point
     nature.add(trackedMetalParticle2);
-    nature.add(structureTrackedBond);
     nature.start;
     
     val timer = new Timer;
@@ -76,7 +74,7 @@ object FixedBondHardeningUnderStretchingImpulse {
     }, 3000);
   }
   
-  private def initParticlesDebugger() = {
+  private def initParticleDebugger() = {
     val frame = new JFrame("Scape2D Debugger");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.getContentPane.setBackground(Color.BLACK);
@@ -96,7 +94,7 @@ object FixedBondHardeningUnderStretchingImpulse {
     debugger;
   }
   
-  private def initBondsDebugger(particleTrackingView:ParticleTrackingView) = {
+  private def initBondStructureDebugger(particleTrackingView:ParticleTrackingView) = {
     val graphViewFactory = () => {
       val frame = new JFrame("Scape2D Stress(Y) vs Strain(X) graph");
       val contentPanel = new JPanel;

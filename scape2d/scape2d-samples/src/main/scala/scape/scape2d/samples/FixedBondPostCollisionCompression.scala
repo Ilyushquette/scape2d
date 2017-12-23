@@ -23,6 +23,7 @@ import scape.scape2d.graphics.rasterizer.UnitConvertingRasterizer
 import scape.scape2d.graphics.rasterizer.cache.CachingRasterizers
 import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
+import scape.scape2d.debugger.BondDebugger
 
 object FixedBondPostCollisionCompression {
   def main(args:Array[String]):Unit = {
@@ -63,18 +64,17 @@ object FixedBondPostCollisionCompression {
     val unitConvertingRecursiveRasterizer = UnitConvertingRasterizer(converter, rasterizer);
     val shapeDrawer = new SwingMixingRastersShapeDrawer(buffer, unitConvertingRecursiveRasterizer);
     shapeDrawer.setOpaque(false);
-    val debugger = new ParticleDebugger(new ShapeDrawingParticleTrackingView(shapeDrawer));
+    val particleDebugger = new ParticleDebugger(new ShapeDrawingParticleTrackingView(shapeDrawer));
+    val bondDebugger = new BondDebugger(particleDebugger);
     frame.add(shapeDrawer);
     frame.pack();
     frame.setVisible(true);
     
-    debugger.trackParticle(trackedMetalParticle);
-    debugger.trackParticle(trackedMetalParticle2);
-    debugger.trackParticle(trackedMetalParticle3);
-    // first particle is not a subject to the laws of nature to be able to simulate fixed point
+    bondDebugger.trackBond(bond);
+    particleDebugger.trackParticle(trackedMetalParticle3);
+    // first particle is not a subject to the laws of nature to be able to emulate fixed point
     nature.add(trackedMetalParticle2);
     nature.add(trackedMetalParticle3);
-    nature.add(bond);
     nature.start;
   }
 }

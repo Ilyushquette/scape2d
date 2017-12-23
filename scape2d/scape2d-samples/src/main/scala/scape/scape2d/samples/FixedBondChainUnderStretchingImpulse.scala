@@ -71,19 +71,17 @@ object FixedBondChainUnderStretchingImpulse {
     val unitConvertingRecursiveRasterizer = UnitConvertingRasterizer(converter, rasterizer);
     val shapeDrawer = new SwingMixingRastersShapeDrawer(buffer, unitConvertingRecursiveRasterizer);
     shapeDrawer.setOpaque(false);
-    val debugger = new ParticleDebugger(new ShapeDrawingParticleTrackingView(shapeDrawer));
+    val particleDebugger = new ParticleDebugger(new ShapeDrawingParticleTrackingView(shapeDrawer));
     frame.add(shapeDrawer);
     frame.pack();
     frame.setVisible(true);
     
-    debugger.trackParticle(trackedMetalParticle);
-    debugger.trackParticle(trackedMetalParticle2);
-    debugger.trackParticle(trackedMetalParticle3);
-    // first particle is not a subject to the laws of nature to be able to simulate fixed point
+    particleDebugger.trackParticle(trackedMetalParticle);
+    particleDebugger.trackParticle(trackedMetalParticle2);
+    particleDebugger.trackParticle(trackedMetalParticle3);
+    // first particle is not a subject to the laws of nature to be able to emulate fixed point
     nature.add(trackedMetalParticle2);
     nature.add(trackedMetalParticle3);
-    nature.add(bond);
-    nature.add(bond2);
     nature.add(impulse);
     nature.start;
   }
