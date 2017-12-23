@@ -5,6 +5,7 @@ import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.structure.SegmentedStructure
 import scape.scape2d.engine.geom.shape.Segment
+import scape.scape2d.engine.util.Combination2
 
 case class BodyBuilder(
   particleFactory:Point => Particle = point => ParticleBuilder().as(Circle(point, 1)).build,
@@ -25,22 +26,24 @@ case class BodyBuilder(
     val particles = points.map(particleFactory(_));
     val centerOfMass = particles.find(_.shape.center == fixedPoint).get;
     val bonds = makeBonds(structure.segments, particles);
-    val body = new Body(centerOfMass, bonds, angularVelocity, torque);
+    val body = new Body(centerOfMass, bonds.toSet, angularVelocity, torque);
     bonds.foreach(_.setBody(Some(body)));
     body;
   }
   
-  private def makeBonds(segments:List[Segment], particles:Set[Particle], bonds:Set[Bond] = Set()):Set[Bond] = {
+  private def makeBonds(segments:List[Segment], particles:Set[Particle], bonds:List[Bond] = List()):List[Bond] = {
     segments match {
-      case s::Nil => bonds + makeBond(s, particles);
-      case s::ss => makeBonds(ss, particles, bonds + makeBond(s, particles));
+      case s::Nil => bonds ++ makeOriginalAndReversedBond(s, particles);
+      case s::ss => makeBonds(ss, particles, bonds ++ makeOriginalAndReversedBond(s, particles));
       case Nil => throw new IllegalArgumentException("Couldn't create body without structure");
     }
   }
   
-  private def makeBond(segment:Segment, particles:Set[Particle]) = {
+  private def makeOriginalAndReversedBond(segment:Segment, particles:Set[Particle]) = {
     val particle1 = particles.find(_.shape.center == segment.p1).get;
     val particle2 = particles.find(_.shape.center == segment.p2).get;
-    bondFactory(particle1, particle2);
+    val bond = bondFactory(particle1, particle2);
+    val reversedBond = particle2.bonds.find(_.particles == Combination2(particle1, particle2)).get;
+    List(bond, reversedBond);
   }
 }

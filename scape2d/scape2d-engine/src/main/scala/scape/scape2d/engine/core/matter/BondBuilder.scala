@@ -43,5 +43,10 @@ case class BondBuilder private[matter] (
   
   def withDampingCoefficient(dc:Double) = copy(dampingCoefficient = dc);
   
-  def build = new Bond(particles, None, restLength, DeformationDescriptor(elastic, plastic), dampingCoefficient);
+  def build = {
+    val bond = new Bond(particles, None, restLength, DeformationDescriptor(elastic, plastic), dampingCoefficient);
+    bond.particles._1.setBonds(bond.particles._1.bonds + bond);
+    bond.particles._2.setBonds(bond.particles._2.bonds + bond.reversed);
+    bond;
+  }
 }
