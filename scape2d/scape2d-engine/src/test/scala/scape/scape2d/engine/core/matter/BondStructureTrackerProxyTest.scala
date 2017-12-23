@@ -10,7 +10,7 @@ class BondStructureTrackerProxyTest {
   def testSettingDifferingDeformationDescriptorEventInterception = {
     var event:Option[StructureEvolutionEvent] = None;
     val bond = BondBuilder(ParticleBuilder().build, ParticleBuilder().build, 0).build;
-    val structureTrackedBond = new BondStructureTrackerProxy(bond);
+    val structureTrackedBond = BondStructureTrackerProxy.track(bond);
     structureTrackedBond.onStructureEvolution(e => event = Some(e));
     
     val old = structureTrackedBond.deformationDescriptor;
@@ -25,7 +25,7 @@ class BondStructureTrackerProxyTest {
   def testSettingSameDeformationDescriptorNoEventInterception = {
     var event:Option[StructureEvolutionEvent] = None;
     val bond = BondBuilder(ParticleBuilder().build, ParticleBuilder().build, 0).build;
-    val structureTrackedBond = new BondStructureTrackerProxy(bond);
+    val structureTrackedBond = BondStructureTrackerProxy.track(bond);
     structureTrackedBond.onStructureEvolution(e => event = Some(e));
     
     structureTrackedBond.setDeformationDescriptor(structureTrackedBond.deformationDescriptor);
@@ -38,7 +38,7 @@ class BondStructureTrackerProxyTest {
     val bond = BondBuilder(ParticleBuilder().build, ParticleBuilder().build, 0).build;
     bond.particles._1.setBonds(Set(bond));
     bond.particles._2.setBonds(Set(bond));
-    val structureTrackedBond = new BondStructureTrackerProxy(bond);
+    val structureTrackedBond = BondStructureTrackerProxy.track(bond);
     structureTrackedBond.onStructureBreak(e => event = Some(e));
     
     structureTrackedBond.break();
@@ -48,7 +48,7 @@ class BondStructureTrackerProxyTest {
   @Test
   def testReversedEnhancedVersion = {
     val bond = BondBuilder(ParticleBuilder().build, ParticleBuilder().build, 0).build;
-    val structureTrackedBond = new BondStructureTrackerProxy(bond);
+    val structureTrackedBond = BondStructureTrackerProxy.track(bond);
     
     val reversedStructureTrackedBond = structureTrackedBond.reversed;
     Assert.assertTrue(Enhancer.isEnhanced(reversedStructureTrackedBond.getClass));

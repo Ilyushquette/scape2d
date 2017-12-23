@@ -55,7 +55,7 @@ object FixedBondFractureAfterStretchingImpulse {
       .withDampingCoefficient(0.1)
       .build;
     
-    val structureTrackedBond = new BondStructureTrackerProxy(bond);
+    val structureTrackedBond = BondStructureTrackerProxy.track(bond);
     
     val particlesDebugger = initParticlesDebugger();
     particlesDebugger.trackParticle(trackedMetalParticle);

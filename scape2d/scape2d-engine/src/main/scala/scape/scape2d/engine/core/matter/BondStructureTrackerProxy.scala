@@ -6,12 +6,21 @@ import net.sf.cglib.proxy.MethodProxy
 import scape.scape2d.engine.deformation.DeformationDescriptor
 import scape.scape2d.engine.util.Proxy
 
+object BondStructureTrackerProxy {  
+  def track(origin:Bond) = {
+    val proxy = new BondStructureTrackerProxy(origin);
+    // recursive reversed proxy construction
+    proxy.particles._2.setBonds(proxy.particles._2.bonds - origin.reversed + proxy.reversed);
+    proxy;
+  }
+}
+
 class BondStructureTrackerProxy private[BondStructureTrackerProxy](
   val origin:Bond,
-  private val structureEvolutionListeners:HashSet[StructureEvolutionEvent => Unit],
-  private val structureBreakListeners:HashSet[StructureBreakEvent => Unit])
+  private val structureEvolutionListeners:HashSet[StructureEvolutionEvent => Unit] = HashSet(),
+  private val structureBreakListeners:HashSet[StructureBreakEvent => Unit] = HashSet())
 extends Proxy[Bond] {
-  def this(origin:Bond) = this(origin, HashSet(), HashSet());
+  enhanced.particles._1.setBonds(enhanced.particles._1.bonds - origin + enhanced);
   
   def onStructureEvolution(listener:StructureEvolutionEvent => Unit) = structureEvolutionListeners += listener;
   
@@ -37,6 +46,7 @@ extends Proxy[Bond] {
       result;
     case ("reversed", Nil) =>
       val reversedBond = methodProxy.invokeSuper(origin, Array.empty).asInstanceOf[Bond];
+      // non-recursive reversed proxy construction
       new BondStructureTrackerProxy(reversedBond, structureEvolutionListeners, structureBreakListeners).enhanced;
     case (_, args) =>
       methodProxy.invokeSuper(origin, args.toArray);
