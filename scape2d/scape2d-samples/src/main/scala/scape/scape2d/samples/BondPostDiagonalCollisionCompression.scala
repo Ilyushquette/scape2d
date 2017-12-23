@@ -57,7 +57,6 @@ object BondPostDiagonalCollisionCompression {
     frame.getContentPane.setBackground(Color.BLACK);
     val converter = ShapeUnitConverter(50);
     val rasterizer = RecursiveRasterizer(
-        segmentRasterizer = CachingRasterizers.enhanceSegmentRasterizer(NaiveSegmentRasterizer()),
         circleRasterizer = CachingRasterizers.enhanceCircleRasterizer(MidpointCircleRasterizer())
     );
     val buffer = new SwingBuffer(Toolkit.getDefaultToolkit().getScreenSize(), true);
