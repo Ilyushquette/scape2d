@@ -2,25 +2,22 @@ package scape.scape2d.engine.core.matter
 
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.core.TimeDependent
+import scape.scape2d.engine.time.Duration
 
 /**
  * Units:
  * <ul>
  *  <li>force - magnitude in Newtons, angle in degrees</li>
- *  <li>time - in milliseconds</li>
  * </ul>
  */
-case class Impulse(particle:Particle, force:Vector, time:Double) extends TimeDependent {
-  private var timeleft = time;
-  
+case class Impulse(
+  particle:Particle,
+  force:Vector,
+  time:Duration)
+extends TimeDependent {
   private[core] def integrate(timestep:Double) = {
-    if(timeleft > 0) {
-      timeleft = timeleft - timestep;
-      val calibratedTime = if(timeleft < 0) timestep + timeleft else timestep;
-      val multiplier = calibratedTime / time;
-      val calibratedForce = force * multiplier;
-      particle.exertForce(calibratedForce, true);
-      true;
-    }else false;
+    val multiplier = timestep / time.milliseconds;
+    val calibratedForce = force * multiplier;
+    particle.exertForce(calibratedForce, true);
   }
 }

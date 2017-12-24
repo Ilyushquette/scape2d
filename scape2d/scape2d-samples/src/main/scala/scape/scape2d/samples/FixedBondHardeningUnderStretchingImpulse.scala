@@ -28,6 +28,7 @@ import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.shape.ShapeUnitConverter
 import scape.scape2d.engine.core.MovableTrackerProxy
+import scape.scape2d.engine.time._
 import scape.scape2d.graphics.rasterizer.UnitConvertingRasterizer
 import scape.scape2d.graphics.rasterizer.cache.CachingRasterizers
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
@@ -70,7 +71,7 @@ object FixedBondHardeningUnderStretchingImpulse {
     
     val timer = new Timer;
     timer.schedule(new TimerTask {
-      def run() = nature.add(new Impulse(trackedMetalParticle2, Vector(450, 0), 2500));
+      def run() = nature.add(new Impulse(trackedMetalParticle2, Vector(500, 0), 2.5(Second)));
     }, 3000);
   }
   

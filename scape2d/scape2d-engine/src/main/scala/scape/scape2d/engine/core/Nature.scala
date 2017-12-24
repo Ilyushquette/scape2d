@@ -22,10 +22,10 @@ extends Actor {
   private val log = Logger.getLogger(getClass);
   private val linearMotionIntegral = LinearMotionIntegral(collisionDetector);
   private val rotationIntegral = RotationIntegral();
-  private var timeSubjects = Set[TimeDependent]();
+  private var temporals = Set[Temporal]();
   private var particles = Set[Particle]();
   
-  def add(timeSubject:TimeDependent):Unit = this ! (() => timeSubjects += timeSubject);
+  def add(timeDependent:TimeDependent):Unit = this ! (() => temporals += new Temporal(timeDependent));
   
   def add(particle:Particle):Unit = this ! (() => particles += particle);
   
@@ -46,7 +46,8 @@ extends Actor {
       
       linearMotionIntegral.integrate(particles, timestepMillis);
       rotationIntegral.integrate(particles, timestepMillis);
-      timeSubjects = timeSubjects.filter(_.integrate(timestepMillis));
+      temporals.foreach(_.integrate(timestepMillis));
+      temporals = temporals.filter(_.timeleft > 0);
       dispatchInputs();
       
       val cycleMillis = System.currentTimeMillis - cycleStart;

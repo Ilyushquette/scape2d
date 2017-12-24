@@ -17,6 +17,7 @@ import scape.scape2d.engine.core.matter.BondBuilder
 import scape.scape2d.engine.deformation.elasticity.Elastic
 import scape.scape2d.engine.deformation.LinearStressStrainGraph
 import scape.scape2d.engine.deformation.plasticity.Plastic
+import scape.scape2d.engine.time._
 import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
 import scape.scape2d.debugger.view.swing.SwingMixingRastersShapeDrawer
 import scape.scape2d.engine.geom.shape.ShapeUnitConverter
@@ -57,7 +58,7 @@ object FixedBondChainUnderStretchingImpulse {
       .withDampingCoefficient(0.1)
       .build;
     
-    val impulse = new Impulse(trackedMetalParticle3, Vector(500, 0), 10000);
+    val impulse = new Impulse(trackedMetalParticle3, Vector(500, 0), 10(Second));
     
     val frame = new JFrame("Scape2D Debugger");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

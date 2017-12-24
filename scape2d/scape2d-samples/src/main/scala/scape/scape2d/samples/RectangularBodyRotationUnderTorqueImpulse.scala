@@ -24,6 +24,7 @@ import scape.scape2d.engine.geom.shape.ShapeUnitConverter
 import scape.scape2d.engine.core.MovableTrackerProxy
 import scape.scape2d.engine.motion.collision.detection.QuadTreeBasedCollisionDetector
 import scape.scape2d.engine.motion.collision.detection.detectWithDiscriminant
+import scape.scape2d.engine.time._
 import scape.scape2d.graphics.rasterizer.UnitConvertingRasterizer
 import scape.scape2d.graphics.rasterizer.cache.CachingRasterizers
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
@@ -49,7 +50,7 @@ object RectangularBodyRotationUnderTorqueImpulse {
                           .withStep(0.15)
                           .build(AxisAlignedRectangle(Point(1, 7), 0.75, 0.75));
     val particleNearestToOrigin = rectangularBody.movables.minBy(_.position distanceTo Point.origin);
-    val torqueImpulse = new TorqueImpulse(particleNearestToOrigin, 120, 60000);
+    val torqueImpulse = new TorqueImpulse(particleNearestToOrigin, 120, 1(Minute));
     
     val frame = new JFrame("Scape2D Debugger");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
