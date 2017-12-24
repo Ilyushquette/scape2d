@@ -24,7 +24,7 @@ case class BodyBuilder(
   def build(fixedPoint:Point, structure:SegmentedStructure) = {
     val points = fetchWaypoints(structure.segments.iterator);
     val particles = points.map(particleFactory(_));
-    val centerOfMass = particles.find(_.shape.center == fixedPoint).get;
+    val centerOfMass = particles.find(_.position == fixedPoint).get;
     val bonds = makeBonds(structure.segments, particles);
     val body = new Body(centerOfMass, bonds.toSet, angularVelocity, torque);
     bonds.foreach(_.setBody(Some(body)));
@@ -40,8 +40,8 @@ case class BodyBuilder(
   }
   
   private def makeOriginalAndReversedBond(segment:Segment, particles:Set[Particle]) = {
-    val particle1 = particles.find(_.shape.center == segment.p1).get;
-    val particle2 = particles.find(_.shape.center == segment.p2).get;
+    val particle1 = particles.find(_.position == segment.p1).get;
+    val particle2 = particles.find(_.position == segment.p2).get;
     val bond = bondFactory(particle1, particle2);
     val reversedBond = particle2.bonds.find(_.particles == Combination2(particle1, particle2)).get;
     List(bond, reversedBond);

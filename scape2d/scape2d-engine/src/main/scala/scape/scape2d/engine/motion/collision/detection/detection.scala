@@ -11,7 +11,7 @@ package object detection {
   type DetectionStrategy = (MovableSphere, MovableSphere, Double) => Option[Double];
   
   def detectWithDiscriminant[T <: MovableSphere](s1:T, s2:T, timestep:Double) = {
-    val sumOfRadii = s1.shape.radius + s2.shape.radius;
+    val sumOfRadii = s1.radius + s2.radius;
     val A = s1.position - s2.position;
     val B = asMetersPerTimestep(s1.velocity, timestep) - asMetersPerTimestep(s2.velocity, timestep);
     

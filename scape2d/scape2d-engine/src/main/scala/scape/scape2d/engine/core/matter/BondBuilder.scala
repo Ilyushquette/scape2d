@@ -11,7 +11,7 @@ import scape.scape2d.engine.util.Combination2
 
 object BondBuilder {
   def apply(p1:Particle, p2:Particle, youngModulus:Double) = {
-    val radius = toRadians((p1.shape.radius + p2.shape.radius) / 2);
+    val radius = toRadians((p1.radius + p2.radius) / 2);
     // average cross-sectional area viewed along central axis
     val crossSectionalArea = PI * (radius * radius);
     val length = p1.position distanceTo p2.position;
