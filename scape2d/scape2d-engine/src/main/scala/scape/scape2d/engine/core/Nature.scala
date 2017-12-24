@@ -8,13 +8,9 @@ import scape.scape2d.engine.motion.collision._
 import scape.scape2d.engine.motion.collision.detection._
 import scape.scape2d.engine.motion._
 import scape.scape2d.engine.core.matter.Particle
-import scape.scape2d.engine.core.input.AddTimeSubject
-import scape.scape2d.engine.core.input.AddParticle
-import scape.scape2d.engine.core.input.AddBond
 import scape.scape2d.engine.core.matter.Bond
 import scape.scape2d.engine.core.integral.LinearMotionIntegral
 import scape.scape2d.engine.core.integral.RotationIntegral
-import scape.scape2d.engine.core.input.AddBody
 import scape.scape2d.engine.core.matter.Body
 import scape.scape2d.engine.time.Frequency
 import scape.scape2d.engine.time.Second
@@ -29,13 +25,16 @@ extends Actor {
   private var timeSubjects = Set[TimeDependent]();
   private var particles = Set[Particle]();
   
-  def add(timeSubject:TimeDependent) = this ! AddTimeSubject(timeSubject);
+  def add(timeSubject:TimeDependent):Unit = this ! (() => timeSubjects += timeSubject);
   
-  def add(particle:Particle) = this ! AddParticle(particle);
+  def add(particle:Particle):Unit = this ! (() => particles += particle);
   
-  def add(bond:Bond) = this ! AddBond(bond);
+  def add(bond:Bond):Unit = this ! (() => {
+    add(bond.particles._1);
+    add(bond.particles._2);
+  });
   
-  def add(body:Body) = this ! AddBody(body);
+  def add(body:Body):Unit = this ! (() => body.movables.foreach(add));
   
   override def act = {
     log.info("Nature has been started");
@@ -57,20 +56,13 @@ extends Actor {
     }
   }
   
-  private def dispatchInputs() = {
-    var endOfMailbox = false;
-    while(!endOfMailbox) {
-      receiveWithin(0) {
-        case AddTimeSubject(ts) => timeSubjects = timeSubjects + ts;
-        case AddParticle(p) => particles = particles + p;
-        case AddBond(bond) => 
-          add(bond.particles._1);
-          add(bond.particles._2);
-        case AddBody(body) =>
-          body.movables.foreach(add);
-        case TIMEOUT => endOfMailbox = true;
-        case unknown => log.warn("Unknown input " + unknown);
-      }
-    }
+  private def dispatchInputs():Unit = receiveWithin(0) {
+    case act:(() => Unit) =>
+      act();
+      dispatchInputs();
+    case TIMEOUT => return;
+    case unknown =>
+      log.warn("Unknown input " + unknown);
+      dispatchInputs();
   }
 }
