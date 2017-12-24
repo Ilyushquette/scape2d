@@ -13,9 +13,9 @@ case class Plastic(graph:StressStrainGraph, limit:Double) {
       throw new IllegalArgumentException("Strain %f occurs after fracture %f".format(absoluteStrain, limit));
     
     val shiftedGraph = graph match {
-      case ShiftedStressStrainGraph(deformation, permanentStrain) =>
-        ShiftedStressStrainGraph(deformation, permanentStrain + absoluteStrain);
-      case deformation => ShiftedStressStrainGraph(deformation, absoluteStrain);
+      case ShiftedStressStrainGraph(graph, permanentStrain) =>
+        ShiftedStressStrainGraph(graph, permanentStrain + absoluteStrain);
+      case graph => ShiftedStressStrainGraph(graph, absoluteStrain);
     }
     
     Plastic(shiftedGraph, limit - absoluteStrain);
