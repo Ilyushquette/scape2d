@@ -58,14 +58,26 @@ extends Movable with Formed[Circle] {
     }else 0;
   }
   
-  def snapshot = {
-    val snapshot = snapshotExcludingBonds;
+  def snapshot = snapshot();
+  
+  def snapshot(shape:Circle = this.shape,
+               mass:Double = this.mass,
+               velocity:Vector = this.velocity,
+               force:Vector = this.force) = {
+    val snapshot = snapshotExcludingBonds(shape, mass, velocity, force);
     // only snapshot of the current particle's bonds structure is taken performance wise
     snapshot._bonds = bonds.map(bond => bond.snapshot(
-      particles = Combination2(snapshotExcludingBonds, bond.particles._2.snapshotExcludingBonds)
+      particles = Combination2(snapshot, bond.particles._2.snapshotExcludingBonds)
     ));
     snapshot;
   }
   
-  private def snapshotExcludingBonds = new Particle(shape, mass, velocity, force);
+  private def snapshotExcludingBonds:Particle = snapshotExcludingBonds();
+  
+  private def snapshotExcludingBonds(shape:Circle = this.shape,
+                                     mass:Double = this.mass,
+                                     velocity:Vector = this.velocity,
+                                     force:Vector = this.force):Particle = {
+    new Particle(shape, mass, velocity, force);
+  }
 }
