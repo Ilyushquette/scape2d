@@ -38,7 +38,7 @@ extends ShapeInteger[AxisAlignedRectangle] {
   lazy val bottomRight = shapeDouble.bottomRight.toInt;
 }
 
-case class PolygonInteger(segments:Array[SegmentInteger]) extends ShapeInteger[Polygon] {
+case class PolygonInteger(segments:List[SegmentInteger]) extends ShapeInteger[Polygon] {
   lazy val shapeDouble = CustomPolygon(segments.map(ShapeInteger.widenShape));
   lazy val points = shapeDouble.points.map(_.toInt);
 }

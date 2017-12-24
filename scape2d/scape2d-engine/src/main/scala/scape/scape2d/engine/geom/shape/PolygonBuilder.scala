@@ -2,11 +2,11 @@ package scape.scape2d.engine.geom.shape
 
 object PolygonBuilder {
   def apply(p1:Point, p2:Point, p3:Point):PolygonBuilder = {
-    PolygonBuilder(Array(Segment(p1, p2), Segment(p2, p3)));
+    PolygonBuilder(List(Segment(p1, p2), Segment(p2, p3)));
   }
 }
 
-case class PolygonBuilder private[shape] (segments:Array[Segment]) {
+case class PolygonBuilder private[shape] (segments:List[Segment]) {
   def to(next:Point) = copy(segments = segments :+ Segment(segments.last.p2, next));
   
   def build = {

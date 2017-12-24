@@ -20,7 +20,7 @@ sealed trait Sweepable[T <: Shape] extends Shape {
 sealed trait Polygon extends Shape {
   lazy val points = fetchWaypoints(segments.iterator);
   
-  def segments:Array[Segment];
+  def segments:List[Segment];
 }
 
 object Point {
@@ -186,9 +186,9 @@ case class Circle(center:Point, radius:Double) extends Sweepable[CircleSweep] {
   lazy val toInt = CircleInteger(center.toInt, round(radius).toInt);
 }
 
-case class CustomPolygon private[shape] (segments:Array[Segment]) extends Polygon {
+case class CustomPolygon private[shape] (segments:List[Segment]) extends Polygon {
   override def equals(any:Any) = any match {
-    case polygon:Polygon => segments.deep == polygon.segments.deep;
+    case polygon:Polygon => segments == polygon.segments;
     case _ => false;
   }
   

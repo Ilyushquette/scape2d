@@ -12,8 +12,8 @@ class PolygonBuilderTest {
     val p4 = Point(1, -1);
     val p5 = Point(0, 0);
     val polygon = PolygonBuilder(p1, p2, p3).to(p4).to(p5).build;
-    val expectedSegments = Array(Segment(p1, p2), Segment(p2, p3), Segment(p3, p4), Segment(p4, p5))
-    Assert.assertEquals(expectedSegments.deep, polygon.segments.deep);
+    val expectedSegments = List(Segment(p1, p2), Segment(p2, p3), Segment(p3, p4), Segment(p4, p5))
+    Assert.assertEquals(expectedSegments, polygon.segments);
   }
   
   @Test
