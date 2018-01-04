@@ -1,6 +1,7 @@
 package scape.scape2d.engine
 
 import java.lang.Math.cos
+import java.lang.Math.PI
 import java.lang.Math.sin
 import java.lang.Math.toRadians
 
@@ -12,8 +13,11 @@ import scape.scape2d.engine.geom.shape.Segment
 
 package object geom {
   val Epsilon = 1E-10;
+  val TwicePI = PI * 2;
   
   def normalizeAngle(angle:Double) = (angle + 360) % 360;
+  
+  def normalizeRadians(radians:Double) = (radians + TwicePI) % TwicePI;
   
   def sinDeg(angle:Double) = sin(toRadians(normalizeAngle(angle)));
   

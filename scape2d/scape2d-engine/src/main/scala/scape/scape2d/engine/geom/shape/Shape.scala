@@ -32,7 +32,9 @@ case class Point(x:Double, y:Double) extends Shape {
   
   def distanceTo(point:Point) = hypot(point.x - x, point.y - y);
   
-  def angleTo(point:Point) = normalizeAngle(toDegrees(atan2(point.y - y, point.x - x)));
+  def angleTo(point:Point) = normalizeRadians(atan2(point.y - y, point.x - x));
+  
+  def angleToDeg(point:Point) = normalizeAngle(toDegrees(atan2(point.y - y, point.x - x)));
   
   def -(point:Point) = Vector.from(Components(x - point.x, y - point.y));
   

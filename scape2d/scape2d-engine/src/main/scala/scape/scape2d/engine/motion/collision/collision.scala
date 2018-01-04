@@ -25,7 +25,7 @@ package object collision {
     val particle2 = snapshotPair._2;
     val p1 = getPostLinearMotionPosition(particle1, collision.time);
     val p2 = getPostLinearMotionPosition(particle2, collision.time);
-    val phi = p1.angleTo(p2);
+    val phi = p1 angleToDeg p2;
     
     def vel(particle1:Particle, particle2:Particle) = {
       val u1 = particle1.velocity.magnitude;

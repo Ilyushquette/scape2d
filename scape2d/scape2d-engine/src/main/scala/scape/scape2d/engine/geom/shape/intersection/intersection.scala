@@ -21,7 +21,7 @@ package object intersection {
   }
   
   def testIntersection(ray:Ray, point:Point):Boolean = {
-    ray.origin == point || fuzzyEquals(ray.angle, ray.origin.angleTo(point), Epsilon);
+    ray.origin == point || fuzzyEquals(ray.angle, ray.origin angleToDeg point, Epsilon);
   }
   
   def testIntersection(ray:Ray, line:Line):Boolean = {
