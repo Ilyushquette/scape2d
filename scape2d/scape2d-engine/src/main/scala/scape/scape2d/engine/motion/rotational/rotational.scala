@@ -23,6 +23,12 @@ package object rotational {
     }else _ => Mp;
   }
   
+  def distanceForTimeOf(movable1:Movable, movable2:Movable):(Double => Double) = {
+    val Pft = positionForTimeOf(movable1);
+    val Qft = positionForTimeOf(movable2);
+    t => Pft(t) distanceTo Qft(t);
+  }
+  
   def asRadiansPerTimestep(angularVelocity:Double, timestep:Double) = {
     val stepsPerSecond = 1000 / timestep;
     angularVelocity / stepsPerSecond;
