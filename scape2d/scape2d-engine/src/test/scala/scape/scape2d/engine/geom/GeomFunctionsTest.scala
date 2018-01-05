@@ -9,12 +9,12 @@ import scape.scape2d.engine.geom.shape.Segment
 class TestGeomFunctions {
   @Test
   def testNormalizePositiveAngle = {
-    Assert.assertEquals(135, normalizeAngle(135), 0.00001);
+    Assert.assertEquals(135, normalizeDegrees(135), 0.00001);
   }
   
   @Test
   def testNormalizeNegativeAngle = {
-    Assert.assertEquals(270, normalizeAngle(-90), 0.00001);
+    Assert.assertEquals(270, normalizeDegrees(-90), 0.00001);
   }
   
   @Test

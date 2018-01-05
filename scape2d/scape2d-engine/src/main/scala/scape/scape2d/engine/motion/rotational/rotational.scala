@@ -3,14 +3,14 @@ package scape.scape2d.engine.motion
 import java.lang.Math.toDegrees
 
 import scape.scape2d.engine.core.Movable
-import scape.scape2d.engine.geom.normalizeAngle
+import scape.scape2d.engine.geom.normalizeDegrees
 import scape.scape2d.engine.geom.Vector
 
 package object rotational {
   def getPostRotationPosition(movable:Movable, timestep:Double) = {
     if(movable.rotatable.isDefined && movable.rotatable.get.angularVelocity != 0) {
       val radiansPerTimestep = asRadiansPerTimestep(movable.rotatable.get.angularVelocity, timestep);
-      val degreesPerTimestep = normalizeAngle(toDegrees(radiansPerTimestep));
+      val degreesPerTimestep = normalizeDegrees(toDegrees(radiansPerTimestep));
       val radialVector = movable.position - movable.rotatable.get.center;
       val nextRadialVector = Vector(radialVector.magnitude, radialVector.angle + degreesPerTimestep);
       movable.rotatable.get.center.displace(nextRadialVector);

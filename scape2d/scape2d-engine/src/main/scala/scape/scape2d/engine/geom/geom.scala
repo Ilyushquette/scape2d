@@ -15,13 +15,13 @@ package object geom {
   val Epsilon = 1E-10;
   val TwicePI = PI * 2;
   
-  def normalizeAngle(angle:Double) = (angle + 360) % 360;
+  def normalizeDegrees(degrees:Double) = (degrees + 360) % 360;
   
   def normalizeRadians(radians:Double) = (radians + TwicePI) % TwicePI;
   
-  def sinDeg(angle:Double) = sin(toRadians(normalizeAngle(angle)));
+  def sinDeg(degrees:Double) = sin(toRadians(normalizeDegrees(degrees)));
   
-  def cosDeg(angle:Double) = cos(toRadians(normalizeAngle(angle)));
+  def cosDeg(degrees:Double) = cos(toRadians(normalizeDegrees(degrees)));
   
   def findMutualX(l1:Line, l2:Line) = {
     if(!l1.vertical && !l2.vertical && !fuzzyEquals(l1.slope.get, l2.slope.get, Epsilon)) {

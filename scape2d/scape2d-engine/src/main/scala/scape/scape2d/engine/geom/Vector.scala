@@ -7,7 +7,7 @@ object Vector {
   def from(components:Components) = {
     val magnitude = hypot(components.x, components.y);
     val radians = atan2(components.y, components.x);
-    val angle = normalizeAngle(toDegrees(radians));
+    val angle = normalizeDegrees(toDegrees(radians));
     Vector(magnitude, angle);
   }
   
@@ -26,7 +26,7 @@ case class Vector(magnitude:Double = 0, angle:Double = 0) {
   // x cannot be accessed through conversion due to naming overlap with cross-product method
   lazy val x = components.x;
   
-  lazy val opposite = Vector(magnitude, normalizeAngle(angle + 180));
+  lazy val opposite = Vector(magnitude, normalizeDegrees(angle + 180));
   
   def +(vector:Vector) = Vector.from(Components(this.x + vector.x, this.y + vector.y));
   
@@ -36,7 +36,7 @@ case class Vector(magnitude:Double = 0, angle:Double = 0) {
   
   def *(magnitudeMultiplier:Double) = {
     val newMagnitude = magnitude * abs(magnitudeMultiplier);
-    val newAngle = if(magnitudeMultiplier >= 0) angle else normalizeAngle(angle + 180);
+    val newAngle = if(magnitudeMultiplier >= 0) angle else normalizeDegrees(angle + 180);
     Vector(newMagnitude, newAngle);
   }
   

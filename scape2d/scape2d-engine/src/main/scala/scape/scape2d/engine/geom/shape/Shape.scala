@@ -34,7 +34,7 @@ case class Point(x:Double, y:Double) extends Shape {
   
   def angleTo(point:Point) = normalizeRadians(atan2(point.y - y, point.x - x));
   
-  def angleToDeg(point:Point) = normalizeAngle(toDegrees(atan2(point.y - y, point.x - x)));
+  def angleToDeg(point:Point) = normalizeDegrees(toDegrees(atan2(point.y - y, point.x - x)));
   
   def -(point:Point) = Vector.from(Components(x - point.x, y - point.y));
   
@@ -269,7 +269,7 @@ case class CircleSweep(circle:Circle, sweepVector:Vector) extends Shape {
   lazy val connector = {
     val origin = circle.center;
     val destination = origin.displace(sweepVector);
-    val radialVectorToConnector = Vector(circle.radius, normalizeAngle(sweepVector.angle + 90));
+    val radialVectorToConnector = Vector(circle.radius, normalizeDegrees(sweepVector.angle + 90));
     val connector1 = Segment(origin.displace(radialVectorToConnector), 
                              destination.displace(radialVectorToConnector));
     val connector2 = Segment(destination.displace(radialVectorToConnector.opposite),
