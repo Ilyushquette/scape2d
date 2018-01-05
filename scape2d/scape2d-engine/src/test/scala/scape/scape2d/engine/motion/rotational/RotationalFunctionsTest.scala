@@ -37,7 +37,7 @@ class RotationalFunctionsTest {
     val movableMock = Mockito.mock(classOf[Movable]);
     Mockito.when(movableMock.position).thenReturn(Point(4, 4));
     Mockito.when(movableMock.rotatable).thenReturn(None);
-    Assert.assertEquals(Point(4, 4), getPostRotationPosition(movableMock, 1000));
+    Assert.assertEquals(Point(4, 4), positionForTimeOf(movableMock)(1000));
   }
   
   @Test
@@ -50,7 +50,7 @@ class RotationalFunctionsTest {
     Mockito.when(movableMock.position).thenReturn(Point(0, 1));
     Mockito.when(movableMock.rotatable).thenReturn(Some(rotatableMock));
     
-    Assert.assertEquals(Point(0, 1), getPostRotationPosition(movableMock, 1000));
+    Assert.assertEquals(Point(0, 1), positionForTimeOf(movableMock)(1000));
   }
   
   @Test
@@ -63,7 +63,7 @@ class RotationalFunctionsTest {
     Mockito.when(movableMock.position).thenReturn(Point(0, 1));
     Mockito.when(movableMock.rotatable).thenReturn(Some(rotatableMock));
     
-    val postRotationPosition = getPostRotationPosition(movableMock, 1000);
+    val postRotationPosition = positionForTimeOf(movableMock)(1000);
     Assert.assertEquals(-1, postRotationPosition.x, 0.00001);
     Assert.assertEquals(0, postRotationPosition.y, 0.00001);
   }
@@ -78,7 +78,7 @@ class RotationalFunctionsTest {
     Mockito.when(movableMock.position).thenReturn(Point(1, 0));
     Mockito.when(movableMock.rotatable).thenReturn(Some(rotatableMock));
     
-    val postRotationPosition = getPostRotationPosition(movableMock, 1000);
+    val postRotationPosition = positionForTimeOf(movableMock)(1000);
     Assert.assertEquals(0.70710, postRotationPosition.x, 0.00001);
     Assert.assertEquals(-0.70710, postRotationPosition.y, 0.00001);
   }
