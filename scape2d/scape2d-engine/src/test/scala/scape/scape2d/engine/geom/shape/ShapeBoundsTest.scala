@@ -54,4 +54,11 @@ class ShapeBoundsTest {
     val bounds = ShapeBounds(circleSweep);
     Assert.assertEquals(AxisAlignedRectangle(Point(1, 1), 6.588190451025207, 13.659258262890683), bounds);
   }
+  
+  @Test
+  def testRingShapeBounds = {
+    val ring = Ring(Circle(Point.origin, 10), 6);
+    val bounds = ShapeBounds(ring);
+    Assert.assertEquals(AxisAlignedRectangle(Point(-13, -13), 26, 26), bounds);
+  }
 }

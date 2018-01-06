@@ -23,6 +23,7 @@ object ShapeBounds {
                    max(originBounds.bottomRight.x, destinationBounds.bottomRight.x),
                    min(originBounds.bottomLeft.y, destinationBounds.bottomLeft.y),
                    max(originBounds.topLeft.y, destinationBounds.topLeft.y));
+    case ring:Ring => ShapeBounds(ring.outerCircle);
     case _:Line | _:Ray => throw new IllegalArgumentException("Infinite shapes unlimited");
   }
   
