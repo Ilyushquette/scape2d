@@ -202,4 +202,8 @@ package object intersection {
     cs1.intersects(cs2.circle) || cs1.intersects(cs2.destinationCircle) ||
     cs1.intersects(cs2.connector._1) || cs1.intersects(cs2.connector._2);
   }
+  
+  def testIntersection(ring:Ring, shape:Shape):Boolean = {
+    ring.outerCircle.intersects(shape) && !ring.innerCircle.contains(shape);
+  }
 }

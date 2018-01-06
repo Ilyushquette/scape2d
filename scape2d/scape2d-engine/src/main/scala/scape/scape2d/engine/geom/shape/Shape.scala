@@ -47,6 +47,7 @@ case class Point(x:Double, y:Double) extends Shape {
     case rectangle:AxisAlignedRectangle => testIntersection(rectangle, this);
     case polygon:Polygon => testIntersection(polygon, this);
     case circleSweep:CircleSweep => testIntersection(circleSweep, this);
+    case ring:Ring => testIntersection(ring, this);
   }
   
   def contains(shape:Shape) = shape match {
@@ -305,7 +306,7 @@ case class Ring(circle:Circle, thickness:Double) extends Shape {
   lazy val outerCircle = circle.copy(radius = circle.radius + thickness / 2);
   lazy val innerCircle = circle.copy(radius = circle.radius - thickness / 2);
   
-  def intersects(shape:Shape) = false;
+  def intersects(shape:Shape) = testIntersection(this, shape);
   
   def contains(shape:Shape) = false;
   
