@@ -291,6 +291,7 @@ case class CircleSweep(circle:Circle, sweepVector:Vector) extends Shape {
     case circle:Circle => testIntersection(this, circle);
     case polygon:Polygon => testIntersection(this, polygon);
     case circleSweep:CircleSweep => testIntersection(this, circleSweep);
+    case ring:Ring => testIntersection(ring, this);
   }
   
   def contains(shape:Shape) = shape match {
