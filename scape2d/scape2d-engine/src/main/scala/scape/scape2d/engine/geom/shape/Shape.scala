@@ -207,6 +207,7 @@ case class CustomPolygon private[shape] (segments:List[Segment]) extends Polygon
     case circle:Circle => testIntersection(this, circle);
     case polygon:Polygon => testIntersection(this, polygon);
     case circleSweep:CircleSweep => testIntersection(circleSweep, this);
+    case ring:Ring => testIntersection(ring, this);
   }
   
   def contains(shape:Shape) = shape match {
