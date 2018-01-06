@@ -150,6 +150,7 @@ case class Segment(p1:Point, p2:Point) extends Shape {
     case circle:Circle => testIntersection(circle, this);
     case polygon:Polygon => testIntersection(polygon, this);
     case circleSweep:CircleSweep => testIntersection(circleSweep, this);
+    case ring:Ring => testIntersection(ring, this);
   }
   
   def contains(shape:Shape) = shape match {
