@@ -300,3 +300,14 @@ case class CircleSweep(circle:Circle, sweepVector:Vector) extends Shape {
   
   lazy val toInt = CircleSweepInteger(circle.toInt, sweepVector);
 }
+
+case class Ring(circle:Circle, thickness:Double) extends Shape {
+  lazy val outerCircle = circle.copy(radius = circle.radius + thickness / 2);
+  lazy val innerCircle = circle.copy(radius = circle.radius - thickness / 2);
+  
+  def intersects(shape:Shape) = false;
+  
+  def contains(shape:Shape) = false;
+  
+  lazy val toInt = RingInteger(circle.toInt, thickness);
+}

@@ -48,3 +48,9 @@ case class CircleSweepInteger(circle:CircleInteger, sweepVector:Vector) extends 
   lazy val destinationCircle = shapeDouble.destinationCircle.toInt;
   lazy val connector = (shapeDouble.connector._1.toInt, shapeDouble.connector._2.toInt);
 }
+
+case class RingInteger(circle:CircleInteger, thickness:Double) extends ShapeInteger[Ring] {
+  lazy val shapeDouble = Ring(circle, thickness);
+  lazy val outerCircle = shapeDouble.outerCircle.toInt;
+  lazy val innerCircle = shapeDouble.innerCircle.toInt;
+}
