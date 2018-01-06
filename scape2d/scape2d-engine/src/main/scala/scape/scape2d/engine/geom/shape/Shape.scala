@@ -182,6 +182,7 @@ case class Circle(center:Point, radius:Double) extends Sweepable[CircleSweep] {
     case Circle(center2, radius2) => center.distanceTo(center2) + radius2 <= radius;
     case polygon:Polygon => polygon.points.forall(intersects);
     case circleSweep:CircleSweep => contains(circleSweep.circle) && contains(circleSweep.destinationCircle);
+    case ring:Ring => contains(ring.outerCircle);
     case _ => false;
   }
   
@@ -219,6 +220,7 @@ case class CustomPolygon private[shape] (segments:List[Segment]) extends Polygon
                                     contains(circleSweep.destinationCircle) &&
                                     contains(circleSweep.connector._1) &&
                                     contains(circleSweep.connector._2);
+    case ring:Ring => contains(ring.outerCircle);
     case _ => false;
   }
   
@@ -257,6 +259,7 @@ case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) e
                                    center.y >= bottomRight.y + radius && center.y <= topLeft.y - radius;
     case polygon:Polygon => polygon.points.forall(intersects);
     case circleSweep:CircleSweep => contains(circleSweep.circle) && contains(circleSweep.destinationCircle);
+    case ring:Ring => contains(ring.outerCircle);
     case untuned => polygon.contains(untuned);
   }
   
@@ -314,7 +317,7 @@ case class Ring(circle:Circle, thickness:Double) extends Shape {
   
   def intersects(shape:Shape) = testIntersection(this, shape);
   
-  def contains(shape:Shape) = false;
+  def contains(shape:Shape) = outerCircle contains shape;
   
   lazy val toInt = RingInteger(circle.toInt, thickness);
 }
