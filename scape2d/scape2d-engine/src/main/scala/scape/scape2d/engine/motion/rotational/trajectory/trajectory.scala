@@ -17,4 +17,10 @@ package object trajectory {
       trajectoryOf(movable);
     else movable.shape;
   }
+  
+  def crossPaths[T <: Movable with Formed[Circle]](movable1:T, movable2:T) = {
+    val path1 = pathOf(movable1);
+    val path2 = pathOf(movable2);
+    path1.intersects(path2);
+  }
 }
