@@ -2,7 +2,7 @@ package scape.scape2d.engine.core
 
 import scape.scape2d.engine.geom.shape.Point
 
-class RotatableMock(
+private[engine] class RotatableMock(
   val center:Point,
   private var _angularVelocity:Double,
   val movables:Set[MovableMock])
