@@ -25,4 +25,24 @@ class TrajectoryFunctionsTest {
     val rotatable = new RotatableMock(Point(1, 1), 0, Set(movable));
     Assert.assertEquals(Ring(Circle(Point(1, 1), 5), 1), trajectoryOf(movable));
   }
+  
+  @Test
+  def testPathOfNonRotatableIsCurrentlyConsumedArea = {
+    val movable = new MovableMock(Circle(Point.origin, 0.1), Vector(), None);
+    Assert.assertEquals(movable.shape, pathOf(movable));
+  }
+  
+  @Test
+  def testPathOfStationaryIsCurrentlyConsumedArea = {
+    val movable = new MovableMock(Circle(Point(1, 6), 0.5), Vector(), None);
+    val rotatable = new RotatableMock(Point(1, 1), 0, Set(movable));
+    Assert.assertEquals(movable.shape, pathOf(movable));
+  }
+  
+  @Test
+  def testPathOfRotatableIsTrajectoryOfRotation = {
+    val movable = new MovableMock(Circle(Point(1, 6), 0.5), Vector(), None);
+    val rotatable = new RotatableMock(Point(1, 1), 2.35, Set(movable));
+    Assert.assertEquals(Ring(Circle(Point(1, 1), 5), 1), pathOf(movable));
+  }
 }

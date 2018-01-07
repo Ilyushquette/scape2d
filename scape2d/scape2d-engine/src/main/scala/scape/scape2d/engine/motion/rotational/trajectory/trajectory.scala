@@ -11,4 +11,10 @@ package object trajectory {
     val trajectoryRadius = trajectoryCenter distanceTo movable.position;
     Ring(Circle(trajectoryCenter, trajectoryRadius), movable.radius * 2);
   }
+  
+  def pathOf[T <: Movable with Formed[Circle]](movable:T) = {
+    if(movable.rotatable.isDefined && movable.rotatable.get.angularVelocity != 0)
+      trajectoryOf(movable);
+    else movable.shape;
+  }
 }
