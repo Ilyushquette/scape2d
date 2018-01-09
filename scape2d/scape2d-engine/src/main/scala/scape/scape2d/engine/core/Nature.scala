@@ -14,14 +14,15 @@ import scape.scape2d.engine.core.integral.RotationIntegral
 import scape.scape2d.engine.core.matter.Body
 import scape.scape2d.engine.time.Frequency
 import scape.scape2d.engine.time.Second
+import scape.scape2d.engine.motion.collision.detection.rotation.BruteForceBasedRotationalCollisionDetector
+import scape.scape2d.engine.motion.collision.detection.rotation.IterativeRootFindingRotationalCollisionDetectionStrategy
 
 class Nature(
   var timescale:Timescale = Timescale(Frequency(60, Second)),
-  val collisionDetector:CollisionDetector[Particle] = new BruteForceBasedCollisionDetector(detectWithDiscriminant))
-extends Actor {
+  val linearMotionIntegral:LinearMotionIntegral = LinearMotionIntegral(new BruteForceBasedCollisionDetector(detectWithDiscriminant)),
+  val rotationIntegral:RotationIntegral = RotationIntegral(new BruteForceBasedRotationalCollisionDetector(new IterativeRootFindingRotationalCollisionDetectionStrategy))
+) extends Actor {
   private val log = Logger.getLogger(getClass);
-  private val linearMotionIntegral = LinearMotionIntegral(collisionDetector);
-  private val rotationIntegral = RotationIntegral();
   private var temporals = Set[Temporal]();
   private var particles = Set[Particle]();
   
