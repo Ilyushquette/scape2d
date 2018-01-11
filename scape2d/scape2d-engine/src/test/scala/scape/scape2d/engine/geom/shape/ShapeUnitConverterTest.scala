@@ -64,6 +64,13 @@ class ShapeUnitConverterTest {
     Assert.assertEquals(CircleSweep(Circle(Point(99, 99), 33), Vector(66, 45)), converter.scale(circleSweep));
   }
   
+  @Test
+  def testRingUnitConversion = {
+    val ring = Ring(Circle(Point.origin, 10), 6);
+    val converter = new ShapeUnitConverter(33);
+    Assert.assertEquals(Ring(Circle(Point(0, 0), 330), 198), converter.scale(ring));
+  }
+  
   @Test(expected=classOf[IllegalArgumentException])
   def testLineUnitsIllegalConversion:Unit = {
     val line = Line(Point(0, 0), Point(0, 1));

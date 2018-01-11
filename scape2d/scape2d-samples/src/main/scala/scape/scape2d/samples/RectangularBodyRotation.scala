@@ -30,12 +30,13 @@ import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
 import scape.scape2d.engine.core.MovableTrackerProxy
+import scape.scape2d.engine.core.integral.LinearMotionIntegral
 
 object RectangularBodyRotation {
   def main(args:Array[String]):Unit = {
     val bounds = AxisAlignedRectangle(Point.origin, 27.32, 15.36);
     val collisionDetector = new QuadTreeBasedCollisionDetector[Particle](bounds, detectWithDiscriminant);
-    val nature = new Nature(collisionDetector = collisionDetector);
+    val nature = new Nature(linearMotionIntegral = LinearMotionIntegral(collisionDetector));
     
     val shapeDrawer = createShapeDrawer();
     val particleDebugger = new ParticleDebugger(new ShapeDrawingParticleTrackingView(shapeDrawer));

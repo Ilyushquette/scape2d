@@ -27,6 +27,7 @@ import scape.scape2d.graphics.rasterizer.cache.CachingRasterizers
 import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
 import javax.swing.JPanel
+import scape.scape2d.engine.core.integral.LinearMotionIntegral
 
 object ExtendedSpaceLocatedCollision {
   def main(args:Array[String]):Unit = {
@@ -35,7 +36,7 @@ object ExtendedSpaceLocatedCollision {
     val bucketDetector = new BruteForceBasedCollisionDetector[Particle](detectWithDiscriminant);
     val collisionDetector = new ExtendedSpaceCollisionDetector(coreDetector, _ => bucketDetector,
                                                                detectWithDiscriminant, 100);
-    val nature = new Nature(collisionDetector = collisionDetector);
+    val nature = new Nature(linearMotionIntegral = LinearMotionIntegral(collisionDetector));
     val trackedMetalParticles = prepareTrackedMetalParticles();
     
     val screenSize = Toolkit.getDefaultToolkit().getScreenSize();

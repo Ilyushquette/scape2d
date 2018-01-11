@@ -8,11 +8,15 @@ import java.awt.geom.Path2D
 import java.awt.geom.Point2D
 import java.awt.geom.Rectangle2D
 
+import scape.scape2d.debugger.swing.ShapeMappingException
 import scape.scape2d.engine.geom.shape.AxisAlignedRectangle
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.CircleSweep
+import scape.scape2d.engine.geom.shape.Line
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.shape.Polygon
+import scape.scape2d.engine.geom.shape.Ray
+import scape.scape2d.engine.geom.shape.Ring
 import scape.scape2d.engine.geom.shape.Segment
 import scape.scape2d.engine.geom.shape.Shape
 
@@ -42,7 +46,11 @@ package object swing {
       complexShape.add(new Area(map(circleSweep.connector._1, pixelate)));
       complexShape.add(new Area(map(circleSweep.connector._2, pixelate)));
       complexShape;
-    case _ => throw new ShapeMappingException("No mapping for infinite shapes");
+    case ring:Ring =>
+      val complexShape = new Area(map(ring.outerCircle, pixelate));
+      complexShape.add(new Area(map(ring.innerCircle, pixelate)));
+      complexShape;
+    case _:Line | _:Ray => throw new ShapeMappingException("No mapping for infinite shapes");
   }
   
   def mapPoint(point:Point, pixelate:Double => Double) = {

@@ -11,7 +11,7 @@ import scape.scape2d.engine.motion.collision.resolveForces
 import scape.scape2d.engine.geom.Vector
 
 case class LinearMotionIntegral(collisionDetector:CollisionDetector[Particle]) {
-  def integrate(particles:Iterable[Particle], timestep:Double) = {
+  def integrate(particles:Iterable[Particle], timestep:Double):Unit = {
     particles.foreach(accelerateLinear);
     val collisions = collisionDetector.detect(particles, timestep);
     if(!collisions.isEmpty) {
@@ -21,7 +21,7 @@ case class LinearMotionIntegral(collisionDetector:CollisionDetector[Particle]) {
       if(safeTime > 0) integrateLinearMotion(particles, safeTime);
       exertKnockingForces(earliestCollision.concurrentPair, forces);
       val remainingTime = timestep - safeTime;
-      if(remainingTime > 0) integrateLinearMotion(particles, remainingTime);
+      if(remainingTime > 0) integrate(particles, remainingTime);
     }else integrateLinearMotion(particles, timestep);
   }
   

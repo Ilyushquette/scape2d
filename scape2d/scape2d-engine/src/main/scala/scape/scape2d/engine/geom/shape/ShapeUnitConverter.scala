@@ -17,6 +17,7 @@ case class ShapeUnitConverter(multiplier:Double) {
       CustomPolygon(scaledSegments);
     case CircleSweep(circle, sweepVector) =>
       CircleSweep(scale(circle), sweepVector * multiplier);
+    case Ring(circle, thickness) => Ring(scale(circle), thickness * multiplier);
     case _:Line | _:Ray =>
       throw new IllegalArgumentException("Couldn't scale line/ray due to infinite nature");
   }

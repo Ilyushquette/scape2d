@@ -32,7 +32,9 @@ case class Point(x:Double, y:Double) extends Shape {
   
   def distanceTo(point:Point) = hypot(point.x - x, point.y - y);
   
-  def angleTo(point:Point) = normalizeAngle(toDegrees(atan2(point.y - y, point.x - x)));
+  def angleTo(point:Point) = normalizeRadians(atan2(point.y - y, point.x - x));
+  
+  def angleToDeg(point:Point) = normalizeDegrees(toDegrees(atan2(point.y - y, point.x - x)));
   
   def -(point:Point) = Vector.from(Components(x - point.x, y - point.y));
   
@@ -45,6 +47,7 @@ case class Point(x:Double, y:Double) extends Shape {
     case rectangle:AxisAlignedRectangle => testIntersection(rectangle, this);
     case polygon:Polygon => testIntersection(polygon, this);
     case circleSweep:CircleSweep => testIntersection(circleSweep, this);
+    case ring:Ring => testIntersection(ring, this);
   }
   
   def contains(shape:Shape) = shape match {
@@ -94,6 +97,7 @@ case class Line(p1:Point, p2:Point) extends Shape {
     case circle:Circle => testIntersection(circle, this);
     case polygon:Polygon => testIntersection(polygon, this);
     case circleSweep:CircleSweep => testIntersection(circleSweep, this);
+    case ring:Ring => testIntersection(ring, this);
   }
   
   def contains(shape:Shape) = shape match {
@@ -121,6 +125,7 @@ case class Ray(origin:Point, angle:Double) extends Shape {
     case circle:Circle => testIntersection(circle, this);
     case polygon:Polygon => testIntersection(polygon, this);
     case circleSweep:CircleSweep => testIntersection(circleSweep, this);
+    case ring:Ring => testIntersection(ring, this);
   }
   
   def contains(shape:Shape) = shape match {
@@ -145,6 +150,7 @@ case class Segment(p1:Point, p2:Point) extends Shape {
     case circle:Circle => testIntersection(circle, this);
     case polygon:Polygon => testIntersection(polygon, this);
     case circleSweep:CircleSweep => testIntersection(circleSweep, this);
+    case ring:Ring => testIntersection(ring, this);
   }
   
   def contains(shape:Shape) = shape match {
@@ -167,6 +173,7 @@ case class Circle(center:Point, radius:Double) extends Sweepable[CircleSweep] {
     case circle:Circle => testIntersection(this, circle);
     case polygon:Polygon => testIntersection(polygon, this);
     case circleSweep:CircleSweep => testIntersection(circleSweep, this);
+    case ring:Ring => testIntersection(ring, this);
   }
   
   def contains(shape:Shape) = shape match {
@@ -175,6 +182,7 @@ case class Circle(center:Point, radius:Double) extends Sweepable[CircleSweep] {
     case Circle(center2, radius2) => center.distanceTo(center2) + radius2 <= radius;
     case polygon:Polygon => polygon.points.forall(intersects);
     case circleSweep:CircleSweep => contains(circleSweep.circle) && contains(circleSweep.destinationCircle);
+    case ring:Ring => contains(ring.outerCircle);
     case _ => false;
   }
   
@@ -200,6 +208,7 @@ case class CustomPolygon private[shape] (segments:List[Segment]) extends Polygon
     case circle:Circle => testIntersection(this, circle);
     case polygon:Polygon => testIntersection(this, polygon);
     case circleSweep:CircleSweep => testIntersection(circleSweep, this);
+    case ring:Ring => testIntersection(ring, this);
   }
   
   def contains(shape:Shape) = shape match {
@@ -211,6 +220,7 @@ case class CustomPolygon private[shape] (segments:List[Segment]) extends Polygon
                                     contains(circleSweep.destinationCircle) &&
                                     contains(circleSweep.connector._1) &&
                                     contains(circleSweep.connector._2);
+    case ring:Ring => contains(ring.outerCircle);
     case _ => false;
   }
   
@@ -249,6 +259,7 @@ case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) e
                                    center.y >= bottomRight.y + radius && center.y <= topLeft.y - radius;
     case polygon:Polygon => polygon.points.forall(intersects);
     case circleSweep:CircleSweep => contains(circleSweep.circle) && contains(circleSweep.destinationCircle);
+    case ring:Ring => contains(ring.outerCircle);
     case untuned => polygon.contains(untuned);
   }
   
@@ -267,7 +278,7 @@ case class CircleSweep(circle:Circle, sweepVector:Vector) extends Shape {
   lazy val connector = {
     val origin = circle.center;
     val destination = origin.displace(sweepVector);
-    val radialVectorToConnector = Vector(circle.radius, normalizeAngle(sweepVector.angle + 90));
+    val radialVectorToConnector = Vector(circle.radius, normalizeDegrees(sweepVector.angle + 90));
     val connector1 = Segment(origin.displace(radialVectorToConnector), 
                              destination.displace(radialVectorToConnector));
     val connector2 = Segment(destination.displace(radialVectorToConnector.opposite),
@@ -283,6 +294,7 @@ case class CircleSweep(circle:Circle, sweepVector:Vector) extends Shape {
     case circle:Circle => testIntersection(this, circle);
     case polygon:Polygon => testIntersection(this, polygon);
     case circleSweep:CircleSweep => testIntersection(this, circleSweep);
+    case ring:Ring => testIntersection(ring, this);
   }
   
   def contains(shape:Shape) = shape match {
@@ -297,4 +309,15 @@ case class CircleSweep(circle:Circle, sweepVector:Vector) extends Shape {
   }
   
   lazy val toInt = CircleSweepInteger(circle.toInt, sweepVector);
+}
+
+case class Ring(circle:Circle, thickness:Double) extends Shape {
+  lazy val outerCircle = circle.copy(radius = circle.radius + thickness / 2);
+  lazy val innerCircle = circle.copy(radius = circle.radius - thickness / 2);
+  
+  def intersects(shape:Shape) = testIntersection(this, shape);
+  
+  def contains(shape:Shape) = outerCircle contains shape;
+  
+  lazy val toInt = RingInteger(circle.toInt, thickness);
 }

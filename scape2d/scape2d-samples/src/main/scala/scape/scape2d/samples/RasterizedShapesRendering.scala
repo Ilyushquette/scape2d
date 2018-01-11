@@ -2,7 +2,6 @@ package scape.scape2d.samples
 
 import java.awt.Color
 import java.awt.Dimension
-
 import javax.swing.JFrame
 import scape.scape2d.debugger.view.ShapeDrawer
 import scape.scape2d.debugger.view.swing.SwingBuffer
@@ -21,6 +20,7 @@ import scape.scape2d.graphics.rasterizer.cache.CachingRasterizers
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
+import scape.scape2d.engine.geom.shape.Ring
 
 object RasterizedShapesRendering {
   def main(args:Array[String]) = {
@@ -47,6 +47,7 @@ object RasterizedShapesRendering {
     drawCircles(shapeDrawer);
     drawPolygon(shapeDrawer);
     drawCircleSweep(shapeDrawer);
+    drawRing(shapeDrawer);
   }
   
   private def drawPoint(shapeDrawer:ShapeDrawer) = {
@@ -82,5 +83,10 @@ object RasterizedShapesRendering {
   private def drawCircleSweep(shapeDrawer:ShapeDrawer) = {
     val circleSweep = CircleSweep(Circle(Point(5, 4.5), 0.5), Vector(3, 20));
     shapeDrawer.draw(CustomizedShape(circleSweep, 0xFFFFFFFF));
+  }
+  
+  private def drawRing(shapeDrawer:ShapeDrawer) = {
+    val ring = Ring(Circle(Point(11, 5), 1), 0.5);
+    shapeDrawer.draw(CustomizedShape(ring, 0xFFFFFFFF));
   }
 }

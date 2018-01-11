@@ -34,7 +34,13 @@ class PointTest {
   @Test
   def testAngleTo = {
     val perspective = Point(10, 7);
-    Assert.assertEquals(225, perspective.angleTo(Point(5, 2)), 0.00001);
+    Assert.assertEquals(3.92699, perspective angleTo Point(5, 2), 0.00001);
+  }
+  
+  @Test
+  def testAngleToDeg = {
+    val perspective = Point(10, 7);
+    Assert.assertEquals(225, perspective angleToDeg Point(5, 2), 0.00001);
   }
   
   @Test

@@ -1,20 +1,32 @@
 package scape.scape2d.engine.motion
 
-import java.lang.Math.toDegrees
+import java.lang.Math.cos
+import java.lang.Math.sin
 
 import scape.scape2d.engine.core.Movable
-import scape.scape2d.engine.geom.normalizeAngle
-import scape.scape2d.engine.geom.Vector
+import scape.scape2d.engine.geom.shape.Point
 
 package object rotational {
-  def getPostRotationPosition(movable:Movable, timestep:Double) = {
+  def positionForTimeOf(movable:Movable):(Double => Point) = {
+    val Mp = movable.position;
     if(movable.rotatable.isDefined && movable.rotatable.get.angularVelocity != 0) {
-      val radiansPerTimestep = asRadiansPerTimestep(movable.rotatable.get.angularVelocity, timestep);
-      val degreesPerTimestep = normalizeAngle(toDegrees(radiansPerTimestep));
-      val radialVector = movable.position - movable.rotatable.get.center;
-      val nextRadialVector = Vector(radialVector.magnitude, radialVector.angle + degreesPerTimestep);
-      movable.rotatable.get.center.displace(nextRadialVector);
-    }else movable.position;
+      val Rc = movable.rotatable.get.center;
+      val ω = movable.rotatable.get.angularVelocity;
+      val r = Rc distanceTo Mp;
+      val θ = Rc angleTo Mp;
+      t => {
+        val ωt = asRadiansPerTimestep(ω, t);
+        val x = Rc.x + r * cos(θ + ωt);
+        val y = Rc.y + r * sin(θ + ωt);
+        Point(x, y);
+      }
+    }else _ => Mp;
+  }
+  
+  def distanceForTimeOf(movable1:Movable, movable2:Movable):(Double => Double) = {
+    val Pft = positionForTimeOf(movable1);
+    val Qft = positionForTimeOf(movable2);
+    t => Pft(t) distanceTo Qft(t);
   }
   
   def asRadiansPerTimestep(angularVelocity:Double, timestep:Double) = {

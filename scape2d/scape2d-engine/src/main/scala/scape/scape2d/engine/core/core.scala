@@ -8,7 +8,7 @@ import scape.scape2d.engine.deformation.elasticity.resolveFrictionalForces
 import scape.scape2d.engine.geom.Epsilon
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.motion.linear.getPostLinearMotionPosition
-import scape.scape2d.engine.motion.rotational.getPostRotationPosition
+import scape.scape2d.engine.motion.rotational.positionForTimeOf
 import scape.scape2d.engine.core.matter.Body
 
 package object core {
@@ -18,7 +18,7 @@ package object core {
   }
   
   private[core] def rotate(movable:Movable, timestep:Double):Unit = {
-    val nextPosition = getPostRotationPosition(movable, timestep);
+    val nextPosition = positionForTimeOf(movable)(timestep);
     if(movable.position != nextPosition) movable.setPosition(nextPosition);
   }
   
