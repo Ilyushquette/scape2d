@@ -31,16 +31,18 @@ import scape.scape2d.engine.core.integral.LinearMotionIntegral
 import scape.scape2d.engine.motion.collision.detection.linear.QuadTreeLinearMotionCollisionDetector
 import scape.scape2d.engine.motion.collision.detection.linear.ExtendedSpaceLinearMotionCollisionDetector
 import scape.scape2d.engine.motion.collision.detection.linear.BruteForceLinearMotionCollisionDetector
+import scape.scape2d.engine.motion.collision.detection.linear.QuadraticLinearMotionCollisionDetectionStrategy
 
 object ExtendedSpaceLocatedCollision {
   def main(args:Array[String]):Unit = {
     val bounds = AxisAlignedRectangle(Point(0, 0), 22.32, 13.36);
-    val quadTreeDetector = new QuadTreeLinearMotionCollisionDetector[Particle](bounds, detectWithDiscriminant);
-    val bruteForceDetector = new BruteForceLinearMotionCollisionDetector[Particle](detectWithDiscriminant);
+    val detectionStrategy = QuadraticLinearMotionCollisionDetectionStrategy[Particle]();
+    val quadTreeDetector = new QuadTreeLinearMotionCollisionDetector[Particle](bounds, detectionStrategy);
+    val bruteForceDetector = new BruteForceLinearMotionCollisionDetector[Particle](detectionStrategy);
     val collisionDetector = new ExtendedSpaceLinearMotionCollisionDetector(
         coreDetector = quadTreeDetector, 
         regionalDetectorFactory = _ => bruteForceDetector,
-        edgeCaseDetect = detectWithDiscriminant,
+        edgeCaseDetectionStrategy = detectionStrategy,
         extension = 100
     );
     val nature = new Nature(linearMotionIntegral = LinearMotionIntegral(collisionDetector));

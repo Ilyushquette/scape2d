@@ -1,19 +1,23 @@
-package scape.scape2d.engine.motion.collision.detection
+package scape.scape2d.engine.motion.collision.detection.linear
 
 import java.util.Arrays
-
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
+import scape.scape2d.engine.motion.collision.detection.linear.{LinearMotionCollisionDetectionStrategyValidator => DetectionStrategyValidator}
 
-object DetectionStrategyTest {
+object LinearMotionCollisionDetectionStrategyTest {
   @Parameterized.Parameters
-  def instancesToTest = Arrays.asList(Array(() => detectWithDiscriminant _));
+  def instancesToTest = Arrays.asList(Array(
+      () => new QuadraticLinearMotionCollisionDetectionStrategy
+  ));
 }
 
 @RunWith(classOf[Parameterized])
-class DetectionStrategyTest(val createDetector:() => DetectionStrategy) {
+class LinearMotionCollisionDetectionStrategyTest(
+  val createDetector:() => LinearMotionCollisionDetectionStrategy[Mock]
+) {
   @Test
   def testTrajectoriesOverlayFrontalCollision = {
     DetectionStrategyValidator.checkTrajectoriesOverlayFrontalCollision(createDetector());

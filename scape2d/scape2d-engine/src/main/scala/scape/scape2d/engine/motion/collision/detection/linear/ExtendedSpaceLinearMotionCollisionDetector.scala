@@ -11,7 +11,7 @@ import scala.collection.mutable.HashSet
 class ExtendedSpaceLinearMotionCollisionDetector[T <: Movable with Formed[_ <: Sweepable[_]]] (
   val coreDetector:FiniteSpaceLinearMotionCollisionDetector[T],
   val regionalDetectorFactory:AxisAlignedRectangle => LinearMotionCollisionDetector[T],
-  val edgeCaseDetect:(T, T, Double) => Option[Double],
+  val edgeCaseDetectionStrategy:LinearMotionCollisionDetectionStrategy[T],
   val extension:Int)
 extends FiniteSpaceLinearMotionCollisionDetector[T] {
   type Swept = LinearSweepFormingMovable[T];
@@ -41,7 +41,7 @@ extends FiniteSpaceLinearMotionCollisionDetector[T] {
     val notInBuckets = outsideOfCore.filterNot(swept => buckets.exists(_.insert(swept)));
     val onTheEdge = notInBuckets.filter(bounds.contains(_));
     val edgeDetections = for (swept <- onTheEdge; swept2 <- all)
-                         yield (swept.entity, swept2.entity, edgeCaseDetect(swept, swept2, timestep));
+                         yield (swept.entity, swept2.entity, edgeCaseDetectionStrategy.detect(swept, swept2, timestep));
     val edgeCollisions = edgeDetections.collect {
       case (e1, e2, Some(t)) => CollisionEvent((e1, e2), t);
     }

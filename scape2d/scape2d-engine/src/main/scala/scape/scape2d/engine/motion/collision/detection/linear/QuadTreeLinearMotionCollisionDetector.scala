@@ -11,7 +11,7 @@ import scape.scape2d.engine.motion.collision.CollisionEvent
 
 class QuadTreeLinearMotionCollisionDetector[T <: Movable with Formed[_ <: Sweepable[_]]](
   val bounds:AxisAlignedRectangle,
-  val detect:(T, T, Double) => Option[Double]
+  val detectionStrategy:LinearMotionCollisionDetectionStrategy[T]
 ) extends FiniteSpaceLinearMotionCollisionDetector[T] {
   type Tree = QuadTree[LinearSweepFormingMovable[T]];
   private val treeCreationListeners = HashSet[Tree => Unit]();
@@ -40,7 +40,7 @@ class QuadTreeLinearMotionCollisionDetector[T <: Movable with Formed[_ <: Sweepa
   
   private def detectSubEntityCollisions(tree:Tree, timestep:Double) = {
     for (swept <- tree.entities; subSwept <- tree.nodes.flatMap(_.subEntities))
-    yield (swept.entity, subSwept.entity, detect(swept, subSwept, timestep));
+    yield (swept.entity, subSwept.entity, detectionStrategy.detect(swept, subSwept, timestep));
   }
   
   private def detectEntityCollisions(tree:Tree, timestep:Double) = {
@@ -48,7 +48,7 @@ class QuadTreeLinearMotionCollisionDetector[T <: Movable with Formed[_ <: Sweepa
    combinations.map(combination => {
      val swept1 = combination(0);
      val swept2 = combination(1);
-     (swept1.entity, swept2.entity, detect(swept1, swept2, timestep));
+     (swept1.entity, swept2.entity, detectionStrategy.detect(swept1, swept2, timestep));
    });
   }
   

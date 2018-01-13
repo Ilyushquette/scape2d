@@ -23,7 +23,6 @@ import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.shape.ShapeUnitConverter
 import scape.scape2d.engine.motion.collision.detection.linear.QuadTreeLinearMotionCollisionDetector
-import scape.scape2d.engine.motion.collision.detection.detectWithDiscriminant
 import scape.scape2d.graphics.rasterizer.UnitConvertingRasterizer
 import scape.scape2d.graphics.rasterizer.cache.CachingRasterizers
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
@@ -31,11 +30,13 @@ import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
 import scape.scape2d.engine.core.MovableTrackerProxy
 import scape.scape2d.engine.core.integral.LinearMotionIntegral
+import scape.scape2d.engine.motion.collision.detection.linear.QuadraticLinearMotionCollisionDetectionStrategy
 
 object RectangularBodyRotation {
   def main(args:Array[String]):Unit = {
     val bounds = AxisAlignedRectangle(Point.origin, 27.32, 15.36);
-    val collisionDetector = new QuadTreeLinearMotionCollisionDetector[Particle](bounds, detectWithDiscriminant);
+    val detectionStrategy = QuadraticLinearMotionCollisionDetectionStrategy[Particle]();
+    val collisionDetector = new QuadTreeLinearMotionCollisionDetector[Particle](bounds, detectionStrategy);
     val nature = new Nature(linearMotionIntegral = LinearMotionIntegral(collisionDetector));
     
     val shapeDrawer = createShapeDrawer();
