@@ -7,17 +7,21 @@ import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.core.moveLinear
 import scape.scape2d.engine.motion.collision.detection.linear.LinearMotionCollisionDetector
 import scape.scape2d.engine.motion.collision.findSafeTime
-import scape.scape2d.engine.motion.collision.resolveForces
 import scape.scape2d.engine.geom.Vector
+import scape.scape2d.engine.motion.collision.resolution.ParticleCollisionForcesResolver
+import scape.scape2d.engine.motion.collision.resolution.MomentumDeltaActionReactionalCollisionForcesResolver
 
-case class LinearMotionIntegral(collisionDetector:LinearMotionCollisionDetector[Particle]) {
+case class LinearMotionIntegral(
+  collisionDetector:LinearMotionCollisionDetector[Particle],
+  collisionForcesResolver:ParticleCollisionForcesResolver = MomentumDeltaActionReactionalCollisionForcesResolver()
+) {
   def integrate(particles:Iterable[Particle], timestep:Double):Unit = {
     particles.foreach(accelerateLinear);
     val collisions = collisionDetector.detect(particles, timestep);
     if(!collisions.isEmpty) {
       val earliestCollision = collisions.minBy(_.time);
       val safeTime = findSafeTime(earliestCollision, 0.005);
-      val forces = resolveForces(earliestCollision);
+      val forces = collisionForcesResolver.resolve(earliestCollision);
       if(safeTime > 0) integrateLinearMotion(particles, safeTime);
       exertKnockingForces(earliestCollision.concurrentPair, forces);
       val remainingTime = timestep - safeTime;
