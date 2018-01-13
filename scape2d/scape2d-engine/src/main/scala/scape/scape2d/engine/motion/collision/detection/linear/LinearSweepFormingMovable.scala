@@ -1,4 +1,4 @@
-package scape.scape2d.engine.motion.collision.detection
+package scape.scape2d.engine.motion.collision.detection.linear
 
 import scape.scape2d.engine.geom.Formed
 import scape.scape2d.engine.core.Movable
@@ -6,15 +6,15 @@ import scape.scape2d.engine.geom.shape.Sweepable
 import scape.scape2d.engine.geom.shape.Shape
 import scape.scape2d.engine.motion.linear.asMetersPerTimestep
 
-object SweepFormingMovable {
-  implicit def toShape(swept:SweepFormingMovable[_]) = swept.shape;
+object LinearSweepFormingMovable {
+  implicit def toShape(swept:LinearSweepFormingMovable[_]) = swept.shape;
   
-  implicit def toEntity[T <: Movable with Formed[_ <: Sweepable[_]]](swept:SweepFormingMovable[T]) = {
+  implicit def toEntity[T <: Movable with Formed[_ <: Sweepable[_]]](swept:LinearSweepFormingMovable[T]) = {
     swept.entity;
   }
 }
 
-case class SweepFormingMovable[T <: Movable with Formed[_ <: Sweepable[_]]](
+case class LinearSweepFormingMovable[T <: Movable with Formed[_ <: Sweepable[_]]](
   entity:T,
   timestep:Double = 0)
 extends Formed[Shape] {

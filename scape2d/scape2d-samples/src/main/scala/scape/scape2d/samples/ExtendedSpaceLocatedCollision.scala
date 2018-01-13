@@ -28,14 +28,21 @@ import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
 import javax.swing.JPanel
 import scape.scape2d.engine.core.integral.LinearMotionIntegral
+import scape.scape2d.engine.motion.collision.detection.linear.QuadTreeLinearMotionCollisionDetector
+import scape.scape2d.engine.motion.collision.detection.linear.ExtendedSpaceLinearMotionCollisionDetector
+import scape.scape2d.engine.motion.collision.detection.linear.BruteForceLinearMotionCollisionDetector
 
 object ExtendedSpaceLocatedCollision {
   def main(args:Array[String]):Unit = {
     val bounds = AxisAlignedRectangle(Point(0, 0), 22.32, 13.36);
-    val coreDetector = new QuadTreeBasedCollisionDetector[Particle](bounds, detectWithDiscriminant);
-    val bucketDetector = new BruteForceBasedCollisionDetector[Particle](detectWithDiscriminant);
-    val collisionDetector = new ExtendedSpaceCollisionDetector(coreDetector, _ => bucketDetector,
-                                                               detectWithDiscriminant, 100);
+    val quadTreeDetector = new QuadTreeLinearMotionCollisionDetector[Particle](bounds, detectWithDiscriminant);
+    val bruteForceDetector = new BruteForceLinearMotionCollisionDetector[Particle](detectWithDiscriminant);
+    val collisionDetector = new ExtendedSpaceLinearMotionCollisionDetector(
+        coreDetector = quadTreeDetector, 
+        regionalDetectorFactory = _ => bruteForceDetector,
+        edgeCaseDetect = detectWithDiscriminant,
+        extension = 100
+    );
     val nature = new Nature(linearMotionIntegral = LinearMotionIntegral(collisionDetector));
     val trackedMetalParticles = prepareTrackedMetalParticles();
     
@@ -44,7 +51,7 @@ object ExtendedSpaceLocatedCollision {
     val quadTreeNodesDrawer = prepareShapeDrawer();
     val quadTreeNodesView = new ShapeDrawingQuadTreeNodesView(quadTreeNodesDrawer);
     val collisionDetectorDebugger = new QuadTreeCollisionDetectorDebugger(quadTreeNodesView);
-    collisionDetectorDebugger.trackNodes(coreDetector);
+    collisionDetectorDebugger.trackNodes(quadTreeDetector);
     
     val particlesDrawer = prepareShapeDrawer();
     val particleTrackingView = new ShapeDrawingParticleTrackingView(particlesDrawer);

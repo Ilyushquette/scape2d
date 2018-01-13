@@ -16,10 +16,11 @@ import scape.scape2d.engine.time.Frequency
 import scape.scape2d.engine.time.Second
 import scape.scape2d.engine.motion.collision.detection.rotation.BruteForceBasedRotationalCollisionDetector
 import scape.scape2d.engine.motion.collision.detection.rotation.IterativeRootFindingRotationalCollisionDetectionStrategy
+import scape.scape2d.engine.motion.collision.detection.linear.BruteForceLinearMotionCollisionDetector
 
 class Nature(
   var timescale:Timescale = Timescale(Frequency(60, Second)),
-  val linearMotionIntegral:LinearMotionIntegral = LinearMotionIntegral(new BruteForceBasedCollisionDetector(detectWithDiscriminant)),
+  val linearMotionIntegral:LinearMotionIntegral = LinearMotionIntegral(BruteForceLinearMotionCollisionDetector(detectWithDiscriminant)),
   val rotationIntegral:RotationIntegral = RotationIntegral(new BruteForceBasedRotationalCollisionDetector(new IterativeRootFindingRotationalCollisionDetectionStrategy))
 ) extends Actor {
   private val log = Logger.getLogger(getClass);

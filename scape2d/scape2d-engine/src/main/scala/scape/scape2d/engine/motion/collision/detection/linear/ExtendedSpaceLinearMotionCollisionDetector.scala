@@ -1,4 +1,4 @@
-package scape.scape2d.engine.motion.collision.detection
+package scape.scape2d.engine.motion.collision.detection.linear
 
 import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.geom.shape.AxisAlignedRectangle
@@ -8,13 +8,13 @@ import scape.scape2d.engine.geom.shape.Sweepable
 import scape.scape2d.engine.motion.collision.CollisionEvent
 import scala.collection.mutable.HashSet
 
-class ExtendedSpaceCollisionDetector[T <: Movable with Formed[_ <: Sweepable[_]]] (
-  val coreDetector:FiniteSpaceCollisionDetector[T],
-  val regionalDetectorFactory:AxisAlignedRectangle => CollisionDetector[T],
+class ExtendedSpaceLinearMotionCollisionDetector[T <: Movable with Formed[_ <: Sweepable[_]]] (
+  val coreDetector:FiniteSpaceLinearMotionCollisionDetector[T],
+  val regionalDetectorFactory:AxisAlignedRectangle => LinearMotionCollisionDetector[T],
   val edgeCaseDetect:(T, T, Double) => Option[Double],
   val extension:Int)
-extends FiniteSpaceCollisionDetector[T] {
-  type Swept = SweepFormingMovable[T];
+extends FiniteSpaceLinearMotionCollisionDetector[T] {
+  type Swept = LinearSweepFormingMovable[T];
   
   val topLeft = AxisAlignedRectangle(Point(coreDetector.bounds.topLeft.x - extension, coreDetector.bounds.topLeft.y), extension, extension);
   val topCenter = AxisAlignedRectangle(coreDetector.bounds.topLeft, coreDetector.bounds.width, extension);
@@ -30,7 +30,7 @@ extends FiniteSpaceCollisionDetector[T] {
   
   def detect(entities:Iterable[T], timestep:Double) = {
     val coreCollisions = coreDetector.detect(entities, timestep);
-    val sweptEntities = entities.map(SweepFormingMovable(_, timestep));
+    val sweptEntities = entities.map(LinearSweepFormingMovable(_, timestep));
     val outsideOfCore = sweptEntities.filterNot(coreDetector.bounds.contains(_));
     if(outsideOfCore.isEmpty) coreCollisions;
     else coreCollisions ++ detectOuterCollisions(outsideOfCore, sweptEntities, timestep);
@@ -49,9 +49,9 @@ extends FiniteSpaceCollisionDetector[T] {
     edgeCollisions ++ bucketCollisions;
   }
   
-  private[ExtendedSpaceCollisionDetector] class Bucket(
+  private[ExtendedSpaceLinearMotionCollisionDetector] class Bucket(
     val bounds:AxisAlignedRectangle,
-    val collisionDetector:CollisionDetector[T]) {
+    val collisionDetector:LinearMotionCollisionDetector[T]) {
     val sweptEntities:HashSet[Swept] = HashSet.empty;
     
     def insert(sweptEntity:Swept) = {

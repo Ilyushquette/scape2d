@@ -5,12 +5,12 @@ import scape.scape2d.engine.core.dampOscillations
 import scape.scape2d.engine.core.deform
 import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.core.moveLinear
-import scape.scape2d.engine.motion.collision.detection.CollisionDetector
+import scape.scape2d.engine.motion.collision.detection.linear.LinearMotionCollisionDetector
 import scape.scape2d.engine.motion.collision.findSafeTime
 import scape.scape2d.engine.motion.collision.resolveForces
 import scape.scape2d.engine.geom.Vector
 
-case class LinearMotionIntegral(collisionDetector:CollisionDetector[Particle]) {
+case class LinearMotionIntegral(collisionDetector:LinearMotionCollisionDetector[Particle]) {
   def integrate(particles:Iterable[Particle], timestep:Double):Unit = {
     particles.foreach(accelerateLinear);
     val collisions = collisionDetector.detect(particles, timestep);
