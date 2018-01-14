@@ -25,7 +25,7 @@ class CachingRasterizer[S <: Shape](
     val currentBounds = ShapeBounds(currentShape);
     val offset = Components(currentBounds.bottomLeft.x - cacheValue.bounds.bottomLeft.x,
                               currentBounds.bottomLeft.y - cacheValue.bounds.bottomLeft.y);
-    cacheValue.points.map(_.displace(offset).toInt);
+    cacheValue.points.map(_.+(offset).toInt);
   }
   
   private def evaluateAndCache(cacheKey:Object, shape:S) = {

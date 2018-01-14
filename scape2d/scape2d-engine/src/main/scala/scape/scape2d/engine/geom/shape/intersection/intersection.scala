@@ -79,7 +79,7 @@ package object intersection {
     val p1c = circle.center - line.p1;
     val p1p2 = line.p2 - line.p1;
     val projectionVector = p1c.projection(p1p2);
-    val nearestPoint = line.p1.displace(projectionVector);
+    val nearestPoint = line.p1 + projectionVector;
     circle.intersects(nearestPoint);
   }
   
@@ -89,7 +89,7 @@ package object intersection {
       val rayUnitVector = Vector(1, ray.angle);
       val projectionVector = sc.projection(rayUnitVector);
       if(fuzzyEquals(projectionVector.angle, ray.angle, Epsilon)) {
-        val nearestPoint = ray.origin.displace(projectionVector);
+        val nearestPoint = ray.origin + projectionVector;
         circle.intersects(nearestPoint);
       }else false;
     }else true;
@@ -102,7 +102,7 @@ package object intersection {
       val projectionVector = p1c.projection(p1p2);
       if(fuzzyEquals(projectionVector.angle, p1p2.angle, Epsilon) &&
          projectionVector.magnitude < p1p2.magnitude) {
-        val nearestPoint = segment.p1.displace(projectionVector);
+        val nearestPoint = segment.p1 + projectionVector;
         circle.intersects(nearestPoint);
       }else false;
     }else true;

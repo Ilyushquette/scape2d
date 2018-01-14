@@ -13,9 +13,9 @@ class PointTest {
   def testEqualsDifferentCoords = Assert.assertNotSame(Point(1, 7), Point(1, 8));
   
   @Test
-  def testDisplace = {
+  def testComponentsAddition = {
     val position = Point(1, 4);
-    val displaced = position.displace(Components(4, 1));
+    val displaced = position + Components(4, 1);
     Assert.assertEquals(Point(5, 5), displaced);
   }
   

@@ -27,14 +27,14 @@ object Point {
   def origin = Point(0, 0);
 }
 
-case class Point(x:Double, y:Double) extends Shape {
-  def displace(components:Components) = Point(x + components.x, y + components.y);
-  
+case class Point(x:Double, y:Double) extends Shape {  
   def distanceTo(point:Point) = hypot(point.x - x, point.y - y);
   
   def angleTo(point:Point) = normalizeRadians(atan2(point.y - y, point.x - x));
   
   def angleToDeg(point:Point) = normalizeDegrees(toDegrees(atan2(point.y - y, point.x - x)));
+  
+  def +(components:Components) = Point(x + components.x, y + components.y);
   
   def -(point:Point) = Vector.from(Components(x - point.x, y - point.y));
   
@@ -115,7 +115,7 @@ case class Line(p1:Point, p2:Point) extends Shape {
 }
 
 case class Ray(origin:Point, angle:Double) extends Shape {
-  lazy val line = Line(origin, origin.displace(Vector(1, angle)));
+  lazy val line = Line(origin, origin + Vector(1, angle));
   
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
@@ -274,15 +274,15 @@ case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) e
 }
 
 case class CircleSweep(circle:Circle, sweepVector:Vector) extends Shape {
-  lazy val destinationCircle = Circle(circle.center.displace(sweepVector), circle.radius);
+  lazy val destinationCircle = Circle(circle.center + sweepVector, circle.radius);
   lazy val connector = {
     val origin = circle.center;
-    val destination = origin.displace(sweepVector);
+    val destination = origin + sweepVector;
     val radialVectorToConnector = Vector(circle.radius, normalizeDegrees(sweepVector.angle + 90));
-    val connector1 = Segment(origin.displace(radialVectorToConnector), 
-                             destination.displace(radialVectorToConnector));
-    val connector2 = Segment(destination.displace(radialVectorToConnector.opposite),
-                             origin.displace(radialVectorToConnector.opposite));
+    val connector1 = Segment(origin + radialVectorToConnector, 
+                             destination + radialVectorToConnector);
+    val connector2 = Segment(destination + radialVectorToConnector.opposite,
+                             origin + radialVectorToConnector.opposite);
     (connector1, connector2);
   }
   
