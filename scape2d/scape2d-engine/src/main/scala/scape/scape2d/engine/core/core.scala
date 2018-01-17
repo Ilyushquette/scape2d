@@ -47,7 +47,7 @@ package object core {
    * Final angular velocity of the body in radians per second.
    */
   private[core] def accelerateAngular(body:Body) = {
-    if(body.torque > 0) {
+    if(body.torque != 0) {
       val acceleration = body.torque / body.momentsOfInertia;
       body.setAngularVelocity(body.angularVelocity + acceleration);
       body.resetTorque();
