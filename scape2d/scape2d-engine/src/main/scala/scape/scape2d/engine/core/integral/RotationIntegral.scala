@@ -7,9 +7,13 @@ import scape.scape2d.engine.motion.collision.detection.rotation.RotationalCollis
 import scape.scape2d.engine.motion.collision.resolution.ParticleCollisionForcesResolver
 import scape.scape2d.engine.motion.collision.resolution.MomentumDeltaActionReactionalCollisionForcesResolver
 import scape.scape2d.engine.geom.Vector
+import scape.scape2d.engine.motion.collision.detection.rotation.BruteForceBasedRotationalCollisionDetector
+import scape.scape2d.engine.motion.collision.detection.rotation.IterativeRootFindingRotationalCollisionDetectionStrategy
 
 case class RotationIntegral(
-  collisionDetector:RotationalCollisionDetector[Particle],
+  collisionDetector:RotationalCollisionDetector[Particle] = BruteForceBasedRotationalCollisionDetector(
+      detectionStrategy = IterativeRootFindingRotationalCollisionDetectionStrategy()
+  ),
   collisionForcesResolver:ParticleCollisionForcesResolver = MomentumDeltaActionReactionalCollisionForcesResolver()
 ) {
   def integrate(particles:Iterable[Particle], timestep:Double):Unit = {
