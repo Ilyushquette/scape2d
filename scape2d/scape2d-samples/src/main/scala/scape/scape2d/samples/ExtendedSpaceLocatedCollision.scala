@@ -32,6 +32,7 @@ import scape.scape2d.engine.motion.collision.detection.linear.QuadTreeLinearMoti
 import scape.scape2d.engine.motion.collision.detection.linear.ExtendedSpaceLinearMotionCollisionDetector
 import scape.scape2d.engine.motion.collision.detection.linear.BruteForceLinearMotionCollisionDetector
 import scape.scape2d.engine.motion.collision.detection.linear.QuadraticLinearMotionCollisionDetectionStrategy
+import scape.scape2d.engine.core.integral.MotionIntegral
 
 object ExtendedSpaceLocatedCollision {
   def main(args:Array[String]):Unit = {
@@ -45,7 +46,7 @@ object ExtendedSpaceLocatedCollision {
         edgeCaseDetectionStrategy = detectionStrategy,
         extension = 100
     );
-    val nature = new Nature(linearMotionIntegral = LinearMotionIntegral(collisionDetector));
+    val nature = new Nature(motionIntegral = MotionIntegral(LinearMotionIntegral(collisionDetector)));
     val trackedMetalParticles = prepareTrackedMetalParticles();
     
     val screenSize = Toolkit.getDefaultToolkit().getScreenSize();
