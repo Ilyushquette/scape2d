@@ -26,6 +26,11 @@ package object core {
     rotatable.movables.foreach(rotate(_, timestep));
   }
   
+  private[core] def accelerate(particle:Particle) = {
+    accelerateLinear(particle);
+    particle.rotatable.map(accelerateAngular);
+  }
+  
   /**
    * Since netforce in the particle is a representation of impulse J = N x timestep,
    * acceleration in meters per second per timestep too.
