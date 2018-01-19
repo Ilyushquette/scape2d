@@ -29,6 +29,21 @@ case class RotationIntegral(
     }else integrateRotation(particles, timestep);
   }
   
+  def integrateBreakIfCollision(particles:Iterable[Particle], timestep:Double) = {
+    particles.foreach(accelerate);
+    val collisions = collisionDetector.detect(particles, timestep);
+    if(!collisions.isEmpty) {
+      val earliestCollision = collisions.minBy(_.time);
+      val forces = collisionForcesResolver.resolve(earliestCollision);
+      if(earliestCollision.time > 0) integrateRotation(particles, earliestCollision.time);
+      exertKnockingForces(earliestCollision.concurrentPair, forces);
+      earliestCollision.time;
+    }else {
+      integrateRotation(particles, timestep);
+      timestep;
+    }
+  }
+  
   private def integrateRotation(particles:Iterable[Particle], timestep:Double) = {
     particles.foreach(rotate(_, timestep));
   }

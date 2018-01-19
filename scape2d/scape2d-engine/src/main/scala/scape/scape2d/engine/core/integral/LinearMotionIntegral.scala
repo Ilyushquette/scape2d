@@ -33,6 +33,22 @@ case class LinearMotionIntegral(
     }else integrateLinearMotion(particles, timestep);
   }
   
+  def integrateBreakIfCollision(particles:Iterable[Particle], timestep:Double) = {
+    particles.foreach(accelerate);
+    val collisions = collisionDetector.detect(particles, timestep);
+    if(!collisions.isEmpty) {
+      val earliestCollision = collisions.minBy(_.time);
+      val safeTime = findSafeTime(earliestCollision, 0.005);
+      val forces = collisionForcesResolver.resolve(earliestCollision);
+      if(safeTime > 0) integrateLinearMotion(particles, safeTime);
+      exertKnockingForces(earliestCollision.concurrentPair, forces);
+      safeTime;
+    }else {
+      integrateLinearMotion(particles, timestep);
+      timestep;
+    }
+  }
+  
   private def integrateLinearMotion(particles:Iterable[Particle], timestep:Double) = {
     particles.foreach(moveLinear(_, timestep));
     val bonds = particles.flatMap(_.bonds);
