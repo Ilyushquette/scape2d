@@ -10,9 +10,13 @@ import scape.scape2d.engine.motion.collision.findSafeTime
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.motion.collision.resolution.ParticleCollisionForcesResolver
 import scape.scape2d.engine.motion.collision.resolution.MomentumDeltaActionReactionalCollisionForcesResolver
+import scape.scape2d.engine.motion.collision.detection.linear.QuadraticLinearMotionCollisionDetectionStrategy
+import scape.scape2d.engine.motion.collision.detection.linear.BruteForceLinearMotionCollisionDetector
 
 case class LinearMotionIntegral(
-  collisionDetector:LinearMotionCollisionDetector[Particle],
+  collisionDetector:LinearMotionCollisionDetector[Particle] = BruteForceLinearMotionCollisionDetector(
+      detectionStrategy = QuadraticLinearMotionCollisionDetectionStrategy()
+  ),
   collisionForcesResolver:ParticleCollisionForcesResolver = MomentumDeltaActionReactionalCollisionForcesResolver()
 ) {
   def integrate(particles:Iterable[Particle], timestep:Double):Unit = {
