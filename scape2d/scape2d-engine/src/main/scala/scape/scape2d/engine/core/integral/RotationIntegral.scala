@@ -1,8 +1,6 @@
 package scape.scape2d.engine.core.integral
 
-import scala.Option.option2Iterable
-import scape.scape2d.engine.core.accelerateAngular
-import scape.scape2d.engine.core.accelerateLinear
+import scape.scape2d.engine.core.accelerate
 import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.core.rotate
 import scape.scape2d.engine.motion.collision.detection.rotation.RotationalCollisionDetector
@@ -15,7 +13,7 @@ case class RotationIntegral(
   collisionForcesResolver:ParticleCollisionForcesResolver = MomentumDeltaActionReactionalCollisionForcesResolver()
 ) {
   def integrate(particles:Iterable[Particle], timestep:Double):Unit = {
-    accelerate(particles);
+    particles.foreach(accelerate);
     val collisions = collisionDetector.detect(particles, timestep);
     if(!collisions.isEmpty) {
       val earliestCollision = collisions.minBy(_.time);
@@ -25,12 +23,6 @@ case class RotationIntegral(
       val remainingTime = timestep - earliestCollision.time;
       if(remainingTime > 0) integrate(particles, remainingTime);
     }else integrateRotation(particles, timestep);
-  }
-  
-  private def accelerate(particles:Iterable[Particle]) = {
-    particles.foreach(accelerateLinear);
-    val bodies = particles.flatMap(_.rotatable).toSet;
-    bodies.foreach(accelerateAngular);
   }
   
   private def integrateRotation(particles:Iterable[Particle], timestep:Double) = {

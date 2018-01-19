@@ -1,6 +1,6 @@
 package scape.scape2d.engine.core.integral
 
-import scape.scape2d.engine.core.accelerateLinear
+import scape.scape2d.engine.core.accelerate
 import scape.scape2d.engine.core.dampOscillations
 import scape.scape2d.engine.core.deform
 import scape.scape2d.engine.core.matter.Particle
@@ -16,7 +16,7 @@ case class LinearMotionIntegral(
   collisionForcesResolver:ParticleCollisionForcesResolver = MomentumDeltaActionReactionalCollisionForcesResolver()
 ) {
   def integrate(particles:Iterable[Particle], timestep:Double):Unit = {
-    particles.foreach(accelerateLinear);
+    particles.foreach(accelerate);
     val collisions = collisionDetector.detect(particles, timestep);
     if(!collisions.isEmpty) {
       val earliestCollision = collisions.minBy(_.time);
