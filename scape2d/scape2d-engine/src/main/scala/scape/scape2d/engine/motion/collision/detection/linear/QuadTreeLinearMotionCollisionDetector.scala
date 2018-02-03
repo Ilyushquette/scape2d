@@ -1,4 +1,4 @@
-package scape.scape2d.engine.motion.collision.detection
+package scape.scape2d.engine.motion.collision.detection.linear
 
 import scala.collection.Iterable
 import scape.scape2d.engine.geom.Formed
@@ -9,16 +9,16 @@ import scape.scape2d.engine.geom.shape.Sweepable
 import scala.collection.mutable.HashSet
 import scape.scape2d.engine.motion.collision.CollisionEvent
 
-class QuadTreeBasedCollisionDetector[T <: Movable with Formed[_ <: Sweepable[_]]](
+class QuadTreeLinearMotionCollisionDetector[T <: Movable with Formed[_ <: Sweepable[_]]](
   val bounds:AxisAlignedRectangle,
-  val detect:(T, T, Double) => Option[Double]
-) extends FiniteSpaceCollisionDetector[T] {
-  type Tree = QuadTree[SweepFormingMovable[T]];
+  val detectionStrategy:LinearMotionCollisionDetectionStrategy[T]
+) extends FiniteSpaceLinearMotionCollisionDetector[T] {
+  type Tree = QuadTree[LinearSweepFormingMovable[T]];
   private val treeCreationListeners = HashSet[Tree => Unit]();
   
   def detect(entities:Iterable[T], timestep:Double) = {
-    val tree = new QuadTree[SweepFormingMovable[T]](bounds, 4);
-    entities.foreach(e => tree.insert(SweepFormingMovable[T](e, timestep)));
+    val tree = new QuadTree[LinearSweepFormingMovable[T]](bounds, 4);
+    entities.foreach(e => tree.insert(LinearSweepFormingMovable[T](e, timestep)));
     treeCreationListeners.foreach(_(tree));
     val collisions = detectNodeCollisions(tree, timestep);
     collisions.iterator;
@@ -40,7 +40,7 @@ class QuadTreeBasedCollisionDetector[T <: Movable with Formed[_ <: Sweepable[_]]
   
   private def detectSubEntityCollisions(tree:Tree, timestep:Double) = {
     for (swept <- tree.entities; subSwept <- tree.nodes.flatMap(_.subEntities))
-    yield (swept.entity, subSwept.entity, detect(swept, subSwept, timestep));
+    yield (swept.entity, subSwept.entity, detectionStrategy.detect(swept, subSwept, timestep));
   }
   
   private def detectEntityCollisions(tree:Tree, timestep:Double) = {
@@ -48,7 +48,7 @@ class QuadTreeBasedCollisionDetector[T <: Movable with Formed[_ <: Sweepable[_]]
    combinations.map(combination => {
      val swept1 = combination(0);
      val swept2 = combination(1);
-     (swept1.entity, swept2.entity, detect(swept1, swept2, timestep));
+     (swept1.entity, swept2.entity, detectionStrategy.detect(swept1, swept2, timestep));
    });
   }
   

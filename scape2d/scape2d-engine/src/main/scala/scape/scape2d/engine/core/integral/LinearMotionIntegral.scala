@@ -1,28 +1,52 @@
 package scape.scape2d.engine.core.integral
 
-import scape.scape2d.engine.core.accelerateLinear
+import scape.scape2d.engine.core.accelerate
 import scape.scape2d.engine.core.dampOscillations
 import scape.scape2d.engine.core.deform
 import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.core.moveLinear
-import scape.scape2d.engine.motion.collision.detection.CollisionDetector
+import scape.scape2d.engine.motion.collision.detection.linear.LinearMotionCollisionDetector
 import scape.scape2d.engine.motion.collision.findSafeTime
-import scape.scape2d.engine.motion.collision.resolveForces
 import scape.scape2d.engine.geom.Vector
+import scape.scape2d.engine.motion.collision.resolution.ParticleCollisionForcesResolver
+import scape.scape2d.engine.motion.collision.resolution.MomentumDeltaActionReactionalCollisionForcesResolver
+import scape.scape2d.engine.motion.collision.detection.linear.QuadraticLinearMotionCollisionDetectionStrategy
+import scape.scape2d.engine.motion.collision.detection.linear.BruteForceLinearMotionCollisionDetector
 
-case class LinearMotionIntegral(collisionDetector:CollisionDetector[Particle]) {
+case class LinearMotionIntegral(
+  collisionDetector:LinearMotionCollisionDetector[Particle] = BruteForceLinearMotionCollisionDetector(
+      detectionStrategy = QuadraticLinearMotionCollisionDetectionStrategy()
+  ),
+  collisionForcesResolver:ParticleCollisionForcesResolver = MomentumDeltaActionReactionalCollisionForcesResolver()
+) {
   def integrate(particles:Iterable[Particle], timestep:Double):Unit = {
-    particles.foreach(accelerateLinear);
+    particles.foreach(accelerate);
     val collisions = collisionDetector.detect(particles, timestep);
     if(!collisions.isEmpty) {
       val earliestCollision = collisions.minBy(_.time);
       val safeTime = findSafeTime(earliestCollision, 0.005);
-      val forces = resolveForces(earliestCollision);
+      val forces = collisionForcesResolver.resolve(earliestCollision);
       if(safeTime > 0) integrateLinearMotion(particles, safeTime);
       exertKnockingForces(earliestCollision.concurrentPair, forces);
       val remainingTime = timestep - safeTime;
       if(remainingTime > 0) integrate(particles, remainingTime);
     }else integrateLinearMotion(particles, timestep);
+  }
+  
+  def integrateBreakIfCollision(particles:Iterable[Particle], timestep:Double) = {
+    particles.foreach(accelerate);
+    val collisions = collisionDetector.detect(particles, timestep);
+    if(!collisions.isEmpty) {
+      val earliestCollision = collisions.minBy(_.time);
+      val safeTime = findSafeTime(earliestCollision, 0.005);
+      val forces = collisionForcesResolver.resolve(earliestCollision);
+      if(safeTime > 0) integrateLinearMotion(particles, safeTime);
+      exertKnockingForces(earliestCollision.concurrentPair, forces);
+      safeTime;
+    }else {
+      integrateLinearMotion(particles, timestep);
+      timestep;
+    }
   }
   
   private def integrateLinearMotion(particles:Iterable[Particle], timestep:Double) = {

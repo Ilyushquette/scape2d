@@ -3,9 +3,9 @@ package scape.scape2d.engine.motion.collision.detection.rotation
 import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.motion.collision.CollisionEvent
 
-class BruteForceBasedRotationalCollisionDetector[T <: Movable](
-  val detectionStrategy:RotationalCollisionDetectionStrategy[T])
-extends RotationalCollisionDetector[T] {
+case class BruteForceBasedRotationalCollisionDetector[T <: Movable](
+  detectionStrategy:RotationalCollisionDetectionStrategy[T]
+) extends RotationalCollisionDetector[T] {
   def detect(movables:Iterable[T], timestep:Double) = {
     val combinations = movables.toSeq.combinations(2);
     val collisions = combinations.map(c => detect(c(0), c(1), timestep));

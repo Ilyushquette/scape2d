@@ -127,4 +127,20 @@ class RotationalFunctionsTest {
     val ft = distanceForTimeOf(movable1, movable2);
     Assert.assertEquals(Point(0, -3) distanceTo movable1.position, ft(500), Epsilon);
   }
+  
+  @Test
+  def testAngularToLinearVelocity = {
+    val movable = new MovableMock(Point(-3, 0), Vector(), None);
+    val rotatable = new RotatableMock(Point.origin, 1.57079, Set(movable));
+    val linearVelocity = angularToLinearVelocity(movable);
+    Assert.assertEquals(Vector(4.71237, 270), linearVelocity);
+  }
+  
+  @Test
+  def testNegativeAngularToInvertedLinearVelocity = {
+    val movable = new MovableMock(Point(-10, 0), Vector(), None);
+    val rotatable = new RotatableMock(Point.origin, -3.14159, Set(movable));
+    val linearVelocity = angularToLinearVelocity(movable);
+    Assert.assertEquals(Vector(31.4159, 90), linearVelocity);
+  }
 }

@@ -1,10 +1,15 @@
 package scape.scape2d.engine.motion
 
+import java.lang.Math.abs
 import java.lang.Math.cos
+import java.lang.Math.signum
 import java.lang.Math.sin
-
 import scape.scape2d.engine.core.Movable
+import scape.scape2d.engine.geom.Vector
+import scape.scape2d.engine.geom.normalizeDegrees
 import scape.scape2d.engine.geom.shape.Point
+import scape.scape2d.engine.geom.Formed
+import scape.scape2d.engine.geom.shape.Circle
 
 package object rotational {
   def positionForTimeOf(movable:Movable):(Double => Point) = {
@@ -37,5 +42,14 @@ package object rotational {
   def asRadiansPerSecond(angularVelocity:Double, timestep:Double) = {
     val stepsPerSecond = 1000 / timestep;
     angularVelocity * stepsPerSecond;
+  }
+  
+  def angularToLinearVelocity(movable:Movable) = {
+    val rotatable = movable.rotatable.get;
+    val radialDirection = rotatable.center angleToDeg movable.position;
+    val ω = rotatable.angularVelocity;
+    val r = movable.position distanceTo rotatable.center;
+    val θ = normalizeDegrees(radialDirection + signum(rotatable.angularVelocity) * 90);
+    Vector(abs(ω * r), θ);
   }
 }

@@ -1,32 +1,55 @@
 package scape.scape2d.engine.core.integral
 
-import scape.scape2d.engine.core.accelerateAngular
+import scape.scape2d.engine.core.accelerate
 import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.core.rotate
 import scape.scape2d.engine.motion.collision.detection.rotation.RotationalCollisionDetector
+import scape.scape2d.engine.motion.collision.resolution.ParticleCollisionForcesResolver
+import scape.scape2d.engine.motion.collision.resolution.MomentumDeltaActionReactionalCollisionForcesResolver
+import scape.scape2d.engine.geom.Vector
+import scape.scape2d.engine.motion.collision.detection.rotation.BruteForceBasedRotationalCollisionDetector
+import scape.scape2d.engine.motion.collision.detection.rotation.IterativeRootFindingRotationalCollisionDetectionStrategy
 
-case class RotationIntegral(collisionDetector:RotationalCollisionDetector[Particle]) {
+case class RotationIntegral(
+  collisionDetector:RotationalCollisionDetector[Particle] = BruteForceBasedRotationalCollisionDetector(
+      detectionStrategy = IterativeRootFindingRotationalCollisionDetectionStrategy()
+  ),
+  collisionForcesResolver:ParticleCollisionForcesResolver = MomentumDeltaActionReactionalCollisionForcesResolver()
+) {
   def integrate(particles:Iterable[Particle], timestep:Double):Unit = {
-    val bodies = particles.flatMap(_.rotatable).toSet;
-    bodies.foreach(accelerateAngular);
+    particles.foreach(accelerate);
     val collisions = collisionDetector.detect(particles, timestep);
     if(!collisions.isEmpty) {
       val earliestCollision = collisions.minBy(_.time);
+      val forces = collisionForcesResolver.resolve(earliestCollision);
       if(earliestCollision.time > 0) integrateRotation(particles, earliestCollision.time);
-      // collision response is out of the scope of this story
-      // for now simple reset of angular velocities
-      stop(earliestCollision.concurrentPair);
+      exertKnockingForces(earliestCollision.concurrentPair, forces);
       val remainingTime = timestep - earliestCollision.time;
       if(remainingTime > 0) integrate(particles, remainingTime);
     }else integrateRotation(particles, timestep);
+  }
+  
+  def integrateBreakIfCollision(particles:Iterable[Particle], timestep:Double) = {
+    particles.foreach(accelerate);
+    val collisions = collisionDetector.detect(particles, timestep);
+    if(!collisions.isEmpty) {
+      val earliestCollision = collisions.minBy(_.time);
+      val forces = collisionForcesResolver.resolve(earliestCollision);
+      if(earliestCollision.time > 0) integrateRotation(particles, earliestCollision.time);
+      exertKnockingForces(earliestCollision.concurrentPair, forces);
+      earliestCollision.time;
+    }else {
+      integrateRotation(particles, timestep);
+      timestep;
+    }
   }
   
   private def integrateRotation(particles:Iterable[Particle], timestep:Double) = {
     particles.foreach(rotate(_, timestep));
   }
   
-  private def stop(particles:(Particle, Particle)) = {
-    particles._1.rotatable.map(_.setAngularVelocity(0));
-    particles._2.rotatable.map(_.setAngularVelocity(0));
+  private def exertKnockingForces(particles:(Particle, Particle), forces:(Vector, Vector)) = {
+    particles._1.exertForce(forces._1, true);
+    particles._2.exertForce(forces._2, true);
   }
 }

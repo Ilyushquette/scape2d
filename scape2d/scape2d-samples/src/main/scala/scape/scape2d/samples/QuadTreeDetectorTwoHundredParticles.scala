@@ -29,12 +29,16 @@ import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
 import javax.swing.JPanel
 import scape.scape2d.engine.core.integral.LinearMotionIntegral
+import scape.scape2d.engine.motion.collision.detection.linear.QuadTreeLinearMotionCollisionDetector
+import scape.scape2d.engine.motion.collision.detection.linear.QuadraticLinearMotionCollisionDetectionStrategy
+import scape.scape2d.engine.core.integral.MotionIntegral
 
 object QuadTreeDetectorTwoHundredParticles {
   def main(args:Array[String]):Unit = {
     val bounds = AxisAlignedRectangle(Point(0, 0), 27.32, 15.36);
-    val collisionDetector = new QuadTreeBasedCollisionDetector[Particle](bounds, detectWithDiscriminant);
-    val nature = new Nature(linearMotionIntegral = LinearMotionIntegral(collisionDetector));
+    val detectionStrategy = QuadraticLinearMotionCollisionDetectionStrategy[Particle]();
+    val collisionDetector = new QuadTreeLinearMotionCollisionDetector[Particle](bounds, detectionStrategy);
+    val nature = new Nature(motionIntegral = MotionIntegral(LinearMotionIntegral(collisionDetector)));
     val trackedMetalParticles = prepareTrackedMetalParticles();
     
     val quadTreeNodesDrawer = prepareShapeDrawer();

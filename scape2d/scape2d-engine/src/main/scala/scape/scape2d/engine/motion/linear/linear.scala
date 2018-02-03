@@ -8,7 +8,7 @@ package object linear {
   def getPostLinearMotionPosition(movable:Movable, timestep:Double) = {
     if(movable.velocity.magnitude > 0) {
       val metersPerTimestep = asMetersPerTimestep(movable.velocity, timestep);
-      movable.position.displace(metersPerTimestep);
+      movable.position + metersPerTimestep;
     }else movable.position;
   }
   

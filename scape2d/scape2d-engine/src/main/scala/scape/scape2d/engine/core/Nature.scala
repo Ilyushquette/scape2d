@@ -16,11 +16,13 @@ import scape.scape2d.engine.time.Frequency
 import scape.scape2d.engine.time.Second
 import scape.scape2d.engine.motion.collision.detection.rotation.BruteForceBasedRotationalCollisionDetector
 import scape.scape2d.engine.motion.collision.detection.rotation.IterativeRootFindingRotationalCollisionDetectionStrategy
+import scape.scape2d.engine.motion.collision.detection.linear.BruteForceLinearMotionCollisionDetector
+import scape.scape2d.engine.motion.collision.detection.linear.QuadraticLinearMotionCollisionDetectionStrategy
+import scape.scape2d.engine.core.integral.MotionIntegral
 
 class Nature(
   var timescale:Timescale = Timescale(Frequency(60, Second)),
-  val linearMotionIntegral:LinearMotionIntegral = LinearMotionIntegral(new BruteForceBasedCollisionDetector(detectWithDiscriminant)),
-  val rotationIntegral:RotationIntegral = RotationIntegral(new BruteForceBasedRotationalCollisionDetector(new IterativeRootFindingRotationalCollisionDetectionStrategy))
+  val motionIntegral:MotionIntegral = MotionIntegral()
 ) extends Actor {
   private val log = Logger.getLogger(getClass);
   private var temporals = Set[Temporal]();
@@ -45,8 +47,7 @@ class Nature(
       val integrationMillis = timescale.integrationFrequency.occurenceDuration.milliseconds;
       val timestepMillis = timescale.timestep.milliseconds;
       
-      linearMotionIntegral.integrate(particles, timestepMillis);
-      rotationIntegral.integrate(particles, timestepMillis);
+      motionIntegral.integrate(particles, timestepMillis);
       temporals.foreach(_.integrate(timestepMillis));
       temporals = temporals.filter(_.timeleft > 0);
       dispatchInputs();
