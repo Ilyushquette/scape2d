@@ -13,10 +13,8 @@ case class IterativeRootFindingRotationalCollisionDetectionStrategy[T <: Movable
 extends RotationalCollisionDetectionStrategy[T] {
   def detect(P:T, Q:T, timestep:Double) = {
     if(P.rotatable != Q.rotatable && crossPaths(P, Q)) {
-      val Protates = P.rotatable.map(_.angularVelocity != 0).getOrElse(false);
-      val Qrotates = Q.rotatable.map(_.angularVelocity != 0).getOrElse(false);
-      if(Protates && Qrotates) detectBetweenRotatables(P, Q, timestep);
-      else if(Protates && !Qrotates) detectBetweenRotatableAndStationary(P, Q, timestep);
+      if(P.isRotating && Q.isRotating) detectBetweenRotatables(P, Q, timestep);
+      else if(P.isRotating && !Q.isRotating) detectBetweenRotatableAndStationary(P, Q, timestep);
       else detectBetweenRotatableAndStationary(Q, P, timestep);
     }else None;
   }
