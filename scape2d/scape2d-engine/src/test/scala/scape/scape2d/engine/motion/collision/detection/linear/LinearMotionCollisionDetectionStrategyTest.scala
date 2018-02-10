@@ -1,10 +1,13 @@
 package scape.scape2d.engine.motion.collision.detection.linear
 
 import java.util.Arrays
+
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
+
+import scape.scape2d.engine.core.MovableMock
 import scape.scape2d.engine.motion.collision.detection.linear.{LinearMotionCollisionDetectionStrategyValidator => DetectionStrategyValidator}
 
 object LinearMotionCollisionDetectionStrategyTest {
@@ -16,7 +19,7 @@ object LinearMotionCollisionDetectionStrategyTest {
 
 @RunWith(classOf[Parameterized])
 class LinearMotionCollisionDetectionStrategyTest(
-  val createDetector:() => LinearMotionCollisionDetectionStrategy[Mock]
+  val createDetector:() => LinearMotionCollisionDetectionStrategy[MovableMock]
 ) {
   @Test
   def testTrajectoriesOverlayFrontalCollision = {
