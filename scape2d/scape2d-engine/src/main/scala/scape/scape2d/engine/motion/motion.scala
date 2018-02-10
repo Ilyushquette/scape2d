@@ -17,4 +17,10 @@ package object motion {
       p1 + angularDisplacementVector;
     }
   }
+  
+  def distanceForTimeOf(movable1:Movable, movable2:Movable):(Double => Double) = {
+    val Pft = positionForTimeOf(movable1);
+    val Qft = positionForTimeOf(movable2);
+    t => Pft(t) distanceTo Qft(t);
+  }
 }
