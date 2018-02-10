@@ -4,7 +4,6 @@ import scape.scape2d.engine.geom._
 import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.util.LazyVal
 import scape.scape2d.engine.core.Movable
-import scape.scape2d.engine.motion.linear.getPostLinearMotionPosition
 import scape.scape2d.engine.motion.linear.asMetersPerTimestep
 
 package object collision {

@@ -6,7 +6,7 @@ import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.cosDeg
 import scape.scape2d.engine.geom.sinDeg
 import scape.scape2d.engine.motion.collision.CollisionEvent
-import scape.scape2d.engine.motion.linear.getPostLinearMotionPosition
+import scape.scape2d.engine.motion.linear.positionForTimeOf
 import scape.scape2d.engine.motion.rotational.angularToLinearVelocity
 
 case class MomentumDeltaActionReactionalCollisionForcesResolver extends ParticleCollisionForcesResolver {
@@ -26,8 +26,8 @@ case class MomentumDeltaActionReactionalCollisionForcesResolver extends Particle
     val particle2 = snapshotPair._2;
     val combinedVelocity1 = combineAngularAndLinearVelocitiesOf(particle1);
     val combinedVelocity2 = combineAngularAndLinearVelocitiesOf(particle2);
-    val p1 = getPostLinearMotionPosition(particle1, collision.time);
-    val p2 = getPostLinearMotionPosition(particle2, collision.time);
+    val p1 = positionForTimeOf(particle1)(collision.time);
+    val p2 = positionForTimeOf(particle2)(collision.time);
     val φ = p1 angleToDeg p2;
     
     val v1 = combinedVelocity1.magnitude;

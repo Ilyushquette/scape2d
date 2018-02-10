@@ -5,16 +5,16 @@ import scape.scape2d.engine.geom.Components
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.cosDeg
 import scape.scape2d.engine.geom.sinDeg
-import scape.scape2d.engine.motion.linear.getPostLinearMotionPosition
+import scape.scape2d.engine.motion.linear.positionForTimeOf
 import scape.scape2d.engine.util.LazyVal
 
 package object resolution {
-  def resolveVelocities(collision:CollisionEvent[Particle]) = {
+  def resolveLinearVelocities(collision:CollisionEvent[Particle]) = {
     val snapshotPair = collision.snapshotPair;
     val particle1 = snapshotPair._1;
     val particle2 = snapshotPair._2;
-    val p1 = getPostLinearMotionPosition(particle1, collision.time);
-    val p2 = getPostLinearMotionPosition(particle2, collision.time);
+    val p1 = positionForTimeOf(particle1)(collision.time);
+    val p2 = positionForTimeOf(particle2)(collision.time);
     val φ = p1 angleToDeg p2;
     
     def vel(particle1:Particle, particle2:Particle) = {
