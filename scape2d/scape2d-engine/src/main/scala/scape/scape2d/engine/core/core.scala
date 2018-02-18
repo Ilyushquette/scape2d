@@ -12,6 +12,11 @@ import scape.scape2d.engine.motion.rotational.{positionForTimeOf => postRotation
 import scape.scape2d.engine.core.matter.Body
 
 package object core {
+  private[core] def move(movable:Movable, timestep:Double) = {
+    moveLinear(movable, timestep);
+    rotate(movable, timestep);
+  }
+  
   private[core] def moveLinear(movable:Movable, timestep:Double) = {
     val nextPosition = postLinearMotionPosition(movable)(timestep);
     if(movable.position != nextPosition) movable.setPosition(nextPosition);
