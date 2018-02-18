@@ -3,7 +3,6 @@ package scape.scape2d.engine.time.simulation
 import scala.actors.Actor
 import scala.actors.TIMEOUT
 import org.apache.log4j.Logger
-import scape.scape2d.engine.core.Timescale
 import scape.scape2d.engine.time.TimeUnit.toDuration
 import scape.scape2d.engine.time.Frequency
 import scape.scape2d.engine.time.Second

@@ -8,6 +8,7 @@ import scape.scape2d.engine.time.TimeUnit.toDuration
 import scape.scape2d.engine.time.simulation.Simulation
 import scape.scape2d.engine.time.Frequency
 import scape.scape2d.engine.time.Second
+import scape.scape2d.engine.time.simulation.Timescale
 
 class Nature(
   timeScale:Timescale = Timescale(Frequency(60, Second)),
