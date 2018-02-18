@@ -32,12 +32,12 @@ class Nature(
   
   def add(particle:Particle):Unit = this ! (() => particles += particle);
   
-  def add(bond:Bond):Unit = this ! (() => {
+  def add(bond:Bond):Unit = {
     add(bond.particles._1);
     add(bond.particles._2);
-  });
+  };
   
-  def add(body:Body):Unit = this ! (() => body.movables.foreach(add));
+  def add(body:Body):Unit = body.movables.foreach(add);
   
   override def act = {
     log.info("Nature has been started");
