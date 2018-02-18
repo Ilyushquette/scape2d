@@ -9,7 +9,7 @@ import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
 import scape.scape2d.debugger.view.swing.SwingBuffer
 import scape.scape2d.debugger.view.swing.SwingMixingRastersShapeDrawer
 import scape.scape2d.engine.core.MovableTrackerProxy
-import scape.scape2d.engine.core.Nature
+import scape.scape2d.engine.core.NonRotatableNature
 import scape.scape2d.engine.core.matter.ParticleBuilder
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.shape.Circle
@@ -25,7 +25,7 @@ import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
 
 object NewtonFirstLawFastmotion {
   def main(args:Array[String]):Unit = {
-    val nature = new Nature();
+    val nature = new NonRotatableNature();
     val metalParticle = ParticleBuilder()
       .as(Circle(Point.origin, 0.05))
       .withMass(2)

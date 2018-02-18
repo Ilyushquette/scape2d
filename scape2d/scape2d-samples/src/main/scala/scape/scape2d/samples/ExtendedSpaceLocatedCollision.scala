@@ -9,7 +9,7 @@ import scape.scape2d.debugger.ParticleDebugger
 import scape.scape2d.debugger.QuadTreeCollisionDetectorDebugger
 import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
 import scape.scape2d.debugger.view.ShapeDrawingQuadTreeNodesView
-import scape.scape2d.engine.core.Nature
+import scape.scape2d.engine.core.NonRotatableNature
 import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.core.matter.ParticleBuilder
 import scape.scape2d.engine.geom.Vector
@@ -46,7 +46,7 @@ object ExtendedSpaceLocatedCollision {
         edgeCaseDetectionStrategy = detectionStrategy,
         extension = 100
     );
-    val nature = new Nature(motionIntegral = MotionIntegral(LinearMotionIntegral(collisionDetector)));
+    val nature = new NonRotatableNature(linearMotionIntegral = LinearMotionIntegral(collisionDetector));
     val trackedMetalParticles = prepareTrackedMetalParticles();
     
     val screenSize = Toolkit.getDefaultToolkit().getScreenSize();

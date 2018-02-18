@@ -5,7 +5,7 @@ import java.awt.Toolkit
 import javax.swing.JFrame
 import scape.scape2d.debugger.ParticleDebugger
 import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
-import scape.scape2d.engine.core.Nature
+import scape.scape2d.engine.core.NonRotatableNature
 import scape.scape2d.engine.core.matter.ParticleBuilder
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.shape.Circle
@@ -38,7 +38,7 @@ object QuadTreeDetectorTwoHundredParticles {
     val bounds = AxisAlignedRectangle(Point(0, 0), 27.32, 15.36);
     val detectionStrategy = QuadraticLinearMotionCollisionDetectionStrategy[Particle]();
     val collisionDetector = new QuadTreeLinearMotionCollisionDetector[Particle](bounds, detectionStrategy);
-    val nature = new Nature(motionIntegral = MotionIntegral(LinearMotionIntegral(collisionDetector)));
+    val nature = new NonRotatableNature(linearMotionIntegral = LinearMotionIntegral(collisionDetector));
     val trackedMetalParticles = prepareTrackedMetalParticles();
     
     val quadTreeNodesDrawer = prepareShapeDrawer();
