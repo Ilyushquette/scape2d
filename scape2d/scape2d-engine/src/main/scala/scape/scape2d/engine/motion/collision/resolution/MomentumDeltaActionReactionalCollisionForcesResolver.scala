@@ -6,7 +6,7 @@ import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.cosDeg
 import scape.scape2d.engine.geom.sinDeg
 import scape.scape2d.engine.motion.collision.CollisionEvent
-import scape.scape2d.engine.motion.linear.positionForTimeOf
+import scape.scape2d.engine.motion.positionForTimeOf
 import scape.scape2d.engine.motion.rotational.angularToLinearVelocity
 
 case class MomentumDeltaActionReactionalCollisionForcesResolver extends ParticleCollisionForcesResolver {
