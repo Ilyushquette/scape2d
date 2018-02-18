@@ -21,10 +21,10 @@ case class IterativeRootFindingCollisionDetectionStrategy[T <: Movable with Form
   def detect(P:T, Q:T, timestep:Double):Option[Double] = {
     if(P.isStationary && Q.isStationary) {
       None;
+    }else if((!P.isRotating && !Q.isRotating) || (P.rotatable == Q.rotatable)) {
+      linearStrategy.detect(P, Q, timestep);
     }else if(!P.isMovingLinearly && !Q.isMovingLinearly) {
       angularStrategy.detect(P, Q, timestep);
-    }else if(!P.isRotating && !Q.isRotating) {
-      linearStrategy.detect(P, Q, timestep);
     }else {
       val minimalStepDistance = min(P.radius, Q.radius);
       val PminimalTimestep = minimalTimestepForDistance(P, minimalStepDistance);
