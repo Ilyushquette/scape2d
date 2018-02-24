@@ -2,6 +2,7 @@ package scape.scape2d.engine.geom.shape
 
 import org.junit.Test
 import org.junit.Assert
+import scape.scape2d.engine.geom.Components
 
 class AxisAlignedRectangleTest {
   @Test
@@ -45,5 +46,12 @@ class AxisAlignedRectangleTest {
                          AxisAlignedRectangle(Point(50, 50), 50, 50));
     val pieces = aabb.slice(4);
     Assert.assertTrue(expected.size == pieces.size && expected.forall(pieces.contains));
+  }
+  
+  @Test
+  def testDisplacedByComponents = {
+    val aabb = AxisAlignedRectangle(Point(10, 10), 100, 100);
+    val components = Components(10, -5);
+    Assert.assertEquals(AxisAlignedRectangle(Point(20, 5), 100, 100), aabb displacedBy components);
   }
 }
