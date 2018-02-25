@@ -1,10 +1,9 @@
-package scape.scape2d.engine.motion.collision.detection.linear
+package scape.scape2d.engine.motion.linear
 
 import scape.scape2d.engine.geom.Formed
 import scape.scape2d.engine.core.Movable
-import scape.scape2d.engine.geom.shape.Sweepable
 import scape.scape2d.engine.geom.shape.Shape
-import scape.scape2d.engine.motion.linear.asMetersPerTimestep
+import scape.scape2d.engine.geom.shape.Sweepable
 
 object LinearSweepFormingMovable {
   implicit def toShape(swept:LinearSweepFormingMovable[_]) = swept.shape;

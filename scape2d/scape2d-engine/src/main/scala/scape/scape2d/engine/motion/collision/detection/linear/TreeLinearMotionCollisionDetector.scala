@@ -6,6 +6,7 @@ import scape.scape2d.engine.geom.partition.Node
 import scape.scape2d.engine.motion.collision.CollisionEvent
 import scape.scape2d.engine.geom.shape.Sweepable
 import scape.scape2d.engine.geom.Formed
+import scape.scape2d.engine.motion.linear.LinearSweepFormingMovable
 
 case class TreeLinearMotionCollisionDetector[T <: Movable with Formed[_ <: Sweepable[_]]](
   treeFactory:() => Node[LinearSweepFormingMovable[T]],

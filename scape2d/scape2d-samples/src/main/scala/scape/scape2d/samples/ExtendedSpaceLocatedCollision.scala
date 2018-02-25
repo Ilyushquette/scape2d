@@ -32,7 +32,7 @@ import scape.scape2d.engine.motion.collision.detection.linear.BruteForceLinearMo
 import scape.scape2d.engine.motion.collision.detection.linear.QuadraticLinearMotionCollisionDetectionStrategy
 import scape.scape2d.engine.core.integral.MotionIntegral
 import scape.scape2d.engine.geom.partition.QuadTree
-import scape.scape2d.engine.motion.collision.detection.linear.LinearSweepFormingMovable
+import scape.scape2d.engine.motion.linear.LinearSweepFormingMovable
 import scape.scape2d.engine.geom.partition.ExpandedTree
 import scape.scape2d.engine.motion.collision.detection.linear.TreeLinearMotionCollisionDetector
 
