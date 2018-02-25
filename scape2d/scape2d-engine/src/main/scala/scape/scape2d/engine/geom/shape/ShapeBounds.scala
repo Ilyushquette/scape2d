@@ -27,6 +27,14 @@ object ShapeBounds {
     case _:Line | _:Ray => throw new IllegalArgumentException("Infinite shapes unlimited");
   }
   
+  def apply(compositeShape:CompositeShape):AxisAlignedRectangle = {
+    val bounds = compositeShape.shapes.map(ShapeBounds(_));
+    val points = bounds.flatMap(_.points);
+    val xs = points.map(_.x);
+    val ys = points.map(_.y);
+    createBounds(xs.min, xs.max, ys.min, ys.max);
+  }
+  
   private def createBounds(minX:Double, maxX:Double, minY:Double, maxY:Double) = {
     AxisAlignedRectangle(Point(minX, minY), maxX - minX, maxY - minY);
   }
