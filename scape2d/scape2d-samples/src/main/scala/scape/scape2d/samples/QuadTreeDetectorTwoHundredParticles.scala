@@ -15,7 +15,7 @@ import scape.scape2d.engine.geom.shape.AxisAlignedRectangle
 import scape.scape2d.engine.motion.collision.detection._
 import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.debugger.QuadTreeCollisionDetectorDebugger
-import scape.scape2d.debugger.view.ShapeDrawingQuadTreeNodesView
+import scape.scape2d.debugger.view.ShapeDrawingTreeNodesView
 import javax.swing.JLayeredPane
 import java.awt.BorderLayout
 import java.awt.Rectangle
@@ -42,7 +42,7 @@ object QuadTreeDetectorTwoHundredParticles {
     val trackedMetalParticles = prepareTrackedMetalParticles();
     
     val quadTreeNodesDrawer = prepareShapeDrawer();
-    val quadTreeNodesView = new ShapeDrawingQuadTreeNodesView(quadTreeNodesDrawer);
+    val quadTreeNodesView = new ShapeDrawingTreeNodesView(quadTreeNodesDrawer);
     val collisionDetectorDebugger = new QuadTreeCollisionDetectorDebugger(quadTreeNodesView);
     collisionDetectorDebugger.trackNodes(collisionDetector);
     

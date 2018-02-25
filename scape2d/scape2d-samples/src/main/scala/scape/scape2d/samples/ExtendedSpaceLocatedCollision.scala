@@ -8,7 +8,7 @@ import javax.swing.JLayeredPane
 import scape.scape2d.debugger.ParticleDebugger
 import scape.scape2d.debugger.QuadTreeCollisionDetectorDebugger
 import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
-import scape.scape2d.debugger.view.ShapeDrawingQuadTreeNodesView
+import scape.scape2d.debugger.view.ShapeDrawingTreeNodesView
 import scape.scape2d.engine.core.NonRotatableNature
 import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.core.matter.ParticleBuilder
@@ -52,7 +52,7 @@ object ExtendedSpaceLocatedCollision {
     val screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     
     val quadTreeNodesDrawer = prepareShapeDrawer();
-    val quadTreeNodesView = new ShapeDrawingQuadTreeNodesView(quadTreeNodesDrawer);
+    val quadTreeNodesView = new ShapeDrawingTreeNodesView(quadTreeNodesDrawer);
     val collisionDetectorDebugger = new QuadTreeCollisionDetectorDebugger(quadTreeNodesView);
     collisionDetectorDebugger.trackNodes(quadTreeDetector);
     

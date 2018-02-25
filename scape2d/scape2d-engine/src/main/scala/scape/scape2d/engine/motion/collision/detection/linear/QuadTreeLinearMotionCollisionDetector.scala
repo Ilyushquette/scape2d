@@ -8,12 +8,13 @@ import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.geom.shape.Sweepable
 import scala.collection.mutable.HashSet
 import scape.scape2d.engine.motion.collision.CollisionEvent
+import scape.scape2d.engine.geom.partition.Node
 
 class QuadTreeLinearMotionCollisionDetector[T <: Movable with Formed[_ <: Sweepable[_]]](
   val bounds:AxisAlignedRectangle,
   val detectionStrategy:LinearMotionCollisionDetectionStrategy[T]
 ) extends FiniteSpaceLinearMotionCollisionDetector[T] {
-  type Tree = QuadTree[LinearSweepFormingMovable[T]];
+  type Tree = Node[LinearSweepFormingMovable[T]];
   private val treeCreationListeners = HashSet[Tree => Unit]();
   
   def detect(entities:Iterable[T], timestep:Double) = {
@@ -24,7 +25,7 @@ class QuadTreeLinearMotionCollisionDetector[T <: Movable with Formed[_ <: Sweepa
     collisions.iterator;
   }
   
-  private def detectNodeCollisions(tree:Tree, timestep:Double):Seq[CollisionEvent[T]] = {
+  private def detectNodeCollisions(tree:Tree, timestep:Double):Iterable[CollisionEvent[T]] = {
     if(tree.entities.isEmpty)
       tree.nodes.flatMap(detectNodeCollisions(_, timestep));
     else {
@@ -44,7 +45,7 @@ class QuadTreeLinearMotionCollisionDetector[T <: Movable with Formed[_ <: Sweepa
   }
   
   private def detectEntityCollisions(tree:Tree, timestep:Double) = {
-   val combinations = tree.entities.combinations(2);
+   val combinations = tree.entities.toSeq.combinations(2);
    combinations.map(combination => {
      val swept1 = combination(0);
      val swept2 = combination(1);
