@@ -28,7 +28,6 @@ import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
 import javax.swing.JPanel
 import scape.scape2d.engine.core.integral.LinearMotionIntegral
-import scape.scape2d.engine.motion.collision.detection.linear.ExtendedSpaceLinearMotionCollisionDetector
 import scape.scape2d.engine.motion.collision.detection.linear.BruteForceLinearMotionCollisionDetector
 import scape.scape2d.engine.motion.collision.detection.linear.QuadraticLinearMotionCollisionDetectionStrategy
 import scape.scape2d.engine.core.integral.MotionIntegral
