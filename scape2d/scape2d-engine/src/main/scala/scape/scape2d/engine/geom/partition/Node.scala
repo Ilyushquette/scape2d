@@ -7,11 +7,11 @@ import scape.scape2d.engine.geom.shape.AxisAlignedRectangle
 trait Node[E <: Formed[_ <: Shape]] {
   def bounds:AxisAlignedRectangle;
   
-  def entities:Iterable[E];
+  def entities:List[E];
   
-  def subEntities:Iterable[E] = entities ++ nodes.flatMap(_.subEntities);
+  def subEntities:List[E] = entities ++ nodes.flatMap(_.subEntities);
   
-  def nodes:Iterable[Node[E]];
+  def nodes:List[Node[E]];
   
   def insert(entity:E):Boolean;
 }
