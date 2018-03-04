@@ -7,8 +7,9 @@ import scape.scape2d.engine.geom.partition.Node
 import scape.scape2d.engine.motion.MotionBounds
 import scape.scape2d.engine.motion.collision.CollisionEvent
 import scala.collection.mutable.HashSet
+import scape.scape2d.engine.core.Identifiable
 
-case class TreeCollisionDetector[T <: Movable with Formed[_ <: Shape]](
+case class TreeCollisionDetector[T <: Movable with Formed[_ <: Shape] with Identifiable](
   treeFactory:() => Node[MotionBounds[T]], 
   detectionStrategy:CollisionDetectionStrategy[T]
 ) extends CollisionDetector[T] {

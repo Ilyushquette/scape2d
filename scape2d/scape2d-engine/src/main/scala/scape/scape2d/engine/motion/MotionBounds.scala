@@ -8,12 +8,15 @@ import scape.scape2d.engine.geom.shape.Shape
 import scape.scape2d.engine.geom.shape.ShapeBounds
 import scape.scape2d.engine.geom.shape.CompositeShape
 import scape.scape2d.engine.motion.rotational.trajectory.trajectoryOf
+import scape.scape2d.engine.core.Identifiable
 
-case class MotionBounds[T <: Movable with Formed[_ <: Shape]](
+case class MotionBounds[T <: Movable with Formed[_ <: Shape] with Identifiable](
   movable:T,
   timestep:Double
-) extends Formed[Shape] {
-  val shape = {
+) extends Formed[Shape] with Identifiable {
+  val id = movable.id;
+  
+  lazy val shape = {
     val ft = positionForTimeOf(movable);
     val displacementVector1 = ft(timestep / 2) - movable.position;
     val displacementVector2 = ft(timestep) - movable.position;
