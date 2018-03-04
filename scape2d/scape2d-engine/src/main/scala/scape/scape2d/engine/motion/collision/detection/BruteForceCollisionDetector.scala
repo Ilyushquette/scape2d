@@ -2,14 +2,15 @@ package scape.scape2d.engine.motion.collision.detection
 
 import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.motion.collision.CollisionEvent
+import scape.scape2d.engine.util.Combination2
 
 case class BruteForceCollisionDetector[T <: Movable](
   detectionStrategy:CollisionDetectionStrategy[T]
 ) extends CollisionDetector[T] {
-  def detect(movables:Iterable[T], timestep:Double) = {
-    val combinations = movables.toSeq.combinations(2);
-    val collisions = combinations.map(c => detect(c(0), c(1), timestep));
-    collisions.flatten;
+  def detect(movables:Set[T], timestep:Double) = {
+    val combinations = Combination2.selectFrom(movables);
+    val detections = combinations.map(c => detect(c._1, c._2, timestep));
+    detections.flatten.toList;
   }
   
   private def detect(movable1:T, movable2:T, timestep:Double) = {

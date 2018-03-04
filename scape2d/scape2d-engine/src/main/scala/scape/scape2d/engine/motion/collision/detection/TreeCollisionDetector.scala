@@ -14,15 +14,14 @@ case class TreeCollisionDetector[T <: Movable with Formed[_ <: Shape]](
 ) extends CollisionDetector[T] {
   private val treeCreationListeners = HashSet[Node[MotionBounds[T]] => Unit]();
   
-  def detect(movables:Iterable[T], timestep:Double) = {
+  def detect(movables:Set[T], timestep:Double) = {
     val tree = treeFactory();
     movables.foreach(m => tree.insert(MotionBounds(m, timestep)));
     treeCreationListeners.foreach(_(tree));
-    val collisions = detectNodeCollisions(tree, timestep);
-    collisions.iterator;
+    detectNodeCollisions(tree, timestep);
   }
   
-  private def detectNodeCollisions(tree:Node[MotionBounds[T]], timestep:Double):Iterable[CollisionEvent[T]] = {
+  private def detectNodeCollisions(tree:Node[MotionBounds[T]], timestep:Double):List[CollisionEvent[T]] = {
     if(!tree.entities.isEmpty) {
       val entityDetections = detectEntityCollisions(tree, timestep);
       val subEntityDetections = detectSubEntityCollisions(tree, timestep);

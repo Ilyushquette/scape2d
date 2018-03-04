@@ -18,7 +18,7 @@ case class MotionIntegral(
   ),
   collisionForcesResolver:ParticleCollisionForcesResolver = MomentumDeltaActionReactionalCollisionForcesResolver()
 ) {
-  def integrate(particles:Iterable[Particle], timestep:Double):Unit = {
+  def integrate(particles:Set[Particle], timestep:Double):Unit = {
     particles.foreach(accelerate);
     val collisions = collisionDetector.detect(particles, timestep);
     if(!collisions.isEmpty) {
