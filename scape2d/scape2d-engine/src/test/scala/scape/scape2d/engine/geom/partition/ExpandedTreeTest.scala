@@ -132,6 +132,30 @@ class ExpandedTreeTest {
     );
     val entity = FormedMock(Circle(Point(0, -8), 2));
     val inserted = expandedTree.insert(entity);
-    Assert.assertTrue(inserted && expandedTree.entities.isEmpty);
+    Assert.assertTrue(inserted);
+    Assert.assertEquals(List(entity), expandedTree.nodes(7).entities);
+  }
+  
+  @Test
+  def testFindTreeNodeEmptyExpandedTree = {
+    val coreBucket = new Bucket[FormedMock[Circle]](AxisAlignedRectangle(Point(-10, -5), 20, 10));
+    val expandedTree = new ExpandedTree(
+        coreNode = coreBucket,
+        expansion = 5
+    );
+    val entity = FormedMock(Circle(Point(0, -8), 2));
+    Assert.assertEquals(None, expandedTree.findTreeNode(entity));
+  }
+  
+  @Test
+  def testFindTreeNodeSingletonExpandedTree = {
+    val coreBucket = new Bucket[FormedMock[Circle]](AxisAlignedRectangle(Point(-10, -5), 20, 10));
+    val expandedTree = new ExpandedTree(
+        coreNode = coreBucket,
+        expansion = 5
+    );
+    val entity = FormedMock(Circle(Point.origin, 2));
+    expandedTree.insert(entity);
+    Assert.assertEquals(Some(expandedTree.nodes(0)), expandedTree.findTreeNode(entity));
   }
 }

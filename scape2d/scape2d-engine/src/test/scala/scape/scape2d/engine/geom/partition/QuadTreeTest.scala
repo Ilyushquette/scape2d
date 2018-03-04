@@ -80,4 +80,34 @@ class QuadTreeTest {
     val subEntities = quadTree.subEntities.toSet;
     Assert.assertTrue(entities.size == subEntities.size && subEntities.subsetOf(entities));
   }
+  
+  @Test
+  def testFindTreeNodeEmptyQuadTree = {
+    val quadTree = new QuadTree[FormedMock[Circle]](AxisAlignedRectangle(Point.origin, 10, 10), 3);
+    val entity = FormedMock(Circle(Point(3, 7), 3));
+    Assert.assertEquals(None, quadTree.findTreeNode(entity));
+  }
+  
+  @Test
+  def testFindTreeNodeSingletonQuadTree = {
+    val quadTree = new QuadTree[FormedMock[Circle]](AxisAlignedRectangle(Point.origin, 10, 10), 3);
+    val entity = FormedMock(Circle(Point(3, 7), 3));
+    quadTree.insert(entity);
+    Assert.assertEquals(Some(quadTree), quadTree.findTreeNode(entity));
+  }
+  
+  @Test
+  def testFindTreeNodeSplittedQuadTree = {
+    val quadTree = new QuadTree[FormedMock[Circle]](AxisAlignedRectangle(Point.origin, 10, 10), 3);
+    val entity1 = FormedMock(Circle(Point(2, 8), 2));
+    val entity2 = FormedMock(Circle(Point(8, 8), 2));
+    val entity3 = FormedMock(Circle(Point(2, 2), 2));
+    val entity4 = FormedMock(Circle(Point(8, 2), 2));
+    quadTree.insert(entity1);
+    quadTree.insert(entity2);
+    quadTree.insert(entity3);
+    quadTree.insert(entity4);
+    val nodes = quadTree.nodes.sortBy(node => node.bounds.bottomLeft.y)(Ordering[Double].reverse);
+    Assert.assertEquals(Some(nodes(1)), quadTree.findTreeNode(entity2));
+  }
 }

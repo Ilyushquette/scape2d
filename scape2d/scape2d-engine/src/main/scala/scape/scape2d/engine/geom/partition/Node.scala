@@ -13,5 +13,8 @@ trait Node[E <: Formed[_ <: Shape]] {
   
   def nodes:List[Node[E]];
   
+  def findTreeNode(entity:E):Option[Node[E]] = if(entities contains entity) Some(this);
+                                               else findNode(entity, nodes);
+  
   def insert(entity:E):Boolean;
 }
