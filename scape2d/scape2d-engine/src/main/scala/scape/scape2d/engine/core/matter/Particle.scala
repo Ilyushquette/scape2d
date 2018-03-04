@@ -6,15 +6,24 @@ import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.util.Combination2
+import scape.scape2d.engine.core.Identifiable
+import java.util.concurrent.atomic.AtomicInteger
+
+object Particle {
+  private val idGenerator = new AtomicInteger(1);
+  
+  private[matter] def nextId = idGenerator.incrementAndGet();
+}
 
 class Particle private[matter] (
+  val id:Int,
   private var _shape:Circle,
   val mass:Double,
   private var _velocity:Vector,
   private var _force:Vector,
   private var _bonds:Set[Bond] = Set.empty)
-extends Movable with Formed[Circle] {
-  private[matter] def this() = this(Circle(Point.origin, 1), 1, Vector(), Vector());
+extends Movable with Formed[Circle] with Identifiable {
+  private[matter] def this() = this(Particle.nextId, Circle(Point.origin, 1), 1, Vector(), Vector());
   
   def position = _shape.center;
   
@@ -78,6 +87,6 @@ extends Movable with Formed[Circle] {
                                      mass:Double = this.mass,
                                      velocity:Vector = this.velocity,
                                      force:Vector = this.force):Particle = {
-    new Particle(shape, mass, velocity, force);
+    new Particle(id, shape, mass, velocity, force);
   }
 }
