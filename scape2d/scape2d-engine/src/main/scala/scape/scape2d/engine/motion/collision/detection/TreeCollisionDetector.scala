@@ -41,7 +41,7 @@ case class TreeCollisionDetector[T <: Movable with Formed[_ <: Shape] with Ident
   }
   
   private def detectSubEntityCollisions(tree:Node[MotionBounds[T]], timestep:Double) = {
-    for(motionBounds <- tree.entities; subMotionBounds <- tree.nodes.flatMap(_.subEntities))
+    for(motionBounds <- tree.entities; subMotionBounds <- tree.subEntities)
     yield detect(motionBounds.movable, subMotionBounds.movable, timestep);
   }
   

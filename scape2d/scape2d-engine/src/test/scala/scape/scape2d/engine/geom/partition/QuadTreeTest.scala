@@ -72,13 +72,12 @@ class QuadTreeTest {
   @Test
   def testSubentitiesRecursiveNature = {
     val quadTree = new QuadTree[FormedMock[Circle]](AxisAlignedRectangle(Point.origin, 10, 10), 3);
-    val entities = Set(FormedMock(Circle(Point(3, 7), 3)),
-                       FormedMock(Circle(Point(3, 7), 3)),
-                       FormedMock(Circle(Point(2, 2), 2)),
-                       FormedMock(Circle(Point(7, 3), 3)));
+    val entities = List(FormedMock(Circle(Point(3, 7), 3)),
+                        FormedMock(Circle(Point(3, 7), 3)),
+                        FormedMock(Circle(Point(2, 2), 2)),
+                        FormedMock(Circle(Point(7, 3), 3)));
     entities.foreach(quadTree.insert);
-    val subEntities = quadTree.subEntities.toSet;
-    Assert.assertTrue(entities.size == subEntities.size && subEntities.subsetOf(entities));
+    Assert.assertEquals(List(entities(2)), quadTree.subEntities);
   }
   
   @Test

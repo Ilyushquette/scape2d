@@ -42,7 +42,7 @@ case class TreeLinearMotionCollisionDetector[T <: Movable with Formed[_ <: Sweep
   }
   
   private def detectSubEntityCollisions(tree:Node[LinearSweepFormingMovable[T]], timestep:Double) = {
-    for(sweepFormingMovable <- tree.entities; subSweepFormingMovable <- tree.nodes.flatMap(_.subEntities))
+    for(sweepFormingMovable <- tree.entities; subSweepFormingMovable <- tree.subEntities)
     yield detect(sweepFormingMovable.entity, subSweepFormingMovable.entity, timestep);
   }
   
