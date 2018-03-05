@@ -7,6 +7,7 @@ import scala.collection.mutable.HashMap
 import scape.scape2d.engine.core.Identifiable
 
 class QuadTree[E <: Formed[_ <: Shape] with Identifiable] private[QuadTree](
+  private var _parent:Option[Node[E]],
   val bounds:AxisAlignedRectangle,
   val capacity:Int,
   private val hashtable:HashMap[Any, Node[E]]
@@ -14,7 +15,13 @@ class QuadTree[E <: Formed[_ <: Shape] with Identifiable] private[QuadTree](
   private var _entities:List[E] = List.empty;
   private var _nodes:List[QuadTree[E]] = List.empty;
   
-  def this(bounds:AxisAlignedRectangle, capacity:Int) = this(bounds, capacity, HashMap());
+  def this(bounds:AxisAlignedRectangle, capacity:Int) = {
+    this(None, bounds, capacity, HashMap());
+  }
+  
+  def parent = _parent;
+  
+  def setParent(newParent:Node[E]) = _parent = Some(newParent);
   
   def entities = _entities;
   
@@ -35,7 +42,7 @@ class QuadTree[E <: Formed[_ <: Shape] with Identifiable] private[QuadTree](
     hashtable.put(entity.id, this);
     if(entities.size > capacity && nodes.isEmpty) {
       val dimensions = bounds.slice(4);
-      _nodes = dimensions.map(new QuadTree[E](_, capacity, hashtable)).toList;
+      _nodes = dimensions.map(new QuadTree[E](Some(this), _, capacity, hashtable)).toList;
       _entities = entities.filterNot(e => nodes.exists(_.insert(e)));
     }
   }

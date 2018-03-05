@@ -9,7 +9,13 @@ trait Node[E <: Formed[_ <: Shape]] {
   
   def entities:List[E];
   
+  def superEntities:List[E] = parent.flatten(p => p.entities ++ p.superEntities).toList;
+  
   def subEntities:List[E] = nodes.flatMap(n => n.entities ++ n.subEntities);
+  
+  def parent:Option[Node[E]];
+  
+  def setParent(newParent:Node[E]);
   
   def nodes:List[Node[E]];
   

@@ -100,6 +100,16 @@ class ExpandedTreeTest {
   }
   
   @Test
+  def testInitializationNodesParentUpdated = {
+    val coreBucket = new Bucket[FormedMock[Circle]](AxisAlignedRectangle(Point(-10, -5), 20, 10));
+    val expandedTree = new ExpandedTree(
+        coreNode = coreBucket,
+        expansion = 5
+    );
+    Assert.assertTrue(expandedTree.nodes.forall(_.parent.get == expandedTree));
+  }
+  
+  @Test
   def testInsertionEntityCannotBeContained = {
     val coreBucket = new Bucket[FormedMock[Circle]](AxisAlignedRectangle(Point(-10, -5), 20, 10));
     val expandedTree = new ExpandedTree(

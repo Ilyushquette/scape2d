@@ -70,6 +70,17 @@ class QuadTreeTest {
   }
   
   @Test
+  def testInsertionSplitIntoSubnodesWithSpecifiedParent = {
+    val quadTree = new QuadTree[FormedMock[Circle]](AxisAlignedRectangle(Point.origin, 10, 10), 3);
+    val entities = List(FormedMock(Circle(Point(3, 7), 3)),
+                        FormedMock(Circle(Point(8, 8), 2)),
+                        FormedMock(Circle(Point(2, 2), 2)),
+                        FormedMock(Circle(Point(7, 3), 3)));
+    entities.foreach(quadTree.insert);
+    Assert.assertTrue(quadTree.nodes.forall(_.parent.get == quadTree));
+  }
+  
+  @Test
   def testSubentitiesRecursiveNature = {
     val quadTree = new QuadTree[FormedMock[Circle]](AxisAlignedRectangle(Point.origin, 10, 10), 3);
     val entities = List(FormedMock(Circle(Point(3, 7), 3)),
@@ -78,6 +89,17 @@ class QuadTreeTest {
                         FormedMock(Circle(Point(7, 3), 3)));
     entities.foreach(quadTree.insert);
     Assert.assertEquals(List(entities(2)), quadTree.subEntities);
+  }
+  
+  @Test
+  def testSuperentitiesRecursiveNature = {
+    val quadTree = new QuadTree[FormedMock[Circle]](AxisAlignedRectangle(Point.origin, 10, 10), 3);
+    val entities = List(FormedMock(Circle(Point(3, 7), 3)),
+                        FormedMock(Circle(Point(3, 7), 3)),
+                        FormedMock(Circle(Point(2, 2), 2)),
+                        FormedMock(Circle(Point(7, 3), 3)));
+    entities.foreach(quadTree.insert);
+    Assert.assertEquals(List(entities(0), entities(1), entities(3)), quadTree.nodes(0).superEntities);
   }
   
   @Test

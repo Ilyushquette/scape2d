@@ -24,8 +24,14 @@ class ExpandedTree[E <: Formed[_ <: Shape]](
   val regions = List(topLeft, topCenter, topRight, centerLeft, centerRight, bottomLeft, bottomCenter, bottomRight);
   val bounds = ShapeBounds(CompositeShape(regions));
   val nodes = coreNode +: regions.map(nodeFactory);
+  nodes.foreach(_.setParent(this));
   
+  private var _parent:Option[Node[E]] = None;
   private var _entities:List[E] = List.empty;
+  
+  def parent = _parent;
+  
+  def setParent(newParent:Node[E]) = _parent = Some(newParent);
   
   def entities = _entities;
   

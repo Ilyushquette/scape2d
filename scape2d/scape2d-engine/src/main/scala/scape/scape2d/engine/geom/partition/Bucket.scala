@@ -8,7 +8,12 @@ class Bucket[E <: Formed[_ <: Shape]](
   val bounds:AxisAlignedRectangle
 ) extends Node[E] {
   val nodes = List.empty;
+  private var _parent:Option[Node[E]] = None;
   private var _entities:List[E] = List.empty;
+  
+  def parent = _parent;
+  
+  def setParent(newParent:Node[E]) = _parent = Some(newParent);
   
   def entities = _entities;
   
