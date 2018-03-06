@@ -16,7 +16,7 @@ case class TreeCollisionDetector[T <: Movable with Formed[_ <: Shape] with Ident
 ) extends CollisionDetector[T] {
   private val treeCreationListeners = HashSet[Node[MotionBounds[T]] => Unit]();
   
-  def detect(movables:Set[T], timestep:Double) = {
+  def detect(movables:Set[T], timestep:Double):Set[CollisionEvent[T]] = {
     val tree = treeFactory();
     movables.foreach(m => tree.insert(MotionBounds(m, timestep)));
     treeCreationListeners.foreach(_(tree));
@@ -24,7 +24,24 @@ case class TreeCollisionDetector[T <: Movable with Formed[_ <: Shape] with Ident
     treeCombinations.flatMap(c => detect(c._1.movable, c._2.movable, timestep));
   }
   
-  private def detect(movable1:T, movable2:T, timestep:Double) = {
+  def detect(checkables:Set[T], others:Set[T], timestep:Double):Set[CollisionEvent[T]] = {
+    val tree = treeFactory();
+    val checkableMotionBounds = checkables.map(MotionBounds(_, timestep));
+    checkableMotionBounds.foreach(tree.insert);
+    others.foreach(m => tree.insert(MotionBounds(m, timestep)));
+    treeCreationListeners.foreach(_(tree));
+    checkableMotionBounds.flatMap(detectBranchCollisions(_, tree, timestep));
+  }
+  
+  private def detectBranchCollisions(entity:MotionBounds[T], tree:Node[MotionBounds[T]], timestep:Double) = {
+    val nodeWithEntity = tree.findTreeNode(entity).get;
+    val otherBranchEntities = nodeWithEntity.superEntities ++
+                              (nodeWithEntity.entities - entity) ++
+                              nodeWithEntity.subEntities;
+    otherBranchEntities.flatMap(otherEntity => detect(entity.movable, otherEntity.movable, timestep));
+  }
+  
+  private def detect(movable1:T, movable2:T, timestep:Double):Option[CollisionEvent[T]] = {
     val detection = detectionStrategy.detect(movable1, movable2, timestep);
     detection.map(time => CollisionEvent((movable1, movable2), time));
   }

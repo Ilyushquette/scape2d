@@ -13,6 +13,14 @@ case class BruteForceCollisionDetector[T <: Movable](
     detections.flatten;
   }
   
+  def detect(checkables:Set[T], others:Set[T], timestep:Double) = {
+    checkables.flatMap(detectOneToMany(_, others, timestep));
+  }
+  
+  private def detectOneToMany(checkable:T, others:Set[T], timestep:Double) = {
+    others.flatMap(detect(checkable, _, timestep));
+  }
+  
   private def detect(movable1:T, movable2:T, timestep:Double) = {
     val detection = detectionStrategy.detect(movable1, movable2, timestep);
     detection.map(CollisionEvent((movable1, movable2), _));
