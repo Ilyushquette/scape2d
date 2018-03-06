@@ -8,6 +8,7 @@ import scape.scape2d.engine.geom.shape.Sweepable
 import scape.scape2d.engine.geom.Formed
 import scape.scape2d.engine.motion.linear.LinearSweepFormingMovable
 import scape.scape2d.engine.core.Identifiable
+import scape.scape2d.engine.util.Combination2
 
 case class TreeLinearMotionCollisionDetector[T <: Movable with Formed[_ <: Sweepable[_]] with Identifiable](
   treeFactory:() => Node[LinearSweepFormingMovable[T]],
@@ -19,31 +20,9 @@ case class TreeLinearMotionCollisionDetector[T <: Movable with Formed[_ <: Sweep
     val tree = treeFactory();
     movables.foreach(m => tree.insert(LinearSweepFormingMovable[T](m, timestep)));
     treeCreationListeners.foreach(_(tree));
-    val collisions = detectNodeCollisions(tree, timestep);
-    collisions.iterator;
-  }
-  
-  private def detectNodeCollisions(tree:Node[LinearSweepFormingMovable[T]], timestep:Double):Iterable[CollisionEvent[T]] = {
-    if(!tree.entities.isEmpty) {
-      val entityDetections = detectEntityCollisions(tree, timestep);
-      val subEntityDetections = detectSubEntityCollisions(tree, timestep);
-      val detections = entityDetections ++ subEntityDetections;
-      val nodeCollisions = detections.flatten;
-      nodeCollisions ++ tree.nodes.flatMap(detectNodeCollisions(_, timestep));
-    }else tree.nodes.flatMap(detectNodeCollisions(_, timestep));
-  }
-  
-  private def detectEntityCollisions(tree:Node[LinearSweepFormingMovable[T]], timestep:Double) = {
-    for {
-      sweepFormingMovable1 <- tree.entities
-      sweepFormingMovable2 <- tree.entities
-      if(sweepFormingMovable1.entity != sweepFormingMovable2.entity)
-    } yield detect(sweepFormingMovable1.entity, sweepFormingMovable2.entity, timestep);
-  }
-  
-  private def detectSubEntityCollisions(tree:Node[LinearSweepFormingMovable[T]], timestep:Double) = {
-    for(sweepFormingMovable <- tree.entities; subSweepFormingMovable <- tree.subEntities)
-    yield detect(sweepFormingMovable.entity, subSweepFormingMovable.entity, timestep);
+    val treeCombinations = Combination2.selectFrom(tree);
+    val treeCollisions = treeCombinations.flatMap(c => detect(c._1.entity, c._2.entity, timestep));
+    treeCollisions.iterator;
   }
   
   private def detect(movable1:T, movable2:T, timestep:Double) = {
