@@ -8,6 +8,7 @@ import scape.scape2d.engine.motion.MotionBounds
 import scape.scape2d.engine.motion.collision.CollisionEvent
 import scala.collection.mutable.HashSet
 import scape.scape2d.engine.core.Identifiable
+import scape.scape2d.engine.util.Combination2
 
 case class TreeCollisionDetector[T <: Movable with Formed[_ <: Shape] with Identifiable](
   treeFactory:() => Node[MotionBounds[T]], 
@@ -19,30 +20,8 @@ case class TreeCollisionDetector[T <: Movable with Formed[_ <: Shape] with Ident
     val tree = treeFactory();
     movables.foreach(m => tree.insert(MotionBounds(m, timestep)));
     treeCreationListeners.foreach(_(tree));
-    detectNodeCollisions(tree, timestep);
-  }
-  
-  private def detectNodeCollisions(tree:Node[MotionBounds[T]], timestep:Double):List[CollisionEvent[T]] = {
-    if(!tree.entities.isEmpty) {
-      val entityDetections = detectEntityCollisions(tree, timestep);
-      val subEntityDetections = detectSubEntityCollisions(tree, timestep);
-      val detections = entityDetections ++ subEntityDetections;
-      val nodeCollisions = detections.flatten;
-      nodeCollisions ++ tree.nodes.flatMap(detectNodeCollisions(_, timestep));
-    }else tree.nodes.flatMap(detectNodeCollisions(_, timestep));
-  }
-  
-  private def detectEntityCollisions(tree:Node[MotionBounds[T]], timestep:Double) = {
-    for {
-      motionBounds1 <- tree.entities
-      motionBounds2 <- tree.entities
-      if(motionBounds1.movable != motionBounds2.movable)
-    } yield detect(motionBounds1.movable, motionBounds2.movable, timestep);
-  }
-  
-  private def detectSubEntityCollisions(tree:Node[MotionBounds[T]], timestep:Double) = {
-    for(motionBounds <- tree.entities; subMotionBounds <- tree.subEntities)
-    yield detect(motionBounds.movable, subMotionBounds.movable, timestep);
+    val treeCombinations = Combination2.selectFrom(tree);
+    treeCombinations.flatMap(c => detect(c._1.movable, c._2.movable, timestep));
   }
   
   private def detect(movable1:T, movable2:T, timestep:Double) = {

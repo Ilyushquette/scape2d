@@ -10,7 +10,7 @@ case class BruteForceCollisionDetector[T <: Movable](
   def detect(movables:Set[T], timestep:Double) = {
     val combinations = Combination2.selectFrom(movables);
     val detections = combinations.map(c => detect(c._1, c._2, timestep));
-    detections.flatten.toList;
+    detections.flatten;
   }
   
   private def detect(movable1:T, movable2:T, timestep:Double) = {
