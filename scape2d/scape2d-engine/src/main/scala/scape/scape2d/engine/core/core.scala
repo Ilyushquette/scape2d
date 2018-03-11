@@ -32,8 +32,9 @@ package object core {
   }
   
   private[core] def accelerate(particle:Particle) = {
-    accelerateLinear(particle);
-    particle.rotatable.map(accelerateAngular);
+    val acceleratedLinear = accelerateLinear(particle);
+    val acceleratedAngular = particle.rotatable.map(accelerateAngular).getOrElse(false);
+    acceleratedLinear || acceleratedAngular;
   }
   
   /**
@@ -47,7 +48,8 @@ package object core {
       val acceleration = Vector(particle.force.magnitude / particle.mass, particle.force.angle);
       particle.setVelocity(particle.velocity + acceleration);
       particle.resetForce();
-    }
+      true;
+    }else false;
   }
   
   /**
@@ -61,7 +63,8 @@ package object core {
       val acceleration = body.torque / body.momentsOfInertia;
       body.setAngularVelocity(body.angularVelocity + acceleration);
       body.resetTorque();
-    }
+      true;
+    }else false;
   }
   
   private[core] def deform(bond:Bond) = {
