@@ -42,15 +42,22 @@ import javax.swing.JPanel
 import javax.swing.JLayeredPane
 import java.awt.Rectangle
 import scape.scape2d.engine.core.integral.ContinuousMotionIntegral
+import scape.scape2d.engine.motion.collision.detection.TreePosterioriCollisionDetector
+import scape.scape2d.engine.core.MovablePhantom
+import scape.scape2d.engine.core.integral.DiscreteMotionIntegral
+import scape.scape2d.engine.time.simulation.Timescale
+import scape.scape2d.engine.time.Frequency
+import scape.scape2d.engine.time.Second
+import scape.scape2d.debugger.TreePosterioriCollisionDetectorDebugger
 
 object RectangularBodiesDiagonalCollision {
   def main(args:Array[String]):Unit = {
     val bounds = AxisAlignedRectangle(Point(0, 0), 27.32, 15.36);
-    val treeFactory = () => new QuadTree[MotionBounds[Particle]](bounds, 4);
-    val detectionStrategy = IterativeRootFindingCollisionDetectionStrategy[Particle]();
-    val collisionDetector = TreeCollisionDetector(treeFactory, detectionStrategy);
+    val treeFactory = () => new QuadTree[MovablePhantom[Particle]](bounds, 4);
+    val collisionDetector = TreePosterioriCollisionDetector(treeFactory);
     val nature = new Nature(
-        motionIntegral = ContinuousMotionIntegral(collisionDetector)
+        timeScale = Timescale(Frequency(120, Second)),
+        motionIntegral = new DiscreteMotionIntegral(collisionDetector)
     );
     
     val particlesDrawer = createShapeDrawer();
@@ -59,7 +66,7 @@ object RectangularBodiesDiagonalCollision {
     
     val quadTreeNodesDrawer = createShapeDrawer();
     val shapeDrawingQuadTreeNodesView = new ShapeDrawingTreeNodesView(quadTreeNodesDrawer); 
-    val collisionDetectorDebugger = new TreeCollisionDetectorDebugger(shapeDrawingQuadTreeNodesView);
+    val collisionDetectorDebugger = new TreePosterioriCollisionDetectorDebugger(shapeDrawingQuadTreeNodesView);
     collisionDetectorDebugger.trackNodes(collisionDetector);
     
     val body1 = RectangularBodyBuilder()
