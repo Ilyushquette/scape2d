@@ -9,10 +9,11 @@ import scape.scape2d.engine.time.simulation.Simulation
 import scape.scape2d.engine.time.Frequency
 import scape.scape2d.engine.time.Second
 import scape.scape2d.engine.time.simulation.Timescale
+import scape.scape2d.engine.core.integral.ContinuousMotionIntegral
 
 class Nature(
   timeScale:Timescale = Timescale(Frequency(60, Second)),
-  val motionIntegral:MotionIntegral = MotionIntegral()
+  val motionIntegral:MotionIntegral = ContinuousMotionIntegral()
 ) extends Simulation(timeScale) {
   private var temporals = Set[Temporal]();
   private var particles = Set[Particle]();

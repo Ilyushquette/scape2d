@@ -12,7 +12,7 @@ extends LinearMotionCollisionDetector[T] {
     val combinations = movables.toSeq.combinations(2);
     val detections = combinations.map(c => (c, detectionStrategy.detect(c(0), c(1), timestep)));
     detections.collect {
-      case (Seq(a, b), Some(time)) => CollisionEvent((a, b), time);
+      case (Seq(a, b), Some(time)) => CollisionEvent(a, b, time);
     }
   }
 }

@@ -43,7 +43,7 @@ case class TreeCollisionDetector[T <: Movable with Formed[_ <: Shape] with Ident
   
   private def detect(movable1:T, movable2:T, timestep:Double):Option[CollisionEvent[T]] = {
     val detection = detectionStrategy.detect(movable1, movable2, timestep);
-    detection.map(time => CollisionEvent((movable1, movable2), time));
+    detection.map(time => CollisionEvent(movable1, movable2, time));
   }
   
   def onTreeCreation(listener:Node[MotionBounds[T]] => Unit) = treeCreationListeners += listener;
