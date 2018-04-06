@@ -9,6 +9,7 @@ import scape.scape2d.engine.motion.collision.resolution.MomentumDeltaActionReact
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.motion.collision.detection.rotation.BruteForceBasedRotationalCollisionDetector
 import scape.scape2d.engine.motion.collision.detection.rotation.IterativeRootFindingRotationalCollisionDetectionStrategy
+import scape.scape2d.engine.util.Combination2
 
 case class RotationIntegral(
   collisionDetector:RotationalCollisionDetector[Particle] = BruteForceBasedRotationalCollisionDetector(
@@ -48,7 +49,7 @@ case class RotationIntegral(
     particles.foreach(rotate(_, timestep));
   }
   
-  private def exertKnockingForces(particles:(Particle, Particle), forces:(Vector, Vector)) = {
+  private def exertKnockingForces(particles:Combination2[Particle, Particle], forces:(Vector, Vector)) = {
     particles._1.exertForce(forces._1, true);
     particles._2.exertForce(forces._2, true);
   }

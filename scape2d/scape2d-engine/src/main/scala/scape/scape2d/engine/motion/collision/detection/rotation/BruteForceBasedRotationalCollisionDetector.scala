@@ -14,6 +14,6 @@ case class BruteForceBasedRotationalCollisionDetector[T <: Movable](
   
   private def detect(movable1:T, movable2:T, timestep:Double) = {
     val detection = detectionStrategy.detect(movable1, movable2, timestep);
-    detection.map(CollisionEvent((movable1, movable2), _));
+    detection.map(CollisionEvent(movable1, movable2, _));
   }
 }
