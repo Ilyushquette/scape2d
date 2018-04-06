@@ -24,5 +24,5 @@ case class ParticleBuilder(
   
   def withForce(f:Vector) = copy(force = f);
   
-  def build = new Particle(shape, mass, velocity, force);
+  def build = new Particle(Particle.nextId, shape, mass, velocity, force);
 }

@@ -2,6 +2,7 @@ package scape.scape2d.engine.geom.shape
 
 import org.junit.Test
 import org.junit.Assert
+import scape.scape2d.engine.geom.Components
 
 class LineTest {
   @Test
@@ -50,5 +51,12 @@ class LineTest {
   def testClampByOrdinateInterval = {
     val line = Line(Point(3, 3), Point(3, 6));
     Assert.assertEquals(Segment(Point(3, 5), Point(3, 8)), line.clampOrdinate(5, 8));
+  }
+  
+  @Test
+  def testDisplacedByComponents = {
+    val line = Line(Point(1, 3), Point(3, 9));
+    val components = Components(-0.5, 1);
+    Assert.assertEquals(Line(Point(0.5, 4), Point(2.5, 10)), line displacedBy components);
   }
 }

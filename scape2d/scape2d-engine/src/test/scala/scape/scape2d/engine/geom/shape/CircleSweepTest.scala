@@ -19,4 +19,12 @@ class CircleSweepTest {
     val circleSweep = CircleSweep(Circle(Point(3, 3), 2), Vector.from(Components(-3, -3)));
     Assert.assertEquals((connector1, connector2), circleSweep.connector);
   }
+  
+  @Test
+  def testDisplacedByComponents = {
+    val circleSweep = CircleSweep(Circle(Point(3, 3), 2), Vector.from(Components(-3, -3)));
+    val components = Components(1, 0);
+    val expectedCircleSweep = CircleSweep(Circle(Point(4, 3), 2), Vector.from(Components(-3, -3)));
+    Assert.assertEquals(expectedCircleSweep, circleSweep displacedBy components);
+  }
 }

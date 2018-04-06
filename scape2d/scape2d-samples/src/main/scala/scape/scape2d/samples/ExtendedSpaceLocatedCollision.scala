@@ -6,10 +6,10 @@ import java.awt.Toolkit
 import javax.swing.JFrame
 import javax.swing.JLayeredPane
 import scape.scape2d.debugger.ParticleDebugger
-import scape.scape2d.debugger.QuadTreeCollisionDetectorDebugger
+import scape.scape2d.debugger.TreeLinearMotionCollisionDetectorDebugger
 import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
-import scape.scape2d.debugger.view.ShapeDrawingQuadTreeNodesView
-import scape.scape2d.engine.core.Nature
+import scape.scape2d.debugger.view.ShapeDrawingTreeNodesView
+import scape.scape2d.engine.core.NonRotatableNature
 import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.core.matter.ParticleBuilder
 import scape.scape2d.engine.geom.Vector
@@ -28,33 +28,32 @@ import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
 import javax.swing.JPanel
 import scape.scape2d.engine.core.integral.LinearMotionIntegral
-import scape.scape2d.engine.motion.collision.detection.linear.QuadTreeLinearMotionCollisionDetector
-import scape.scape2d.engine.motion.collision.detection.linear.ExtendedSpaceLinearMotionCollisionDetector
 import scape.scape2d.engine.motion.collision.detection.linear.BruteForceLinearMotionCollisionDetector
 import scape.scape2d.engine.motion.collision.detection.linear.QuadraticLinearMotionCollisionDetectionStrategy
 import scape.scape2d.engine.core.integral.MotionIntegral
+import scape.scape2d.engine.geom.partition.QuadTree
+import scape.scape2d.engine.motion.linear.LinearSweepFormingMovable
+import scape.scape2d.engine.geom.partition.ExpandedTree
+import scape.scape2d.engine.motion.collision.detection.linear.TreeLinearMotionCollisionDetector
 
 object ExtendedSpaceLocatedCollision {
   def main(args:Array[String]):Unit = {
     val bounds = AxisAlignedRectangle(Point(0, 0), 22.32, 13.36);
     val detectionStrategy = QuadraticLinearMotionCollisionDetectionStrategy[Particle]();
-    val quadTreeDetector = new QuadTreeLinearMotionCollisionDetector[Particle](bounds, detectionStrategy);
-    val bruteForceDetector = new BruteForceLinearMotionCollisionDetector[Particle](detectionStrategy);
-    val collisionDetector = new ExtendedSpaceLinearMotionCollisionDetector(
-        coreDetector = quadTreeDetector, 
-        regionalDetectorFactory = _ => bruteForceDetector,
-        edgeCaseDetectionStrategy = detectionStrategy,
-        extension = 100
+    val treeFactory = () => new ExpandedTree(
+        coreNode = new QuadTree[LinearSweepFormingMovable[Particle]](bounds, 4),
+        expansion = 5
     );
-    val nature = new Nature(motionIntegral = MotionIntegral(LinearMotionIntegral(collisionDetector)));
+    val collisionDetector = TreeLinearMotionCollisionDetector[Particle](treeFactory, detectionStrategy);
+    val nature = new NonRotatableNature(linearMotionIntegral = LinearMotionIntegral(collisionDetector));
     val trackedMetalParticles = prepareTrackedMetalParticles();
     
     val screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     
     val quadTreeNodesDrawer = prepareShapeDrawer();
-    val quadTreeNodesView = new ShapeDrawingQuadTreeNodesView(quadTreeNodesDrawer);
-    val collisionDetectorDebugger = new QuadTreeCollisionDetectorDebugger(quadTreeNodesView);
-    collisionDetectorDebugger.trackNodes(quadTreeDetector);
+    val quadTreeNodesView = new ShapeDrawingTreeNodesView(quadTreeNodesDrawer);
+    val collisionDetectorDebugger = new TreeLinearMotionCollisionDetectorDebugger(quadTreeNodesView);
+    collisionDetectorDebugger.trackNodes(collisionDetector);
     
     val particlesDrawer = prepareShapeDrawer();
     val particleTrackingView = new ShapeDrawingParticleTrackingView(particlesDrawer);

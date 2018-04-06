@@ -7,18 +7,23 @@ import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.deformation.elasticity.resolveFrictionalForces
 import scape.scape2d.engine.geom.Epsilon
 import scape.scape2d.engine.geom.Vector
-import scape.scape2d.engine.motion.linear.getPostLinearMotionPosition
-import scape.scape2d.engine.motion.rotational.positionForTimeOf
+import scape.scape2d.engine.motion.linear.{positionForTimeOf => postLinearMotionPosition}
+import scape.scape2d.engine.motion.rotational.{positionForTimeOf => postRotationPosition}
 import scape.scape2d.engine.core.matter.Body
 
 package object core {
+  private[core] def move(movable:Movable, timestep:Double) = {
+    moveLinear(movable, timestep);
+    rotate(movable, timestep);
+  }
+  
   private[core] def moveLinear(movable:Movable, timestep:Double) = {
-    val nextPosition = getPostLinearMotionPosition(movable, timestep);
+    val nextPosition = postLinearMotionPosition(movable)(timestep);
     if(movable.position != nextPosition) movable.setPosition(nextPosition);
   }
   
   private[core] def rotate(movable:Movable, timestep:Double):Unit = {
-    val nextPosition = positionForTimeOf(movable)(timestep);
+    val nextPosition = postRotationPosition(movable)(timestep);
     if(movable.position != nextPosition) movable.setPosition(nextPosition);
   }
   

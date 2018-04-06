@@ -15,7 +15,7 @@ import scape.scape2d.debugger.view.ShapeDrawingGraphView
 import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
 import scape.scape2d.debugger.view.swing.SwingBuffer
 import scape.scape2d.debugger.view.swing.SwingMixingRastersShapeDrawer
-import scape.scape2d.engine.core.Nature
+import scape.scape2d.engine.core.NonRotatableNature
 import scape.scape2d.engine.core.matter.BondBuilder
 import scape.scape2d.engine.core.matter.Impulse
 import scape.scape2d.engine.core.matter.ParticleBuilder
@@ -38,7 +38,7 @@ import scape.scape2d.debugger.BondDebugger
 
 object FixedBondHardeningUnderStretchingImpulse {
   def main(args:Array[String]):Unit = {
-    val nature = new Nature();
+    val nature = new NonRotatableNature();
     val metalParticle = ParticleBuilder()
       .as(Circle(Point(10.3, 7), 0.05))
       .withMass(2)

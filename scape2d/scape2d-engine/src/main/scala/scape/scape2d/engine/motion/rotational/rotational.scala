@@ -44,12 +44,18 @@ package object rotational {
     angularVelocity * stepsPerSecond;
   }
   
-  def angularToLinearVelocity(movable:Movable) = {
+  def angularToLinearVelocityScalar(movable:Movable) = {
     val rotatable = movable.rotatable.get;
-    val radialDirection = rotatable.center angleToDeg movable.position;
     val ω = rotatable.angularVelocity;
     val r = movable.position distanceTo rotatable.center;
+    abs(ω * r);
+  }
+  
+  def angularToLinearVelocity(movable:Movable) = {
+    val scalar = angularToLinearVelocityScalar(movable);
+    val rotatable = movable.rotatable.get;
+    val radialDirection = rotatable.center angleToDeg movable.position;
     val θ = normalizeDegrees(radialDirection + signum(rotatable.angularVelocity) * 90);
-    Vector(abs(ω * r), θ);
+    Vector(scalar, θ);
   }
 }

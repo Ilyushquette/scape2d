@@ -7,12 +7,14 @@ import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
 import scape.scape2d.engine.core.MovableMock
 import scape.scape2d.engine.motion.collision.detection.rotation.{RotationalCollisionDetectionStrategyValidator => Validator}
+import scape.scape2d.engine.motion.collision.detection.IterativeRootFindingCollisionDetectionStrategy
 
 object RotationalCollisionDetectionStrategyTest {
   @Parameterized.Parameters
-  def instancesToTest = Arrays.asList(Array(
-      () => new IterativeRootFindingRotationalCollisionDetectionStrategy
-  ));
+  def instancesToTest:java.util.List[Array[() => RotationalCollisionDetectionStrategy[MovableMock]]] = Arrays.asList(
+      Array(() => IterativeRootFindingRotationalCollisionDetectionStrategy()),
+      Array(() => IterativeRootFindingCollisionDetectionStrategy())
+  );
 }
 
 @RunWith(classOf[Parameterized])

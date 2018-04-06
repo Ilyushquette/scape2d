@@ -129,6 +129,22 @@ class RotationalFunctionsTest {
   }
   
   @Test
+  def testAngularToLinearVelocityScalar = {
+    val movable = new MovableMock(Point(-3, 0), Vector(), None);
+    val rotatable = new RotatableMock(Point.origin, 1.57079, Set(movable));
+    val linearVelocityScalar = angularToLinearVelocityScalar(movable);
+    Assert.assertEquals(4.71237, linearVelocityScalar, Epsilon);
+  }
+  
+  @Test
+  def testNegativeAngularToAbsoluteLinearVelocityScalar = {
+    val movable = new MovableMock(Point(-10, 0), Vector(), None);
+    val rotatable = new RotatableMock(Point.origin, -3.14159, Set(movable));
+    val linearVelocityScalar = angularToLinearVelocityScalar(movable);
+    Assert.assertEquals(31.4159, linearVelocityScalar, Epsilon);
+  }
+  
+  @Test
   def testAngularToLinearVelocity = {
     val movable = new MovableMock(Point(-3, 0), Vector(), None);
     val rotatable = new RotatableMock(Point.origin, 1.57079, Set(movable));

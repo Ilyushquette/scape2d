@@ -27,7 +27,7 @@ class LinearMotionFunctionsTest {
     val movableMock = Mockito.mock(classOf[Movable]);
     Mockito.when(movableMock.position).thenReturn(Point(3, 5));
     Mockito.when(movableMock.velocity).thenReturn(Vector(0, 47));
-    Assert.assertEquals(Point(3, 5), getPostLinearMotionPosition(movableMock, 100));
+    Assert.assertEquals(Point(3, 5), positionForTimeOf(movableMock)(100));
   }
   
   @Test
@@ -35,6 +35,6 @@ class LinearMotionFunctionsTest {
     val movableMock = Mockito.mock(classOf[Movable]);
     Mockito.when(movableMock.position).thenReturn(Point(3, 5));
     Mockito.when(movableMock.velocity).thenReturn(Vector.from(Components(-3, -5)));
-    Assert.assertEquals(Point(2.7, 4.5), getPostLinearMotionPosition(movableMock, 100))
+    Assert.assertEquals(Point(2.7, 4.5), positionForTimeOf(movableMock)(100))
   }
 }

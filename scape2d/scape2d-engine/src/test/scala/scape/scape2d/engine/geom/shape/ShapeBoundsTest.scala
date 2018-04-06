@@ -61,4 +61,14 @@ class ShapeBoundsTest {
     val bounds = ShapeBounds(ring);
     Assert.assertEquals(AxisAlignedRectangle(Point(-13, -13), 26, 26), bounds);
   }
+  
+  @Test
+  def testCompositeShapeBounds = {
+    val triangle = PolygonBuilder(Point(0, 10), Point(3, 13), Point(3, 10)).build;
+    val rectangle = AxisAlignedRectangle(Point(-1, 5), 5, 5);
+    val circle = Circle(Point(1.5, 5), 2);
+    val compositeShape = CompositeShape(triangle, rectangle, circle);
+    val bounds = ShapeBounds(compositeShape);
+    Assert.assertEquals(AxisAlignedRectangle(Point(-1, 3), 5, 10), bounds);
+  }
 }
