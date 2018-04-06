@@ -41,6 +41,7 @@ import scape.scape2d.debugger.TreeCollisionDetectorDebugger
 import javax.swing.JPanel
 import javax.swing.JLayeredPane
 import java.awt.Rectangle
+import scape.scape2d.engine.core.integral.ContinuousMotionIntegral
 
 object RectangularBodiesDiagonalCollision {
   def main(args:Array[String]):Unit = {
@@ -49,7 +50,7 @@ object RectangularBodiesDiagonalCollision {
     val detectionStrategy = IterativeRootFindingCollisionDetectionStrategy[Particle]();
     val collisionDetector = TreeCollisionDetector(treeFactory, detectionStrategy);
     val nature = new Nature(
-        motionIntegral = MotionIntegral(collisionDetector)
+        motionIntegral = ContinuousMotionIntegral(collisionDetector)
     );
     
     val particlesDrawer = createShapeDrawer();
