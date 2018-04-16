@@ -7,6 +7,13 @@
   <version>1.01-SNAPSHOT</version>
   <packaging>pom</packaging>
 
+  <modules>
+    <module>scape2d-engine</module>
+    <module>scape2d-graphics</module>
+    <module>scape2d-debugger</module>
+    <module>scape2d-samples</module>
+  </modules>
+
   <dependencies>
     <!-- Scala -->
     <dependency>
