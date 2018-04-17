@@ -13,6 +13,10 @@
     <module>scape2d-debugger</module>
     <module>scape2d-samples</module>
   </modules>
+  
+  <properties>
+    <build.scripts.dir>build/scripts</build.scripts.dir>
+  </properties>
 
   <dependencies>
     <!-- Scala -->
@@ -84,6 +88,27 @@
               <goal>compile</goal>
               <goal>testCompile</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.gmaven</groupId>
+        <artifactId>groovy-maven-plugin</artifactId>
+        <version>2.0</version>
+        <executions>
+          <execution>
+            <id>check_copyright_years</id>
+            <phase>validate</phase>
+            <inherited>false</inherited>
+            <goals>
+              <goal>execute</goal>
+            </goals>
+            <configuration>
+              <properties>
+                <licensePath>../LICENSE</licensePath>
+              </properties>
+              <source>${build.scripts.dir}/check_copyright_years.groovy</source>
+            </configuration>
           </execution>
         </executions>
       </plugin>
