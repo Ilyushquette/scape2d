@@ -2,7 +2,6 @@ package scape.scape2d.engine.geom.shape
 
 import org.junit.Assert
 import org.junit.Test
-
 import scape.scape2d.engine.geom.Vector
 
 class ShapeBoundsTest {
@@ -50,9 +49,9 @@ class ShapeBoundsTest {
   
   @Test
   def testCircleSweepShapeBounds = {
-    val circleSweep = CircleSweep(Circle(Point(3, 3), 2), Vector(10, 75));
+    val circleSweep = CircleSweep(Circle(Point(3, 3), 2), Vector(10, 1.30899693899));
     val bounds = ShapeBounds(circleSweep);
-    Assert.assertEquals(AxisAlignedRectangle(Point(1, 1), 6.588190451025207, 13.659258262890683), bounds);
+    Assert.assertEquals(AxisAlignedRectangle(Point(1, 1), 6.5881904510, 13.6592582628), bounds);
   }
   
   @Test

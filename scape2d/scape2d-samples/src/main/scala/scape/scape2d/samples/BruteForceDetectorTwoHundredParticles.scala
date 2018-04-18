@@ -1,5 +1,6 @@
 package scape.scape2d.samples
 
+import java.lang.Math.PI
 import java.awt.Color
 import java.awt.Toolkit
 import javax.swing.JFrame
@@ -31,7 +32,7 @@ object BruteForceDetectorTwoHundredParticles {
     val metalParticles2 = for(i <- 0 to 100) yield ParticleBuilder()
       .as(Circle(Point(25 - i * 0.11, i * 0.14), 0.05))
       .withMass(2)
-      .withVelocity(Vector(2, 180))
+      .withVelocity(Vector(2, PI))
       .build;
     
     val trackedMetalParticles = metalParticles.map(MovableTrackerProxy.track(_));

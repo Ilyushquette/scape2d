@@ -28,11 +28,11 @@ object NewtonSecondLaw {
     val metalParticle = ParticleBuilder()
       .as(Circle(Point.origin, 0.05))
       .withMass(2)
-      .withVelocity(Vector(1, 45))
+      .withVelocity(Vector(1, 0.7853981633))
       .build;
     
     val trackedMetalParticle = MovableTrackerProxy.track(metalParticle);
-    val impulse = new Impulse(trackedMetalParticle, Vector(7.68, 45), 2(Second));
+    val impulse = new Impulse(trackedMetalParticle, Vector(7.68, 0.7853981633), 2(Second));
     val impulse2 = new Impulse(trackedMetalParticle, Vector(3.84, 0), 2(Second));
     
     val frame = new JFrame("Scape2D Debugger");

@@ -296,7 +296,7 @@ case class CircleSweep(circle:Circle, sweepVector:Vector) extends Shape {
   lazy val connector = {
     val origin = circle.center;
     val destination = origin + sweepVector;
-    val radialVectorToConnector = Vector(circle.radius, normalizeDegrees(sweepVector.angle + 90));
+    val radialVectorToConnector = Vector(circle.radius, normalizeRadians(sweepVector.angle + HalfPI));
     val connector1 = Segment(origin + radialVectorToConnector, 
                              destination + radialVectorToConnector);
     val connector2 = Segment(destination + radialVectorToConnector.opposite,

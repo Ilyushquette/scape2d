@@ -1,16 +1,15 @@
 package scape.scape2d.engine.motion.rotational
 
 import java.lang.Math.PI
-
 import org.junit.Assert
 import org.junit.Test
 import org.mockito.Mockito
-
 import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.core.MovableMock
 import scape.scape2d.engine.core.Rotatable
 import scape.scape2d.engine.core.RotatableMock
 import scape.scape2d.engine.geom.Epsilon
+import scape.scape2d.engine.geom.HalfPI
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.shape.Point
 
@@ -149,7 +148,7 @@ class RotationalFunctionsTest {
     val movable = new MovableMock(Point(-3, 0), Vector(), None);
     val rotatable = new RotatableMock(Point.origin, 1.57079, Set(movable));
     val linearVelocity = angularToLinearVelocity(movable);
-    Assert.assertEquals(Vector(4.71237, 270), linearVelocity);
+    Assert.assertEquals(Vector(4.71237, 4.7123889803), linearVelocity);
   }
   
   @Test
@@ -157,6 +156,6 @@ class RotationalFunctionsTest {
     val movable = new MovableMock(Point(-10, 0), Vector(), None);
     val rotatable = new RotatableMock(Point.origin, -3.14159, Set(movable));
     val linearVelocity = angularToLinearVelocity(movable);
-    Assert.assertEquals(Vector(31.4159, 90), linearVelocity);
+    Assert.assertEquals(Vector(31.4159, HalfPI), linearVelocity);
   }
 }

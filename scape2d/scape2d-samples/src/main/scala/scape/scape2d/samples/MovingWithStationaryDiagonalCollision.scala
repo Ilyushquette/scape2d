@@ -19,6 +19,7 @@ import scape.scape2d.graphics.rasterizer.UnitConvertingRasterizer
 import scape.scape2d.graphics.rasterizer.cache.CachingRasterizers
 import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
+import java.lang.Math.PI
 
 object MovingWithStationaryDiagonalCollision {
   def main(args:Array[String]):Unit = {
@@ -31,7 +32,7 @@ object MovingWithStationaryDiagonalCollision {
     val metalParticle2 = ParticleBuilder()
       .as(Circle(Point(10, 6.97), 0.05))
       .withMass(2)
-      .withVelocity(Vector(0, 180))
+      .withVelocity(Vector(0, PI))
       .build;
     
     val trackedMetalParticle = MovableTrackerProxy.track(metalParticle);

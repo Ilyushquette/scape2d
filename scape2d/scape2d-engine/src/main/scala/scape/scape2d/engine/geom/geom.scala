@@ -13,6 +13,7 @@ import scape.scape2d.engine.geom.shape.Segment
 
 package object geom {
   val Epsilon = 1E-10;
+  val HalfPI = PI / 2;
   val TwicePI = PI * 2;
   
   def normalizeDegrees(degrees:Double) = (degrees + 360) % 360;

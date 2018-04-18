@@ -35,6 +35,7 @@ import scape.scape2d.engine.geom.partition.QuadTree
 import scape.scape2d.engine.motion.linear.LinearSweepFormingMovable
 import scape.scape2d.engine.geom.partition.ExpandedTree
 import scape.scape2d.engine.motion.collision.detection.linear.TreeLinearMotionCollisionDetector
+import java.lang.Math.PI
 
 object ExtendedSpaceLocatedCollision {
   def main(args:Array[String]):Unit = {
@@ -75,12 +76,12 @@ object ExtendedSpaceLocatedCollision {
     val metalParticle2 = ParticleBuilder()
       .as(Circle(Point(22.32, 6.97), 0.05))
       .withMass(2)
-      .withVelocity(Vector(0, 180))
+      .withVelocity(Vector(0, PI))
       .build;
     val metalParticle3 = ParticleBuilder()
       .as(Circle(Point(22.52, 6.77), 0.05))
       .withMass(2)
-      .withVelocity(Vector(0, 180))
+      .withVelocity(Vector(0, PI))
       .build;
     
     Array(MovableTrackerProxy.track(metalParticle),

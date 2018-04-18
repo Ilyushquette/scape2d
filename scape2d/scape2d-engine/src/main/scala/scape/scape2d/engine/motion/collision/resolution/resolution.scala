@@ -1,10 +1,10 @@
 package scape.scape2d.engine.motion.collision
 
+import java.lang.Math._
 import scape.scape2d.engine.core.matter.Particle
+import scape.scape2d.engine.geom.HalfPI
 import scape.scape2d.engine.geom.Components
 import scape.scape2d.engine.geom.Vector
-import scape.scape2d.engine.geom.cosDeg
-import scape.scape2d.engine.geom.sinDeg
 import scape.scape2d.engine.motion.linear.positionForTimeOf
 import scape.scape2d.engine.util.LazyVal
 
@@ -15,7 +15,7 @@ package object resolution {
     val particle2 = snapshotPair._2;
     val p1 = positionForTimeOf(particle1)(collision.time);
     val p2 = positionForTimeOf(particle2)(collision.time);
-    val φ = p1 angleToDeg p2;
+    val φ = p1 angleTo p2;
     
     def vel(particle1:Particle, particle2:Particle) = {
       val v1 = particle1.velocity.magnitude;
@@ -25,9 +25,9 @@ package object resolution {
       val θ1 = particle1.velocity.angle;
       val θ2 = particle2.velocity.angle;
       
-      val fraction = (v1 * cosDeg(θ1 - φ) * (m1 - m2) + 2 * m2 * v2 * cosDeg(θ2 - φ)) / (m1 + m2);
-      val vx = fraction * cosDeg(φ) + v1 * sinDeg(θ1 - φ) * cosDeg(φ + 90);
-      val vy = fraction * sinDeg(φ) + v1 * sinDeg(θ1 - φ) * sinDeg(φ + 90);
+      val fraction = (v1 * cos(θ1 - φ) * (m1 - m2) + 2 * m2 * v2 * cos(θ2 - φ)) / (m1 + m2);
+      val vx = fraction * cos(φ) + v1 * sin(θ1 - φ) * cos(φ + HalfPI);
+      val vy = fraction * sin(φ) + v1 * sin(θ1 - φ) * sin(φ + HalfPI);
       Vector.from(Components(vx, vy));
     }
     

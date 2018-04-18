@@ -1,9 +1,9 @@
 package scape.scape2d.engine.geom.shape
 
 import org.junit.Test
-
 import junit.framework.Assert
 import scape.scape2d.engine.geom.Components
+import scape.scape2d.engine.geom.Vector
 
 class PointTest {
   @Test
@@ -47,8 +47,6 @@ class PointTest {
   def testPointSubtraction = {
     val p = Point(1, 0);
     val q = Point(4, -3);
-    val vector = p - q;
-    Assert.assertEquals(vector.magnitude, 4.24264, 0.00001);
-    Assert.assertEquals(vector.angle, 135, 0.00001);
+    Assert.assertEquals(Vector(4.2426406871, 2.3561944901), p - q);
   }
 }

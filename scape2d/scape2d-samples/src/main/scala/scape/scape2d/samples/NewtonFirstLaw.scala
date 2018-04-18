@@ -26,7 +26,7 @@ object NewtonFirstLaw {
     val metalParticle = ParticleBuilder()
       .as(Circle(Point.origin, 0.05))
       .withMass(2)
-      .withVelocity(Vector(2, 45))
+      .withVelocity(Vector(2, 0.7853981633))
       .build;
     
     val trackedMetalParticle = MovableTrackerProxy.track(metalParticle);
