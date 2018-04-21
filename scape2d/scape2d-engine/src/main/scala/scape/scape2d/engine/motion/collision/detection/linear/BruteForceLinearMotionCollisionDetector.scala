@@ -1,18 +1,21 @@
 package scape.scape2d.engine.motion.collision.detection.linear
 
 import scala.collection.Iterable
-
 import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.motion.collision.CollisionEvent
+import scape.scape2d.engine.util.Combination2
 
 case class BruteForceLinearMotionCollisionDetector[T <: Movable](
   val detectionStrategy:LinearMotionCollisionDetectionStrategy[T])
 extends LinearMotionCollisionDetector[T] {  
   def detect(movables:Iterable[T], timestep:Double) = {
-    val combinations = movables.toSeq.combinations(2);
-    val detections = combinations.map(c => (c, detectionStrategy.detect(c(0), c(1), timestep)));
-    detections.collect {
-      case (Seq(a, b), Some(time)) => CollisionEvent(a, b, time);
-    }
+    val combinations = Combination2.selectFrom(movables);
+    val collisions = combinations.flatMap(detect(_, timestep));
+    collisions.iterator;
+  }
+  
+  private def detect(movableCombination:Combination2[T, T], timestep:Double) = {
+    val detection = detectionStrategy.detect(movableCombination._1, movableCombination._2, timestep);
+    detection.map(CollisionEvent(movableCombination, _));
   }
 }
