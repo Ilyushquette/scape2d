@@ -16,13 +16,12 @@ case class TreeLinearMotionCollisionDetector[T <: Movable with Formed[_ <: Sweep
 ) extends LinearMotionCollisionDetector[T] {
   private val treeCreationListeners = HashSet[Node[LinearSweepFormingMovable[T]] => Unit]();
   
-  def detect(movables:Iterable[T], timestep:Double) = {
+  def detect(movables:Set[T], timestep:Double) = {
     val tree = treeFactory();
     movables.foreach(m => tree.insert(LinearSweepFormingMovable[T](m, timestep)));
     treeCreationListeners.foreach(_(tree));
     val treeCombinations = Combination2.selectFrom(tree);
-    val treeCollisions = treeCombinations.flatMap(c => detect(c._1.entity, c._2.entity, timestep));
-    treeCollisions.iterator;
+    treeCombinations.flatMap(c => detect(c._1.entity, c._2.entity, timestep));
   }
   
   private def detect(movable1:T, movable2:T, timestep:Double) = {
