@@ -7,10 +7,9 @@ import scape.scape2d.engine.util.Combination2
 case class BruteForceBasedRotationalCollisionDetector[T <: Movable](
   detectionStrategy:RotationalCollisionDetectionStrategy[T]
 ) extends RotationalCollisionDetector[T] {
-  def detect(movables:Iterable[T], timestep:Double) = {
+  def detect(movables:Set[T], timestep:Double) = {
     val combinations = Combination2.selectFrom(movables);
-    val collisions = combinations.flatMap(detect(_, timestep));
-    collisions.iterator;
+    combinations.flatMap(detect(_, timestep));
   }
   
   private def detect(movableCombination:Combination2[T, T], timestep:Double) = {

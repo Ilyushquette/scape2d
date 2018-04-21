@@ -17,7 +17,7 @@ case class RotationIntegral(
   ),
   collisionForcesResolver:ParticleCollisionForcesResolver = MomentumDeltaActionReactionalCollisionForcesResolver()
 ) {
-  def integrate(particles:Iterable[Particle], timestep:Double):Unit = {
+  def integrate(particles:Set[Particle], timestep:Double):Unit = {
     particles.foreach(accelerate);
     val collisions = collisionDetector.detect(particles, timestep);
     if(!collisions.isEmpty) {
@@ -30,7 +30,7 @@ case class RotationIntegral(
     }else integrateRotation(particles, timestep);
   }
   
-  def integrateBreakIfCollision(particles:Iterable[Particle], timestep:Double) = {
+  def integrateBreakIfCollision(particles:Set[Particle], timestep:Double) = {
     particles.foreach(accelerate);
     val collisions = collisionDetector.detect(particles, timestep);
     if(!collisions.isEmpty) {
