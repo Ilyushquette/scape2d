@@ -9,8 +9,7 @@ import scape.scape2d.engine.motion.collision.CollisionEvent
 import scape.scape2d.engine.motion.positionForTimeOf
 import scape.scape2d.engine.motion.rotational.angularToLinearVelocity
 
-
-case class MomentumDeltaActionReactionalCollisionForcesResolver extends ParticleCollisionForcesResolver {
+case class MomentumDeltaActionReactionalCollisionForcesResolver() extends ParticleCollisionForcesResolver {
   def resolve(collision:CollisionEvent[Particle]) = {
     val snapshotPair = collision.snapshotPair;
     val velocity1 = resolveCombinedVelocityOfFirstParticle(collision);

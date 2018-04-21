@@ -7,7 +7,7 @@ import scape.scape2d.engine.geom.shape.Segment
 import scape.scape2d.engine.geom.shape.ShapeBounds
 import scape.scape2d.graphics.rasterizer.Rasterizer
 
-case class NaiveSegmentRasterizer extends Rasterizer[Segment] {
+case class NaiveSegmentRasterizer() extends Rasterizer[Segment] {
   def rasterize(segment:Segment) = {
     if(segment.line.vertical || abs(segment.line.slope.get) > 1) rasterizeSteepLine(segment);
     else rasterizeGradualLine(segment);

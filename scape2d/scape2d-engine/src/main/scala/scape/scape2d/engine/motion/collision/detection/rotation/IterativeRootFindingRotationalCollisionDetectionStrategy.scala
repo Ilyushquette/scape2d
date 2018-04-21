@@ -9,7 +9,7 @@ import scape.scape2d.engine.motion.rotational.trajectory.crossPaths
 import scape.scape2d.engine.geom.Formed
 import scape.scape2d.engine.geom.shape.Circle
 
-case class IterativeRootFindingRotationalCollisionDetectionStrategy[T <: Movable with Formed[Circle]]
+case class IterativeRootFindingRotationalCollisionDetectionStrategy[T <: Movable with Formed[Circle]]()
 extends RotationalCollisionDetectionStrategy[T] {
   def detect(P:T, Q:T, timestep:Double) = {
     if(P.rotatable != Q.rotatable && crossPaths(P, Q)) {

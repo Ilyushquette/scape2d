@@ -7,7 +7,7 @@ import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.graphics.rasterizer.Rasterizer
 
-case class MidpointCircleRasterizer extends Rasterizer[Circle] {
+case class MidpointCircleRasterizer() extends Rasterizer[Circle] {
   def rasterize(circle:Circle) = {
     val zerothOctantOffsets = calculateZerothOctantOffsets(circle, 0, Set());
     zerothOctantOffsets.flatMap(reflectOctants(_, circle));

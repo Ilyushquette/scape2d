@@ -5,7 +5,7 @@ import scape.scape2d.engine.motion.linear.asMetersPerTimestep
 import scape.scape2d.engine.geom.Formed
 import scape.scape2d.engine.geom.shape.Circle
 
-case class QuadraticLinearMotionCollisionDetectionStrategy[T <: Movable with Formed[Circle]]
+case class QuadraticLinearMotionCollisionDetectionStrategy[T <: Movable with Formed[Circle]]()
 extends LinearMotionCollisionDetectionStrategy[T] {
   def detect(s1:T, s2:T, timestep:Double) = {
     val sumOfRadii = s1.radius + s2.radius;
