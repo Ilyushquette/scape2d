@@ -27,7 +27,7 @@ object CollisionDetectionStrategyValidator {
     val rotatable1 = new RotatableMock(Point.origin, 0, Set(movable1));
     val movable2 = new MovableMock(Circle(Point(10, -1), 1), Vector(), None);
     val detection = detectionStrategy.detect(movable1, movable2, 1000);
-    if(detection.isDefined) throw new UnexpectedDetectionException("");
+    if(detection.isDefined) throw UnexpectedDetectionException();
   }
   
   def checkSynchronousPairNoCollision(detectionStrategy:CollisionDetectionStrategy[MovableMock]) = {
@@ -36,7 +36,7 @@ object CollisionDetectionStrategyValidator {
     val movable2 = new MovableMock(Circle(Point.origin, 0.1), Vector(4, HalfPI), None);
     val rotatable2 = new RotatableMock(Point(0, 1), PI, Set(movable2));
     val detection = detectionStrategy.detect(movable1, movable2, 1000);
-    if(detection.isDefined) throw new UnexpectedDetectionException("");
+    if(detection.isDefined) throw UnexpectedDetectionException();
   }
   
   def checkDirectCollision(detectionStrategy:CollisionDetectionStrategy[MovableMock]) = {
@@ -45,10 +45,10 @@ object CollisionDetectionStrategyValidator {
     val movable2 = new MovableMock(Circle(Point(0, 11), 1), Vector(4, 4.7123889803), None);
     val rotatable2 = new RotatableMock(Point(0, 10), -PI, Set(movable2));
     val detection = detectionStrategy.detect(movable1, movable2, 1000);
-    val time = detection.getOrElse(throw new NoDetectionException(""));
+    val time = detection.getOrElse(throw NoDetectionException());
     val contactTime = 798.42135;
     if(time > contactTime || time < contactTime - 25)
-      throw new ContactTimePredictionException("");
+      throw ContactTimePredictionException();
   }
   
   def checkFastVersusSlowNoCollision(detectionStrategy:CollisionDetectionStrategy[MovableMock]) = {
@@ -57,7 +57,7 @@ object CollisionDetectionStrategyValidator {
     val movable2 = new MovableMock(Circle(Point(0, 11), 0.1), Vector(4, 4.7123889803), None);
     val rotatable2 = new RotatableMock(Point(0, 10), -TwicePI, Set(movable2));
     val detection = detectionStrategy.detect(movable1, movable2, 1000);
-    if(detection.isDefined) throw new UnexpectedDetectionException("");
+    if(detection.isDefined) throw UnexpectedDetectionException();
   }
   
   def checkSmallFastVersusLargeSlowCollision(detectionStrategy:CollisionDetectionStrategy[MovableMock]) = {
@@ -66,9 +66,9 @@ object CollisionDetectionStrategyValidator {
     val movable2 = new MovableMock(Circle(Point(0, 11), 1.9), Vector(4, 4.7123889803), None);
     val rotatable2 = new RotatableMock(Point(0, 10), -TwicePI, Set(movable2));
     val detection = detectionStrategy.detect(movable1, movable2, 1000);
-    val time = detection.getOrElse(throw new NoDetectionException(""));
+    val time = detection.getOrElse(throw NoDetectionException());
     val contactTime = 999.99171;
     if(time > contactTime || time < contactTime - 17)
-      throw new ContactTimePredictionException("");
+      throw ContactTimePredictionException();
   }
 }
