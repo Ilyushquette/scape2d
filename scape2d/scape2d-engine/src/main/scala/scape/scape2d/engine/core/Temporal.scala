@@ -1,5 +1,7 @@
 package scape.scape2d.engine.core
 
+import java.lang.Math.abs
+
 class Temporal(timeDependent:TimeDependent) {
   private var _timeleft = timeDependent.time.milliseconds;
   
@@ -14,7 +16,7 @@ class Temporal(timeDependent:TimeDependent) {
   }
   
   private def adjustTimestep(timestep:Double) = {
-    if(timestep > timeleft) Math.abs(timestep - timeleft);
+    if(timestep > timeleft) abs(timestep - timeleft);
     else timestep;
   }
 }

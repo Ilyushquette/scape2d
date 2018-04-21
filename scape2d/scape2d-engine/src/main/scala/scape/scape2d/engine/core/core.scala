@@ -1,5 +1,6 @@
 package scape.scape2d.engine
 
+import java.lang.Math.abs
 import com.google.common.math.DoubleMath.fuzzyEquals
 import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.core.matter.Bond
@@ -69,7 +70,7 @@ package object core {
     val currentLength = particles._1.position distanceTo particles._2.position;
     val strain = currentLength - bond.restLength;
     if(!fuzzyEquals(0, strain, Epsilon)) {
-      if(Math.abs(strain) <= bond.deformationDescriptor.plastic.limit) {
+      if(abs(strain) <= bond.deformationDescriptor.plastic.limit) {
         val deformation = bond.deformationDescriptor.strained(strain);
         val restoringForce1 = (particles._1.position - particles._2.position) * -deformation.stress;
         val restoringForce2 = restoringForce1.opposite;
