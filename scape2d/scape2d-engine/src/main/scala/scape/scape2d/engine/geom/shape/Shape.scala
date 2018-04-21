@@ -111,7 +111,7 @@ case class Line(p1:Point, p2:Point) extends Shape {
                       else false;
     case ray:Ray => contains(ray.line);
     case segment:Segment => contains(segment.line);
-    case _ => false;
+    case _:Circle | _:Polygon | _:CircleSweep | _:Ring => false;
   }
   
   def displacedBy(components:Components) = Line(p1 + components, p2 + components);
@@ -137,7 +137,7 @@ case class Ray(origin:Point, angle:Double) extends Shape {
     case point:Point => intersects(point);
     case Ray(origin2, angle2) => angle == angle2 && intersects(origin2);
     case Segment(p1, p2) => intersects(p1) && intersects(p2);
-    case _ => false;
+    case _:Line | _:Circle | _:Polygon | _:CircleSweep | _:Ring => false;
   }
   
   def displacedBy(components:Components) = Ray(origin + components, angle);
@@ -163,7 +163,7 @@ case class Segment(p1:Point, p2:Point) extends Shape {
   def contains(shape:Shape) = shape match {
     case point:Point => intersects(point);
     case Segment(p3, p4) => intersects(p3) && intersects(p4);
-    case _ => false;
+    case _:Line | _:Ray | _:Circle | _:Polygon | _:CircleSweep | _:Ring => false;
   }
   
   def displacedBy(components:Components) = Segment(p1 + components, p2 + components);
@@ -192,7 +192,7 @@ case class Circle(center:Point, radius:Double) extends Sweepable[CircleSweep] {
     case polygon:Polygon => polygon.points.forall(intersects);
     case circleSweep:CircleSweep => contains(circleSweep.circle) && contains(circleSweep.destinationCircle);
     case ring:Ring => contains(ring.outerCircle);
-    case _ => false;
+    case _:Line | _:Ray => false;
   }
   
   def displacedBy(components:Components) = Circle(center + components, radius);
@@ -232,7 +232,7 @@ case class CustomPolygon private[shape] (segments:List[Segment]) extends Polygon
                                     contains(circleSweep.connector._1) &&
                                     contains(circleSweep.connector._2);
     case ring:Ring => contains(ring.outerCircle);
-    case _ => false;
+    case _:Line | _:Ray => false;
   }
   
   def displacedBy(components:Components) = {
@@ -265,7 +265,7 @@ case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) e
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
     case aabb:AxisAlignedRectangle => testIntersection(this, aabb);
-    case untuned => polygon.intersects(untuned);
+    case _:Line | _:Ray | _:Segment | _:Circle | _:Polygon | _:CircleSweep | _:Ring => polygon.intersects(shape);
   }
   
   def contains(shape:Shape) = shape match {
@@ -276,7 +276,7 @@ case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) e
     case polygon:Polygon => polygon.points.forall(intersects);
     case circleSweep:CircleSweep => contains(circleSweep.circle) && contains(circleSweep.destinationCircle);
     case ring:Ring => contains(ring.outerCircle);
-    case untuned => polygon.contains(untuned);
+    case _:Line | _:Ray => polygon.contains(shape);
   }
   
   def displacedBy(components:Components) = AxisAlignedRectangle(bottomLeft + components, width, height);
@@ -324,7 +324,7 @@ case class CircleSweep(circle:Circle, sweepVector:Vector) extends Shape {
     case polygon:Polygon => polygon.points.forall(contains);
     case cs:CircleSweep => contains(cs.circle) && contains(cs.destinationCircle);
     case ring:Ring => contains(ring.outerCircle);
-    case _ => false;
+    case _:Line | _:Ray => false;
   }
   
   def displacedBy(components:Components) = CircleSweep(circle displacedBy components, sweepVector);
