@@ -323,6 +323,7 @@ case class CircleSweep(circle:Circle, sweepVector:Vector) extends Shape {
                             (!ocircle.intersects(connector._1) && !ocircle.intersects(connector._2)));
     case polygon:Polygon => polygon.points.forall(contains);
     case cs:CircleSweep => contains(cs.circle) && contains(cs.destinationCircle);
+    case ring:Ring => contains(ring.outerCircle);
     case _ => false;
   }
   
