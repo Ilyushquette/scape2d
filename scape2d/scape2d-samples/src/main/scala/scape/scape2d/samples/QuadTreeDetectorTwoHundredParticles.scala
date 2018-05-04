@@ -34,7 +34,6 @@ import scape.scape2d.engine.motion.collision.detection.linear.QuadraticLinearMot
 import scape.scape2d.engine.core.integral.MotionIntegral
 import scape.scape2d.engine.geom.partition.QuadTree
 import scape.scape2d.engine.motion.linear.LinearSweepFormingMovable
-import java.lang.Math.PI
 
 object QuadTreeDetectorTwoHundredParticles {
   def main(args:Array[String]):Unit = {
@@ -70,7 +69,7 @@ object QuadTreeDetectorTwoHundredParticles {
     val metalParticles2 = for(i <- 0 to 100) yield ParticleBuilder()
       .as(Circle(Point(25 - i * 0.11, i * 0.14), 0.05))
       .withMass(2)
-      .withVelocity(Vector(2, PI))
+      .withVelocity(Vector(2, 180))
       .build;
     
     val trackedMetalParticles = metalParticles.map(MovableTrackerProxy.track(_));

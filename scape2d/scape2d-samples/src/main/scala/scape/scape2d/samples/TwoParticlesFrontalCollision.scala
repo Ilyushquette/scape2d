@@ -19,7 +19,6 @@ import scape.scape2d.graphics.rasterizer.UnitConvertingRasterizer
 import scape.scape2d.graphics.rasterizer.cache.CachingRasterizers
 import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
-import java.lang.Math.PI
 
 object TwoParticlesFrontalCollision {
   def main(args:Array[String]):Unit = {
@@ -32,7 +31,7 @@ object TwoParticlesFrontalCollision {
     val metalParticle2 = ParticleBuilder()
       .as(Circle(Point(10, 7), 0.05))
       .withMass(2)
-      .withVelocity(Vector(2, PI))
+      .withVelocity(Vector(2, 180))
       .build;
     
     val trackedMetalParticle = MovableTrackerProxy.track(metalParticle);

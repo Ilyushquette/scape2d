@@ -1,12 +1,11 @@
 package scape.scape2d.engine.geom.shape.intersection
 
-import java.lang.Math.PI
 import org.junit.Test
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.shape.Ray
 import org.junit.Assert
 
-class RayPointIntersectionTest {
+class RayPointIntersection {
   @Test
   def testRayWithRayStartingPointDoIntersect = {
     val startingPoint = Point(2, 7);
@@ -16,19 +15,19 @@ class RayPointIntersectionTest {
   
   @Test
   def testRayPointBehindDontIntersect = {
-    val ray = Ray(Point(5, -5), 2.3561944901);
+    val ray = Ray(Point(5, -5), 135);
     Assert.assertFalse(ray.intersects(Point(6, -6)));
   }
   
   @Test
   def testRayPointOnTheWayDoIntersect = {
-    val ray = Ray(Point(5, -5), 2.3561944901);
+    val ray = Ray(Point(5, -5), 135);
     Assert.assertTrue(ray.intersects(Point(-1, 1)));
   }
   
   @Test
   def testRayPointDontIntersect = {
-    val ray = Ray(Point(0, 0), PI);
+    val ray = Ray(Point(0, 0), 180);
     Assert.assertFalse(ray.intersects(Point(-30, 1)));
   }
 }

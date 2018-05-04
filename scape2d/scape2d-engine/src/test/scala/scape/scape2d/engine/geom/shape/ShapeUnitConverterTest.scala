@@ -2,6 +2,7 @@ package scape.scape2d.engine.geom.shape
 
 import org.junit.Assert
 import org.junit.Test
+
 import scape.scape2d.engine.geom.Vector
 
 class ShapeUnitConverterTest {
@@ -58,9 +59,9 @@ class ShapeUnitConverterTest {
   
   @Test
   def testCircleSweepUnitConversion = {
-    val circleSweep = CircleSweep(Circle(Point(3, 3), 1), Vector(2, 0.7853981633));
+    val circleSweep = CircleSweep(Circle(Point(3, 3), 1), Vector(2, 45));
     val converter = new ShapeUnitConverter(33);
-    Assert.assertEquals(CircleSweep(Circle(Point(99, 99), 33), Vector(66, 0.7853981633)), converter.scale(circleSweep));
+    Assert.assertEquals(CircleSweep(Circle(Point(99, 99), 33), Vector(66, 45)), converter.scale(circleSweep));
   }
   
   @Test
@@ -79,7 +80,7 @@ class ShapeUnitConverterTest {
   
   @Test(expected=classOf[IllegalArgumentException])
   def testRayUnitsIllegalConversion:Unit = {
-    val line = Ray(Point(0, 0), 5.4977871437);
+    val line = Ray(Point(0, 0), 315);
     val converter = new ShapeUnitConverter(33);
     converter.scale(line);
   }

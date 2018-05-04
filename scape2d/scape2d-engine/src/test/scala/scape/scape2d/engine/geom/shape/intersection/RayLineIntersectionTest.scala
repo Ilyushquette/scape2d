@@ -1,24 +1,22 @@
 package scape.scape2d.engine.geom.shape.intersection
 
-import java.lang.Math.PI
 import org.junit.Test
-import scape.scape2d.engine.geom.HalfPI
 import scape.scape2d.engine.geom.shape.Ray
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.shape.Line
 import org.junit.Assert
 
-class RayLineIntersectionTest {
+class RayLineIntersection {
   @Test
   def testRayLineVerticalsDontIntersect = {
-    val ray = Ray(Point(0, 0), HalfPI);
+    val ray = Ray(Point(0, 0), 90);
     val line = Line(Point(1, 1), Point(1, -1));
     Assert.assertFalse(ray.intersects(line));
   }
   
   @Test
   def testRayLineVerticalsDoIntersect = {
-    val ray = Ray(Point(0, 0), HalfPI);
+    val ray = Ray(Point(0, 0), 90);
     val line = Line(Point(0, 0), Point(0, -1));
     Assert.assertTrue(ray.intersects(line));
   }
@@ -39,14 +37,14 @@ class RayLineIntersectionTest {
   
   @Test
   def testRayLineBehindDontIntersect = {
-    val ray = Ray(Point(0, 0), 2.3561944901);
+    val ray = Ray(Point(0, 0), 135);
     val line = Line(Point(2, 1), Point(0, -1));
     Assert.assertFalse(ray.intersects(line));
   }
   
   @Test
   def testRayLineBehindDoIntersect = {
-    val ray = Ray(Point(0, 0), 5.4977871437);
+    val ray = Ray(Point(0, 0), 315);
     val line = Line(Point(2, 1), Point(0, -1));
     Assert.assertTrue(ray.intersects(line));
   }

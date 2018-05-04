@@ -6,7 +6,7 @@ import scape.scape2d.engine.geom.shape.Point
 import org.junit.Assert
 import scape.scape2d.engine.geom.shape.Line
 
-class CircleLineIntersectionTest {
+class CircleLineIntersection {
   @Test
   def testCircleLineDontIntersect = {
     val circle = Circle(Point(0, 0), 4);

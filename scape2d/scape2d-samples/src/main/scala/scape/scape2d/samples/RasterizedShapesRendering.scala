@@ -81,7 +81,7 @@ object RasterizedShapesRendering {
   }
   
   private def drawCircleSweep(shapeDrawer:ShapeDrawer) = {
-    val circleSweep = CircleSweep(Circle(Point(5, 4.5), 0.5), Vector(3, 0.3490658503));
+    val circleSweep = CircleSweep(Circle(Point(5, 4.5), 0.5), Vector(3, 20));
     shapeDrawer.draw(CustomizedShape(circleSweep, 0xFFFFFFFF));
   }
   

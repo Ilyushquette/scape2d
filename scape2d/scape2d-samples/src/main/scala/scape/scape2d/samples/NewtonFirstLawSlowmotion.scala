@@ -2,6 +2,7 @@ package scape.scape2d.samples
 
 import java.awt.Color
 import java.awt.Toolkit
+
 import javax.swing.JFrame
 import scape.scape2d.debugger.ParticleDebugger
 import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
@@ -28,7 +29,7 @@ object NewtonFirstLawSlowmotion {
     val metalParticle = ParticleBuilder()
       .as(Circle(Point.origin, 0.05))
       .withMass(2)
-      .withVelocity(Vector(2, 0.7853981633))
+      .withVelocity(Vector(2, 45))
       .build;
     
     val trackedMetalParticle = MovableTrackerProxy.track(metalParticle);

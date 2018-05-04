@@ -21,7 +21,7 @@ package object intersection {
   }
   
   def testIntersection(ray:Ray, point:Point):Boolean = {
-    ray.origin == point || fuzzyEquals(ray.angle, ray.origin angleTo point, Epsilon);
+    ray.origin == point || fuzzyEquals(ray.angle, ray.origin angleToDeg point, Epsilon);
   }
   
   def testIntersection(ray:Ray, line:Line):Boolean = {
@@ -115,7 +115,7 @@ package object intersection {
   def testIntersection(polygon:Polygon, point:Point):Boolean = {
     val onTheVertex = polygon.segments.exists(s => s.p1 == point || s.p2 == point);
     if(!onTheVertex) {
-      val ray = Ray(point, PI);
+      val ray = Ray(point, 180);
       val intersectedSegments = polygon.segments.filter(_.intersects(ray));
       (intersectedSegments.size & 1) == 1;
     }else true;
@@ -153,7 +153,7 @@ package object intersection {
   
   def testIntersection(circleSweep:CircleSweep, point:Point):Boolean = {
     if(!circleSweep.circle.intersects(point) && !circleSweep.destinationCircle.intersects(point)) {
-      val ray = Ray(point, normalizeRadians(circleSweep.sweepVector.angle + HalfPI));
+      val ray = Ray(point, normalizeDegrees(circleSweep.sweepVector.angle + 90));
       ray.intersects(circleSweep.connector._1) ^ ray.intersects(circleSweep.connector._2);
     }else true;
   }
@@ -173,7 +173,7 @@ package object intersection {
   
   def testIntersection(circleSweep:CircleSweep, segment:Segment):Boolean = {
     if(!segment.intersects(circleSweep.circle) && !segment.intersects(circleSweep.destinationCircle)) {
-      val ray = Ray(segment.p1, normalizeRadians(circleSweep.sweepVector.angle + HalfPI));
+      val ray = Ray(segment.p1, normalizeDegrees(circleSweep.sweepVector.angle + 90));
       segment.intersects(circleSweep.connector._1) ||
       segment.intersects(circleSweep.connector._2) ||
       circleSweep.connector._1.intersects(ray) ^ circleSweep.connector._2.intersects(ray); // in connector
@@ -182,7 +182,7 @@ package object intersection {
   
   def testIntersection(circleSweep:CircleSweep, circle:Circle):Boolean = {
     if(!circle.intersects(circleSweep.circle) && !circle.intersects(circleSweep.destinationCircle)) {
-      val ray = Ray(circle.center, normalizeRadians(circleSweep.sweepVector.angle + HalfPI));
+      val ray = Ray(circle.center, normalizeDegrees(circleSweep.sweepVector.angle + 90));
       circle.intersects(circleSweep.connector._1) || circle.intersects(circleSweep.connector._2) ||
       ray.intersects(circleSweep.connector._1) ^ ray.intersects(circleSweep.connector._2); // in connector
     }else true;
