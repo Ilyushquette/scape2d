@@ -19,6 +19,16 @@ case class Angle private[Angle](value:Double, unit:AngleUnit) {
     else this;
   }
   
+  def +(angle:Angle) = {
+    val convertedAngle = angle to unit;
+    Angle.bound(value + convertedAngle.value, unit);
+  }
+  
+  def -(angle:Angle) = {
+    val convertedAngle = angle to unit;
+    Angle.bound(value - convertedAngle.value, unit);
+  }
+  
   def *(multiplier:Double) = Angle.bound(value * multiplier, unit);
   
   def /(angle:Angle) = radians / angle.radians;

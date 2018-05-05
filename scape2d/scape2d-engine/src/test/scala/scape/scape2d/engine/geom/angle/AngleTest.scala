@@ -20,6 +20,12 @@ class AngleTest {
   def testUnitConversionAngle = Assert.assertEquals(Angle.straight, 180(Degree) to Radian);
   
   @Test
+  def testAngleSumWithAnotherAngle = Assert.assertEquals(180(Degree), 90(Degree) + 1.5707963267(Radian));
+  
+  @Test
+  def testAngleSubtractionFromAnotherAngle = Assert.assertEquals(359(Degree), Degree - 2(Degree));
+  
+  @Test
   def testAngleMultiplicationByNumber = Assert.assertEquals(135(Degree), 90(Degree) * 5.5);
   
   @Test
