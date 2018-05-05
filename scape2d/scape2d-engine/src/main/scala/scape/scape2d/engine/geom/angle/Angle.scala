@@ -1,6 +1,8 @@
 package scape.scape2d.engine.geom.angle
 
 object Angle {
+  val straight = 3.14159265358979(Radian);
+  
   def bound(value:Double, unit:AngleUnit) = {
     val normalizedValue = (value + unit.upperBound) % unit.upperBound;
     Angle(normalizedValue, unit);
