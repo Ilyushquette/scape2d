@@ -6,7 +6,7 @@ import scape.scape2d.engine.geom.shape.Line
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.shape.Segment
 
-class TestGeomFunctions {
+class GeomFunctionsTest {
   @Test
   def testNormalizePositiveAngle = {
     Assert.assertEquals(135, normalizeDegrees(135), 0.00001);

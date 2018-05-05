@@ -6,7 +6,7 @@ import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.shape.Ray
 import org.junit.Assert
 
-class SegmentRayIntersection {
+class SegmentRayIntersectionTest {
   @Test
   def testSegmentRayVerticalDontIntersect = {
     val segment = Segment(Point(1, 3), Point(1, 5));

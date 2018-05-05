@@ -5,7 +5,7 @@ import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.shape.Ray
 import org.junit.Assert
 
-class RayPointIntersection {
+class RayPointIntersectionTest {
   @Test
   def testRayWithRayStartingPointDoIntersect = {
     val startingPoint = Point(2, 7);

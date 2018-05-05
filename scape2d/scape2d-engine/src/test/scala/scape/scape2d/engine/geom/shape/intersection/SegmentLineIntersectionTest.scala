@@ -6,7 +6,7 @@ import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.shape.Line
 import org.junit.Assert
 
-class SegmentLineIntersection {
+class SegmentLineIntersectionTest {
   @Test
   def testSegmentVerticalLineDontIntersect = {
     val segment = Segment(Point(1, 1), Point(2, 0));

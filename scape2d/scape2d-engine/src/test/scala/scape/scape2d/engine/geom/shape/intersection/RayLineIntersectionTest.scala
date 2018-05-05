@@ -6,7 +6,7 @@ import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.shape.Line
 import org.junit.Assert
 
-class RayLineIntersection {
+class RayLineIntersectionTest {
   @Test
   def testRayLineVerticalsDontIntersect = {
     val ray = Ray(Point(0, 0), 90);
