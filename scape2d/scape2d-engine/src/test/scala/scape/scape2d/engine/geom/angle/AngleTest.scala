@@ -15,4 +15,13 @@ class AngleTest {
   
   @Test
   def testSameDurationWithDifferentTypes = Assert.assertTrue(90(Degree) == 1.5707963267(Radian));
+  
+  @Test
+  def testAngleMultiplicationByNumber = Assert.assertEquals(135(Degree), 90(Degree) * 5.5);
+  
+  @Test
+  def testAngleDivisionByAnotherAngle = Assert.assertEquals(9, 45(Degree) / 5(Degree), Epsilon);
+  
+  @Test
+  def testAngleDivisionByNumber = Assert.assertEquals(3(Degree), 270(Degree) / 90);
 }

@@ -14,6 +14,12 @@ object Angle {
 case class Angle private[Angle](value:Double, unit:AngleUnit) {
   lazy val radians = value * unit.radians;
   
+  def *(multiplier:Double) = Angle.bound(value * multiplier, unit);
+  
+  def /(angle:Angle) = radians / angle.radians;
+  
+  def /(divider:Double) = Angle.bound(value / divider, unit);
+  
   override def equals(any:Any) = any match {
     case angle:Angle => fuzzyEquals(radians, angle.radians, Epsilon);
     case unit:AngleUnit => this == AngleUnit.toAngle(unit);
