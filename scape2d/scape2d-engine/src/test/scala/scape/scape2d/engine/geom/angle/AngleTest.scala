@@ -17,6 +17,9 @@ class AngleTest {
   def testSameDurationWithDifferentTypes = Assert.assertTrue(90(Degree) == 1.5707963267(Radian));
   
   @Test
+  def testUnitConversionAngle = Assert.assertEquals(Angle.straight, 180(Degree) to Radian);
+  
+  @Test
   def testAngleMultiplicationByNumber = Assert.assertEquals(135(Degree), 90(Degree) * 5.5);
   
   @Test

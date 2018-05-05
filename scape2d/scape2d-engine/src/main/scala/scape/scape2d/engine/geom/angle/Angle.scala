@@ -14,6 +14,11 @@ object Angle {
 case class Angle private[Angle](value:Double, unit:AngleUnit) {
   lazy val radians = value * unit.radians;
   
+  def to(anotherUnit:AngleUnit) = {
+    if(unit != anotherUnit) Angle.bound(unit / anotherUnit * value, anotherUnit);
+    else this;
+  }
+  
   def *(multiplier:Double) = Angle.bound(value * multiplier, unit);
   
   def /(angle:Angle) = radians / angle.radians;
