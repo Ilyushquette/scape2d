@@ -25,6 +25,7 @@ object Angle {
 
 case class Angle private[Angle](value:Double, unit:AngleUnit) extends Ordered[Angle] {
   lazy val radians = value * unit.radians;
+  lazy val opposite = this + Angle.straight;
   
   def to(anotherUnit:AngleUnit) = {
     if(unit != anotherUnit) Angle.bound(unit / anotherUnit * value, anotherUnit);
