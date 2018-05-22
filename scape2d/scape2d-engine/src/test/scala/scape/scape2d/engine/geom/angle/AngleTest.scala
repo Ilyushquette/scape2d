@@ -2,6 +2,7 @@ package scape.scape2d.engine.geom.angle
 
 import org.junit.Assert
 import org.junit.Test
+import scape.scape2d.engine.geom.Components
 
 class AngleTest {
   @Test
@@ -15,6 +16,9 @@ class AngleTest {
   
   @Test
   def testSameDurationWithDifferentTypes = Assert.assertTrue(90(Degree) == 1.5707963267(Radian));
+  
+  @Test
+  def testAngleFromComponents = Assert.assertEquals(225(Degree), Angle.from(Components(-2, -2)));
   
   @Test
   def testUnitConversionAngle = Assert.assertEquals(Angle.straight, 180(Degree) to Radian);

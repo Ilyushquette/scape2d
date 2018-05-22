@@ -1,7 +1,10 @@
 package scape.scape2d.engine.geom.angle
 
+import java.lang.Math.atan2
+
 import com.google.common.math.DoubleMath.fuzzyCompare
 import com.google.common.math.DoubleMath.fuzzyEquals
+import scape.scape2d.engine.geom.Components
 
 object Angle {
   val straight = 3.14159265358979(Radian);
@@ -9,6 +12,11 @@ object Angle {
   def bound(value:Double, unit:AngleUnit) = {
     val normalizedValue = (value + unit.upperBound) % unit.upperBound;
     Angle(normalizedValue, unit);
+  }
+  
+  def from(components:Components) = {
+    val value = atan2(components.y, components.x);
+    Angle.bound(value, Radian);
   }
 }
 
