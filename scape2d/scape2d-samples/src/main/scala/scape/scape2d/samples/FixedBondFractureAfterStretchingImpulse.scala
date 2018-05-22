@@ -35,6 +35,7 @@ import scape.scape2d.graphics.rasterizer.cache.CachingRasterizers
 import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
 import scape.scape2d.debugger.BondDebugger
+import scape.scape2d.engine.geom.angle.Angle
 
 object FixedBondFractureAfterStretchingImpulse {
   def main(args:Array[String]):Unit = {
@@ -71,7 +72,7 @@ object FixedBondFractureAfterStretchingImpulse {
     
     val timer = new Timer;
     timer.schedule(new TimerTask {
-      def run() = nature.add(new Impulse(trackedMetalParticle2, Vector(85, 0), 50(Millisecond)));
+      def run() = nature.add(new Impulse(trackedMetalParticle2, Vector(85, Angle.zero), 50(Millisecond)));
     }, 3000);
   }
   

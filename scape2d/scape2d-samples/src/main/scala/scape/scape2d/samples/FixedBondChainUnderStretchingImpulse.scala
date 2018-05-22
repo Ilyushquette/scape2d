@@ -26,6 +26,7 @@ import scape.scape2d.graphics.rasterizer.UnitConvertingRasterizer
 import scape.scape2d.graphics.rasterizer.cache.CachingRasterizers
 import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
+import scape.scape2d.engine.geom.angle.Angle
 
 object FixedBondChainUnderStretchingImpulse {
   def main(args:Array[String]):Unit = {
@@ -58,7 +59,7 @@ object FixedBondChainUnderStretchingImpulse {
       .withDampingCoefficient(0.1)
       .build;
     
-    val impulse = new Impulse(trackedMetalParticle3, Vector(500, 0), 10(Second));
+    val impulse = new Impulse(trackedMetalParticle3, Vector(500, Angle.zero), 10(Second));
     
     val frame = new JFrame("Scape2D Debugger");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

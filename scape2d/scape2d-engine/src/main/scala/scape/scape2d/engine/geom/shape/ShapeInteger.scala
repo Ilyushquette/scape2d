@@ -1,6 +1,7 @@
 package scape.scape2d.engine.geom.shape
 
 import scape.scape2d.engine.geom.Vector
+import scape.scape2d.engine.geom.angle.Angle
 
 object ShapeInteger {
   implicit def widenShape[S <: Shape](shapeInteger:ShapeInteger[S]):S = shapeInteger.shapeDouble;
@@ -18,7 +19,7 @@ case class LineInteger(p1:PointInteger, p2:PointInteger) extends ShapeInteger[Li
   lazy val shapeDouble = Line(p1, p2);
 }
 
-case class RayInteger(origin:PointInteger, angle:Double) extends ShapeInteger[Ray] {
+case class RayInteger(origin:PointInteger, angle:Angle) extends ShapeInteger[Ray] {
   lazy val shapeDouble = Ray(origin, angle);
 }
 

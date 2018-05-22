@@ -2,76 +2,74 @@ package scape.scape2d.engine.geom
 
 import org.junit.Assert
 import org.junit.Test
+import scape.scape2d.engine.geom.angle.Degree
+import scape.scape2d.engine.geom.angle.doubleToAngle
 
 class VectorTest {
   @Test
   def testVectorFromComponents = {
     val components = Components(3, 3);
-    val vector = Vector.from(components);
-    Assert.assertEquals(4.24264, vector.magnitude, 0.00001);
-    Assert.assertEquals(45, vector.angle, 0.00001);
+    Assert.assertEquals(Vector(4.2426406871, 45(Degree)), Vector.from(components));
   }
   
   @Test
-  def testEqualsSame = Assert.assertEquals(Vector(3, 55.5), Vector(3, 55.5));
+  def testEqualsSame = Assert.assertEquals(Vector(3, 55.5(Degree)), Vector(3, 55.5(Degree)));
   
   @Test
-  def testEqualsSameWithZeroMagnitude = Assert.assertEquals(Vector(0, 55.5), Vector(0, 90));
+  def testEqualsSameWithZeroMagnitude = Assert.assertEquals(Vector(0, 55.5(Degree)), Vector(0, 90(Degree)));
   
   @Test
-  def testEqualsNotSameByMagnitude = Assert.assertNotSame(Vector(78, 13.23), Vector(77, 13.23));
+  def testEqualsNotSameByMagnitude = Assert.assertNotSame(Vector(78, 13.23(Degree)), Vector(77, 13.23(Degree)));
   
   @Test
-  def testEqualsNotSameByAngle = Assert.assertNotSame(Vector(78, 13.23), Vector(78, 13.23));
+  def testEqualsNotSameByAngle = Assert.assertNotSame(Vector(78, 13.23(Degree)), Vector(78, 13.23(Degree)));
   
   @Test
   def testCalculateComponents = {
-    val vector = Vector(7, 15);
-    val components = vector.components;
-    Assert.assertEquals(6.76148, components.x, 0.00001);
-    Assert.assertEquals(1.81173, components.y, 0.00001);
+    val vector = Vector(7, 15(Degree));
+    Assert.assertEquals(Components(6.7614807840, 1.8117333157), vector.components);
   }
   
   @Test
   def testSumOpposedVectors = {
-    val vector = Vector(20, 0) + Vector(30, 180);
-    assertVectors(Vector(10, 180), vector);
+    val vector = Vector(20, 0(Degree)) + Vector(30, 180(Degree));
+    Assert.assertEquals(Vector(10, 180(Degree)), vector);
   }
   
   @Test
   def testSumUnidirectionalVectors = {
-    val vector = Vector(10, 45) + Vector(7, 45) + Vector(30, 45);
-    assertVectors(Vector(47, 45), vector);
+    val vector = Vector(10, 45(Degree)) + Vector(7, 45(Degree)) + Vector(30, 45(Degree));
+    Assert.assertEquals(Vector(47, 45(Degree)), vector);
   }
   
   @Test
   def testSubtractOpposedVectors = {
-    val vector = Vector(4, 90) - Vector(5, 270);
-    assertVectors(Vector(9, 90), vector);
+    val vector = Vector(4, 90(Degree)) - Vector(5, 270(Degree));
+    Assert.assertEquals(Vector(9, 90(Degree)), vector)
   }
   
   @Test
   def testSubtractUnidirectionalVectors = {
-    val vector = Vector(3, 315) - Vector(4, 315) - Vector(5, 315);
-    assertVectors(Vector(6, 135), vector);
+    val vector = Vector(3, 315(Degree)) - Vector(4, 315(Degree)) - Vector(5, 315(Degree));
+    Assert.assertEquals(Vector(6, 135(Degree)), vector);
   }
   
   @Test
-  def testDotProduct = Assert.assertEquals(-9, Vector(3, 90) * Vector(4.24264, 315), 0.00001);
+  def testDotProduct = Assert.assertEquals(-9, Vector(3, 90(Degree)) * Vector(4.24264, 315(Degree)), 0.00001);
   
   @Test
-  def testDotProductWithZeroLength = Assert.assertEquals(0, Vector(3, 90) * Vector(0, 180), 0.00001);
+  def testDotProductWithZeroLength = Assert.assertEquals(0, Vector(3, 90(Degree)) * Vector(0, 180(Degree)), 0.00001);
   
   @Test
   def testVectorMagnitudeMultiplication = {
-    val sourceVector = Vector(4, 180);
-    Assert.assertEquals(Vector(16, 180), sourceVector * 4);
+    val sourceVector = Vector(4, 180(Degree));
+    Assert.assertEquals(Vector(16, 180(Degree)), sourceVector * 4);
   }
   
   @Test
   def testVectorNegativeMagnitudeMultiplication = {
-    val sourceVector = Vector(3, 270);
-    Assert.assertEquals(Vector(3, 90), sourceVector * -1);
+    val sourceVector = Vector(3, 270(Degree));
+    Assert.assertEquals(Vector(3, 90(Degree)), sourceVector * -1);
   }
   
   @Test
@@ -84,7 +82,7 @@ class VectorTest {
   @Test
   def testCrossProductZeroMagnitude = {
     val v1 = Vector.from(Components(2, 3));
-    val v2 = Vector(0, 90);
+    val v2 = Vector(0, 90(Degree));
     Assert.assertEquals(0, v1 x v2, 0.00001);
   }
   
@@ -113,19 +111,12 @@ class VectorTest {
   def testVectorProjection = {
     val vector1 = Vector.from(Components(-4, 0));
     val vector2 = Vector.from(Components(-7, 10));
-    val projectionVector = vector2.projection(vector1);
-    Assert.assertEquals(7, projectionVector.magnitude, 0.00001);
-    Assert.assertEquals(180, projectionVector.angle, 0.00001);
+    Assert.assertEquals(Vector(7, 180(Degree)), vector2 projection vector1);
   }
   
   @Test
   def testOpposite = {
-    val sourceVector = Vector(5, 320)
-    Assert.assertEquals(Vector(5, 140), sourceVector.opposite);
-  }
-  
-  private def assertVectors(expected:Vector, actual:Vector) = {
-    Assert.assertEquals(expected.magnitude, actual.magnitude, 0.00001);
-    Assert.assertEquals(expected.angle, actual.angle, 0.00001);
+    val sourceVector = Vector(5, 320(Degree))
+    Assert.assertEquals(Vector(5, 140(Degree)), sourceVector.opposite);
   }
 }

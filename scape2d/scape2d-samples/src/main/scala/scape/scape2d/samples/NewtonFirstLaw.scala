@@ -19,6 +19,8 @@ import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
 import scape.scape2d.debugger.view.swing.SwingBuffer
 import scape.scape2d.debugger.view.swing.SwingMixingRastersShapeDrawer
 import scape.scape2d.graphics.rasterizer.UnitConvertingRasterizer
+import scape.scape2d.engine.geom.angle.Degree
+import scape.scape2d.engine.geom.angle.doubleToAngle
 
 object NewtonFirstLaw {
   def main(args:Array[String]):Unit = {
@@ -26,7 +28,7 @@ object NewtonFirstLaw {
     val metalParticle = ParticleBuilder()
       .as(Circle(Point.origin, 0.05))
       .withMass(2)
-      .withVelocity(Vector(2, 45))
+      .withVelocity(Vector(2, 45(Degree)))
       .build;
     
     val trackedMetalParticle = MovableTrackerProxy.track(metalParticle);

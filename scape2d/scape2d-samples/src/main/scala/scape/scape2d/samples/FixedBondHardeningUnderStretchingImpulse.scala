@@ -35,6 +35,7 @@ import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
 import scape.scape2d.debugger.BondDebugger
+import scape.scape2d.engine.geom.angle.Angle
 
 object FixedBondHardeningUnderStretchingImpulse {
   def main(args:Array[String]):Unit = {
@@ -71,7 +72,7 @@ object FixedBondHardeningUnderStretchingImpulse {
     
     val timer = new Timer;
     timer.schedule(new TimerTask {
-      def run() = nature.add(new Impulse(trackedMetalParticle2, Vector(500, 0), 2.5(Second)));
+      def run() = nature.add(new Impulse(trackedMetalParticle2, Vector(500, Angle.zero), 2.5(Second)));
     }, 3000);
   }
   

@@ -1,9 +1,9 @@
 package scape.scape2d.engine.core.matter
 
 import scape.scape2d.engine.core.TimeDependent
-import scape.scape2d.engine.geom.normalizeDegrees
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.time.Duration
+import scape.scape2d.engine.geom.angle.Angle
 
 /**
  * Units:
@@ -28,7 +28,7 @@ extends TimeDependent {
   }
   
   private def directionVector = {
-    val radialDirection = particle.rotatable.get.center angleToDeg particle.position;
-    Vector(1, normalizeDegrees(radialDirection + 90));
+    val radialDirection = particle.rotatable.get.center angleTo particle.position;
+    Vector(1, radialDirection + Angle.right);
   }
 }

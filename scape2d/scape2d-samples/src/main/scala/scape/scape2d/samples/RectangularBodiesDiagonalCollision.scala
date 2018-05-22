@@ -49,6 +49,7 @@ import scape.scape2d.engine.time.simulation.Timescale
 import scape.scape2d.engine.time.Frequency
 import scape.scape2d.engine.time.Second
 import scape.scape2d.debugger.TreePosterioriCollisionDetectorDebugger
+import scape.scape2d.engine.geom.angle.Angle
 
 object RectangularBodiesDiagonalCollision {
   def main(args:Array[String]):Unit = {
@@ -94,7 +95,7 @@ object RectangularBodiesDiagonalCollision {
   private def makeMovingParticle(position:Point) = MovableTrackerProxy.track(ParticleBuilder()
                                                                        .as(Circle(position, 0.05))
                                                                        .withMass(2)
-                                                                       .withVelocity(Vector(3, 0))
+                                                                       .withVelocity(Vector(3, Angle.zero))
                                                                        .build);
   
   private def makeStationaryParticle(position:Point) = MovableTrackerProxy.track(ParticleBuilder()

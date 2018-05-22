@@ -24,6 +24,7 @@ import scape.scape2d.graphics.rasterizer.cache.CachingRasterizers
 import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
 import scape.scape2d.debugger.BondDebugger
+import scape.scape2d.engine.geom.angle.Angle
 
 object BondPostDiagonalCollisionCompression {
   def main(args:Array[String]):Unit = {
@@ -39,7 +40,7 @@ object BondPostDiagonalCollisionCompression {
     val metalParticle3 = ParticleBuilder()
       .as(Circle(Point(14.8, 7.025), 0.05))
       .withMass(2)
-      .withVelocity(Vector(3, 180))
+      .withVelocity(Vector(3, Angle.straight))
       .build;
     
     val trackedMetalParticle = MovableTrackerProxy.track(metalParticle);

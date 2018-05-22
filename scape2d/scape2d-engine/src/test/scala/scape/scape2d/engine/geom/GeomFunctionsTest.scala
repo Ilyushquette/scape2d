@@ -8,22 +8,6 @@ import scape.scape2d.engine.geom.shape.Segment
 
 class GeomFunctionsTest {
   @Test
-  def testNormalizePositiveAngle = {
-    Assert.assertEquals(135, normalizeDegrees(135), 0.00001);
-  }
-  
-  @Test
-  def testNormalizeNegativeAngle = {
-    Assert.assertEquals(270, normalizeDegrees(-90), 0.00001);
-  }
-  
-  @Test
-  def testCosDeg = Assert.assertEquals(0.5446, cosDeg(57), 0.0001);
-  
-  @Test
-  def testSinDeg = Assert.assertEquals(0.2588, sinDeg(15), 0.0001);
-  
-  @Test
   def testFindDiagonalCrossedLinesMutualX = {
     val l1 = Line(Point(0, 100), Point(100, 0));
     val l2 = Line(Point(100, 100), Point(0, 0));

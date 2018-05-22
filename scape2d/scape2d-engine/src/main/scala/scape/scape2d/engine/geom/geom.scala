@@ -3,7 +3,6 @@ package scape.scape2d.engine
 import java.lang.Math.cos
 import java.lang.Math.PI
 import java.lang.Math.sin
-import java.lang.Math.toRadians
 
 import com.google.common.math.DoubleMath.fuzzyEquals
 
@@ -13,16 +12,7 @@ import scape.scape2d.engine.geom.shape.Segment
 
 package object geom {
   val Epsilon = 1E-10;
-  val HalfPI = PI / 2;
   val TwicePI = PI * 2;
-  
-  def normalizeDegrees(degrees:Double) = (degrees + 360) % 360;
-  
-  def normalizeRadians(radians:Double) = (radians + TwicePI) % TwicePI;
-  
-  def sinDeg(degrees:Double) = sin(toRadians(normalizeDegrees(degrees)));
-  
-  def cosDeg(degrees:Double) = cos(toRadians(normalizeDegrees(degrees)));
   
   def findMutualX(l1:Line, l2:Line) = {
     if(!l1.vertical && !l2.vertical && !fuzzyEquals(l1.slope.get, l2.slope.get, Epsilon)) {

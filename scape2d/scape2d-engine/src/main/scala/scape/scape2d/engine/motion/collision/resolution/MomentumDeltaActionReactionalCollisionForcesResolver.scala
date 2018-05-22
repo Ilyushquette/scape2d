@@ -1,10 +1,11 @@
 package scape.scape2d.engine.motion.collision.resolution
 
-import java.lang.Math._
 import scape.scape2d.engine.core.matter.Particle
-import scape.scape2d.engine.geom.HalfPI
 import scape.scape2d.engine.geom.Components
 import scape.scape2d.engine.geom.Vector
+import scape.scape2d.engine.geom.angle.Angle
+import scape.scape2d.engine.geom.angle.cos
+import scape.scape2d.engine.geom.angle.sin
 import scape.scape2d.engine.motion.collision.CollisionEvent
 import scape.scape2d.engine.motion.positionForTimeOf
 import scape.scape2d.engine.motion.rotational.angularToLinearVelocity
@@ -38,8 +39,8 @@ case class MomentumDeltaActionReactionalCollisionForcesResolver() extends Partic
     val θ2 = combinedVelocity2.angle;
     
     val fraction = (v1 * cos(θ1 - φ) * (m1 - m2) + 2 * m2 * v2 * cos(θ2 - φ)) / (m1 + m2);
-    val vx = fraction * cos(φ) + v1 * sin(θ1 - φ) * cos(φ + HalfPI);
-    val vy = fraction * sin(φ) + v1 * sin(θ1 - φ) * sin(φ + HalfPI);
+    val vx = fraction * cos(φ) + v1 * sin(θ1 - φ) * cos(φ + Angle.right);
+    val vy = fraction * sin(φ) + v1 * sin(θ1 - φ) * sin(φ + Angle.right);
     Vector.from(Components(vx, vy));
   }
   

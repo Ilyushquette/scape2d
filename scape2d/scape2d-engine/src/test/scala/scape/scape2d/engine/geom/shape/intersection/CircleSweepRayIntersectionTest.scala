@@ -1,6 +1,8 @@
 package scape.scape2d.engine.geom.shape.intersection
 
 import org.junit.Test
+import scape.scape2d.engine.geom.angle.Degree
+import scape.scape2d.engine.geom.angle.doubleToAngle
 import scape.scape2d.engine.geom.shape.CircleSweep
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
@@ -28,7 +30,7 @@ class CircleSweepRayIntersectionTest {
   @Test
   def testRayInTheDirectionAwayFromCircleSweepDontIntersect = {
     val circleSweep = CircleSweep(Circle(Point(0, 5), 2), Vector.from(Components(5, -5)));
-    val ray = Ray(Point(0, 0), 225);
+    val ray = Ray(Point(0, 0), 225(Degree));
     Assert.assertFalse(circleSweep.intersects(ray));
   }
   
@@ -50,7 +52,7 @@ class CircleSweepRayIntersectionTest {
   @Test
   def testRayThroughDestinationCircleOfCircleSweepDoIntersect = {
     val circleSweep = CircleSweep(Circle(Point(0, 5), 2), Vector.from(Components(5, -5)));
-    val ray = Ray(Point(10, -1), 180);
+    val ray = Ray(Point(10, -1), 180(Degree));
     Assert.assertTrue(circleSweep.intersects(ray));
   }
   
@@ -72,7 +74,7 @@ class CircleSweepRayIntersectionTest {
   @Test
   def testRayInsideOfRectangularConnectorOfCircleSweepDoIntersect = {
     val circleSweep = CircleSweep(Circle(Point(0, 5), 2), Vector.from(Components(5, -5)));
-    val ray = Ray(Point(2, 2), 45);
+    val ray = Ray(Point(2, 2), 45(Degree));
     Assert.assertTrue(circleSweep.intersects(ray));
   }
 }

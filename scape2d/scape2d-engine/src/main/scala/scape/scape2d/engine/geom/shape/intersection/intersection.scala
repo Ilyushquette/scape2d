@@ -3,6 +3,7 @@ package scape.scape2d.engine.geom.shape
 import java.lang.Math._
 import scape.scape2d.engine.geom._
 import com.google.common.math.DoubleMath._
+import scape.scape2d.engine.geom.angle.Angle
 
 package object intersection {
   def testIntersection(p1:Point, p2:Point) = p1 == p2;
@@ -21,7 +22,7 @@ package object intersection {
   }
   
   def testIntersection(ray:Ray, point:Point):Boolean = {
-    ray.origin == point || fuzzyEquals(ray.angle, ray.origin angleToDeg point, Epsilon);
+    ray.origin == point || ray.angle == (ray.origin angleTo point);
   }
   
   def testIntersection(ray:Ray, line:Line):Boolean = {
@@ -88,7 +89,7 @@ package object intersection {
       val sc = circle.center - ray.origin;
       val rayUnitVector = Vector(1, ray.angle);
       val projectionVector = sc.projection(rayUnitVector);
-      if(fuzzyEquals(projectionVector.angle, ray.angle, Epsilon)) {
+      if(projectionVector.angle == ray.angle) {
         val nearestPoint = ray.origin + projectionVector;
         circle.intersects(nearestPoint);
       }else false;
@@ -100,7 +101,7 @@ package object intersection {
       val p1c = circle.center - segment.p1;
       val p1p2 = segment.p2 - segment.p1;
       val projectionVector = p1c.projection(p1p2);
-      if(fuzzyEquals(projectionVector.angle, p1p2.angle, Epsilon) &&
+      if(projectionVector.angle == p1p2.angle &&
          projectionVector.magnitude < p1p2.magnitude) {
         val nearestPoint = segment.p1 + projectionVector;
         circle.intersects(nearestPoint);
@@ -115,7 +116,7 @@ package object intersection {
   def testIntersection(polygon:Polygon, point:Point):Boolean = {
     val onTheVertex = polygon.segments.exists(s => s.p1 == point || s.p2 == point);
     if(!onTheVertex) {
-      val ray = Ray(point, 180);
+      val ray = Ray(point, Angle.straight);
       val intersectedSegments = polygon.segments.filter(_.intersects(ray));
       (intersectedSegments.size & 1) == 1;
     }else true;
@@ -153,7 +154,7 @@ package object intersection {
   
   def testIntersection(circleSweep:CircleSweep, point:Point):Boolean = {
     if(!circleSweep.circle.intersects(point) && !circleSweep.destinationCircle.intersects(point)) {
-      val ray = Ray(point, normalizeDegrees(circleSweep.sweepVector.angle + 90));
+      val ray = Ray(point, circleSweep.sweepVector.angle + Angle.right);
       ray.intersects(circleSweep.connector._1) ^ ray.intersects(circleSweep.connector._2);
     }else true;
   }
@@ -173,7 +174,7 @@ package object intersection {
   
   def testIntersection(circleSweep:CircleSweep, segment:Segment):Boolean = {
     if(!segment.intersects(circleSweep.circle) && !segment.intersects(circleSweep.destinationCircle)) {
-      val ray = Ray(segment.p1, normalizeDegrees(circleSweep.sweepVector.angle + 90));
+      val ray = Ray(segment.p1, circleSweep.sweepVector.angle + Angle.right);
       segment.intersects(circleSweep.connector._1) ||
       segment.intersects(circleSweep.connector._2) ||
       circleSweep.connector._1.intersects(ray) ^ circleSweep.connector._2.intersects(ray); // in connector
@@ -182,7 +183,7 @@ package object intersection {
   
   def testIntersection(circleSweep:CircleSweep, circle:Circle):Boolean = {
     if(!circle.intersects(circleSweep.circle) && !circle.intersects(circleSweep.destinationCircle)) {
-      val ray = Ray(circle.center, normalizeDegrees(circleSweep.sweepVector.angle + 90));
+      val ray = Ray(circle.center, circleSweep.sweepVector.angle + Angle.right);
       circle.intersects(circleSweep.connector._1) || circle.intersects(circleSweep.connector._2) ||
       ray.intersects(circleSweep.connector._1) ^ ray.intersects(circleSweep.connector._2); // in connector
     }else true;

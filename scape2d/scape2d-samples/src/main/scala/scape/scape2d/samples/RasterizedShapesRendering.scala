@@ -21,6 +21,8 @@ import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
 import scape.scape2d.engine.geom.shape.Ring
+import scape.scape2d.engine.geom.angle.Degree
+import scape.scape2d.engine.geom.angle.doubleToAngle
 
 object RasterizedShapesRendering {
   def main(args:Array[String]) = {
@@ -81,7 +83,7 @@ object RasterizedShapesRendering {
   }
   
   private def drawCircleSweep(shapeDrawer:ShapeDrawer) = {
-    val circleSweep = CircleSweep(Circle(Point(5, 4.5), 0.5), Vector(3, 20));
+    val circleSweep = CircleSweep(Circle(Point(5, 4.5), 0.5), Vector(3, 20(Degree)));
     shapeDrawer.draw(CustomizedShape(circleSweep, 0xFFFFFFFF));
   }
   

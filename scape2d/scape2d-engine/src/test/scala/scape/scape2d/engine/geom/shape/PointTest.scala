@@ -1,9 +1,12 @@
 package scape.scape2d.engine.geom.shape
 
 import org.junit.Test
-
 import junit.framework.Assert
 import scape.scape2d.engine.geom.Components
+import scape.scape2d.engine.geom.angle.Degree
+import scape.scape2d.engine.geom.angle.doubleToAngle
+import com.google.common.math.DoubleMath
+import scape.scape2d.engine.geom.Vector
 
 class PointTest {
   @Test
@@ -34,13 +37,7 @@ class PointTest {
   @Test
   def testAngleTo = {
     val perspective = Point(10, 7);
-    Assert.assertEquals(3.92699, perspective angleTo Point(5, 2), 0.00001);
-  }
-  
-  @Test
-  def testAngleToDeg = {
-    val perspective = Point(10, 7);
-    Assert.assertEquals(225, perspective angleToDeg Point(5, 2), 0.00001);
+    Assert.assertEquals(225(Degree), perspective angleTo Point(5, 2));
   }
   
   @Test
@@ -48,7 +45,7 @@ class PointTest {
     val p = Point(1, 0);
     val q = Point(4, -3);
     val vector = p - q;
-    Assert.assertEquals(vector.magnitude, 4.24264, 0.00001);
-    Assert.assertEquals(vector.angle, 135, 0.00001);
+    println(DoubleMath.fuzzyEquals(4.2426406871, 4.242640687119285, scape.scape2d.engine.geom.Epsilon));
+    Assert.assertEquals(Vector(4.2426406871, 135(Degree)), vector);
   }
 }

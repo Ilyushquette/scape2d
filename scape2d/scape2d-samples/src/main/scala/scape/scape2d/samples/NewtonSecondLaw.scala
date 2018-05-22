@@ -21,6 +21,8 @@ import scape.scape2d.graphics.rasterizer.UnitConvertingRasterizer
 import scape.scape2d.graphics.rasterizer.cache.CachingRasterizers
 import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
+import scape.scape2d.engine.geom.angle.Degree
+import scape.scape2d.engine.geom.angle.Angle
 
 object NewtonSecondLaw {
   def main(args:Array[String]):Unit = {
@@ -28,12 +30,12 @@ object NewtonSecondLaw {
     val metalParticle = ParticleBuilder()
       .as(Circle(Point.origin, 0.05))
       .withMass(2)
-      .withVelocity(Vector(1, 45))
+      .withVelocity(Vector(1, Angle.bound(45, Degree)))
       .build;
     
     val trackedMetalParticle = MovableTrackerProxy.track(metalParticle);
-    val impulse = new Impulse(trackedMetalParticle, Vector(7.68, 45), 2(Second));
-    val impulse2 = new Impulse(trackedMetalParticle, Vector(3.84, 0), 2(Second));
+    val impulse = new Impulse(trackedMetalParticle, Vector(7.68, Angle.bound(45, Degree)), 2(Second));
+    val impulse2 = new Impulse(trackedMetalParticle, Vector(3.84, Angle.zero), 2(Second));
     
     val frame = new JFrame("Scape2D Debugger");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
