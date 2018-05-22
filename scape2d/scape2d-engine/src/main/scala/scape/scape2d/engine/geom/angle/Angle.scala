@@ -1,5 +1,6 @@
 package scape.scape2d.engine.geom.angle
 
+import com.google.common.math.DoubleMath.fuzzyCompare
 import com.google.common.math.DoubleMath.fuzzyEquals
 
 object Angle {
@@ -11,7 +12,7 @@ object Angle {
   }
 }
 
-case class Angle private[Angle](value:Double, unit:AngleUnit) {
+case class Angle private[Angle](value:Double, unit:AngleUnit) extends Ordered[Angle] {
   lazy val radians = value * unit.radians;
   
   def to(anotherUnit:AngleUnit) = {
@@ -34,6 +35,8 @@ case class Angle private[Angle](value:Double, unit:AngleUnit) {
   def /(angle:Angle) = radians / angle.radians;
   
   def /(divider:Double) = Angle.bound(value / divider, unit);
+  
+  def compare(angle:Angle) = fuzzyCompare(radians, angle.radians, Epsilon);
   
   override def equals(any:Any) = any match {
     case angle:Angle => fuzzyEquals(radians, angle.radians, Epsilon);
