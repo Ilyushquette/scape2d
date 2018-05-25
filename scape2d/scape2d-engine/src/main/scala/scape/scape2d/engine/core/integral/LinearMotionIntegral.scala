@@ -6,7 +6,6 @@ import scape.scape2d.engine.core.deform
 import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.core.moveLinear
 import scape.scape2d.engine.motion.collision.detection.linear.LinearMotionCollisionDetector
-import scape.scape2d.engine.motion.collision.findSafeTime
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.motion.collision.resolution.ParticleCollisionForcesResolver
 import scape.scape2d.engine.motion.collision.resolution.MomentumDeltaActionReactionalCollisionForcesResolver
@@ -25,11 +24,10 @@ case class LinearMotionIntegral(
     val collisions = collisionDetector.detect(particles, timestep);
     if(!collisions.isEmpty) {
       val earliestCollision = collisions.minBy(_.time);
-      val safeTime = findSafeTime(earliestCollision, 0.005);
       val forces = collisionForcesResolver.resolve(earliestCollision);
-      if(safeTime > 0) integrateLinearMotion(particles, safeTime);
+      if(earliestCollision.time > 0) integrateLinearMotion(particles, earliestCollision.time);
       exertKnockingForces(earliestCollision.concurrentPair, forces);
-      val remainingTime = timestep - safeTime;
+      val remainingTime = timestep - earliestCollision.time;
       if(remainingTime > 0) integrate(particles, remainingTime);
     }else integrateLinearMotion(particles, timestep);
   }
@@ -39,11 +37,10 @@ case class LinearMotionIntegral(
     val collisions = collisionDetector.detect(particles, timestep);
     if(!collisions.isEmpty) {
       val earliestCollision = collisions.minBy(_.time);
-      val safeTime = findSafeTime(earliestCollision, 0.005);
       val forces = collisionForcesResolver.resolve(earliestCollision);
-      if(safeTime > 0) integrateLinearMotion(particles, safeTime);
+      if(earliestCollision.time > 0) integrateLinearMotion(particles, earliestCollision.time);
       exertKnockingForces(earliestCollision.concurrentPair, forces);
-      safeTime;
+      earliestCollision.time;
     }else {
       integrateLinearMotion(particles, timestep);
       timestep;
