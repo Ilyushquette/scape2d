@@ -7,4 +7,9 @@ object Instant {
   }
 }
 
-case class Instant(unixEpochDuration:Duration);
+case class Instant(unixEpochDuration:Duration) {
+  override def equals(any:Any) = any match {
+    case Instant(otherUnixEpochDuration) => unixEpochDuration == otherUnixEpochDuration;
+    case _ => false;
+  }
+}
