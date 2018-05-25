@@ -7,7 +7,9 @@ object Instant {
   }
 }
 
-case class Instant(unixEpochDuration:Duration) {
+case class Instant(unixEpochDuration:Duration) extends Ordered[Instant] {
+  def compare(instant:Instant) = unixEpochDuration compareTo instant.unixEpochDuration;
+  
   override def equals(any:Any) = any match {
     case Instant(otherUnixEpochDuration) => unixEpochDuration == otherUnixEpochDuration;
     case _ => false;
