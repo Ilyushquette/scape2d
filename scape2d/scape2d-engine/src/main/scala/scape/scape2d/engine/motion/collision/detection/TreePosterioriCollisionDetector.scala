@@ -8,6 +8,7 @@ import scape.scape2d.engine.geom.partition.Node
 import scape.scape2d.engine.util.Combination2
 import scape.scape2d.engine.motion.collision.CollisionEvent
 import scala.collection.mutable.HashSet
+import scape.scape2d.engine.time.Duration
 
 case class TreePosterioriCollisionDetector[T <: Movable with Formed[_ <: Shape]](
   treeFactory:() => Node[T]
@@ -20,7 +21,7 @@ case class TreePosterioriCollisionDetector[T <: Movable with Formed[_ <: Shape]]
     treeCreationListeners.foreach(_(tree));
     val combinations = Combination2.selectFrom(tree);
     val overlapping = combinations.filter(combination => combination._1.shape intersects combination._2.shape);
-    overlapping.map(CollisionEvent(_, 0));
+    overlapping.map(CollisionEvent(_, Duration.zero));
   }
   
   def onTreeCreation(listener:Node[T] => Unit) = treeCreationListeners += listener;

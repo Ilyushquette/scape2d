@@ -13,6 +13,7 @@ import scape.scape2d.engine.motion.collision.CollisionEvent
 import scape.scape2d.engine.util.Combination2
 import scape.scape2d.engine.geom.partition.QuadTree
 import scape.scape2d.engine.geom.shape.AxisAlignedRectangle
+import scape.scape2d.engine.time.Duration
 
 object PosterioriCollisionDetectorTest {
   @Parameterized.Parameters
@@ -43,8 +44,8 @@ class PosterioriCollisionDetectorTest(
     val movable3 = new MovableMock(Circle(Point.origin, 1), Vector(), None);
     val movable4 = new MovableMock(Circle(Point(-10, 10), 2), Vector(), None);
     val movables = Set(movable1, movable2, movable3, movable4);
-    val expectedCollisions = Set(CollisionEvent(Combination2(movable1, movable2), 0),
-                                 CollisionEvent(Combination2(movable1, movable3), 0));
+    val expectedCollisions = Set(CollisionEvent(Combination2(movable1, movable2), Duration.zero),
+                                 CollisionEvent(Combination2(movable1, movable3), Duration.zero));
     val collisions = collisionDetector.detect(movables);
     Assert.assertEquals(expectedCollisions, collisions);
   }

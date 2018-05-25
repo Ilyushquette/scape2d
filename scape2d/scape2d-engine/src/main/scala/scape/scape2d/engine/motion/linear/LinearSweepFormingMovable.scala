@@ -5,6 +5,7 @@ import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.geom.shape.Shape
 import scape.scape2d.engine.geom.shape.Sweepable
 import scape.scape2d.engine.core.Identifiable
+import scape.scape2d.engine.time.Duration
 
 object LinearSweepFormingMovable {
   implicit def toShape(swept:LinearSweepFormingMovable[_]) = swept.shape;
@@ -16,7 +17,7 @@ object LinearSweepFormingMovable {
 
 case class LinearSweepFormingMovable[T <: Movable with Formed[_ <: Sweepable[_]] with Identifiable](
   entity:T,
-  timestep:Double = 0)
+  timestep:Duration = Duration.zero)
 extends Formed[Shape] with Identifiable {
   val id = entity.id;
   

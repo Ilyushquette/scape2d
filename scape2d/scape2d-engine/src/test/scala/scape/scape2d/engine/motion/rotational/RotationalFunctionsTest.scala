@@ -15,30 +15,33 @@ import scape.scape2d.engine.geom.angle.doubleToAngle
 import scape.scape2d.engine.geom.angle.Degree
 import scape.scape2d.engine.geom.angle.Angle
 import scape.scape2d.engine.geom.angle.Radian
+import scape.scape2d.engine.time.Duration
+import scape.scape2d.engine.time.Millisecond
+import scape.scape2d.engine.time.Second
 
 class RotationalFunctionsTest {
   @Test
   def testAsRadiansPerTimestepCounterclockwise = {
     val radiansPerSecond = 0.785398; // 45 degrees
-    Assert.assertEquals(0.0785398, asRadiansPerTimestep(radiansPerSecond, 100), 0.00001);
+    Assert.assertEquals(0.0785398, asRadiansPerTimestep(radiansPerSecond, Duration(100, Millisecond)), 0.00001);
   }
   
   @Test
   def testAsRadiansPerTimestepClockwise = {
     val radiansPerSecond = -1.5708; // -90 degrees
-    Assert.assertEquals(-0.15708, asRadiansPerTimestep(radiansPerSecond, 100), 0.00001);
+    Assert.assertEquals(-0.15708, asRadiansPerTimestep(radiansPerSecond, Duration(100, Millisecond)), 0.00001);
   }
   
   @Test
   def testAsRadiansPerSecondCounterclockwise = {
     val radiansPerTimestep = 0.174533; // 10 degrees
-    Assert.assertEquals(1.74533, asRadiansPerSecond(radiansPerTimestep, 100), 0.00001);
+    Assert.assertEquals(1.74533, asRadiansPerSecond(radiansPerTimestep, Duration(100, Millisecond)), 0.00001);
   }
   
   @Test
   def testAsRadiansPerSecondClockwise = {
     val radiansPerTimestep = -3.14159; // 180 degrees
-    Assert.assertEquals(-31.4159, asRadiansPerSecond(radiansPerTimestep, 100), 0.00001);
+    Assert.assertEquals(-31.4159, asRadiansPerSecond(radiansPerTimestep, Duration(100, Millisecond)), 0.00001);
   }
   
   @Test
@@ -46,7 +49,7 @@ class RotationalFunctionsTest {
     val movableMock = Mockito.mock(classOf[Movable]);
     Mockito.when(movableMock.position).thenReturn(Point(4, 4));
     Mockito.when(movableMock.rotatable).thenReturn(None);
-    Assert.assertEquals(Point(4, 4), positionForTimeOf(movableMock)(1000));
+    Assert.assertEquals(Point(4, 4), positionForTimeOf(movableMock)(Second));
   }
   
   @Test
@@ -59,7 +62,7 @@ class RotationalFunctionsTest {
     Mockito.when(movableMock.position).thenReturn(Point(0, 1));
     Mockito.when(movableMock.rotatable).thenReturn(Some(rotatableMock));
     
-    Assert.assertEquals(Point(0, 1), positionForTimeOf(movableMock)(1000));
+    Assert.assertEquals(Point(0, 1), positionForTimeOf(movableMock)(Second));
   }
   
   @Test
@@ -67,7 +70,7 @@ class RotationalFunctionsTest {
     val movableMock = new MovableMock(Point(0, 1), Vector(), None);
     val rotatableMock = new RotatableMock(Point.origin, PI / 2, Set(movableMock));
     
-    val postRotationPosition = positionForTimeOf(movableMock)(1000);
+    val postRotationPosition = positionForTimeOf(movableMock)(Second);
     Assert.assertEquals(Point(-1, 0), postRotationPosition);
   }
   
@@ -76,7 +79,7 @@ class RotationalFunctionsTest {
     val movableMock = new MovableMock(Point(1, 0), Vector(), None);
     val rotatableMock = new RotatableMock(Point.origin, -PI / 4, Set(movableMock));
     
-    val postRotationPosition = positionForTimeOf(movableMock)(1000);
+    val postRotationPosition = positionForTimeOf(movableMock)(Second);
     Assert.assertEquals(Point(0.7071067811, -0.7071067811), postRotationPosition);
   }
   
@@ -87,7 +90,7 @@ class RotationalFunctionsTest {
     val rotatable1 = new RotatableMock(Point.origin, PI, Set(movable1));
     val rotatable2 = new RotatableMock(Point(0, -6), -PI, Set(movable2));
     val ft = distanceForTimeOf(movable1, movable2);
-    Assert.assertEquals(6, ft(500), Epsilon);
+    Assert.assertEquals(6, ft(Duration(500, Millisecond)), Epsilon);
   }
   
   @Test
@@ -97,7 +100,7 @@ class RotationalFunctionsTest {
     val rotatable1 = new RotatableMock(Point.origin, PI, Set(movable1));
     val rotatable2 = new RotatableMock(Point(0, -6), -PI, Set(movable2));
     val ft = distanceForTimeOf(movable1, movable2);
-    Assert.assertEquals(0, ft(1000), Epsilon);
+    Assert.assertEquals(0, ft(Second), Epsilon);
   }
   
   @Test
@@ -105,8 +108,8 @@ class RotationalFunctionsTest {
     val movable1 = new MovableMock(Point(-3, 0), Vector(), None);
     val movable2 = new MovableMock(Point(3, -6), Vector(), None);
     val ft = distanceForTimeOf(movable1, movable2);
-    Assert.assertEquals(movable1.position distanceTo movable2.position, ft(500), Epsilon);
-    Assert.assertEquals(movable1.position distanceTo movable2.position, ft(1000), Epsilon);
+    Assert.assertEquals(movable1.position distanceTo movable2.position, ft(Duration(500, Millisecond)), Epsilon);
+    Assert.assertEquals(movable1.position distanceTo movable2.position, ft(Second), Epsilon);
   }
   
   @Test
@@ -115,7 +118,7 @@ class RotationalFunctionsTest {
     val movable2 = new MovableMock(Point(3, -6), Vector(), None);
     val rotatable2 = new RotatableMock(Point(0, -6), PI, Set(movable2));
     val ft = distanceForTimeOf(movable1, movable2);
-    Assert.assertEquals(Point(0, -3) distanceTo movable1.position, ft(500), Epsilon);
+    Assert.assertEquals(Point(0, -3) distanceTo movable1.position, ft(Duration(500, Millisecond)), Epsilon);
   }
   
   @Test

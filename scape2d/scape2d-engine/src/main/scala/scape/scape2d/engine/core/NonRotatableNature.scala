@@ -8,6 +8,7 @@ import scape.scape2d.engine.time.simulation.Simulation
 import scape.scape2d.engine.time.Frequency
 import scape.scape2d.engine.time.Second
 import scape.scape2d.engine.time.simulation.Timescale
+import scape.scape2d.engine.time.Duration
 
 class NonRotatableNature(
   timeScale:Timescale = Timescale(Frequency(60, Second)),
@@ -25,9 +26,9 @@ class NonRotatableNature(
     add(bond.particles._2);
   };
   
-  def integrate(timestep:Double) = {
+  def integrate(timestep:Duration) = {
     linearMotionIntegral.integrate(particles, timestep);
     temporals.foreach(_.integrate(timestep));
-    temporals = temporals.filter(_.timeleft > 0);
+    temporals = temporals.filter(_.timeleft > Duration.zero);
   }
 }

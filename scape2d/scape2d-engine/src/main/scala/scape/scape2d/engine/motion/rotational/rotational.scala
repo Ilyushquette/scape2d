@@ -11,9 +11,11 @@ import scape.scape2d.engine.geom.angle.cos
 import scape.scape2d.engine.geom.angle.sin
 import scape.scape2d.engine.geom.angle.Angle
 import scape.scape2d.engine.geom.angle.Radian
+import scape.scape2d.engine.time.Duration
+import scape.scape2d.engine.time.Second
 
 package object rotational {
-  def positionForTimeOf(movable:Movable):(Double => Point) = {
+  def positionForTimeOf(movable:Movable):(Duration => Point) = {
     val Mp = movable.position;
     if(movable.isRotating) {
       val Rc = movable.rotatable.get.center;
@@ -30,19 +32,19 @@ package object rotational {
     }else _ => Mp;
   }
   
-  def distanceForTimeOf(movable1:Movable, movable2:Movable):(Double => Double) = {
+  def distanceForTimeOf(movable1:Movable, movable2:Movable):(Duration => Double) = {
     val Pft = positionForTimeOf(movable1);
     val Qft = positionForTimeOf(movable2);
     t => Pft(t) distanceTo Qft(t);
   }
   
-  def asRadiansPerTimestep(angularVelocity:Double, timestep:Double) = {
-    val stepsPerSecond = 1000 / timestep;
+  def asRadiansPerTimestep(angularVelocity:Double, timestep:Duration) = {
+    val stepsPerSecond = Second / timestep;
     angularVelocity / stepsPerSecond;
   }
   
-  def asRadiansPerSecond(angularVelocity:Double, timestep:Double) = {
-    val stepsPerSecond = 1000 / timestep;
+  def asRadiansPerSecond(angularVelocity:Double, timestep:Duration) = {
+    val stepsPerSecond = Second / timestep;
     angularVelocity * stepsPerSecond;
   }
   

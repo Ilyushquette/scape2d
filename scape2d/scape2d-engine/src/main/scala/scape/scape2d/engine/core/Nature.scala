@@ -10,6 +10,7 @@ import scape.scape2d.engine.time.Frequency
 import scape.scape2d.engine.time.Second
 import scape.scape2d.engine.time.simulation.Timescale
 import scape.scape2d.engine.core.integral.ContinuousMotionIntegral
+import scape.scape2d.engine.time.Duration
 
 class Nature(
   timeScale:Timescale = Timescale(Frequency(60, Second)),
@@ -29,9 +30,9 @@ class Nature(
   
   def add(body:Body):Unit = body.movables.foreach(add);
   
-  def integrate(timestep:Double) = {
+  def integrate(timestep:Duration) = {
     motionIntegral.integrate(particles, timestep);
     temporals.foreach(_.integrate(timestep));
-    temporals = temporals.filter(_.timeleft > 0);
+    temporals = temporals.filter(_.timeleft > Duration.zero);
   }
 }

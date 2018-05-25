@@ -12,6 +12,7 @@ import scape.scape2d.engine.motion.collision.detection.CollisionDetector
 import scape.scape2d.engine.motion.collision.detection.IterativeRootFindingCollisionDetectionStrategy
 import scape.scape2d.engine.motion.collision.detection.BruteForceCollisionDetector
 import scape.scape2d.engine.util.Combination2
+import scape.scape2d.engine.time.Duration
 
 case class ContinuousMotionIntegral(
   collisionDetector:CollisionDetector[Particle] = BruteForceCollisionDetector(
@@ -19,20 +20,20 @@ case class ContinuousMotionIntegral(
   ),
   collisionForcesResolver:ParticleCollisionForcesResolver = MomentumDeltaActionReactionalCollisionForcesResolver()
 ) extends MotionIntegral {
-  def integrate(particles:Set[Particle], timestep:Double):Unit = {
+  def integrate(particles:Set[Particle], timestep:Duration):Unit = {
     particles.foreach(accelerate);
     val collisions = collisionDetector.detect(particles, timestep);
     if(!collisions.isEmpty) {
       val earliestCollision = collisions.minBy(_.time);
       val forces = collisionForcesResolver.resolve(earliestCollision);
-      if(earliestCollision.time > 0) integrateMotion(particles, earliestCollision.time);
+      if(earliestCollision.time > Duration.zero) integrateMotion(particles, earliestCollision.time);
       exertKnockingForces(earliestCollision.concurrentPair, forces);
       val remainingTime = timestep - earliestCollision.time;
-      if(remainingTime > 0) integrate(particles, remainingTime);
+      if(remainingTime > Duration.zero) integrate(particles, remainingTime);
     }else integrateMotion(particles, timestep);
   }
   
-  private def integrateMotion(particles:Iterable[Particle], timestep:Double) = {
+  private def integrateMotion(particles:Iterable[Particle], timestep:Duration) = {
     particles.foreach(move(_, timestep));
     val bonds = particles.flatMap(_.bonds);
     bonds.foreach(deform);

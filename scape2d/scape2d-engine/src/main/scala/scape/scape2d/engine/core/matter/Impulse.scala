@@ -15,9 +15,8 @@ case class Impulse(
   force:Vector,
   time:Duration)
 extends TimeDependent {
-  private[core] def integrate(timestep:Double) = {
-    val multiplier = timestep / time.milliseconds;
-    val calibratedForce = force * multiplier;
-    particle.exertForce(calibratedForce, true);
+  private[core] def integrate(timestep:Duration) = {
+    val multiplier = timestep / time;
+    particle.exertForce(force * multiplier, true);
   }
 }

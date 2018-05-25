@@ -11,24 +11,25 @@ import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.motion.linear.{positionForTimeOf => postLinearMotionPosition}
 import scape.scape2d.engine.motion.rotational.{positionForTimeOf => postRotationPosition}
 import scape.scape2d.engine.core.matter.Body
+import scape.scape2d.engine.time.Duration
 
 package object core {
-  private[core] def move(movable:Movable, timestep:Double) = {
+  private[core] def move(movable:Movable, timestep:Duration) = {
     moveLinear(movable, timestep);
     rotate(movable, timestep);
   }
   
-  private[core] def moveLinear(movable:Movable, timestep:Double) = {
+  private[core] def moveLinear(movable:Movable, timestep:Duration) = {
     val nextPosition = postLinearMotionPosition(movable)(timestep);
     if(movable.position != nextPosition) movable.setPosition(nextPosition);
   }
   
-  private[core] def rotate(movable:Movable, timestep:Double):Unit = {
+  private[core] def rotate(movable:Movable, timestep:Duration):Unit = {
     val nextPosition = postRotationPosition(movable)(timestep);
     if(movable.position != nextPosition) movable.setPosition(nextPosition);
   }
   
-  private[core] def rotate(rotatable:Rotatable, timestep:Double):Unit = {
+  private[core] def rotate(rotatable:Rotatable, timestep:Duration):Unit = {
     rotatable.movables.foreach(rotate(_, timestep));
   }
   

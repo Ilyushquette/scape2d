@@ -4,9 +4,10 @@ import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.motion.linear.{positionForTimeOf => postLinearMotionPosition}
 import scape.scape2d.engine.motion.rotational.{positionForTimeOf => postRotationPosition}
+import scape.scape2d.engine.time.Duration
 
 package object motion {
-  def positionForTimeOf(movable:Movable):(Double => Point) = {
+  def positionForTimeOf(movable:Movable):(Duration => Point) = {
     val position = movable.position;
     val ft_linear = postLinearMotionPosition(movable);
     val ft_rotational = postRotationPosition(movable);
@@ -18,7 +19,7 @@ package object motion {
     }
   }
   
-  def distanceForTimeOf(movable1:Movable, movable2:Movable):(Double => Double) = {
+  def distanceForTimeOf(movable1:Movable, movable2:Movable):(Duration => Double) = {
     val Pft = positionForTimeOf(movable1);
     val Qft = positionForTimeOf(movable2);
     t => Pft(t) distanceTo Qft(t);

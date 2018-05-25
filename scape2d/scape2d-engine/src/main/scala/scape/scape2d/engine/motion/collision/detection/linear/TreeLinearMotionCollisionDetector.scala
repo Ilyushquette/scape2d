@@ -9,6 +9,7 @@ import scape.scape2d.engine.geom.Formed
 import scape.scape2d.engine.motion.linear.LinearSweepFormingMovable
 import scape.scape2d.engine.core.Identifiable
 import scape.scape2d.engine.util.Combination2
+import scape.scape2d.engine.time.Duration
 
 case class TreeLinearMotionCollisionDetector[T <: Movable with Formed[_ <: Sweepable[_]] with Identifiable](
   treeFactory:() => Node[LinearSweepFormingMovable[T]],
@@ -16,7 +17,7 @@ case class TreeLinearMotionCollisionDetector[T <: Movable with Formed[_ <: Sweep
 ) extends LinearMotionCollisionDetector[T] {
   private val treeCreationListeners = HashSet[Node[LinearSweepFormingMovable[T]] => Unit]();
   
-  def detect(movables:Set[T], timestep:Double) = {
+  def detect(movables:Set[T], timestep:Duration) = {
     val tree = treeFactory();
     movables.foreach(m => tree.insert(LinearSweepFormingMovable[T](m, timestep)));
     treeCreationListeners.foreach(_(tree));
@@ -24,7 +25,7 @@ case class TreeLinearMotionCollisionDetector[T <: Movable with Formed[_ <: Sweep
     treeCombinations.flatMap(c => detect(c._1.entity, c._2.entity, timestep));
   }
   
-  private def detect(movable1:T, movable2:T, timestep:Double) = {
+  private def detect(movable1:T, movable2:T, timestep:Duration) = {
     val detection = detectionStrategy.detect(movable1, movable2, timestep);
     detection.map(time => CollisionEvent(movable1, movable2, time));
   }

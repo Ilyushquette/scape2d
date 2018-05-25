@@ -6,6 +6,9 @@ import org.apache.log4j.Logger
 import scape.scape2d.engine.time.TimeUnit.toDuration
 import scape.scape2d.engine.time.Frequency
 import scape.scape2d.engine.time.Second
+import scape.scape2d.engine.time.Instant
+import scape.scape2d.engine.time.Duration
+import scape.scape2d.engine.time.Millisecond
 
 abstract class Simulation(
   var timescale:Timescale
@@ -15,22 +18,22 @@ abstract class Simulation(
   override def act = {
     log.info("Simulation has been started");
     loop {
-      val cycleStart = System.currentTimeMillis;
+      val cycleStart = Instant.now();
       val timescale = this.timescale;
-      val integrationMillis = timescale.integrationFrequency.occurenceDuration.milliseconds;
-      val timestepMillis = timescale.timestep.milliseconds;
+      val integrationDuration = timescale.integrationFrequency.occurenceDuration;
+      val timestep = timescale.timestep;
       
-      integrate(timestepMillis);
+      integrate(timestep);
       dispatchInputs();
       
-      val cycleMillis = System.currentTimeMillis - cycleStart;
-      val cooldown = (integrationMillis - cycleMillis).toLong;
-      log.info("Cycle finished! Took %d/%f ms".format(cycleMillis, integrationMillis));
-      if(cooldown > 0) Thread.sleep(cooldown);
+      val cycleDuration = Instant.now() - cycleStart;
+      val remainingTime = integrationDuration - cycleDuration;
+      log.info("Cycle finished! Took %s/%s".format(cycleDuration, integrationDuration to Millisecond));
+      if(remainingTime > Duration.zero) Thread.sleep(remainingTime.milliseconds.toLong);
     }
   }
   
-  def integrate(timestep:Double);
+  def integrate(timestep:Duration);
   
   private def dispatchInputs():Unit = receiveWithin(0) {
     case act:(() => Unit) =>

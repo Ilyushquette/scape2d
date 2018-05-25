@@ -17,13 +17,13 @@ case class TorqueImpulse(
   val torque:Double,
   val time:Duration)
 extends TimeDependent {
-  private[core] def integrate(timestep:Double) = {
+  private[core] def integrate(timestep:Duration) = {
     val torque = asTorquePerTimestep(timestep);
     particle.exertForce(directionVector * torque, true);
   }
   
-  private def asTorquePerTimestep(timestep:Double) = {
-    val multiplier = timestep / time.milliseconds;
+  private def asTorquePerTimestep(timestep:Duration) = {
+    val multiplier = timestep / time;
     torque * multiplier;
   }
   

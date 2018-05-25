@@ -9,10 +9,11 @@ import scape.scape2d.engine.geom.shape.ShapeBounds
 import scape.scape2d.engine.geom.shape.CompositeShape
 import scape.scape2d.engine.motion.rotational.trajectory.trajectoryOf
 import scape.scape2d.engine.core.Identifiable
+import scape.scape2d.engine.time.Duration
 
 case class MotionBounds[T <: Movable with Formed[_ <: Shape] with Identifiable](
   movable:T,
-  timestep:Double
+  timestep:Duration
 ) extends Formed[Shape] with Identifiable {
   val id = movable.id;
   

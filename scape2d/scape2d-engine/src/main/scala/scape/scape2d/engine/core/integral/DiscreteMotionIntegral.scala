@@ -13,12 +13,13 @@ import scape.scape2d.engine.util.Combination2
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.motion.collision.detection.BruteForcePosterioriCollisionDetector
 import scape.scape2d.engine.motion.collision.resolution.MomentumDeltaActionReactionalCollisionForcesResolver
+import scape.scape2d.engine.time.Duration
 
 class DiscreteMotionIntegral(
   collisionDetector:PosterioriCollisionDetector[MovablePhantom[Particle]] = BruteForcePosterioriCollisionDetector(),
   collisionResolver:ParticleCollisionForcesResolver = MomentumDeltaActionReactionalCollisionForcesResolver()
 ) extends MotionIntegral {
-  def integrate(particles:Set[Particle], timestep:Double) = {
+  def integrate(particles:Set[Particle], timestep:Duration) = {
     particles.foreach(accelerate);
     val particlePhantoms = particles.map(new MovablePhantom(_));
     particlePhantoms.foreach(move(_, timestep));

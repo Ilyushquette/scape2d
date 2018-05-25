@@ -10,6 +10,7 @@ import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.motion.collision.detection.rotation.BruteForceBasedRotationalCollisionDetector
 import scape.scape2d.engine.motion.collision.detection.rotation.IterativeRootFindingRotationalCollisionDetectionStrategy
 import scape.scape2d.engine.util.Combination2
+import scape.scape2d.engine.time.Duration
 
 case class RotationIntegral(
   collisionDetector:RotationalCollisionDetector[Particle] = BruteForceBasedRotationalCollisionDetector(
@@ -17,26 +18,26 @@ case class RotationIntegral(
   ),
   collisionForcesResolver:ParticleCollisionForcesResolver = MomentumDeltaActionReactionalCollisionForcesResolver()
 ) {
-  def integrate(particles:Set[Particle], timestep:Double):Unit = {
+  def integrate(particles:Set[Particle], timestep:Duration):Unit = {
     particles.foreach(accelerate);
     val collisions = collisionDetector.detect(particles, timestep);
     if(!collisions.isEmpty) {
       val earliestCollision = collisions.minBy(_.time);
       val forces = collisionForcesResolver.resolve(earliestCollision);
-      if(earliestCollision.time > 0) integrateRotation(particles, earliestCollision.time);
+      if(earliestCollision.time > Duration.zero) integrateRotation(particles, earliestCollision.time);
       exertKnockingForces(earliestCollision.concurrentPair, forces);
       val remainingTime = timestep - earliestCollision.time;
-      if(remainingTime > 0) integrate(particles, remainingTime);
+      if(remainingTime > Duration.zero) integrate(particles, remainingTime);
     }else integrateRotation(particles, timestep);
   }
   
-  def integrateBreakIfCollision(particles:Set[Particle], timestep:Double) = {
+  def integrateBreakIfCollision(particles:Set[Particle], timestep:Duration) = {
     particles.foreach(accelerate);
     val collisions = collisionDetector.detect(particles, timestep);
     if(!collisions.isEmpty) {
       val earliestCollision = collisions.minBy(_.time);
       val forces = collisionForcesResolver.resolve(earliestCollision);
-      if(earliestCollision.time > 0) integrateRotation(particles, earliestCollision.time);
+      if(earliestCollision.time > Duration.zero) integrateRotation(particles, earliestCollision.time);
       exertKnockingForces(earliestCollision.concurrentPair, forces);
       earliestCollision.time;
     }else {
@@ -45,7 +46,7 @@ case class RotationIntegral(
     }
   }
   
-  private def integrateRotation(particles:Iterable[Particle], timestep:Double) = {
+  private def integrateRotation(particles:Iterable[Particle], timestep:Duration) = {
     particles.foreach(rotate(_, timestep));
   }
   

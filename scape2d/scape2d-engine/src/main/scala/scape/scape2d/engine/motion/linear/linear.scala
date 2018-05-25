@@ -4,9 +4,11 @@ import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.geom._
 import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.geom.shape.Point
+import scape.scape2d.engine.time.Duration
+import scape.scape2d.engine.time.Second
 
 package object linear {
-  def positionForTimeOf(movable:Movable):(Double => Point) = {
+  def positionForTimeOf(movable:Movable):(Duration => Point) = {
     val position = movable.position;
     val velocity = movable.velocity;
     if(velocity.magnitude > 0) {
@@ -14,13 +16,13 @@ package object linear {
     }else _ => position;
   }
   
-  def asMetersPerTimestep(velocity:Vector, timestep:Double) = {
-    val stepsPerSecond = 1000 / timestep;
+  def asMetersPerTimestep(velocity:Vector, timestep:Duration) = {
+    val stepsPerSecond = Second / timestep;
     Vector(velocity.magnitude / stepsPerSecond, velocity.angle);
   }
   
-  def asMetersPerSecond(metersPerTimestep:Vector, timestep:Double) = {
-    val stepsPerSecond = 1000 / timestep;
+  def asMetersPerSecond(metersPerTimestep:Vector, timestep:Duration) = {
+    val stepsPerSecond = Second / timestep;
     Vector(metersPerTimestep.magnitude * stepsPerSecond, metersPerTimestep.angle);
   }
 }
