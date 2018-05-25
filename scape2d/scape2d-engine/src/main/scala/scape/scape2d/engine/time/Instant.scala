@@ -8,6 +8,12 @@ object Instant {
 }
 
 case class Instant(unixEpochDuration:Duration) extends Ordered[Instant] {
+  def +(duration:Duration) = Instant(unixEpochDuration + duration);
+  
+  def -(duration:Duration) = Instant(unixEpochDuration - duration);
+  
+  def -(instant:Instant) = unixEpochDuration - instant.unixEpochDuration;
+  
   def compare(instant:Instant) = unixEpochDuration compareTo instant.unixEpochDuration;
   
   override def equals(any:Any) = any match {
