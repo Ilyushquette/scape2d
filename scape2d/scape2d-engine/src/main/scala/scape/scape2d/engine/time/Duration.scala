@@ -3,6 +3,10 @@ package scape.scape2d.engine.time
 import com.google.common.math.DoubleMath.fuzzyCompare
 import com.google.common.math.DoubleMath.fuzzyEquals
 
+object Duration {
+  val zero = 0(Second);
+}
+
 case class Duration(value:Double, unit:TimeUnit) extends Ordered[Duration] {
   lazy val milliseconds = value * unit.milliseconds;
   
