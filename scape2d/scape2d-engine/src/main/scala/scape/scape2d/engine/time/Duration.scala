@@ -1,8 +1,9 @@
 package scape.scape2d.engine.time
 
-import com.google.common.math.DoubleMath
+import com.google.common.math.DoubleMath.fuzzyCompare
+import com.google.common.math.DoubleMath.fuzzyEquals
 
-case class Duration(value:Double, unit:TimeUnit) {
+case class Duration(value:Double, unit:TimeUnit) extends Ordered[Duration] {
   lazy val milliseconds = value * unit.milliseconds;
   
   def to(anotherUnit:TimeUnit) = {
@@ -26,17 +27,11 @@ case class Duration(value:Double, unit:TimeUnit) {
   
   def /(divider:Double) = copy(value = value / divider);
   
-  def <(duration:Duration) = DoubleMath.fuzzyCompare(milliseconds, duration.milliseconds, Epsilon) == -1;
-  
-  def <=(duration:Duration) = DoubleMath.fuzzyCompare(milliseconds, duration.milliseconds, Epsilon) <= 0;
-  
-  def >(duration:Duration) = DoubleMath.fuzzyCompare(milliseconds, duration.milliseconds, Epsilon) == 1;
-  
-  def >=(duration:Duration) = DoubleMath.fuzzyCompare(milliseconds, duration.milliseconds, Epsilon) >= 0;
+  def compare(duration:Duration) = fuzzyCompare(milliseconds, duration.milliseconds, Epsilon);
   
   override def equals(any:Any) = any match {
     case duration:Duration =>
-      DoubleMath.fuzzyEquals(milliseconds, duration.milliseconds, Epsilon);
+      fuzzyEquals(milliseconds, duration.milliseconds, Epsilon);
     case unit:TimeUnit =>
       this == TimeUnit.toDuration(unit);
     case _ => false;

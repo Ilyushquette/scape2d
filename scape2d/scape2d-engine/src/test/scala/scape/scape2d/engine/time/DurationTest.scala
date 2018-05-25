@@ -33,34 +33,4 @@ class DurationTest {
   
   @Test
   def testDurationDivisionByNumber = Assert.assertEquals(30(Second), Minute / 2);
-  
-  @Test
-  def testDurationLessThanAnotherDuration = Assert.assertTrue(59(Second) < Minute);
-  
-  @Test
-  def testDurationNotLessThanAnotherDuration = Assert.assertFalse(61(Second) < Minute);
-  
-  @Test
-  def testDurationLessThanOrEqualToAnotherDurationLess = Assert.assertTrue(999(Millisecond) <= Second);
-  
-  @Test
-  def testDurationLessThanOrEqualToAnotherDurationEqual = Assert.assertTrue(60(Millisecond) <= Minute);
-  
-  @Test
-  def testDurationNotLessThanOrEqualToAnotherDuration = Assert.assertFalse(10000001(Nanosecond) <= Millisecond);
-  
-  @Test
-  def testDurationGreaterThanAnotherDuration = Assert.assertTrue(10000001(Nanosecond) > Millisecond);
-  
-  @Test
-  def testDurationNotGreaterThanAnotherDuration = Assert.assertFalse(Second > 1000(Millisecond));
-  
-  @Test
-  def testDurationGreaterThanOrEqualToAnotherDurationGreater = Assert.assertTrue(Day > 23(Hour));
-  
-  @Test
-  def testDurationGreaterThanOrEqualToAnotherDurationEqual = Assert.assertTrue(Hour >= 60(Minute));
-  
-  @Test
-  def testDurationNotGreaterThanOrEqualToAnotherDuration = Assert.assertFalse(14(Minute) >= 0.25(Hour));
 }
