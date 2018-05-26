@@ -8,6 +8,8 @@ import scape.scape2d.engine.geom.angle.doubleToAngle
 import scape.scape2d.engine.geom.angle.cos
 import scape.scape2d.engine.geom.angle.sin
 import scape.scape2d.engine.geom.angle.Radian
+import scape.scape2d.engine.time.Duration
+import scape.scape2d.engine.motion.linear.Velocity
 
 object Vector {
   val zero = Vector(0, Angle.zero);
@@ -50,6 +52,8 @@ case class Vector(magnitude:Double, angle:Angle) extends Ordered[Vector] {
     val newAngle = if(magnitudeDivider >= 0) angle else angle.opposite;
     Vector(newMagnitude, newAngle);
   }
+  
+  def /(duration:Duration) = Velocity(this, duration);
   
   def x(vector:Vector):Double = this.x * vector.y - this.y * vector.x;
   
