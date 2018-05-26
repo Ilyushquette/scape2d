@@ -11,12 +11,12 @@ package object motion {
     val position = movable.position;
     val ft_linear = postLinearMotionPosition(movable);
     val ft_rotational = postRotationPosition(movable);
-    t => {
+    t => if(t > Duration.zero) {
       val p1 = ft_linear(t);
       val p2 = ft_rotational(t);
       val angularDisplacementVector = p2 - position;
       p1 + angularDisplacementVector;
-    }
+    }else position;
   }
   
   def distanceForTimeOf(movable1:Movable, movable2:Movable):(Duration => Double) = {

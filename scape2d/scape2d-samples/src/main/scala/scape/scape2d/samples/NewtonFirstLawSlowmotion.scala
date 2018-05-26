@@ -23,6 +23,7 @@ import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
 import scape.scape2d.engine.geom.angle.Degree
 import scape.scape2d.engine.geom.angle.doubleToAngle
+import scape.scape2d.engine.time.Second
 
 object NewtonFirstLawSlowmotion {
   def main(args:Array[String]):Unit = {
@@ -30,7 +31,7 @@ object NewtonFirstLawSlowmotion {
     val metalParticle = ParticleBuilder()
       .as(Circle(Point.origin, 0.05))
       .withMass(2)
-      .withVelocity(Vector(2, 45(Degree)))
+      .withVelocity(Vector(2, 45(Degree)) / Second)
       .build;
     
     val trackedMetalParticle = MovableTrackerProxy.track(metalParticle);

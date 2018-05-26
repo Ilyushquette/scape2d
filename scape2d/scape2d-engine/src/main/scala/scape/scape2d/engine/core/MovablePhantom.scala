@@ -4,6 +4,7 @@ import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.Formed
 import scape.scape2d.engine.geom.shape.Shape
+import scape.scape2d.engine.motion.linear.Velocity
 
 class MovablePhantom[T <: Movable with Formed[_ <: Shape] with Identifiable](
   val origin:T
@@ -19,7 +20,7 @@ class MovablePhantom[T <: Movable with Formed[_ <: Shape] with Identifiable](
   
   def velocity = origin.velocity;
   
-  private[core] def setVelocity(newVelocity:Vector) = origin.setVelocity(newVelocity);
+  private[core] def setVelocity(newVelocity:Velocity) = origin.setVelocity(newVelocity);
   
   def rotatable = origin.rotatable;
   

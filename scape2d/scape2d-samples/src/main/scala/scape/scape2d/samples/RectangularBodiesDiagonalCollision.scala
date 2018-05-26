@@ -95,7 +95,7 @@ object RectangularBodiesDiagonalCollision {
   private def makeMovingParticle(position:Point) = MovableTrackerProxy.track(ParticleBuilder()
                                                                        .as(Circle(position, 0.05))
                                                                        .withMass(2)
-                                                                       .withVelocity(Vector(3, Angle.zero))
+                                                                       .withVelocity(Vector(3, Angle.zero) / Second)
                                                                        .build);
   
   private def makeStationaryParticle(position:Point) = MovableTrackerProxy.track(ParticleBuilder()

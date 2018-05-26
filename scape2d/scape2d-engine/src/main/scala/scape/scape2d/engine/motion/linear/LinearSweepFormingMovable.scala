@@ -22,7 +22,7 @@ extends Formed[Shape] with Identifiable {
   val id = entity.id;
   
   lazy val shape = {
-    val sweepVector = asMetersPerTimestep(entity.velocity, timestep);
+    val sweepVector = entity.velocity.forTime(timestep);
     if(sweepVector.magnitude > 0) entity.shape.sweep(sweepVector).asInstanceOf[Shape];
     else entity.shape;
   }

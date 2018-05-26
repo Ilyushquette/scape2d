@@ -32,6 +32,7 @@ import scape.scape2d.engine.core.integral.LinearMotionIntegral
 import scape.scape2d.engine.motion.collision.detection.linear.QuadraticLinearMotionCollisionDetectionStrategy
 import scape.scape2d.engine.core.integral.MotionIntegral
 import scape.scape2d.engine.geom.angle.Angle
+import scape.scape2d.engine.time.Second
 
 object RectangularBodyRotation {
   def main(args:Array[String]):Unit = {
@@ -75,7 +76,7 @@ object RectangularBodyRotation {
   private def makeParticle(position:Point) = MovableTrackerProxy.track(ParticleBuilder()
                                                                        .as(Circle(position, 0.05))
                                                                        .withMass(2)
-                                                                       .withVelocity(Vector(1, Angle.zero))
+                                                                       .withVelocity(Vector(1, Angle.zero) / Second)
                                                                        .build);
   
   private def makeBond(p1:Particle, p2:Particle) = BondBuilder(p1, p2)

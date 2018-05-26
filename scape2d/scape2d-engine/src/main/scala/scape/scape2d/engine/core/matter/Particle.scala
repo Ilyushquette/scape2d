@@ -8,6 +8,8 @@ import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.util.Combination2
 import scape.scape2d.engine.core.Identifiable
 import java.util.concurrent.atomic.AtomicInteger
+import scape.scape2d.engine.motion.linear.Velocity
+import scape.scape2d.engine.time.Second
 
 object Particle {
   private val idGenerator = new AtomicInteger(1);
@@ -19,11 +21,11 @@ class Particle private[matter] (
   val id:Int,
   private var _shape:Circle,
   val mass:Double,
-  private var _velocity:Vector,
+  private var _velocity:Velocity,
   private var _force:Vector,
   private var _bonds:Set[Bond] = Set.empty)
 extends Movable with Formed[Circle] with Identifiable {
-  private[matter] def this() = this(Particle.nextId, Circle(Point.origin, 1), 1, Vector.zero, Vector.zero);
+  private[matter] def this() = this(Particle.nextId, Circle(Point.origin, 1), 1, Velocity.zero, Vector.zero);
   
   def position = _shape.center;
   
@@ -31,7 +33,7 @@ extends Movable with Formed[Circle] with Identifiable {
   
   def velocity = _velocity;
   
-  private[core] def setVelocity(newVelocity:Vector) = _velocity = newVelocity;
+  private[core] def setVelocity(newVelocity:Velocity) = _velocity = newVelocity;
   
   def shape = _shape;
   
@@ -71,7 +73,7 @@ extends Movable with Formed[Circle] with Identifiable {
   
   def snapshot(shape:Circle = this.shape,
                mass:Double = this.mass,
-               velocity:Vector = this.velocity,
+               velocity:Velocity = this.velocity,
                force:Vector = this.force) = {
     val snapshot = snapshotExcludingBonds(shape, mass, velocity, force);
     // only snapshot of the current particle's bonds structure is taken performance wise
@@ -85,7 +87,7 @@ extends Movable with Formed[Circle] with Identifiable {
   
   private def snapshotExcludingBonds(shape:Circle = this.shape,
                                      mass:Double = this.mass,
-                                     velocity:Vector = this.velocity,
+                                     velocity:Velocity = this.velocity,
                                      force:Vector = this.force):Particle = {
     new Particle(id, shape, mass, velocity, force);
   }

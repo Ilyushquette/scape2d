@@ -60,6 +60,6 @@ package object rotational {
     val rotatable = movable.rotatable.get;
     val radialDirection = rotatable.center angleTo movable.position;
     val θ = radialDirection + (Angle.right * signum(rotatable.angularVelocity));
-    Vector(scalar, θ);
+    Vector(scalar, θ) / Second;
   }
 }

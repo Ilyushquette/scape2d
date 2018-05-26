@@ -2,7 +2,6 @@ package scape.scape2d.engine.motion.collision.detection.linear
 
 import java.lang.Math.sqrt
 import scape.scape2d.engine.core.Movable
-import scape.scape2d.engine.motion.linear.asMetersPerTimestep
 import scape.scape2d.engine.geom.Epsilon
 import scape.scape2d.engine.geom.Formed
 import scape.scape2d.engine.geom.shape.Circle
@@ -14,7 +13,7 @@ case class QuadraticLinearMotionCollisionDetectionStrategy[T <: Movable with For
   def detect(s1:T, s2:T, timestep:Duration) = {
     val contactSafeDistance = s1.radius + s2.radius + closestDistance;
     val A = s1.position - s2.position;
-    val B = asMetersPerTimestep(s1.velocity, timestep) - asMetersPerTimestep(s2.velocity, timestep);
+    val B = s1.velocity.forTime(timestep) - s2.velocity.forTime(timestep);
     
     val a = B * B;
     val b = 2 * (A * B);

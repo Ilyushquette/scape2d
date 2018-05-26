@@ -30,7 +30,7 @@ object NewtonFirstLawFastmotion {
     val metalParticle = ParticleBuilder()
       .as(Circle(Point.origin, 0.05))
       .withMass(2)
-      .withVelocity(Vector(2, 45(Degree)))
+      .withVelocity(Vector(2, 45(Degree)) / Second)
       .build;
     
     val trackedMetalParticle = MovableTrackerProxy.track(metalParticle);

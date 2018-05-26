@@ -5,6 +5,7 @@ import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.Formed
 import scape.scape2d.engine.geom.shape.Circle
 import java.util.concurrent.atomic.AtomicInteger
+import scape.scape2d.engine.motion.linear.Velocity
 
 object MovableMock {
   private val idGenerator = new AtomicInteger(1);
@@ -14,15 +15,15 @@ object MovableMock {
 
 private[engine] class MovableMock(
   var shape:Circle,
-  var velocity:Vector,
+  var velocity:Velocity,
   private var _rotatable:Option[Rotatable])
 extends Movable with Formed[Circle] with Identifiable {
   val id = MovableMock.nextId;
   
   // this default constructor is only exists for cglib proxy support
-  def this() = this(Circle(Point.origin, 0), Vector.zero, None);
+  def this() = this(Circle(Point.origin, 0), Velocity.zero, None);
   
-  def this(position:Point, velocity:Vector, rotatable:Option[Rotatable]) = {
+  def this(position:Point, velocity:Velocity, rotatable:Option[Rotatable]) = {
     this(Circle(position, 0), velocity, rotatable);
   }
   
@@ -30,7 +31,7 @@ extends Movable with Formed[Circle] with Identifiable {
   
   def setPosition(nextPosition:Point) = shape = shape.copy(nextPosition, shape.radius);
   
-  def setVelocity(newVelocity:Vector) = velocity = newVelocity;
+  def setVelocity(newVelocity:Velocity) = velocity = newVelocity;
   
   def rotatable = _rotatable;
   

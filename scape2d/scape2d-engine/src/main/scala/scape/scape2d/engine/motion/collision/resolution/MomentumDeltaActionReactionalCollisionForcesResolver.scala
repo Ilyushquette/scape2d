@@ -9,14 +9,18 @@ import scape.scape2d.engine.geom.angle.sin
 import scape.scape2d.engine.motion.collision.CollisionEvent
 import scape.scape2d.engine.motion.positionForTimeOf
 import scape.scape2d.engine.motion.rotational.angularToLinearVelocity
+import scape.scape2d.engine.time.Second
 
 case class MomentumDeltaActionReactionalCollisionForcesResolver() extends ParticleCollisionForcesResolver {
   def resolve(collision:CollisionEvent[Particle]) = {
-    val snapshotPair = collision.snapshotPair;
-    val velocity1 = resolveCombinedVelocityOfFirstParticle(collision);
-    val particle1 = snapshotPair._1;
-    val momentumBefore = combineAngularAndLinearVelocitiesOf(particle1) * particle1.mass;
-    val momentumAfter = velocity1 * particle1.mass;
+    val particle1 = collision.snapshotPair._1;
+    
+    val particle1VelocityBefore = combineAngularAndLinearVelocitiesOf(particle1);
+    val particle1VelocityAfter = resolveCombinedVelocityOfFirstParticle(collision);
+    
+    val momentumBefore = particle1VelocityBefore.vector * particle1.mass;
+    val momentumAfter = particle1VelocityAfter.vector * particle1.mass;
+    
     val force = momentumAfter - momentumBefore;
     (force, force.opposite);
   }
@@ -31,17 +35,17 @@ case class MomentumDeltaActionReactionalCollisionForcesResolver() extends Partic
     val p2 = positionForTimeOf(particle2)(collision.time);
     val φ = p1 angleTo p2;
     
-    val v1 = combinedVelocity1.magnitude;
-    val v2 = combinedVelocity2.magnitude;
+    val v1 = combinedVelocity1.forTime(Second).magnitude;
+    val v2 = combinedVelocity2.forTime(Second).magnitude;
     val m1 = particle1.mass;
     val m2 = particle2.mass;
-    val θ1 = combinedVelocity1.angle;
-    val θ2 = combinedVelocity2.angle;
+    val θ1 = combinedVelocity1.vector.angle;
+    val θ2 = combinedVelocity2.vector.angle;
     
     val fraction = (v1 * cos(θ1 - φ) * (m1 - m2) + 2 * m2 * v2 * cos(θ2 - φ)) / (m1 + m2);
     val vx = fraction * cos(φ) + v1 * sin(θ1 - φ) * cos(φ + Angle.right);
     val vy = fraction * sin(φ) + v1 * sin(θ1 - φ) * sin(φ + Angle.right);
-    Vector.from(Components(vx, vy));
+    Vector.from(Components(vx, vy)) / Second;
   }
   
   private def combineAngularAndLinearVelocitiesOf(particle:Particle) = {

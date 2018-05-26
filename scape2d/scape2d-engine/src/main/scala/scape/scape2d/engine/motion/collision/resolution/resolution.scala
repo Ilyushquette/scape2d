@@ -8,6 +8,7 @@ import scape.scape2d.engine.geom.angle.cos
 import scape.scape2d.engine.geom.angle.sin
 import scape.scape2d.engine.motion.linear.positionForTimeOf
 import scape.scape2d.engine.util.LazyVal
+import scape.scape2d.engine.time.Second
 
 package object resolution {
   def resolveLinearVelocities(collision:CollisionEvent[Particle]) = {
@@ -19,12 +20,12 @@ package object resolution {
     val φ = p1 angleTo p2;
     
     def vel(particle1:Particle, particle2:Particle) = {
-      val v1 = particle1.velocity.magnitude;
-      val v2 = particle2.velocity.magnitude;
+      val v1 = particle1.velocity.forTime(Second).magnitude;
+      val v2 = particle2.velocity.forTime(Second).magnitude;
       val m1 = particle1.mass;
       val m2 = particle2.mass;
-      val θ1 = particle1.velocity.angle;
-      val θ2 = particle2.velocity.angle;
+      val θ1 = particle1.velocity.vector.angle;
+      val θ2 = particle2.velocity.vector.angle;
       
       val fraction = (v1 * cos(θ1 - φ) * (m1 - m2) + 2 * m2 * v2 * cos(θ2 - φ)) / (m1 + m2);
       val vx = fraction * cos(φ) + v1 * sin(θ1 - φ) * cos(φ + Angle.right);

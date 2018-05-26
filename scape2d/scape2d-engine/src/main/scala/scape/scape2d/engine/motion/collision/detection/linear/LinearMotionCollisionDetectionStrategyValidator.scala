@@ -25,8 +25,8 @@ object LinearMotionCollisionDetectionStrategyValidator {
   }
   
   def checkTrajectoriesOverlayFrontalCollision(detectionStrategy:LinearMotionCollisionDetectionStrategy[MovableMock]) = {
-    val s1 = new MovableMock(Circle(Point(10, 10), 0.05), Vector(15, 0(Degree)), None);
-    val s2 = new MovableMock(Circle(Point(30, 10), 0.05), Vector(15, 180(Degree)), None);
+    val s1 = new MovableMock(Circle(Point(10, 10), 0.05), Vector(15, 0(Degree)) / Second, None);
+    val s2 = new MovableMock(Circle(Point(30, 10), 0.05), Vector(15, 180(Degree)) / Second, None);
     val detection = detectionStrategy.detect(s1, s2, Second);
     val time = detection.getOrElse(throw NoDetectionException());
     val contactTime = Duration(663.333333333333333, Millisecond);
@@ -36,8 +36,8 @@ object LinearMotionCollisionDetectionStrategyValidator {
   }
   
   def checkTrajectoriesOverlayFrontalNoCollision(detectionStrategy:LinearMotionCollisionDetectionStrategy[MovableMock]) = {
-    val s1 = new MovableMock(Circle(Point(10, 10), 0.05), Vector(3, 0(Degree)), None);
-    val s2 = new MovableMock(Circle(Point(30, 10), 0.05), Vector(3, 180(Degree)), None);
+    val s1 = new MovableMock(Circle(Point(10, 10), 0.05), Vector(3, 0(Degree)) / Second, None);
+    val s2 = new MovableMock(Circle(Point(30, 10), 0.05), Vector(3, 180(Degree)) / Second, None);
     val detection = detectionStrategy.detect(s1, s2, Second);
     if(!detection.isEmpty) {
       throw UnexpectedDetectionException();
@@ -45,8 +45,8 @@ object LinearMotionCollisionDetectionStrategyValidator {
   }
   
   def checkTrajectoriesOverlayUnidirectionalNoCollision(detectionStrategy:LinearMotionCollisionDetectionStrategy[MovableMock]) = {
-    val s1 = new MovableMock(Circle(Point(10, 10), 0.05), Vector(15, 0(Degree)), None);
-    val s2 = new MovableMock(Circle(Point(30, 10), 0.05), Vector(15, 0(Degree)), None);
+    val s1 = new MovableMock(Circle(Point(10, 10), 0.05), Vector(15, 0(Degree)) / Second, None);
+    val s2 = new MovableMock(Circle(Point(30, 10), 0.05), Vector(15, 0(Degree)) / Second, None);
     val detection = detectionStrategy.detect(s1, s2, Second);
     if(!detection.isEmpty) {
       val error = "Spheres moved unidirectionally with same velocity and must not cause collision";
@@ -55,8 +55,8 @@ object LinearMotionCollisionDetectionStrategyValidator {
   }
   
   def checkTrajectoriesOverlayUnidirectionalCollision(detectionStrategy:LinearMotionCollisionDetectionStrategy[MovableMock]) = {
-    val s1 = new MovableMock(Circle(Point(10, 10), 0.05), Vector(35, 0(Degree)), None);
-    val s2 = new MovableMock(Circle(Point(30, 10), 0.05), Vector(15, 0(Degree)), None);
+    val s1 = new MovableMock(Circle(Point(10, 10), 0.05), Vector(35, 0(Degree)) / Second, None);
+    val s2 = new MovableMock(Circle(Point(30, 10), 0.05), Vector(15, 0(Degree)) / Second, None);
     val detection = detectionStrategy.detect(s1, s2, Second);
     val time = detection.getOrElse(throw NoDetectionException());
     val contactTime = Duration(995, Millisecond);
@@ -66,8 +66,8 @@ object LinearMotionCollisionDetectionStrategyValidator {
   }
   
   def checkTrajectoriesCrossedNoCollision(detectionStrategy:LinearMotionCollisionDetectionStrategy[MovableMock]) = {
-    val s1 = new MovableMock(Circle(Point(10, 100), 0.05), Vector(50, 0(Degree)), None);
-    val s2 = new MovableMock(Circle(Point(60, 110), 0.05), Vector(50, 270(Degree)), None);
+    val s1 = new MovableMock(Circle(Point(10, 100), 0.05), Vector(50, 0(Degree)) / Second, None);
+    val s2 = new MovableMock(Circle(Point(60, 110), 0.05), Vector(50, 270(Degree)) / Second, None);
     val detection = detectionStrategy.detect(s1, s2, Second);
     if(!detection.isEmpty) {
       val error = "Trajectories are crossed, but at any point of time spheres must not collide";
@@ -76,8 +76,8 @@ object LinearMotionCollisionDetectionStrategyValidator {
   }
   
   def checkTrajectoriesCrossedCollision(detectionStrategy:LinearMotionCollisionDetectionStrategy[MovableMock]) = {
-    val s1 = new MovableMock(Circle(Point(10, 100), 0.05), Vector(100, 0(Degree)), None);
-    val s2 = new MovableMock(Circle(Point(60, 150), 0.05), Vector(100, 270(Degree)), None);
+    val s1 = new MovableMock(Circle(Point(10, 100), 0.05), Vector(100, 0(Degree)) / Second, None);
+    val s2 = new MovableMock(Circle(Point(60, 150), 0.05), Vector(100, 270(Degree)) / Second, None);
     val detection = detectionStrategy.detect(s1, s2, Second);
     val time = detection.getOrElse(throw NoDetectionException());
     val contactTime = Duration(499.2928932188, Millisecond);

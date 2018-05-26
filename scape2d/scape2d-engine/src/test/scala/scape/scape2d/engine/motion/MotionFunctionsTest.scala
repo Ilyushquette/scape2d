@@ -16,16 +16,16 @@ import scape.scape2d.engine.time.Millisecond
 class MotionFunctionsTest {
   @Test
   def testPositionForTime = {
-    val movable = new MovableMock(Point(-1, 0), Vector.from(Components(3, 1)), None);
+    val movable = new MovableMock(Point(-1, 0), Vector.from(Components(3, 1)) / Second, None);
     val rotatable = new RotatableMock(Point.origin, -PI, Set(movable));
     Assert.assertEquals(Point(4, 1), positionForTimeOf(movable)(Second));
   }
   
   @Test
   def testDistanceForTime = {
-    val movable1 = new MovableMock(Point(-1, 0), Vector.from(Components(3, 0)), None);
+    val movable1 = new MovableMock(Point(-1, 0), Vector.from(Components(3, 0)) / Second, None);
     val rotatable1 = new RotatableMock(Point.origin, -PI, Set(movable1));
-    val movable2 = new MovableMock(Point(11, 0), Vector.from(Components(-3, 0)), None);
+    val movable2 = new MovableMock(Point(11, 0), Vector.from(Components(-3, 0)) / Second, None);
     val rotatable2 = new RotatableMock(Point(10, 0), PI, Set(movable2));
     Assert.assertEquals(7, distanceForTimeOf(movable1, movable2)(500(Millisecond)), Epsilon);
   }

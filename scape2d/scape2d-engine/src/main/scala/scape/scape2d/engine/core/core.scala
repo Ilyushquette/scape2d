@@ -12,6 +12,7 @@ import scape.scape2d.engine.motion.linear.{positionForTimeOf => postLinearMotion
 import scape.scape2d.engine.motion.rotational.{positionForTimeOf => postRotationPosition}
 import scape.scape2d.engine.core.matter.Body
 import scape.scape2d.engine.time.Duration
+import scape.scape2d.engine.time.Second
 
 package object core {
   private[core] def move(movable:Movable, timestep:Duration) = {
@@ -46,7 +47,7 @@ package object core {
    */
   private[core] def accelerateLinear(particle:Particle) = {
     if(particle.force.magnitude > 0) {
-      val acceleration = Vector(particle.force.magnitude / particle.mass, particle.force.angle);
+      val acceleration = Vector(particle.force.magnitude / particle.mass, particle.force.angle) / Second;
       particle.setVelocity(particle.velocity + acceleration);
       particle.resetForce();
     }

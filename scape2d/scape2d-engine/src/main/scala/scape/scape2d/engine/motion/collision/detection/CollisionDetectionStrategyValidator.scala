@@ -15,6 +15,7 @@ import scape.scape2d.engine.geom.angle.Angle
 import scape.scape2d.engine.time.Second
 import scape.scape2d.engine.time.Duration
 import scape.scape2d.engine.time.Millisecond
+import scape.scape2d.engine.motion.linear.Velocity
 
 object CollisionDetectionStrategyValidator {
   def check(detectionStrategy:CollisionDetectionStrategy[MovableMock]) = {
@@ -28,26 +29,26 @@ object CollisionDetectionStrategyValidator {
   }
   
   def checkStationaryNoCollision(detectionStrategy:CollisionDetectionStrategy[MovableMock]) = {
-    val movable1 = new MovableMock(Circle(Point(0, -1), 1), Vector.zero, None);
+    val movable1 = new MovableMock(Circle(Point(0, -1), 1), Velocity.zero, None);
     val rotatable1 = new RotatableMock(Point.origin, 0, Set(movable1));
-    val movable2 = new MovableMock(Circle(Point(10, -1), 1), Vector.zero, None);
+    val movable2 = new MovableMock(Circle(Point(10, -1), 1), Velocity.zero, None);
     val detection = detectionStrategy.detect(movable1, movable2, Second);
     if(detection.isDefined) throw UnexpectedDetectionException();
   }
   
   def checkSynchronousPairNoCollision(detectionStrategy:CollisionDetectionStrategy[MovableMock]) = {
-    val movable1 = new MovableMock(Circle(Point(0, -1), 0.1), Vector(4, 90(Degree)), None);
+    val movable1 = new MovableMock(Circle(Point(0, -1), 0.1), Vector(4, 90(Degree)) / Second, None);
     val rotatable1 = new RotatableMock(Point.origin, PI, Set(movable1));
-    val movable2 = new MovableMock(Circle(Point.origin, 0.1), Vector(4, 90(Degree)), None);
+    val movable2 = new MovableMock(Circle(Point.origin, 0.1), Vector(4, 90(Degree)) / Second, None);
     val rotatable2 = new RotatableMock(Point(0, 1), PI, Set(movable2));
     val detection = detectionStrategy.detect(movable1, movable2, Second);
     if(detection.isDefined) throw UnexpectedDetectionException();
   }
   
   def checkDirectCollision(detectionStrategy:CollisionDetectionStrategy[MovableMock]) = {
-    val movable1 = new MovableMock(Circle(Point(0, -1), 1), Vector(4, 90(Degree)), None);
+    val movable1 = new MovableMock(Circle(Point(0, -1), 1), Vector(4, 90(Degree)) / Second, None);
     val rotatable1 = new RotatableMock(Point.origin, PI, Set(movable1));
-    val movable2 = new MovableMock(Circle(Point(0, 11), 1), Vector(4, 270(Degree)), None);
+    val movable2 = new MovableMock(Circle(Point(0, 11), 1), Vector(4, 270(Degree)) / Second, None);
     val rotatable2 = new RotatableMock(Point(0, 10), -PI, Set(movable2));
     val detection = detectionStrategy.detect(movable1, movable2, Second);
     val time = detection.getOrElse(throw NoDetectionException());
@@ -57,18 +58,18 @@ object CollisionDetectionStrategyValidator {
   }
   
   def checkFastVersusSlowNoCollision(detectionStrategy:CollisionDetectionStrategy[MovableMock]) = {
-    val movable1 = new MovableMock(Circle(Point(0, -1), 0.1), Vector(4, 90(Degree)), None);
+    val movable1 = new MovableMock(Circle(Point(0, -1), 0.1), Vector(4, 90(Degree)) / Second, None);
     val rotatable1 = new RotatableMock(Point.origin, PI, Set(movable1));
-    val movable2 = new MovableMock(Circle(Point(0, 11), 0.1), Vector(4, 270(Degree)), None);
+    val movable2 = new MovableMock(Circle(Point(0, 11), 0.1), Vector(4, 270(Degree)) / Second, None);
     val rotatable2 = new RotatableMock(Point(0, 10), -TwicePI, Set(movable2));
     val detection = detectionStrategy.detect(movable1, movable2, Second);
     if(detection.isDefined) throw UnexpectedDetectionException();
   }
   
   def checkSmallFastVersusLargeSlowCollision(detectionStrategy:CollisionDetectionStrategy[MovableMock]) = {
-    val movable1 = new MovableMock(Circle(Point(0, -1), 0.1), Vector(4, 90(Degree)), None);
+    val movable1 = new MovableMock(Circle(Point(0, -1), 0.1), Vector(4, 90(Degree)) / Second, None);
     val rotatable1 = new RotatableMock(Point.origin, PI, Set(movable1));
-    val movable2 = new MovableMock(Circle(Point(0, 11), 1.9), Vector(4, 270(Degree)), None);
+    val movable2 = new MovableMock(Circle(Point(0, 11), 1.9), Vector(4, 270(Degree)) / Second, None);
     val rotatable2 = new RotatableMock(Point(0, 10), -TwicePI, Set(movable2));
     val detection = detectionStrategy.detect(movable1, movable2, Second);
     val time = detection.getOrElse(throw NoDetectionException());

@@ -14,11 +14,12 @@ import scape.scape2d.engine.util.Combination2
 import scape.scape2d.engine.geom.partition.QuadTree
 import scape.scape2d.engine.geom.shape.AxisAlignedRectangle
 import scape.scape2d.engine.time.Duration
+import scape.scape2d.engine.motion.linear.Velocity
 
 object PosterioriCollisionDetectorTest {
   @Parameterized.Parameters
   def instancesToTest:java.util.List[Array[() => PosterioriCollisionDetector[MovableMock]]] = Arrays.asList(
-      Array(() => BruteForcePosterioriCollisionDetector()),
+      Array(() => BruteForcePosterioriCollisionDetector()), 
       Array(() => TreePosterioriCollisionDetector(
           () => new QuadTree[MovableMock](AxisAlignedRectangle(Point(-20, -20), 40, 40), 3)
       ))
@@ -39,10 +40,10 @@ class PosterioriCollisionDetectorTest(
   @Test
   def testCollisionsBetweenMovablesDetection = {
     val collisionDetector = collisionDetectorFactory();
-    val movable1 = new MovableMock(Circle(Point.origin, 3), Vector.zero, None);
-    val movable2 = new MovableMock(Circle(Point(0, 5), 3), Vector.zero, None);
-    val movable3 = new MovableMock(Circle(Point.origin, 1), Vector.zero, None);
-    val movable4 = new MovableMock(Circle(Point(-10, 10), 2), Vector.zero, None);
+    val movable1 = new MovableMock(Circle(Point.origin, 3), Velocity.zero, None);
+    val movable2 = new MovableMock(Circle(Point(0, 5), 3), Velocity.zero, None);
+    val movable3 = new MovableMock(Circle(Point.origin, 1), Velocity.zero, None);
+    val movable4 = new MovableMock(Circle(Point(-10, 10), 2), Velocity.zero, None);
     val movables = Set(movable1, movable2, movable3, movable4);
     val expectedCollisions = Set(CollisionEvent(Combination2(movable1, movable2), Duration.zero),
                                  CollisionEvent(Combination2(movable1, movable3), Duration.zero));

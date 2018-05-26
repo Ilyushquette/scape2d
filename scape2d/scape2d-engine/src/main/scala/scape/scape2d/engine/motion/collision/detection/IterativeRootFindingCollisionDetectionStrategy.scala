@@ -54,14 +54,16 @@ case class IterativeRootFindingCollisionDetectionStrategy[T <: Movable with Form
   }
   
   private def timestepForDistance(movable:Movable, distance:Double) = {
-    val combinedVelocityScalar = combineAngularAndLinearVelocitiesScalar(movable);
-    Duration(distance / combinedVelocityScalar, Second);
+    val combinedVelocitiesScalar = combineAngularAndLinearVelocitiesScalar(movable);
+    Duration(distance / combinedVelocitiesScalar, Second);
   }
   
   private def combineAngularAndLinearVelocitiesScalar(movable:Movable) = {
-    if(movable.rotatable.isDefined)
-      abs(movable.velocity.magnitude + angularToLinearVelocityScalar(movable));
+    val linearVelocityMagnitude = movable.velocity.forTime(Second).magnitude;
+    
+    if(movable.isRotating)
+      linearVelocityMagnitude + angularToLinearVelocityScalar(movable);
     else
-      abs(movable.velocity.magnitude);
+      linearVelocityMagnitude;
   }
 }
