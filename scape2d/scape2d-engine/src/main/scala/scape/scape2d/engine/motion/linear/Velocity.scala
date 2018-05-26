@@ -8,4 +8,9 @@ import scape.scape2d.engine.geom.Vector
  */
 case class Velocity(vector:Vector, time:Duration) {
   lazy val vectorPerMillisecond = vector / time.milliseconds;
+  
+  override def equals(any:Any) = any match {
+    case velocity:Velocity => vectorPerMillisecond == velocity.vectorPerMillisecond;
+    case _ => false;
+  }
 }
