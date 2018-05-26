@@ -39,10 +39,10 @@ class PosterioriCollisionDetectorTest(
   @Test
   def testCollisionsBetweenMovablesDetection = {
     val collisionDetector = collisionDetectorFactory();
-    val movable1 = new MovableMock(Circle(Point.origin, 3), Vector(), None);
-    val movable2 = new MovableMock(Circle(Point(0, 5), 3), Vector(), None);
-    val movable3 = new MovableMock(Circle(Point.origin, 1), Vector(), None);
-    val movable4 = new MovableMock(Circle(Point(-10, 10), 2), Vector(), None);
+    val movable1 = new MovableMock(Circle(Point.origin, 3), Vector.zero, None);
+    val movable2 = new MovableMock(Circle(Point(0, 5), 3), Vector.zero, None);
+    val movable3 = new MovableMock(Circle(Point.origin, 1), Vector.zero, None);
+    val movable4 = new MovableMock(Circle(Point(-10, 10), 2), Vector.zero, None);
     val movables = Set(movable1, movable2, movable3, movable4);
     val expectedCollisions = Set(CollisionEvent(Combination2(movable1, movable2), Duration.zero),
                                  CollisionEvent(Combination2(movable1, movable3), Duration.zero));

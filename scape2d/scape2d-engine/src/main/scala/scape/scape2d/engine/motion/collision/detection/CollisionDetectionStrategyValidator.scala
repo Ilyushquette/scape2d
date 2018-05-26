@@ -28,9 +28,9 @@ object CollisionDetectionStrategyValidator {
   }
   
   def checkStationaryNoCollision(detectionStrategy:CollisionDetectionStrategy[MovableMock]) = {
-    val movable1 = new MovableMock(Circle(Point(0, -1), 1), Vector(), None);
+    val movable1 = new MovableMock(Circle(Point(0, -1), 1), Vector.zero, None);
     val rotatable1 = new RotatableMock(Point.origin, 0, Set(movable1));
-    val movable2 = new MovableMock(Circle(Point(10, -1), 1), Vector(), None);
+    val movable2 = new MovableMock(Circle(Point(10, -1), 1), Vector.zero, None);
     val detection = detectionStrategy.detect(movable1, movable2, Second);
     if(detection.isDefined) throw UnexpectedDetectionException();
   }

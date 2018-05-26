@@ -20,7 +20,7 @@ extends Movable with Formed[Circle] with Identifiable {
   val id = MovableMock.nextId;
   
   // this default constructor is only exists for cglib proxy support
-  def this() = this(Circle(Point.origin, 0), Vector(), None);
+  def this() = this(Circle(Point.origin, 0), Vector.zero, None);
   
   def this(position:Point, velocity:Vector, rotatable:Option[Rotatable]) = {
     this(Circle(position, 0), velocity, rotatable);

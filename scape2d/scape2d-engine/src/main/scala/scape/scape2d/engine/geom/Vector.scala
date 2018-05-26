@@ -10,6 +10,8 @@ import scape.scape2d.engine.geom.angle.sin
 import scape.scape2d.engine.geom.angle.Radian
 
 object Vector {
+  val zero = Vector(0, Angle.zero);
+  
   def from(components:Components) = {
     val magnitude = hypot(components.x, components.y);
     Vector(magnitude, Angle.from(components));
@@ -18,7 +20,7 @@ object Vector {
   implicit def toComponents(vector:Vector) = vector.components;
 }
 
-case class Vector(magnitude:Double = 0, angle:Angle = Angle.zero) {
+case class Vector(magnitude:Double, angle:Angle) {
   lazy val components = {
     val offsetX = magnitude * cos(angle);
     val offsetY = magnitude * sin(angle);

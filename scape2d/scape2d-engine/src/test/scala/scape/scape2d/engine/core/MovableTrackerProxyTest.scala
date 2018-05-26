@@ -10,7 +10,7 @@ class MovableTrackerProxyTest {
   def testSettingDifferingPositionEventInterception = {
     var event:Option[MotionEvent[MovableMock]] = None;
     
-    val movableMock = new MovableMock(Point(5, 5), Vector(), None);
+    val movableMock = new MovableMock(Point(5, 5), Vector.zero, None);
     val trackedMovable = MovableTrackerProxy.track(movableMock);
     trackedMovable.onMotion(e => event = Some(e));
     
@@ -22,7 +22,7 @@ class MovableTrackerProxyTest {
   def testSettingSamePositionNoEventInterception = {
     var event:Option[MotionEvent[MovableMock]] = None;
     
-    val movableMock = new MovableMock(Point(5, 5), Vector(), None);
+    val movableMock = new MovableMock(Point(5, 5), Vector.zero, None);
     val trackedMovable = MovableTrackerProxy.track(movableMock);
     trackedMovable.onMotion(e => event = Some(e));
     

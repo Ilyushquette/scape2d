@@ -23,7 +23,7 @@ class Particle private[matter] (
   private var _force:Vector,
   private var _bonds:Set[Bond] = Set.empty)
 extends Movable with Formed[Circle] with Identifiable {
-  private[matter] def this() = this(Particle.nextId, Circle(Point.origin, 1), 1, Vector(), Vector());
+  private[matter] def this() = this(Particle.nextId, Circle(Point.origin, 1), 1, Vector.zero, Vector.zero);
   
   def position = _shape.center;
   
@@ -50,7 +50,7 @@ extends Movable with Formed[Circle] with Identifiable {
     }
   }
   
-  private[core] def resetForce() = _force = Vector();
+  private[core] def resetForce() = _force = Vector.zero;
   
   def bonds = _bonds;
   

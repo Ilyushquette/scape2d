@@ -7,8 +7,8 @@ import scape.scape2d.engine.geom.shape.Circle
 case class ParticleBuilder(
   shape:Circle = Circle(Point.origin, 1),
   mass:Double = 1,
-  velocity:Vector = Vector(),
-  force:Vector = Vector()
+  velocity:Vector = Vector.zero,
+  force:Vector = Vector.zero
 ) {
   /**
    * position in meters, radius in meters
