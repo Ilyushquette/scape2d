@@ -13,6 +13,16 @@ case class Velocity(vector:Vector, time:Duration) extends Ordered[Velocity] {
   
   def forTime(time:Duration) = vector * (time / this.time);
   
+  def +(velocity:Velocity) = {
+    val vectorToAdd = velocity.forTime(time);
+    Velocity(vector + vectorToAdd, time);
+  }
+  
+  def -(velocity:Velocity) = {
+    val vectorToSubtract = velocity.forTime(time);
+    Velocity(vector - vectorToSubtract, time);
+  }
+  
   def compare(velocity:Velocity) = vectorPerMillisecond compareTo velocity.vectorPerMillisecond;
   
   override def equals(any:Any) = any match {
