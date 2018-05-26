@@ -10,6 +10,7 @@ import scape.scape2d.engine.time.Duration
 import scape.scape2d.engine.time.Millisecond
 import scape.scape2d.engine.geom.angle.Angle
 import scape.scape2d.engine.time.Minute
+import scape.scape2d.engine.time.Hour
 
 class VelocityTest {
   @Test
@@ -30,5 +31,11 @@ class VelocityTest {
   def testTimeForDistanceResolutionFromVelocity = {
     val velocity = Vector(7, 315(Degree)) / Second;
     Assert.assertEquals(Duration(2, Second), velocity.forDistance(14));
+  }
+  
+  @Test
+  def testDisplacementVectorForTimeResolutionFromVelocity = {
+    val velocity = Vector(18, 315(Degree)) / Hour;
+    Assert.assertEquals(Vector(9, 315(Degree)), velocity.forTime(Duration(30, Minute)));
   }
 }
