@@ -20,7 +20,7 @@ object Vector {
   implicit def toComponents(vector:Vector) = vector.components;
 }
 
-case class Vector(magnitude:Double, angle:Angle) {
+case class Vector(magnitude:Double, angle:Angle) extends Ordered[Vector] {
   lazy val components = {
     val offsetX = magnitude * cos(angle);
     val offsetY = magnitude * sin(angle);
@@ -56,6 +56,8 @@ case class Vector(magnitude:Double, angle:Angle) {
   def scalarProjection(target:Vector) = (this * target) / (target.magnitude * target.magnitude);
   
   def projection(target:Vector) = target * scalarProjection(target);
+  
+  def compare(vector:Vector) = magnitude compareTo vector.magnitude;
   
   override def equals(a:Any) = a match {
     case Vector(omagnitude, oangle) =>
