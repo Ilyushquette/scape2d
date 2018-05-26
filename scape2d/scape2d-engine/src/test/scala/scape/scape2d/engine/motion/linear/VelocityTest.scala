@@ -25,4 +25,10 @@ class VelocityTest {
     val velocity2 = Vector(5, 135(Degree)) / Duration(500, Millisecond);
     Assert.assertTrue(velocity1 == velocity2);
   }
+  
+  @Test
+  def testTimeForDistanceResolutionFromVelocity = {
+    val velocity = Vector(7, 315(Degree)) / Second;
+    Assert.assertEquals(Duration(2, Second), velocity.forDistance(14));
+  }
 }

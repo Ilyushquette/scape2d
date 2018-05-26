@@ -9,6 +9,8 @@ import scape.scape2d.engine.geom.Vector
 case class Velocity(vector:Vector, time:Duration) extends Ordered[Velocity] {
   lazy val vectorPerMillisecond = vector / time.milliseconds;
   
+  def forDistance(distance:Double) = time * (distance / vector.magnitude);
+  
   def compare(velocity:Velocity) = vectorPerMillisecond compareTo velocity.vectorPerMillisecond;
   
   override def equals(any:Any) = any match {
