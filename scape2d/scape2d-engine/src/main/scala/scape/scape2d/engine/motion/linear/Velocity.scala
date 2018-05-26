@@ -2,6 +2,11 @@ package scape.scape2d.engine.motion.linear
 
 import scape.scape2d.engine.time.Duration
 import scape.scape2d.engine.geom.Vector
+import scape.scape2d.engine.time.Second
+
+object Velocity {
+  val zero = Vector.zero / Second;
+}
 
 /**
  * distance in meters
