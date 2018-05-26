@@ -73,6 +73,18 @@ class VectorTest {
   }
   
   @Test
+  def testVectorMagnitudeDivision = {
+    val sourceVector = Vector(5, 45(Degree));
+    Assert.assertEquals(Vector(2.5, 45(Degree)), sourceVector / 2);
+  }
+  
+  @Test
+  def testVectorNegativeMagnitudeDivision = {
+    val sourceVector = Vector(1, 135(Degree));
+    Assert.assertEquals(Vector(1, 315(Degree)), sourceVector / -1);
+  }
+  
+  @Test
   def testCrossProduct = {
     val v1 = Vector.from(Components(-2, 3));
     val v2 = Vector.from(Components(0, 1));

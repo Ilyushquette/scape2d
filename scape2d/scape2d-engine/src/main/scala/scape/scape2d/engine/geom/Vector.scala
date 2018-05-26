@@ -45,6 +45,12 @@ case class Vector(magnitude:Double, angle:Angle) {
     Vector(newMagnitude, newAngle);
   }
   
+  def /(magnitudeDivider:Double) = {
+    val newMagnitude = magnitude / abs(magnitudeDivider);
+    val newAngle = if(magnitudeDivider >= 0) angle else angle.opposite;
+    Vector(newMagnitude, newAngle);
+  }
+  
   def x(vector:Vector):Double = this.x * vector.y - this.y * vector.x;
   
   def scalarProjection(target:Vector) = (this * target) / (target.magnitude * target.magnitude);
