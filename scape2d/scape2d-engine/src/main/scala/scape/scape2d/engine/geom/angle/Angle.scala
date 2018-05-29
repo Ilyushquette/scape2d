@@ -55,4 +55,6 @@ case class Angle private[Angle](value:Double, unit:AngleUnit) extends Ordered[An
     case unit:AngleUnit => this == AngleUnit.toAngle(unit);
     case _ => false;
   }
+  
+  lazy val unbound = UnboundAngle(value, unit);
 }
