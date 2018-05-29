@@ -6,6 +6,11 @@ import com.google.common.math.DoubleMath.fuzzyEquals
 case class UnboundAngle(value:Double, unit:AngleUnit) extends Ordered[UnboundAngle] {
   lazy val radians = value * unit.radians;
   
+  def to(anotherUnit:AngleUnit) = {
+    if(unit != anotherUnit) UnboundAngle(unit / anotherUnit * value, anotherUnit);
+    else this;
+  }
+  
   def compare(unboundAngle:UnboundAngle) = fuzzyCompare(radians, unboundAngle.radians, Epsilon);
   
   override def equals(any:Any) = any match {

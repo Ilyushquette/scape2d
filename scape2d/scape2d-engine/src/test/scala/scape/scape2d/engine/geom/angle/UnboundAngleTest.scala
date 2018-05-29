@@ -23,4 +23,10 @@ class UnboundAngleTest {
   def testSameUnboundAnglesWithDifferentTypes = {
     Assert.assertTrue(UnboundAngle(180, Degree) == Angle.straight.unbound);
   }
+  
+  def testUnitConversionUnboundAngle = {
+    val convertedAngle = UnboundAngle(180, Degree) to Radian;
+    Assert.assertEquals(3.14159265358979, convertedAngle.value, Epsilon);
+    Assert.assertEquals(Radian, convertedAngle.unit);
+  }
 }
