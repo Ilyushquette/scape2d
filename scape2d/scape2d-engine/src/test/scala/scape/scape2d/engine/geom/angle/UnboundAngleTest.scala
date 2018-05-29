@@ -29,4 +29,14 @@ class UnboundAngleTest {
     Assert.assertEquals(3.14159265358979, convertedAngle.value, Epsilon);
     Assert.assertEquals(Radian, convertedAngle.unit);
   }
+  
+  @Test
+  def testSumWithUnboundAngle = {
+    Assert.assertEquals(UnboundAngle(400, Degree), UnboundAngle(540, Degree) + UnboundAngle(-140, Degree));
+  }
+  
+  @Test
+  def testSubtractionOfUnboundAngle = {
+    Assert.assertEquals(UnboundAngle(-4, Radian), UnboundAngle(-1, Radian) - UnboundAngle(3, Radian));
+  }
 }

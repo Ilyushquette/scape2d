@@ -11,6 +11,16 @@ case class UnboundAngle(value:Double, unit:AngleUnit) extends Ordered[UnboundAng
     else this;
   }
   
+  def +(unboundAngle:UnboundAngle):UnboundAngle = {
+    val convertedUnboundAngle = unboundAngle to unit;
+    UnboundAngle(value + convertedUnboundAngle.value, unit);
+  }
+  
+  def -(unboundAngle:UnboundAngle):UnboundAngle = {
+    val convertedUnboundAngle = unboundAngle to unit;
+    UnboundAngle(value - convertedUnboundAngle.value, unit);
+  }
+  
   def compare(unboundAngle:UnboundAngle) = fuzzyCompare(radians, unboundAngle.radians, Epsilon);
   
   override def equals(any:Any) = any match {
