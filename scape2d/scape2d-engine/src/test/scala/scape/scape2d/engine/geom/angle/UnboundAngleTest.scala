@@ -39,4 +39,19 @@ class UnboundAngleTest {
   def testSubtractionOfUnboundAngle = {
     Assert.assertEquals(UnboundAngle(-4, Radian), UnboundAngle(-1, Radian) - UnboundAngle(3, Radian));
   }
+  
+  @Test
+  def testMultiplicationByNumber = {
+    Assert.assertEquals(UnboundAngle(-540, Degree), UnboundAngle(-270, Degree) * 2);
+  }
+  
+  @Test
+  def testDivisionByUnboundAngle = {
+    Assert.assertEquals(2, UnboundAngle(720, Degree) / Angle.full.unbound, 0.00001);
+  }
+  
+  @Test
+  def testDivisionByNumber = {
+    Assert.assertEquals(UnboundAngle(45, Degree), UnboundAngle(315, Degree) / 7);
+  }
 }
