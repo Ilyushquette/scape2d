@@ -2,6 +2,8 @@ package scape.scape2d.engine.geom.angle
 
 import com.google.common.math.DoubleMath.fuzzyCompare
 import com.google.common.math.DoubleMath.fuzzyEquals
+import scape.scape2d.engine.time.Duration
+import scape.scape2d.engine.motion.rotational.AngularVelocity
 
 case class UnboundAngle(value:Double, unit:AngleUnit) extends Ordered[UnboundAngle] {
   lazy val radians = value * unit.radians;
@@ -26,6 +28,8 @@ case class UnboundAngle(value:Double, unit:AngleUnit) extends Ordered[UnboundAng
   def /(unboundAngle:UnboundAngle) = radians / unboundAngle.radians;
   
   def /(divider:Double) = UnboundAngle(value / divider, unit);
+  
+  def /(duration:Duration) = AngularVelocity(this, duration);
   
   def compare(unboundAngle:UnboundAngle) = fuzzyCompare(radians, unboundAngle.radians, Epsilon);
   

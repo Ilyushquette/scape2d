@@ -1,10 +1,11 @@
 package scape.scape2d.engine.geom.angle
 
 import java.lang.Math.atan2
-
 import com.google.common.math.DoubleMath.fuzzyCompare
 import com.google.common.math.DoubleMath.fuzzyEquals
 import scape.scape2d.engine.geom.Components
+import scape.scape2d.engine.motion.rotational.AngularVelocity
+import scape.scape2d.engine.time.Duration
 
 object Angle {
   val straight = 3.14159265358979(Radian);
@@ -47,6 +48,8 @@ case class Angle private[Angle](value:Double, unit:AngleUnit) extends Ordered[An
   def /(angle:Angle) = radians / angle.radians;
   
   def /(divider:Double) = Angle.bound(value / divider, unit);
+  
+  def /(duration:Duration) = AngularVelocity(this, duration);
   
   def compare(angle:Angle) = fuzzyCompare(radians, angle.radians, Epsilon);
   
