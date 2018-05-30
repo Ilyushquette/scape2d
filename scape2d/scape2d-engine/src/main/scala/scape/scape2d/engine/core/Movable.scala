@@ -3,6 +3,7 @@ package scape.scape2d.engine.core
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.motion.linear.Velocity
+import scape.scape2d.engine.motion.rotational.AngularVelocity
 
 trait Movable extends Volatile {
   /**
@@ -20,7 +21,7 @@ trait Movable extends Volatile {
   
   def rotatable:Option[Rotatable];
   
-  def isRotating = rotatable.map(_.angularVelocity != 0).getOrElse(false);
+  def isRotating = rotatable.map(_.angularVelocity != AngularVelocity.zero).getOrElse(false);
   
   def isStationary = !isMovingLinearly && !isRotating;
 }

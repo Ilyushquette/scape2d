@@ -11,6 +11,7 @@ import scape.scape2d.engine.geom.angle.cos
 import scape.scape2d.engine.geom.angle.sin
 import scape.scape2d.engine.geom.angle.Angle
 import scape.scape2d.engine.geom.angle.Radian
+import scape.scape2d.engine.motion.rotational.trajectory.trajectoryCircleOf
 import scape.scape2d.engine.time.Duration
 import scape.scape2d.engine.time.Second
 
@@ -23,8 +24,8 @@ package object rotational {
       val r = Rc distanceTo Mp;
       val θ = Rc angleTo Mp;
       t => {
-        val ωt = asRadiansPerTimestep(ω, t);
-        val θt = θ + Angle.bound(ωt, Radian);
+        val ωt = ω forTime t;
+        val θt = θ + ωt.bound;
         val x = Rc.x + r * cos(θt);
         val y = Rc.y + r * sin(θt);
         Point(x, y);
@@ -38,28 +39,12 @@ package object rotational {
     t => Pft(t) distanceTo Qft(t);
   }
   
-  def asRadiansPerTimestep(angularVelocity:Double, timestep:Duration) = {
-    val stepsPerSecond = Second / timestep;
-    angularVelocity / stepsPerSecond;
-  }
-  
-  def asRadiansPerSecond(angularVelocity:Double, timestep:Duration) = {
-    val stepsPerSecond = Second / timestep;
-    angularVelocity * stepsPerSecond;
-  }
-  
-  def angularToLinearVelocityScalar(movable:Movable) = {
-    val rotatable = movable.rotatable.get;
-    val ω = rotatable.angularVelocity;
-    val r = movable.position distanceTo rotatable.center;
-    abs(ω * r);
-  }
-  
   def angularToLinearVelocity(movable:Movable) = {
-    val scalar = angularToLinearVelocityScalar(movable);
     val rotatable = movable.rotatable.get;
+    val ωt = rotatable.angularVelocity.forTime(Second);
+    val length = abs(trajectoryCircleOf(movable).forAngle(ωt));
     val radialDirection = rotatable.center angleTo movable.position;
-    val θ = radialDirection + (Angle.right * signum(rotatable.angularVelocity));
-    Vector(scalar, θ) / Second;
+    val θ = radialDirection + (Angle.right * signum(rotatable.angularVelocity.angle.value));
+    Vector(length, θ) / Second;
   }
 }

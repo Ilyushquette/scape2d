@@ -13,6 +13,8 @@ import scape.scape2d.engine.motion.rotational.{positionForTimeOf => postRotation
 import scape.scape2d.engine.core.matter.Body
 import scape.scape2d.engine.time.Duration
 import scape.scape2d.engine.time.Second
+import scape.scape2d.engine.geom.angle.UnboundAngle
+import scape.scape2d.engine.geom.angle.Radian
 
 package object core {
   private[core] def move(movable:Movable, timestep:Duration) = {
@@ -55,13 +57,13 @@ package object core {
   
   /**
    * Since nettorque in the body is a representation of impulse J = N x timestep,
-   * acceleration in radians per second per timestep too.
+   * acceleration in angle per second per timestep too.
    * In the other words: all torques collected since last time integration.
    * Final angular velocity of the body in radians per second.
    */
   private[core] def accelerateAngular(body:Body) = {
     if(body.torque != 0) {
-      val acceleration = body.torque / body.momentsOfInertia;
+      val acceleration = UnboundAngle(body.torque / body.momentsOfInertia, Radian) / Second;
       body.setAngularVelocity(body.angularVelocity + acceleration);
       body.resetTorque();
     }

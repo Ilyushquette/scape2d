@@ -1,11 +1,12 @@
 package scape.scape2d.engine.core.matter
 
 import scape.scape2d.engine.core.Rotatable
+import scape.scape2d.engine.motion.rotational.AngularVelocity
 
 class Body private[matter] (
   val centerParticle:Particle,
   val bonds:Set[Bond],
-  private var _angularVelocity:Double,
+  private var _angularVelocity:AngularVelocity,
   private var _torque:Double
 ) extends Rotatable {
   val movables = bonds.foldLeft(Set[Particle]())((particles, bond) => particles + bond.particles._1 + bond.particles._2);
@@ -14,7 +15,7 @@ class Body private[matter] (
   
   def angularVelocity = _angularVelocity;
   
-  private[core] def setAngularVelocity(newAngularVelocity:Double) = _angularVelocity = newAngularVelocity;
+  private[core] def setAngularVelocity(newAngularVelocity:AngularVelocity) = _angularVelocity = newAngularVelocity;
   
   def torque = _torque;
   
@@ -28,7 +29,7 @@ class Body private[matter] (
   
   def snapshot(centerParticle:Particle = this.centerParticle,
                bonds:Set[Bond] = this.bonds,
-               angularVelocity:Double = this.angularVelocity,
+               angularVelocity:AngularVelocity = this.angularVelocity,
                torque:Double = this.torque) = {
     new Body(centerParticle, bonds, angularVelocity, torque);
   }

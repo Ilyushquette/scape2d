@@ -47,8 +47,8 @@ extends Movable with Formed[Circle] with Identifiable {
     val bodyOpt = rotatable;
     if(cascade && bodyOpt.isDefined) {
       val body = bodyOpt.get;
-      val levelArm = shape.center - body.center;
-      body.exertTorque(levelArm x force);
+      val leverArm = shape.center - body.center;
+      body.exertTorque(leverArm x force);
     }
   }
   

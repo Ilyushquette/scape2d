@@ -46,7 +46,7 @@ object RectangularBodyRotation {
                           .withBodyBuilder(BodyBuilder()
                                            .withParticleFactory(makeParticle)
                                            .withBondFactory(makeBond)
-                                           .withAngularVelocity(3.14))
+                                           .withAngularVelocity(Angle.straight / Second))
                           .withStep(0.15)
                           .build(AxisAlignedRectangle(Point(1, 7), 0.75, 0.75));
     

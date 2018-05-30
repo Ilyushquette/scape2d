@@ -2,7 +2,6 @@ package scape.scape2d.samples
 
 import java.awt.Color
 import java.awt.Toolkit
-
 import javax.swing.JFrame
 import scape.scape2d.debugger.BodyDebugger
 import scape.scape2d.debugger.ParticleDebugger
@@ -27,6 +26,9 @@ import scape.scape2d.graphics.rasterizer.UnitConvertingRasterizer
 import scape.scape2d.graphics.rasterizer.cache.CachingRasterizers
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
+import scape.scape2d.engine.geom.angle.Degree
+import scape.scape2d.engine.geom.angle.doubleToAngle
+import scape.scape2d.engine.time.Second
 
 object RotatingSingletonBondBodyWithStationaryCollision {
   def main(args:Array[String]): Unit = {
@@ -35,7 +37,7 @@ object RotatingSingletonBondBodyWithStationaryCollision {
     val body = BodyBuilder()
                .withParticleFactory(makeParticle)
                .withBondFactory(makeBond)
-               .withAngularVelocity(2.74017)
+               .withAngularVelocity(157(Degree) / Second)
                .build(singleSegmentStructure.suspension, singleSegmentStructure);
     val stationaryParticle = makeParticle(Point(12.5, 6));
     

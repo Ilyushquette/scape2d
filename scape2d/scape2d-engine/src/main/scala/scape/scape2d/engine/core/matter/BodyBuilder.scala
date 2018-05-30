@@ -6,18 +6,19 @@ import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.structure.SegmentedStructure
 import scape.scape2d.engine.geom.shape.Segment
 import scape.scape2d.engine.util.Combination2
+import scape.scape2d.engine.motion.rotational.AngularVelocity
 
 case class BodyBuilder(
   particleFactory:Point => Particle = point => ParticleBuilder().as(Circle(point, 1)).build,
   bondFactory:(Particle, Particle) => Bond = BondBuilder(_, _).build,
-  angularVelocity:Double = 0,
+  angularVelocity:AngularVelocity = AngularVelocity.zero,
   torque:Double = 0
 ) {
   def withParticleFactory(pf:Point => Particle) = copy(particleFactory = pf);
   
   def withBondFactory(bf:(Particle, Particle) => Bond) = copy(bondFactory = bf);
   
-  def withAngularVelocity(av:Double) = copy(angularVelocity = av);
+  def withAngularVelocity(av:AngularVelocity) = copy(angularVelocity = av);
   
   def withTorque(t:Double) = copy(torque = t);
   

@@ -6,13 +6,13 @@ import com.google.common.math.DoubleMath
 import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.geom.Formed.exposeShape
 import scape.scape2d.engine.motion.distanceForTimeOf
-import scape.scape2d.engine.motion.rotational.angularToLinearVelocityScalar
 import scape.scape2d.engine.geom.Formed
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.motion.collision.detection.linear.LinearMotionCollisionDetectionStrategy
 import scape.scape2d.engine.motion.collision.detection.rotation.RotationalCollisionDetectionStrategy
 import scape.scape2d.engine.motion.collision.detection.linear.QuadraticLinearMotionCollisionDetectionStrategy
 import scape.scape2d.engine.motion.collision.detection.rotation.IterativeRootFindingRotationalCollisionDetectionStrategy
+import scape.scape2d.engine.motion.rotational.trajectory.trajectoryCircleOf
 import scape.scape2d.engine.time.Duration
 import scape.scape2d.engine.time.Second
 import scape.scape2d.engine.util.comparison.min
@@ -61,9 +61,10 @@ case class IterativeRootFindingCollisionDetectionStrategy[T <: Movable with Form
   private def combineAngularAndLinearVelocitiesScalar(movable:Movable) = {
     val linearVelocityMagnitude = movable.velocity.forTime(Second).magnitude;
     
-    if(movable.isRotating)
-      linearVelocityMagnitude + angularToLinearVelocityScalar(movable);
-    else
-      linearVelocityMagnitude;
+    if(movable.isRotating) {
+      val ωt = movable.rotatable.get.angularVelocity.forTime(Second);
+      val angularVelocityMagnitude = abs(trajectoryCircleOf(movable).forAngle(ωt));
+      linearVelocityMagnitude + angularVelocityMagnitude;
+    } else linearVelocityMagnitude;
   }
 }

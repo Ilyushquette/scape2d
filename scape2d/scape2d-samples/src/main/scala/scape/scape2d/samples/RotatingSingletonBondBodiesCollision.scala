@@ -2,6 +2,7 @@ package scape.scape2d.samples
 
 import java.awt.Color
 import java.awt.Toolkit
+import java.lang.Math.PI
 import javax.swing.JFrame
 import scape.scape2d.debugger.ParticleDebugger
 import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
@@ -26,22 +27,27 @@ import scape.scape2d.engine.deformation.LinearStressStrainGraph
 import scape.scape2d.engine.deformation.plasticity.Plastic
 import scape.scape2d.engine.geom.structure.HingedSegmentedStructure
 import scape.scape2d.debugger.BodyDebugger
+import scape.scape2d.engine.geom.angle.UnboundAngle
+import scape.scape2d.engine.time.Second
+import scape.scape2d.engine.geom.angle.Degree
+import scape.scape2d.engine.geom.angle.doubleToAngle
+import scape.scape2d.engine.geom.angle.Radian
 
 object RotatingSingletonBondBodiesCollision {
   def main(args:Array[String]): Unit = {
     val nature = new Nature();
     val singleSegmentStructure1 = HingedSegmentedStructure(Point(13, 7), List(Point(14, 7)));
     val body1 = BodyBuilder()
-               .withParticleFactory(makeParticle)
-               .withBondFactory(makeBond)
-               .withAngularVelocity(2.76)
-               .build(singleSegmentStructure1.suspension, singleSegmentStructure1);
+                .withParticleFactory(makeParticle)
+                .withBondFactory(makeBond)
+                .withAngularVelocity(2.76(Radian) / Second)
+                .build(singleSegmentStructure1.suspension, singleSegmentStructure1);
     
     val singleSegmentStructure2 = HingedSegmentedStructure(Point(11, 7), List(Point(10, 7)));
     val body2 = BodyBuilder()
                 .withParticleFactory(makeParticle)
                 .withBondFactory(makeBond)
-                .withAngularVelocity(-3.14)
+                .withAngularVelocity(UnboundAngle(-3.14, Radian) / Second)
                 .build(singleSegmentStructure2.suspension, singleSegmentStructure2);
     
     val frame = new JFrame("Scape2D Debugger");

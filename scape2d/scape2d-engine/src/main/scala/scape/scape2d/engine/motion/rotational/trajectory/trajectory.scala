@@ -6,14 +6,18 @@ import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Ring
 
 package object trajectory {
-  def trajectoryOf[T <: Movable with Formed[Circle]](movable:T) = {
+  def trajectoryCircleOf(movable:Movable) = {
     val trajectoryCenter = movable.rotatable.get.center;
     val trajectoryRadius = trajectoryCenter distanceTo movable.position;
-    Ring(Circle(trajectoryCenter, trajectoryRadius), movable.radius * 2);
+    Circle(trajectoryCenter, trajectoryRadius);
+  }
+  
+  def trajectoryOf[T <: Movable with Formed[Circle]](movable:T) = {
+    Ring(trajectoryCircleOf(movable), movable.radius * 2);
   }
   
   def pathOf[T <: Movable with Formed[Circle]](movable:T) = {
-    if(movable.rotatable.isDefined && movable.rotatable.get.angularVelocity != 0)
+    if(movable.isRotating)
       trajectoryOf(movable);
     else movable.shape;
   }

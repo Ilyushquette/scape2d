@@ -45,7 +45,6 @@ class PointTest {
     val p = Point(1, 0);
     val q = Point(4, -3);
     val vector = p - q;
-    println(DoubleMath.fuzzyEquals(4.2426406871, 4.242640687119285, scape.scape2d.engine.geom.Epsilon));
     Assert.assertEquals(Vector(4.2426406871, 135(Degree)), vector);
   }
 }

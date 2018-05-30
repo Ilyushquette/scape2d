@@ -1,19 +1,17 @@
 package scape.scape2d.engine.core
 
 import scape.scape2d.engine.geom.shape.Point
+import scape.scape2d.engine.motion.rotational.AngularVelocity
 
 trait Rotatable extends Volatile {
   /**
    * in meters
    */
   def center:Point;
+
+  def angularVelocity:AngularVelocity;
   
-  /**
-   * pseudovector in radians per second
-   */
-  def angularVelocity:Double;
-  
-  private[core] def setAngularVelocity(newAngularVelocity:Double);
+  private[core] def setAngularVelocity(newAngularVelocity:AngularVelocity);
   
   def movables:Set[_ <: Movable];
 }
