@@ -22,4 +22,10 @@ class AngularVelocityTest {
   def testSameAngularVelocities = {
     Assert.assertTrue(Angle.full / Hour == Angle.straight / Duration(30, Minute));
   }
+  
+  @Test
+  def testTimeForAngleResolutionFromAngularVelocity = {
+    val angularVelocity = 45(Degree) / Second;
+    Assert.assertEquals(Duration(6, Second), angularVelocity.forAngle(270(Degree).unbound));
+  }
 }
