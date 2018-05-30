@@ -2,7 +2,9 @@ package scape.scape2d.engine.geom.shape
 
 import org.junit.Assert
 import org.junit.Test
+import scape.scape2d.engine.geom.Epsilon
 import scape.scape2d.engine.geom.Components
+import scape.scape2d.engine.geom.angle.Angle
 import scape.scape2d.engine.geom.angle.UnboundAngle
 import scape.scape2d.engine.geom.angle.Radian
 
@@ -20,6 +22,12 @@ class CircleTest {
   def testAngleResolutionForLength = {
     val circle = Circle(Point(5, 10), 3);
     Assert.assertEquals(UnboundAngle(7, Radian), circle forLength 21);
+  }
+  
+  @Test
+  def testLengthResolutionForAngle = {
+    val circle = Circle(Point.origin, 5);
+    Assert.assertEquals(7.8539816339, circle forAngle Angle.right.unbound, Epsilon);
   }
   
   @Test

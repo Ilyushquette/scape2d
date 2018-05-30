@@ -175,6 +175,8 @@ case class Circle(center:Point, radius:Double) extends Sweepable[CircleSweep] {
   
   def forLength(length:Double) = UnboundAngle(length / radius, Radian);
   
+  def forAngle(angle:UnboundAngle) = angle.radians * radius;
+  
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
     case line:Line => testIntersection(this, line);
