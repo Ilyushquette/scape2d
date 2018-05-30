@@ -6,8 +6,11 @@ import scape.scape2d.engine.geom.angle.Angle
 import scape.scape2d.engine.geom.angle.Epsilon
 import com.google.common.math.DoubleMath.fuzzyCompare
 import com.google.common.math.DoubleMath.fuzzyEquals
+import scape.scape2d.engine.time.Second
 
 object AngularVelocity {
+  val zero = Angle.zero / Second;
+  
   def apply(angle:Angle, time:Duration) = new AngularVelocity(angle.unbound, time);
 }
 
