@@ -21,6 +21,16 @@ case class AngularVelocity(angle:UnboundAngle, time:Duration) extends Ordered[An
   
   def forTime(time:Duration) = angle * (time / this.time);
   
+  def +(angularVelocity:AngularVelocity) = {
+    val angleToAdd = angularVelocity.forTime(time);
+    AngularVelocity(angle + angleToAdd, time);
+  }
+  
+  def -(angularVelocity:AngularVelocity) = {
+    val angleToSubtract = angularVelocity.forTime(time);
+    AngularVelocity(angle - angleToSubtract, time);
+  }
+  
   def compare(angularVelocity:AngularVelocity) = {
     fuzzyCompare(radiansPerMillisecond, angularVelocity.radiansPerMillisecond, Epsilon);
   }
