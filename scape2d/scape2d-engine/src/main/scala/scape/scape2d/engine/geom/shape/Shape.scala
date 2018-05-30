@@ -5,6 +5,8 @@ import com.google.common.math.DoubleMath._
 import scape.scape2d.engine.geom._
 import scape.scape2d.engine.geom.shape.intersection._
 import scape.scape2d.engine.geom.angle.Angle
+import scape.scape2d.engine.geom.angle.UnboundAngle
+import scape.scape2d.engine.geom.angle.Radian
 
 sealed trait Shape {
   def intersects(shape:Shape):Boolean;
@@ -170,6 +172,8 @@ case class Segment(p1:Point, p2:Point) extends Shape {
 
 case class Circle(center:Point, radius:Double) extends Sweepable[CircleSweep] {
   def sweep(sweepVector:Vector) = CircleSweep(this, sweepVector);
+  
+  def forLength(length:Double) = UnboundAngle(length / radius, Radian);
   
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
