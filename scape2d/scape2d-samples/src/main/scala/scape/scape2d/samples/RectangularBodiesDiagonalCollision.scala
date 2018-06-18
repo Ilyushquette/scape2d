@@ -45,7 +45,7 @@ import scape.scape2d.engine.core.integral.ContinuousMotionIntegral
 import scape.scape2d.engine.motion.collision.detection.TreePosterioriCollisionDetector
 import scape.scape2d.engine.core.MovablePhantom
 import scape.scape2d.engine.core.integral.DiscreteMotionIntegral
-import scape.scape2d.engine.time.simulation.Timescale
+import scape.scape2d.engine.process.simulation.Timescale
 import scape.scape2d.engine.time.Frequency
 import scape.scape2d.engine.time.Second
 import scape.scape2d.debugger.TreePosterioriCollisionDetectorDebugger

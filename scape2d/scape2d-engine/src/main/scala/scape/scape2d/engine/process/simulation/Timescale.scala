@@ -1,4 +1,4 @@
-package scape.scape2d.engine.time.simulation
+package scape.scape2d.engine.process.simulation
 
 import scape.scape2d.engine.time.Duration
 import scape.scape2d.engine.time.Frequency

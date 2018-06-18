@@ -5,10 +5,10 @@ import scape.scape2d.engine.core.matter.Body
 import scape.scape2d.engine.core.matter.Bond
 import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.time.TimeUnit.toDuration
-import scape.scape2d.engine.time.simulation.Simulation
+import scape.scape2d.engine.process.simulation.Simulation
 import scape.scape2d.engine.time.Frequency
 import scape.scape2d.engine.time.Second
-import scape.scape2d.engine.time.simulation.Timescale
+import scape.scape2d.engine.process.simulation.Timescale
 import scape.scape2d.engine.core.integral.ContinuousMotionIntegral
 import scape.scape2d.engine.time.Duration
 
