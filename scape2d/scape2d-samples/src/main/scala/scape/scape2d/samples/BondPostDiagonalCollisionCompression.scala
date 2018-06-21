@@ -26,10 +26,13 @@ import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
 import scape.scape2d.debugger.BondDebugger
 import scape.scape2d.engine.geom.angle.Angle
 import scape.scape2d.engine.time.Second
+import scape.scape2d.engine.process.simulation.SimulationBuilder
 
 object BondPostDiagonalCollisionCompression {
   def main(args:Array[String]):Unit = {
-    val nature = new NonRotatableNature();
+    val simulation = SimulationBuilder().build(classOf[NonRotatableNature]);
+    val simulationThread = new Thread(simulation);
+    val nature = simulation.process;
     val metalParticle = ParticleBuilder()
       .as(Circle(Point(10.3, 7), 0.05))
       .withMass(2)
@@ -75,6 +78,6 @@ object BondPostDiagonalCollisionCompression {
     particleDebugger.trackParticle(trackedMetalParticle3);
     nature.add(bond);
     nature.add(trackedMetalParticle3);
-    nature.start;
+    simulationThread.start();
   }
 }

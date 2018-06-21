@@ -33,10 +33,14 @@ import scape.scape2d.engine.motion.collision.detection.linear.QuadraticLinearMot
 import scape.scape2d.engine.core.integral.MotionIntegral
 import scape.scape2d.engine.geom.angle.Angle
 import scape.scape2d.engine.time.Second
+import scape.scape2d.engine.process.simulation.Simulation
+import scape.scape2d.engine.process.simulation.SimulationBuilder
 
 object RectangularBodyRotation {
   def main(args:Array[String]):Unit = {
-    val nature = new Nature();
+    val simulation = SimulationBuilder().build(classOf[Nature]);
+    val simulationThread = new Thread(simulation);
+    val nature = simulation.process;
     
     val shapeDrawer = createShapeDrawer();
     val particleDebugger = new ParticleDebugger(new ShapeDrawingParticleTrackingView(shapeDrawer));
@@ -60,7 +64,7 @@ object RectangularBodyRotation {
     
     bodyDebugger.trackBody(rectangularBody);
     nature.add(rectangularBody);
-    nature.start();
+    simulationThread.start();
   }
   
   private def createShapeDrawer() = {

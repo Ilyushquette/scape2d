@@ -36,6 +36,7 @@ import scape.scape2d.engine.geom.partition.QuadTree
 import scape.scape2d.engine.motion.linear.LinearSweepFormingMovable
 import scape.scape2d.engine.geom.angle.Angle
 import scape.scape2d.engine.time.Second
+import scape.scape2d.engine.process.simulation.SimulationBuilder
 
 object QuadTreeDetectorTwoHundredParticles {
   def main(args:Array[String]):Unit = {
@@ -43,7 +44,10 @@ object QuadTreeDetectorTwoHundredParticles {
     val detectionStrategy = QuadraticLinearMotionCollisionDetectionStrategy[Particle]();
     val treeFactory = () => new QuadTree[LinearSweepFormingMovable[Particle]](bounds, 4);
     val collisionDetector = TreeLinearMotionCollisionDetector[Particle](treeFactory, detectionStrategy);
-    val nature = new NonRotatableNature(linearMotionIntegral = LinearMotionIntegral(collisionDetector));
+    val simulation = SimulationBuilder()
+                     .build(classOf[NonRotatableNature], LinearMotionIntegral(collisionDetector));
+    val simulationThread = new Thread(simulation);
+    val nature = simulation.process;
     val trackedMetalParticles = prepareTrackedMetalParticles();
     
     val quadTreeNodesDrawer = prepareShapeDrawer();
@@ -59,7 +63,7 @@ object QuadTreeDetectorTwoHundredParticles {
     initFrame(quadTreeNodesDrawer, particlesDrawer);
     
     trackedMetalParticles.foreach(nature.add(_));
-    nature.start;
+    simulationThread.start();
   }
   
   private def prepareTrackedMetalParticles() = {

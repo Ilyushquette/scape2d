@@ -50,16 +50,18 @@ import scape.scape2d.engine.time.Frequency
 import scape.scape2d.engine.time.Second
 import scape.scape2d.debugger.TreePosterioriCollisionDetectorDebugger
 import scape.scape2d.engine.geom.angle.Angle
+import scape.scape2d.engine.process.simulation.SimulationBuilder
 
 object RectangularBodiesDiagonalCollision {
   def main(args:Array[String]):Unit = {
     val bounds = AxisAlignedRectangle(Point(0, 0), 27.32, 15.36);
     val treeFactory = () => new QuadTree[MovablePhantom[Particle]](bounds, 4);
     val collisionDetector = TreePosterioriCollisionDetector(treeFactory);
-    val nature = new Nature(
-        timeScale = Timescale(Frequency(120, Second)),
-        motionIntegral = new DiscreteMotionIntegral(collisionDetector)
-    );
+    val simulation = SimulationBuilder()
+                     .withTimescale(Timescale(Frequency(120, Second)))
+                     .build(classOf[Nature], new DiscreteMotionIntegral(collisionDetector));
+    val simulationThread = new Thread(simulation);
+    val nature = simulation.process;
     
     val particlesDrawer = createShapeDrawer();
     val particleDebugger = new ParticleDebugger(new ShapeDrawingParticleTrackingView(particlesDrawer));
@@ -89,7 +91,7 @@ object RectangularBodiesDiagonalCollision {
     bodyDebugger.trackBody(body2);
     nature.add(body1);
     nature.add(body2);
-    nature.start();
+    simulationThread.start();
   }
   
   private def makeMovingParticle(position:Point) = MovableTrackerProxy.track(ParticleBuilder()

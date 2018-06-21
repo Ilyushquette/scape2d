@@ -21,10 +21,13 @@ import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
 import scape.scape2d.engine.geom.angle.Angle
 import scape.scape2d.engine.time.Second
+import scape.scape2d.engine.process.simulation.SimulationBuilder
 
 object MovingWithStationaryDiagonalCollision {
   def main(args:Array[String]):Unit = {
-    val nature = new NonRotatableNature();
+    val simulation = SimulationBuilder().build(classOf[NonRotatableNature]);
+    val simulationThread = new Thread(simulation);
+    val nature = simulation.process;
     val metalParticle = ParticleBuilder()
       .as(Circle(Point(0, 7.03), 0.05))
       .withMass(2)
@@ -59,6 +62,6 @@ object MovingWithStationaryDiagonalCollision {
     debugger.trackParticle(trackedMetalParticle2);
     nature.add(trackedMetalParticle);
     nature.add(trackedMetalParticle2);
-    nature.start;
+    simulationThread.start();
   }
 }

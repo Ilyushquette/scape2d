@@ -29,10 +29,13 @@ import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
 import scape.scape2d.engine.geom.angle.Degree
 import scape.scape2d.engine.geom.angle.doubleToAngle
 import scape.scape2d.engine.time.Second
+import scape.scape2d.engine.process.simulation.SimulationBuilder
 
 object RotatingSingletonBondBodyWithStationaryCollision {
   def main(args:Array[String]): Unit = {
-    val nature = new Nature();
+    val simulation = SimulationBuilder().build(classOf[Nature]);
+    val simulationThread = new Thread(simulation);
+    val nature = simulation.process;
     val singleSegmentStructure = HingedSegmentedStructure(Point(13, 7), List(Point(13.66, 7.73)));
     val body = BodyBuilder()
                .withParticleFactory(makeParticle)
@@ -63,7 +66,7 @@ object RotatingSingletonBondBodyWithStationaryCollision {
     particleDebugger.trackParticle(stationaryParticle);
     nature.add(body);
     nature.add(stationaryParticle);
-    nature.start();
+    simulationThread.start();
   }
   
   private def makeParticle(position:Point) = MovableTrackerProxy.track(ParticleBuilder()

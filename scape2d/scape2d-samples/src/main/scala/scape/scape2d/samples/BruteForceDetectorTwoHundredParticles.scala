@@ -21,10 +21,13 @@ import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
 import scape.scape2d.engine.geom.angle.Angle
 import scape.scape2d.engine.time.Second
+import scape.scape2d.engine.process.simulation.SimulationBuilder
 
 object BruteForceDetectorTwoHundredParticles {
   def main(args:Array[String]):Unit = {
-    val nature = new NonRotatableNature();
+    val simulation = SimulationBuilder().build(classOf[NonRotatableNature]);
+    val simulationThread = new Thread(simulation);
+    val nature = simulation.process;
     val metalParticles = for(i <- 0 to 100) yield ParticleBuilder()
       .as(Circle(Point(i * 0.11, i * 0.14), 0.05))
       .withMass(2)
@@ -59,6 +62,6 @@ object BruteForceDetectorTwoHundredParticles {
     trackedMetalParticles2.foreach(debugger.trackParticle(_));
     trackedMetalParticles.foreach(nature.add(_));
     trackedMetalParticles2.foreach(nature.add(_));
-    nature.start;
+    simulationThread.start();
   }
 }

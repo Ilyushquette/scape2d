@@ -32,10 +32,13 @@ import scape.scape2d.engine.core.matter.TorqueImpulse
 import scape.scape2d.debugger.BodyDebugger
 import scape.scape2d.engine.core.integral.LinearMotionIntegral
 import scape.scape2d.engine.core.integral.MotionIntegral
+import scape.scape2d.engine.process.simulation.SimulationBuilder
 
 object RectangularBodyRotationUnderTorqueImpulse {
   def main(args:Array[String]):Unit = {
-    val nature = new Nature();
+    val simulation = SimulationBuilder().build(classOf[Nature]);
+    val simulationThread = new Thread(simulation);
+    val nature = simulation.process;
     
     val shapeDrawer = createShapeDrawer();
     val particleDebugger = new ParticleDebugger(new ShapeDrawingParticleTrackingView(shapeDrawer));
@@ -61,7 +64,7 @@ object RectangularBodyRotationUnderTorqueImpulse {
     bodyDebugger.trackBody(rectangularBody);
     nature.add(rectangularBody);
     nature.add(torqueImpulse);
-    nature.start();
+    simulationThread.start();
   }
   
   private def createShapeDrawer() = {

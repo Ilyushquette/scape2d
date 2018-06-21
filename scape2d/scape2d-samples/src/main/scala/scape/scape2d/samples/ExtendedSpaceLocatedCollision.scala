@@ -38,6 +38,7 @@ import scape.scape2d.engine.motion.collision.detection.linear.TreeLinearMotionCo
 import scape.scape2d.engine.geom.angle.Angle
 import scape.scape2d.engine.time.Second
 import scape.scape2d.engine.motion.linear.Velocity
+import scape.scape2d.engine.process.simulation.SimulationBuilder
 
 object ExtendedSpaceLocatedCollision {
   def main(args:Array[String]):Unit = {
@@ -48,7 +49,9 @@ object ExtendedSpaceLocatedCollision {
         expansion = 5
     );
     val collisionDetector = TreeLinearMotionCollisionDetector[Particle](treeFactory, detectionStrategy);
-    val nature = new NonRotatableNature(linearMotionIntegral = LinearMotionIntegral(collisionDetector));
+    val simulation = SimulationBuilder().build(classOf[NonRotatableNature], LinearMotionIntegral(collisionDetector));
+    val simulationThread = new Thread(simulation);
+    val nature = simulation.process;
     val trackedMetalParticles = prepareTrackedMetalParticles();
     
     val screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -66,7 +69,7 @@ object ExtendedSpaceLocatedCollision {
     initFrame(quadTreeNodesDrawer, particlesDrawer);
     
     trackedMetalParticles.foreach(nature.add(_));
-    nature.start;
+    simulationThread.start();
   }
   
   private def prepareTrackedMetalParticles() = {

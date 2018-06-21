@@ -23,10 +23,13 @@ import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
 import scape.scape2d.engine.geom.angle.Degree
 import scape.scape2d.engine.geom.angle.Angle
+import scape.scape2d.engine.process.simulation.SimulationBuilder
 
 object NewtonSecondLaw {
   def main(args:Array[String]):Unit = {
-    val nature = new NonRotatableNature();
+    val simulation = SimulationBuilder().build(classOf[NonRotatableNature]);
+    val simulationThread = new Thread(simulation);
+    val nature = simulation.process;
     val metalParticle = ParticleBuilder()
       .as(Circle(Point.origin, 0.05))
       .withMass(2)
@@ -57,6 +60,6 @@ object NewtonSecondLaw {
     nature.add(trackedMetalParticle);
     nature.add(impulse);
     nature.add(impulse2);
-    nature.start;
+    simulationThread.start();
   }
 }

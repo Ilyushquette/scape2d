@@ -23,10 +23,13 @@ import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
 import scape.scape2d.engine.geom.angle.Degree
 import scape.scape2d.engine.geom.angle.doubleToAngle
+import scape.scape2d.engine.process.simulation.SimulationBuilder
 
 object NewtonFirstLawFastmotion {
   def main(args:Array[String]):Unit = {
-    val nature = new NonRotatableNature();
+    val simulation = SimulationBuilder().build(classOf[NonRotatableNature]);
+    val simulationThread = new Thread(simulation);
+    val nature = simulation.process;
     val metalParticle = ParticleBuilder()
       .as(Circle(Point.origin, 0.05))
       .withMass(2)
@@ -36,7 +39,7 @@ object NewtonFirstLawFastmotion {
     val trackedMetalParticle = MovableTrackerProxy.track(metalParticle);
     trackedMetalParticle.onMotion(motion => {
       if(motion.snapshot.position.x > 5)
-        nature.timescale = nature.timescale.copy(integrationFrequency = Frequency(120, Second));
+        simulation.timescale = simulation.timescale.copy(integrationFrequency = Frequency(120, Second));
     });
     
     val frame = new JFrame("Scape2D Debugger");
@@ -57,6 +60,6 @@ object NewtonFirstLawFastmotion {
     
     debugger.trackParticle(trackedMetalParticle);
     nature.add(trackedMetalParticle);
-    nature.start;
+    simulationThread.start();
   }
 }
