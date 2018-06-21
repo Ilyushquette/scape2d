@@ -13,7 +13,7 @@
     <module>scape2d-debugger</module>
     <module>scape2d-samples</module>
   </modules>
-  
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <build.scripts.dir>build/scripts</build.scripts.dir>
@@ -53,6 +53,11 @@
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
       <version>14.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.1</version>
     </dependency>
   </dependencies>
 
