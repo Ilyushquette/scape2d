@@ -37,7 +37,7 @@ case class TreeCollisionDetector[T <: Movable with Formed[_ <: Shape] with Ident
   private def detectBranchCollisions(entity:MotionBounds[T], tree:Node[MotionBounds[T]], timestep:Duration) = {
     val nodeWithEntity = tree.findTreeNode(entity).get;
     val otherBranchEntities = nodeWithEntity.superEntities ++
-                              (nodeWithEntity.entities - entity) ++
+                              (nodeWithEntity.entities diff List(entity)) ++
                               nodeWithEntity.subEntities;
     otherBranchEntities.flatMap(otherEntity => detect(entity.movable, otherEntity.movable, timestep));
   }

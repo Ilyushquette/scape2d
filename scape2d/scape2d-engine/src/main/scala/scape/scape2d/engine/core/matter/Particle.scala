@@ -58,7 +58,7 @@ extends Movable with Formed[Circle] with Identifiable {
   
   private[core] def setBonds(bonds:Set[Bond]) = _bonds = bonds;
   
-  def rotatable = bonds.firstOption.flatMap(_.body);
+  def rotatable = bonds.headOption.flatMap(_.body);
   
   def momentOfInertia = {
     val bodyOpt = rotatable;

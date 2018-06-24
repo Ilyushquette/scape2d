@@ -6,7 +6,7 @@ import scala.ref.WeakReference
 class ProxyCache[T, P <: Proxy[T]](proxyFactory:T => P) {
   private val cache = WeakHashMap[T, WeakReference[P]]();
   
-  def dump = cache.mapElements(_.get);
+  def dump = cache.mapValues(_.get);
   
   def get(instance:T):P = {
     val weaklyReachableProxy = cache.get(instance);

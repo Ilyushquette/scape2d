@@ -5,8 +5,8 @@ import scape.scape2d.engine.geom.shape.Segment
 
 object SequentialSegmentedStructure {
   def closed(points:List[Point]) = {
-    if(points.size > 2 && points.first != points.last)
-      new SequentialSegmentedStructure(points :+ points.first);
+    if(points.size > 2 && points.head != points.last)
+      new SequentialSegmentedStructure(points :+ points.head);
     else new SequentialSegmentedStructure(points);
   }
 }
