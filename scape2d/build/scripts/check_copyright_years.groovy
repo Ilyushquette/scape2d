@@ -24,7 +24,7 @@ def scanCopyrightYears = { string ->
 def license = new File(properties.licensePath);
 def lines = license.readLines();
 def copyrightYears = lines.collect(scanCopyrightYears).flatten();
-def revisionYears = "git log --date=format:\"%Y\" --pretty=format:\"%ad\"".execute().inputStream.readLines().toSet();
+def revisionYears = "git log --date=format:%Y --pretty=format:%ad".execute().inputStream.readLines().toSet();
 def missingYears = revisionYears - copyrightYears;
 if(!missingYears.isEmpty()) {
   def error = String.format("Copyright dates need to be updated!%n" +
