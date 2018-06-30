@@ -36,7 +36,7 @@ package object swing {
                              pixelate(width), pixelate(height));
     case polygon:Polygon =>
       val path = new Path2D.Double;
-      path.moveTo(pixelate(polygon.points.first.x), pixelate(polygon.points.first.y));
+      path.moveTo(pixelate(polygon.points.head.x), pixelate(polygon.points.head.y));
       polygon.points.foreach(point => path.lineTo(point.x, point.y));
       path.closePath;
       path;
