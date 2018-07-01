@@ -17,6 +17,13 @@ class MassTest {
   def testSameMassesWithDifferentTypes = Assert.assertTrue(500(Kilogram) == 0.5(Ton));
   
   @Test
+  def testUnitConversionMass = {
+    val convertedMass = 64(Kilogram) to Gram;
+    Assert.assertEquals(64000, convertedMass.value, Epsilon);
+    Assert.assertEquals(Gram, convertedMass.unit);
+  }
+  
+  @Test
   def testMassMultiplicationByNumber = Assert.assertEquals(1(Kilogram), 250(Gram) * 4);
   
   @Test

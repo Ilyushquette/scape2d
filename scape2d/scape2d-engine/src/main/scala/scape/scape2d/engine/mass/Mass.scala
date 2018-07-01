@@ -6,6 +6,11 @@ import com.google.common.math.DoubleMath.fuzzyEquals
 case class Mass(value:Double, unit:MassUnit) extends Ordered[Mass] {
   lazy val kilograms = value * unit.kilograms;
   
+  def to(anotherUnit:MassUnit) = {
+    if(unit != anotherUnit) Mass(unit / anotherUnit * value, anotherUnit);
+    else this;
+  }
+  
   def *(multiplier:Double) = Mass(value * multiplier, unit);
   
   def /(mass:Mass) = kilograms / mass.kilograms;
