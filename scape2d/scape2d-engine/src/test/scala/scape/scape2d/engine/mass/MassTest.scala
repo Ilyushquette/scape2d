@@ -3,6 +3,12 @@ package scape.scape2d.engine.mass
 import org.junit.Assert
 import org.junit.Test
 
+import scape.scape2d.engine.geom.Vector
+import scape.scape2d.engine.geom.angle.Angle
+import scape.scape2d.engine.geom.angle.Degree
+import scape.scape2d.engine.motion.linear.InstantAcceleration
+import scape.scape2d.engine.time.Second
+
 class MassTest {
   @Test
   def testDifferentMassesWithSameTypes = Assert.assertFalse(1(Ton) == 0.999(Ton));
@@ -21,6 +27,14 @@ class MassTest {
     val convertedMass = 64(Kilogram) to Gram;
     Assert.assertEquals(64000, convertedMass.value, Epsilon);
     Assert.assertEquals(Gram, convertedMass.unit);
+  }
+  
+  @Test
+  def testInstantAccelerationForForceResolutionFromMass = {
+    val mass = 2(Kilogram);
+    val force = Vector(10, Angle.bound(45, Degree));
+    val expectedAcceleration = InstantAcceleration(Vector(5, Angle.bound(45, Degree)) / Second);
+    Assert.assertEquals(expectedAcceleration, mass forForce force);
   }
   
   @Test
