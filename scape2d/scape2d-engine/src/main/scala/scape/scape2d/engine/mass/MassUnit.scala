@@ -1,5 +1,9 @@
 package scape.scape2d.engine.mass
 
+object MassUnit {
+  implicit def toMass(unit:MassUnit) = Mass(1, unit);
+}
+
 sealed trait MassUnit {
   def kilograms:Double;
 }
