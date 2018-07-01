@@ -6,6 +6,12 @@ import com.google.common.math.DoubleMath.fuzzyEquals
 case class Mass(value:Double, unit:MassUnit) extends Ordered[Mass] {
   lazy val kilograms = value * unit.kilograms;
   
+  def *(multiplier:Double) = Mass(value * multiplier, unit);
+  
+  def /(mass:Mass) = kilograms / mass.kilograms;
+  
+  def /(divider:Double) = Mass(value / divider, unit);
+  
   def compare(mass:Mass) = fuzzyCompare(kilograms, mass.kilograms, Epsilon);
   
   override def equals(any:Any) = any match {

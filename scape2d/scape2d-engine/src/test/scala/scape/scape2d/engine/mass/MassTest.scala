@@ -15,4 +15,13 @@ class MassTest {
   
   @Test
   def testSameMassesWithDifferentTypes = Assert.assertTrue(500(Kilogram) == 0.5(Ton));
+  
+  @Test
+  def testMassMultiplicationByNumber = Assert.assertEquals(1(Kilogram), 250(Gram) * 4);
+  
+  @Test
+  def testMassDivisionByAnotherMass = Assert.assertEquals(10, Ton / 100(Kilogram), Epsilon);
+  
+  @Test
+  def testMassDivisionByNumber = Assert.assertEquals(1(Milligram), Gram / 1000);
 }
