@@ -11,6 +11,16 @@ case class Mass(value:Double, unit:MassUnit) extends Ordered[Mass] {
     else this;
   }
   
+  def +(mass:Mass) = {
+    val convertedMass = mass to unit;
+    Mass(value + convertedMass.value, unit);
+  }
+  
+  def -(mass:Mass) = {
+    val convertedMass = mass to unit;
+    Mass(value - convertedMass.value, unit);
+  }
+  
   def *(multiplier:Double) = Mass(value * multiplier, unit);
   
   def /(mass:Mass) = kilograms / mass.kilograms;

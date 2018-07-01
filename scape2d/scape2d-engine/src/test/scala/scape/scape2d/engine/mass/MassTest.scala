@@ -24,6 +24,12 @@ class MassTest {
   }
   
   @Test
+  def testMassSumWithAnotherMass = Assert.assertEquals(1(Ton), 700(Kilogram) + 300000(Gram));
+  
+  @Test
+  def testMassSubtractionFromAnotherMass = Assert.assertEquals(400(Gram), Kilogram - 0.6(Kilogram));
+  
+  @Test
   def testMassMultiplicationByNumber = Assert.assertEquals(1(Kilogram), 250(Gram) * 4);
   
   @Test
