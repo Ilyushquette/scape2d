@@ -7,6 +7,7 @@ import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.angle.Angle
 import scape.scape2d.engine.geom.angle.Degree
 import scape.scape2d.engine.motion.linear.InstantAcceleration
+import scape.scape2d.engine.time.Minute
 import scape.scape2d.engine.time.Second
 
 class MassTest {
@@ -35,6 +36,14 @@ class MassTest {
     val force = Vector(10, Angle.bound(45, Degree));
     val expectedAcceleration = InstantAcceleration(Vector(5, Angle.bound(45, Degree)) / Second);
     Assert.assertEquals(expectedAcceleration, mass forForce force);
+  }
+  
+  @Test
+  def testForceForInstantAccelerationResolutionFromMass = {
+    val mass = 100(Kilogram);
+    val acceleration = InstantAcceleration(Vector(1000, Angle.straight) / Minute); // 16.6 m/s/instant
+    val expectedForce = Vector(1666.6666666666, Angle.straight);
+    Assert.assertEquals(expectedForce, mass forAcceleration acceleration);
   }
   
   @Test

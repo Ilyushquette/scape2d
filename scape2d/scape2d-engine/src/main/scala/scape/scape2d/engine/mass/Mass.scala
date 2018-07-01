@@ -20,6 +20,11 @@ case class Mass(value:Double, unit:MassUnit) extends Ordered[Mass] {
   
   def forForce(force:Vector) = InstantAcceleration(Velocity(force / kilograms, Second));
   
+  def forAcceleration(instantAcceleration:InstantAcceleration) = {
+    val distancePerSecond = instantAcceleration.velocity.forTime(Second);
+    distancePerSecond * kilograms;
+  }
+  
   def +(mass:Mass) = {
     val convertedMass = mass to unit;
     Mass(value + convertedMass.value, unit);
