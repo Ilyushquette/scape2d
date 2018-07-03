@@ -29,6 +29,10 @@ case class MomentOfInertia private[MomentOfInertia](
     anglePerSecond.radians * value;
   }
   
+  def +(momentOfInertia:MomentOfInertia):MomentOfInertia = MomentOfInertia(value + momentOfInertia.value);
+  
+  def -(momentOfInertia:MomentOfInertia):MomentOfInertia = MomentOfInertia(value - momentOfInertia.value);
+  
   def compare(momentOfInertia:MomentOfInertia) = fuzzyCompare(value, momentOfInertia.value, Epsilon);
   
   override def equals(any:Any) = any match {
