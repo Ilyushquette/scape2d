@@ -11,6 +11,8 @@ import scape.scape2d.engine.time.Second
 import scape.scape2d.engine.time.TimeUnit.toDuration
 
 object MomentOfInertia {
+  val zero = MomentOfInertia(0);
+  
   def apply(mass:Mass, distanceToCenter:Double) = {
     new MomentOfInertia(distanceToCenter * distanceToCenter * mass.kilograms);
   }
