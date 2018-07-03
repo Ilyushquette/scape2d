@@ -3,6 +3,7 @@ package scape.scape2d.engine.mass.angular
 import org.junit.Test
 import org.junit.Assert
 
+import scape.scape2d.engine.geom.angle.Angle
 import scape.scape2d.engine.geom.angle.UnboundAngle
 import scape.scape2d.engine.geom.angle.Radian
 import scape.scape2d.engine.mass.doubleToMass
@@ -27,5 +28,13 @@ class MomentOfInertiaTest {
     val torque = 40;
     val expectedAngularAcceleration = InstantAngularAcceleration(UnboundAngle(-0.5, Radian) / Second);
     Assert.assertEquals(expectedAngularAcceleration, momentOfInertia forTorque -40);
+  }
+  
+  @Test
+  def testTorqueResolutionForInstantAngularAccelerationFromMomentOfInertia = {
+    val momentOfInertia = MomentOfInertia(3(Kilogram), 10);
+    val angularAcceleration = InstantAngularAcceleration(Angle.full.unbound / Second);
+    val expectedTorque = 1884.95559;
+    Assert.assertEquals(expectedTorque, momentOfInertia forAngularAcceleration angularAcceleration, 0.00001);
   }
 }

@@ -24,6 +24,11 @@ case class MomentOfInertia private[MomentOfInertia](
     InstantAngularAcceleration(UnboundAngle(magnitude, Radian) / Second);
   }
   
+  def forAngularAcceleration(instantAngularAcceleration:InstantAngularAcceleration) = {
+    val anglePerSecond = instantAngularAcceleration.angularVelocity.forTime(Second);
+    anglePerSecond.radians * value;
+  }
+  
   def compare(momentOfInertia:MomentOfInertia) = fuzzyCompare(value, momentOfInertia.value, Epsilon);
   
   override def equals(any:Any) = any match {
