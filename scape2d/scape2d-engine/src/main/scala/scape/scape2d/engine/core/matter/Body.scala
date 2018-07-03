@@ -1,6 +1,7 @@
 package scape.scape2d.engine.core.matter
 
 import scape.scape2d.engine.core.Rotatable
+import scape.scape2d.engine.mass.angular.MomentOfInertia
 import scape.scape2d.engine.motion.rotational.AngularVelocity
 
 class Body private[matter] (
@@ -23,7 +24,7 @@ class Body private[matter] (
   
   private[core] def resetTorque() = _torque = 0;
   
-  def momentsOfInertia = movables.foldLeft(0d)(_ + _.momentOfInertia);
+  def momentsOfInertia = movables.foldLeft(MomentOfInertia.zero)(_ + _.momentOfInertia.get);
   
   def snapshot = snapshot();
   

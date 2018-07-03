@@ -18,8 +18,8 @@ case class MomentumDeltaActionReactionalCollisionForcesResolver() extends Partic
     val particle1VelocityBefore = combineAngularAndLinearVelocitiesOf(particle1);
     val particle1VelocityAfter = resolveCombinedVelocityOfFirstParticle(collision);
     
-    val momentumBefore = particle1VelocityBefore.vector * particle1.mass;
-    val momentumAfter = particle1VelocityAfter.vector * particle1.mass;
+    val momentumBefore = particle1VelocityBefore.vector * particle1.mass.kilograms;
+    val momentumAfter = particle1VelocityAfter.vector * particle1.mass.kilograms;
     
     val force = momentumAfter - momentumBefore;
     (force, force.opposite);
@@ -37,8 +37,8 @@ case class MomentumDeltaActionReactionalCollisionForcesResolver() extends Partic
     
     val v1 = combinedVelocity1.forTime(Second).magnitude;
     val v2 = combinedVelocity2.forTime(Second).magnitude;
-    val m1 = particle1.mass;
-    val m2 = particle2.mass;
+    val m1 = particle1.mass.kilograms;
+    val m2 = particle2.mass.kilograms;
     val θ1 = combinedVelocity1.vector.angle;
     val θ2 = combinedVelocity2.vector.angle;
     

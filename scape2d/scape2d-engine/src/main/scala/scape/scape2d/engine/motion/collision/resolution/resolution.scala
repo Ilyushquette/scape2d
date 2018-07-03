@@ -22,8 +22,8 @@ package object resolution {
     def vel(particle1:Particle, particle2:Particle) = {
       val v1 = particle1.velocity.forTime(Second).magnitude;
       val v2 = particle2.velocity.forTime(Second).magnitude;
-      val m1 = particle1.mass;
-      val m2 = particle2.mass;
+      val m1 = particle1.mass.kilograms;
+      val m2 = particle2.mass.kilograms;
       val θ1 = particle1.velocity.vector.angle;
       val θ2 = particle2.velocity.vector.angle;
       

@@ -25,6 +25,8 @@ import scape.scape2d.engine.geom.angle.Degree
 import scape.scape2d.engine.geom.angle.doubleToAngle
 import scape.scape2d.engine.time.Second
 import scape.scape2d.engine.process.simulation.SimulationBuilder
+import scape.scape2d.engine.mass.Kilogram
+import scape.scape2d.engine.mass.Mass
 
 object NewtonFirstLawSlowmotion {
   def main(args:Array[String]):Unit = {
@@ -32,10 +34,10 @@ object NewtonFirstLawSlowmotion {
     val simulationThread = new Thread(simulation);
     val nature = simulation.process;
     val metalParticle = ParticleBuilder()
-      .as(Circle(Point.origin, 0.05))
-      .withMass(2)
-      .withVelocity(Vector(2, 45(Degree)) / Second)
-      .build;
+                        .as(Circle(Point.origin, 0.05))
+                        .withMass(Mass(2, Kilogram))
+                        .withVelocity(Vector(2, 45(Degree)) / Second)
+                        .build;
     
     val trackedMetalParticle = MovableTrackerProxy.track(metalParticle);
     trackedMetalParticle.onMotion(motion => {

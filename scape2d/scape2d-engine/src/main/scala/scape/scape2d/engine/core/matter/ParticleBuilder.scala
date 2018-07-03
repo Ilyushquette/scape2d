@@ -1,13 +1,15 @@
 package scape.scape2d.engine.core.matter
 
-import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.shape.Circle
+import scape.scape2d.engine.geom.shape.Point
+import scape.scape2d.engine.mass.Kilogram
+import scape.scape2d.engine.mass.Mass
 import scape.scape2d.engine.motion.linear.Velocity
 
 case class ParticleBuilder(
   shape:Circle = Circle(Point.origin, 1),
-  mass:Double = 1,
+  mass:Mass = Mass(1, Kilogram),
   velocity:Velocity = Velocity.zero,
   force:Vector = Vector.zero
 ) {
@@ -19,7 +21,7 @@ case class ParticleBuilder(
  /**
   * in kilograms
   */
-  def withMass(m:Double) = copy(mass = m);
+  def withMass(m:Mass) = copy(mass = m);
   
   def withVelocity(v:Velocity) = copy(velocity = v);
   

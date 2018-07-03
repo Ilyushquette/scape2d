@@ -49,8 +49,8 @@ package object core {
    */
   private[core] def accelerateLinear(particle:Particle) = {
     if(particle.force.magnitude > 0) {
-      val acceleration = Vector(particle.force.magnitude / particle.mass, particle.force.angle) / Second;
-      particle.setVelocity(particle.velocity + acceleration);
+      val instantAcceleration = particle.mass.forForce(particle.force);
+      particle.setVelocity(particle.velocity + instantAcceleration.velocity);
       particle.resetForce();
     }
   }
@@ -63,8 +63,8 @@ package object core {
    */
   private[core] def accelerateAngular(body:Body) = {
     if(body.torque != 0) {
-      val acceleration = UnboundAngle(body.torque / body.momentsOfInertia, Radian) / Second;
-      body.setAngularVelocity(body.angularVelocity + acceleration);
+      val instantAngularAcceleration = body.momentsOfInertia.forTorque(body.torque);
+      body.setAngularVelocity(body.angularVelocity + instantAngularAcceleration.angularVelocity);
       body.resetTorque();
     }
   }

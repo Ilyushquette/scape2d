@@ -2,26 +2,31 @@ package scape.scape2d.samples
 
 import java.awt.Color
 import java.awt.Toolkit
+
 import javax.swing.JFrame
 import scape.scape2d.debugger.ParticleDebugger
 import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
+import scape.scape2d.debugger.view.swing.SwingBuffer
+import scape.scape2d.debugger.view.swing.SwingMixingRastersShapeDrawer
+import scape.scape2d.engine.core.MovableTrackerProxy
 import scape.scape2d.engine.core.NonRotatableNature
 import scape.scape2d.engine.core.matter.ParticleBuilder
 import scape.scape2d.engine.geom.Vector
+import scape.scape2d.engine.geom.angle.Angle
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
-import scape.scape2d.engine.core.MovableTrackerProxy
-import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
-import scape.scape2d.debugger.view.swing.SwingMixingRastersShapeDrawer
 import scape.scape2d.engine.geom.shape.ShapeUnitConverter
-import scape.scape2d.debugger.view.swing.SwingBuffer
+import scape.scape2d.engine.mass.Kilogram
+import scape.scape2d.engine.mass.MassUnit.toMass
+import scape.scape2d.engine.mass.doubleToMass
+import scape.scape2d.engine.process.simulation.SimulationBuilder
+import scape.scape2d.engine.time.Second
+import scape.scape2d.engine.time.TimeUnit.toDuration
+import scape.scape2d.engine.util.Proxy.autoEnhance
 import scape.scape2d.graphics.rasterizer.UnitConvertingRasterizer
 import scape.scape2d.graphics.rasterizer.cache.CachingRasterizers
-import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
-import scape.scape2d.engine.geom.angle.Angle
-import scape.scape2d.engine.time.Second
-import scape.scape2d.engine.process.simulation.SimulationBuilder
+import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
 
 object MovingWithStationaryDiagonalCollision {
   def main(args:Array[String]):Unit = {
@@ -29,15 +34,15 @@ object MovingWithStationaryDiagonalCollision {
     val simulationThread = new Thread(simulation);
     val nature = simulation.process;
     val metalParticle = ParticleBuilder()
-      .as(Circle(Point(0, 7.03), 0.05))
-      .withMass(2)
-      .withVelocity(Vector(2, Angle.zero) / Second)
-      .build;
+                        .as(Circle(Point(0, 7.03), 0.05))
+                        .withMass(2(Kilogram))
+                        .withVelocity(Vector(2, Angle.zero) / Second)
+                        .build;
     val metalParticle2 = ParticleBuilder()
-      .as(Circle(Point(10, 6.97), 0.05))
-      .withMass(2)
-      .withVelocity(Vector(0, Angle.straight) / Second)
-      .build;
+                         .as(Circle(Point(10, 6.97), 0.05))
+                         .withMass(2(Kilogram))
+                         .withVelocity(Vector(0, Angle.straight) / Second)
+                         .build;
     
     val trackedMetalParticle = MovableTrackerProxy.track(metalParticle);
     val trackedMetalParticle2 = MovableTrackerProxy.track(metalParticle2);
