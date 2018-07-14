@@ -79,6 +79,13 @@ extends Movable with Formed[Circle] with Identifiable {
     }else Vector.zero;
   }
   
+  override def hashCode = id;
+  
+  override def equals(any:Any) = any match {
+    case particle:Particle => id == particle.id;
+    case _ => false;
+  }
+  
   def snapshot = snapshot();
   
   def snapshot(shape:Circle = this.shape,
