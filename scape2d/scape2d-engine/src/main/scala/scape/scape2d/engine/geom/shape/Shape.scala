@@ -70,6 +70,7 @@ case class Line(p1:Point, p2:Point) extends Shape {
   private lazy val dy = p2.y - p1.y;
   lazy val slope = if(dx != 0) Some(dy / dx) else None; // slope is undefined for vertical lines
   lazy val yIntercept = if(slope.isDefined) Some(p1.y - slope.get * p1.x) else None;
+  lazy val angle = p1 angleTo p2;
   
   def horizontal = fuzzyEquals(dy, 0, Epsilon);
   
