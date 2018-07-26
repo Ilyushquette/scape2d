@@ -2,9 +2,11 @@ package scape.scape2d.engine.core.matter.shell
 
 import scape.scape2d.engine.core.matter.BodyBuilder
 import scape.scape2d.engine.geom.shape.AxisAlignedRectangle
+import scape.scape2d.engine.geom.shape.Line
 import scape.scape2d.engine.geom.shape.Point
-import scape.scape2d.engine.geom.structure.SequentialSegmentedStructure
 import scape.scape2d.engine.geom.structure.HingedSegmentedStructure
+import scape.scape2d.engine.geom.structure.SequentialSegmentedStructure
+import scape.scape2d.engine.geom.structure.SymmetricallySegmentedStructure
 
 case class RectangularBodyBuilder(
   bodyBuilder:BodyBuilder = BodyBuilder(),
@@ -17,7 +19,9 @@ case class RectangularBodyBuilder(
     val center = Point(bounds.bottomLeft.x + bounds.width / 2, bounds.bottomLeft.y + bounds.height / 2);
     val boundingPoints = makeBoundingPoints(bounds);
     val rectangularStructure = SequentialSegmentedStructure.closed(boundingPoints) ++
-                               HingedSegmentedStructure(center, boundingPoints);
+                               HingedSegmentedStructure(center, boundingPoints) ++
+                               SymmetricallySegmentedStructure(boundingPoints, Line(bounds.bottomLeft, bounds.topRight)) ++
+                               SymmetricallySegmentedStructure(boundingPoints, Line(bounds.topLeft, bounds.bottomRight));
     bodyBuilder.build(center, rectangularStructure);
   }
   

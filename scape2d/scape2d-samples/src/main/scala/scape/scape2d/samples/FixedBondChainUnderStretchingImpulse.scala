@@ -9,7 +9,7 @@ import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
 import scape.scape2d.debugger.view.swing.SwingBuffer
 import scape.scape2d.debugger.view.swing.SwingMixingRastersShapeDrawer
 import scape.scape2d.engine.core.MovableTrackerProxy
-import scape.scape2d.engine.core.NonRotatableNature
+import scape.scape2d.engine.core.dynamics.soft.linear.ContinuousDetectionCollidingLinearSoftBodyDynamics
 import scape.scape2d.engine.core.matter.BondBuilder
 import scape.scape2d.engine.core.matter.Impulse
 import scape.scape2d.engine.core.matter.ParticleBuilder
@@ -23,7 +23,8 @@ import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.shape.ShapeUnitConverter
 import scape.scape2d.engine.mass.Kilogram
 import scape.scape2d.engine.mass.Mass
-import scape.scape2d.engine.process.simulation.SimulationBuilder
+import scape.scape2d.engine.process.simulation.Simulation
+import scape.scape2d.engine.time.IoCDeferred
 import scape.scape2d.engine.time.Second
 import scape.scape2d.engine.time.TimeUnit.toDuration
 import scape.scape2d.engine.time.doubleToTime
@@ -35,9 +36,9 @@ import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
 
 object FixedBondChainUnderStretchingImpulse {
   def main(args:Array[String]):Unit = {
-    val simulation = SimulationBuilder().build(classOf[NonRotatableNature]);
+    val dynamics = ContinuousDetectionCollidingLinearSoftBodyDynamics();
+    val simulation = new Simulation(dynamics);
     val simulationThread = new Thread(simulation);
-    val nature = simulation.process;
     val metalParticle = ParticleBuilder()
                         .as(Circle(Point(10.3, 7), 0.05))
                         .withMass(Mass(2, Kilogram))
@@ -88,9 +89,9 @@ object FixedBondChainUnderStretchingImpulse {
     particleDebugger.trackParticle(trackedMetalParticle2);
     particleDebugger.trackParticle(trackedMetalParticle3);
     // first particle is not a subject to the laws of nature to be able to emulate fixed point
-    nature.add(trackedMetalParticle2);
-    nature.add(trackedMetalParticle3);
-    nature.add(impulse);
+    dynamics.linearSoftBodyDynamics.add(trackedMetalParticle2);
+    dynamics.linearSoftBodyDynamics.add(trackedMetalParticle3);
+    dynamics.linearSoftBodyDynamics.add(impulse);
     simulationThread.start();
   }
 }

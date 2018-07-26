@@ -1,24 +1,18 @@
 package scape.scape2d.engine.process.simulation
 
 import org.apache.log4j.Logger
-import scape.scape2d.engine.time.Frequency
-import scape.scape2d.engine.time.Second
-import scape.scape2d.engine.time.Instant
-import scape.scape2d.engine.time.Duration
-import scape.scape2d.engine.time.Millisecond
+
 import scape.scape2d.engine.process.Process
-import scape.scape2d.engine.process.ProcessOperationsDeferringProxy
+import scape.scape2d.engine.time.Duration
+import scape.scape2d.engine.time.Frequency
+import scape.scape2d.engine.time.Instant
+import scape.scape2d.engine.time.Millisecond
+import scape.scape2d.engine.time.Second
+import scape.scape2d.engine.time.TimeUnit.toDuration
 
-object Simulation {
-  def apply[T <: Process](process:T, timescale:Timescale) = {
-    val processProxy = new ProcessOperationsDeferringProxy(process);
-    new Simulation(processProxy.enhanced, timescale);
-  }
-}
-
-class Simulation[T <: Process] private[Simulation](
+class Simulation[T <: Process](
   val process:T,
-  var timescale:Timescale
+  var timescale:Timescale = Timescale(Frequency(60, Second))
 ) extends Runnable {
   private val log = Logger.getLogger(getClass);
   

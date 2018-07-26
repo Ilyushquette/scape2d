@@ -2,18 +2,20 @@ package scape.scape2d.engine.core.matter
 
 import java.util.concurrent.atomic.AtomicInteger
 
-import scala.annotation.migration
-
 import scape.scape2d.engine.core.Identifiable
 import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.geom.Formed
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
+import scape.scape2d.engine.gravity.G
 import scape.scape2d.engine.mass.Kilogram
 import scape.scape2d.engine.mass.Mass
 import scape.scape2d.engine.mass.angular.MomentOfInertia
 import scape.scape2d.engine.motion.linear.Velocity
+import scape.scape2d.engine.time.Duration
+import scape.scape2d.engine.time.Second
+import scape.scape2d.engine.time.TimeUnit.toDuration
 import scape.scape2d.engine.util.Combination2
 
 object Particle {
@@ -66,6 +68,23 @@ extends Movable with Formed[Circle] with Identifiable {
   def rotatable = bonds.headOption.flatMap(_.body);
   
   def momentOfInertia = rotatable.map(r => MomentOfInertia(mass, r.center distanceTo position));
+  
+  def gravitationalForceOnto(particle:Particle, timestep:Duration) = {
+    val r = position distanceTo particle.position;
+    if(r != 0) {
+      val m1 = mass.kilograms;
+      val m2 = particle.mass.kilograms;
+      val gravitationalForcePerSecond = Vector(G * ((m1 * m2) / (r * r)), particle.position angleTo position);
+      gravitationalForcePerSecond * (timestep / Second);
+    }else Vector.zero;
+  }
+  
+  override def hashCode = id;
+  
+  override def equals(any:Any) = any match {
+    case particle:Particle => id == particle.id;
+    case _ => false;
+  }
   
   def snapshot = snapshot();
   

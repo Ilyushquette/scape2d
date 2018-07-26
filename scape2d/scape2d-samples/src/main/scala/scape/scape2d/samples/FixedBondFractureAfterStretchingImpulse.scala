@@ -3,8 +3,6 @@ package scape.scape2d.samples
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.Toolkit
-import java.util.Timer
-import java.util.TimerTask
 
 import javax.swing.JFrame
 import javax.swing.JPanel
@@ -18,7 +16,8 @@ import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
 import scape.scape2d.debugger.view.swing.SwingBuffer
 import scape.scape2d.debugger.view.swing.SwingMixingRastersShapeDrawer
 import scape.scape2d.engine.core.MovableTrackerProxy
-import scape.scape2d.engine.core.NonRotatableNature
+import scape.scape2d.engine.core.dynamics.soft.linear.ContinuousDetectionCollidingLinearSoftBodyDynamics
+import scape.scape2d.engine.core.dynamics.soft.linear.LinearSoftBodyDynamics
 import scape.scape2d.engine.core.matter.BondBuilder
 import scape.scape2d.engine.core.matter.BondStructureTrackerProxy
 import scape.scape2d.engine.core.matter.Impulse
@@ -33,7 +32,10 @@ import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.shape.ShapeUnitConverter
 import scape.scape2d.engine.mass.Kilogram
 import scape.scape2d.engine.mass.Mass
-import scape.scape2d.engine.process.simulation.SimulationBuilder
+import scape.scape2d.engine.process.ProcessOperationsDeferringProxy
+import scape.scape2d.engine.process.ProcessOperationsDeferringProxy.autoEnhance
+import scape.scape2d.engine.process.simulation.Simulation
+import scape.scape2d.engine.time.IoCDeferred
 import scape.scape2d.engine.time.Millisecond
 import scape.scape2d.engine.time.TimeUnit.toDuration
 import scape.scape2d.engine.time.doubleToTime
@@ -45,9 +47,11 @@ import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
 
 object FixedBondFractureAfterStretchingImpulse {
   def main(args:Array[String]):Unit = {
-    val simulation = SimulationBuilder().build(classOf[NonRotatableNature]);
+    val dynamics = ContinuousDetectionCollidingLinearSoftBodyDynamics(
+        linearSoftBodyDynamics = new ProcessOperationsDeferringProxy(new LinearSoftBodyDynamics())
+    );
+    val simulation = new Simulation(dynamics);
     val simulationThread = new Thread(simulation);
-    val nature = simulation.process;
     val metalParticle = ParticleBuilder()
                         .as(Circle(Point(10.3, 7), 0.05))
                         .withMass(Mass(2, Kilogram))
@@ -75,13 +79,11 @@ object FixedBondFractureAfterStretchingImpulse {
     bondDebugger.trackBond(bond);
     bondStructureDebugger.trackStructureEvolution(structureTrackedBond);
     // first particle is not a subject to the laws of nature to be able to emulate fixed point
-    nature.add(trackedMetalParticle2);
+    dynamics.linearSoftBodyDynamics.add(trackedMetalParticle2);
     simulationThread.start();
     
-    val timer = new Timer;
-    timer.schedule(new TimerTask {
-      def run() = nature.add(new Impulse(trackedMetalParticle2, Vector(85, Angle.zero), 50(Millisecond)));
-    }, 3000);
+    Thread.sleep(3000);
+    dynamics.linearSoftBodyDynamics.add(new Impulse(trackedMetalParticle2, Vector(85, Angle.zero), 50(Millisecond)));
   }
   
   private def initParticleDebugger() = {

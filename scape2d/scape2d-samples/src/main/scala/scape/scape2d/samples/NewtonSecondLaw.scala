@@ -9,7 +9,7 @@ import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
 import scape.scape2d.debugger.view.swing.SwingBuffer
 import scape.scape2d.debugger.view.swing.SwingMixingRastersShapeDrawer
 import scape.scape2d.engine.core.MovableTrackerProxy
-import scape.scape2d.engine.core.NonRotatableNature
+import scape.scape2d.engine.core.dynamics.soft.SoftBodyDynamics
 import scape.scape2d.engine.core.matter.Impulse
 import scape.scape2d.engine.core.matter.ParticleBuilder
 import scape.scape2d.engine.geom.Vector
@@ -20,7 +20,7 @@ import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.shape.ShapeUnitConverter
 import scape.scape2d.engine.mass.Kilogram
 import scape.scape2d.engine.mass.Mass
-import scape.scape2d.engine.process.simulation.SimulationBuilder
+import scape.scape2d.engine.process.simulation.Simulation
 import scape.scape2d.engine.time.Second
 import scape.scape2d.engine.time.TimeUnit.toDuration
 import scape.scape2d.engine.time.doubleToTime
@@ -32,9 +32,9 @@ import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
 
 object NewtonSecondLaw {
   def main(args:Array[String]):Unit = {
-    val simulation = SimulationBuilder().build(classOf[NonRotatableNature]);
+    val dynamics = new SoftBodyDynamics();
+    val simulation = new Simulation(dynamics);
     val simulationThread = new Thread(simulation);
-    val nature = simulation.process;
     val metalParticle = ParticleBuilder()
                         .as(Circle(Point.origin, 0.05))
                         .withMass(Mass(2, Kilogram))
@@ -42,8 +42,8 @@ object NewtonSecondLaw {
                         .build;
     
     val trackedMetalParticle = MovableTrackerProxy.track(metalParticle);
-    val impulse = new Impulse(trackedMetalParticle, Vector(7.68, Angle.bound(45, Degree)), 2(Second));
-    val impulse2 = new Impulse(trackedMetalParticle, Vector(3.84, Angle.zero), 2(Second));
+    val impulse = new Impulse(trackedMetalParticle, Vector(21, Angle.bound(45, Degree)), 4(Second));
+    val impulse2 = new Impulse(trackedMetalParticle, Vector(9, Angle.zero), 4(Second));
     
     val frame = new JFrame("Scape2D Debugger");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,9 +62,9 @@ object NewtonSecondLaw {
     frame.setVisible(true);
     
     debugger.trackParticle(trackedMetalParticle);
-    nature.add(trackedMetalParticle);
-    nature.add(impulse);
-    nature.add(impulse2);
+    dynamics.add(trackedMetalParticle);
+    dynamics.add(impulse);
+    dynamics.add(impulse2);
     simulationThread.start();
   }
 }
