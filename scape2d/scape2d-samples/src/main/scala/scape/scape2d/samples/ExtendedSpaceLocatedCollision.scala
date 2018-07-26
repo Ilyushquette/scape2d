@@ -14,8 +14,7 @@ import scape.scape2d.debugger.view.ShapeDrawingTreeNodesView
 import scape.scape2d.debugger.view.swing.SwingBuffer
 import scape.scape2d.debugger.view.swing.SwingMixingRastersShapeDrawer
 import scape.scape2d.engine.core.MovableTrackerProxy
-import scape.scape2d.engine.core.NonRotatableNature
-import scape.scape2d.engine.core.integral.LinearMotionIntegral
+import scape.scape2d.engine.core.dynamics.soft.linear.ContinuousDetectionCollidingLinearSoftBodyDynamics
 import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.core.matter.ParticleBuilder
 import scape.scape2d.engine.geom.Vector
@@ -33,7 +32,8 @@ import scape.scape2d.engine.motion.collision.detection.linear.QuadraticLinearMot
 import scape.scape2d.engine.motion.collision.detection.linear.TreeLinearMotionCollisionDetector
 import scape.scape2d.engine.motion.linear.LinearSweepFormingMovable
 import scape.scape2d.engine.motion.linear.Velocity
-import scape.scape2d.engine.process.simulation.SimulationBuilder
+import scape.scape2d.engine.process.simulation.Simulation
+import scape.scape2d.engine.time.IoCDeferred
 import scape.scape2d.engine.time.Second
 import scape.scape2d.engine.time.TimeUnit.toDuration
 import scape.scape2d.engine.util.Proxy.autoEnhance
@@ -52,9 +52,9 @@ object ExtendedSpaceLocatedCollision {
         expansion = 5
     );
     val collisionDetector = TreeLinearMotionCollisionDetector[Particle](treeFactory, detectionStrategy);
-    val simulation = SimulationBuilder().build(classOf[NonRotatableNature], LinearMotionIntegral(collisionDetector));
+    val dynamics = ContinuousDetectionCollidingLinearSoftBodyDynamics(collisionDetector);
+    val simulation = new Simulation(dynamics);
     val simulationThread = new Thread(simulation);
-    val nature = simulation.process;
     val trackedMetalParticles = prepareTrackedMetalParticles();
     
     val screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -71,7 +71,7 @@ object ExtendedSpaceLocatedCollision {
     
     initFrame(quadTreeNodesDrawer, particlesDrawer);
     
-    trackedMetalParticles.foreach(nature.add(_));
+    trackedMetalParticles.foreach(dynamics.linearSoftBodyDynamics.add(_));
     simulationThread.start();
   }
   

@@ -16,8 +16,7 @@ import scape.scape2d.debugger.view.swing.SwingBuffer
 import scape.scape2d.debugger.view.swing.SwingMixingRastersShapeDrawer
 import scape.scape2d.engine.core.MovablePhantom
 import scape.scape2d.engine.core.MovableTrackerProxy
-import scape.scape2d.engine.core.Nature
-import scape.scape2d.engine.core.integral.DiscreteMotionIntegral
+import scape.scape2d.engine.core.dynamics.soft.DiscreteDetectionCollidingSoftBodyDynamics
 import scape.scape2d.engine.core.matter.BodyBuilder
 import scape.scape2d.engine.core.matter.BondBuilder
 import scape.scape2d.engine.core.matter.Particle
@@ -37,7 +36,7 @@ import scape.scape2d.engine.mass.Kilogram
 import scape.scape2d.engine.mass.MassUnit.toMass
 import scape.scape2d.engine.mass.doubleToMass
 import scape.scape2d.engine.motion.collision.detection.TreePosterioriCollisionDetector
-import scape.scape2d.engine.process.simulation.SimulationBuilder
+import scape.scape2d.engine.process.simulation.Simulation
 import scape.scape2d.engine.process.simulation.Timescale
 import scape.scape2d.engine.time.Frequency
 import scape.scape2d.engine.time.Second
@@ -53,11 +52,9 @@ object RectangularBodiesDiagonalCollision {
     val bounds = AxisAlignedRectangle(Point(0, 0), 27.32, 15.36);
     val treeFactory = () => new QuadTree[MovablePhantom[Particle]](bounds, 4);
     val collisionDetector = TreePosterioriCollisionDetector(treeFactory);
-    val simulation = SimulationBuilder()
-                     .withTimescale(Timescale(Frequency(120, Second)))
-                     .build(classOf[Nature], new DiscreteMotionIntegral(collisionDetector));
+    val dynamics = DiscreteDetectionCollidingSoftBodyDynamics(collisionDetector);
+    val simulation = new Simulation(dynamics, Timescale(Frequency(120, Second)));
     val simulationThread = new Thread(simulation);
-    val nature = simulation.process;
     
     val particlesDrawer = createShapeDrawer();
     val particleDebugger = new ParticleDebugger(new ShapeDrawingParticleTrackingView(particlesDrawer));
@@ -85,8 +82,8 @@ object RectangularBodiesDiagonalCollision {
     
     bodyDebugger.trackBody(body1);
     bodyDebugger.trackBody(body2);
-    nature.add(body1);
-    nature.add(body2);
+    dynamics.softBodyDynamics.add(body1);
+    dynamics.softBodyDynamics.add(body2);
     simulationThread.start();
   }
   

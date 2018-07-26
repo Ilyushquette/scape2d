@@ -10,7 +10,7 @@ import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
 import scape.scape2d.debugger.view.swing.SwingBuffer
 import scape.scape2d.debugger.view.swing.SwingMixingRastersShapeDrawer
 import scape.scape2d.engine.core.MovableTrackerProxy
-import scape.scape2d.engine.core.Nature
+import scape.scape2d.engine.core.dynamics.soft.ContinuousDetectionCollidingSoftBodyDynamics
 import scape.scape2d.engine.core.matter.BodyBuilder
 import scape.scape2d.engine.core.matter.BondBuilder
 import scape.scape2d.engine.core.matter.Particle
@@ -26,7 +26,7 @@ import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.shape.ShapeUnitConverter
 import scape.scape2d.engine.mass.Kilogram
 import scape.scape2d.engine.mass.Mass
-import scape.scape2d.engine.process.simulation.SimulationBuilder
+import scape.scape2d.engine.process.simulation.Simulation
 import scape.scape2d.engine.time.Minute
 import scape.scape2d.engine.time.TimeUnit.toDuration
 import scape.scape2d.engine.time.doubleToTime
@@ -38,9 +38,9 @@ import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
 
 object RectangularBodyRotationUnderTorqueImpulse {
   def main(args:Array[String]):Unit = {
-    val simulation = SimulationBuilder().build(classOf[Nature]);
+    val dynamics = ContinuousDetectionCollidingSoftBodyDynamics();
+    val simulation = new Simulation(dynamics);
     val simulationThread = new Thread(simulation);
-    val nature = simulation.process;
     
     val shapeDrawer = createShapeDrawer();
     val particleDebugger = new ParticleDebugger(new ShapeDrawingParticleTrackingView(shapeDrawer));
@@ -64,8 +64,8 @@ object RectangularBodyRotationUnderTorqueImpulse {
     frame.setVisible(true);
     
     bodyDebugger.trackBody(rectangularBody);
-    nature.add(rectangularBody);
-    nature.add(torqueImpulse);
+    dynamics.softBodyDynamics.add(rectangularBody);
+    dynamics.softBodyDynamics.add(torqueImpulse);
     simulationThread.start();
   }
   

@@ -2,37 +2,40 @@ package scape.scape2d.samples
 
 import java.awt.Color
 import java.awt.Toolkit
+
 import javax.swing.JFrame
 import scape.scape2d.debugger.ParticleDebugger
 import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
 import scape.scape2d.debugger.view.swing.SwingBuffer
 import scape.scape2d.debugger.view.swing.SwingMixingRastersShapeDrawer
 import scape.scape2d.engine.core.MovableTrackerProxy
-import scape.scape2d.engine.core.NonRotatableNature
+import scape.scape2d.engine.core.dynamics.soft.SoftBodyDynamics
 import scape.scape2d.engine.core.matter.ParticleBuilder
 import scape.scape2d.engine.geom.Vector
+import scape.scape2d.engine.geom.angle.AngleUnit.toAngle
+import scape.scape2d.engine.geom.angle.Degree
+import scape.scape2d.engine.geom.angle.doubleToAngle
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.shape.ShapeUnitConverter
+import scape.scape2d.engine.mass.Kilogram
+import scape.scape2d.engine.mass.Mass
+import scape.scape2d.engine.process.simulation.Simulation
 import scape.scape2d.engine.time.Duration
 import scape.scape2d.engine.time.Millisecond
+import scape.scape2d.engine.time.Second
+import scape.scape2d.engine.time.TimeUnit.toDuration
+import scape.scape2d.engine.util.Proxy.autoEnhance
 import scape.scape2d.graphics.rasterizer.UnitConvertingRasterizer
 import scape.scape2d.graphics.rasterizer.cache.CachingRasterizers
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
-import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
-import scape.scape2d.engine.geom.angle.Degree
-import scape.scape2d.engine.geom.angle.doubleToAngle
-import scape.scape2d.engine.time.Second
-import scape.scape2d.engine.process.simulation.SimulationBuilder
-import scape.scape2d.engine.mass.Kilogram
-import scape.scape2d.engine.mass.Mass
 
 object NewtonFirstLawSlowmotion {
   def main(args:Array[String]):Unit = {
-    val simulation = SimulationBuilder().build(classOf[NonRotatableNature]);
+    val dynamics = new SoftBodyDynamics();
+    val simulation = new Simulation(dynamics);
     val simulationThread = new Thread(simulation);
-    val nature = simulation.process;
     val metalParticle = ParticleBuilder()
                         .as(Circle(Point.origin, 0.05))
                         .withMass(Mass(2, Kilogram))
@@ -40,10 +43,6 @@ object NewtonFirstLawSlowmotion {
                         .build;
     
     val trackedMetalParticle = MovableTrackerProxy.track(metalParticle);
-    trackedMetalParticle.onMotion(motion => {
-      if(motion.snapshot.position.x > 5)
-        simulation.timescale = simulation.timescale.copy(timestep = Duration(8, Millisecond));
-    });
     
     val frame = new JFrame("Scape2D Debugger");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,7 +61,10 @@ object NewtonFirstLawSlowmotion {
     frame.setVisible(true);
     
     debugger.trackParticle(trackedMetalParticle);
-    nature.add(trackedMetalParticle);
+    dynamics.add(trackedMetalParticle);
     simulationThread.start();
+    
+    Thread.sleep(4000);
+    simulation.timescale = simulation.timescale.copy(timestep = Duration(8, Millisecond));
   }
 }
