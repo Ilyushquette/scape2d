@@ -11,7 +11,7 @@ import scape.scape2d.engine.core.Identifiable
 import scape.scape2d.engine.util.Combination2
 import scape.scape2d.engine.time.Duration
 
-case class TreeLinearMotionCollisionDetector[T <: Movable with Formed[_ <: Sweepable[_]] with Identifiable](
+case class TreeLinearMotionCollisionDetector[T <: Movable[_ <: Sweepable[_]] with Identifiable](
   treeFactory:() => Node[LinearSweepFormingMovable[T]],
   detectionStrategy:LinearMotionCollisionDetectionStrategy[T]
 ) extends LinearMotionCollisionDetector[T] {

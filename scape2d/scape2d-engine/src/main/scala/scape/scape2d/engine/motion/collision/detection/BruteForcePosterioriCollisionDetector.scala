@@ -8,7 +8,7 @@ import scape.scape2d.engine.util.Combination2
 import scape.scape2d.engine.motion.collision.CollisionEvent
 import scape.scape2d.engine.time.Duration
 
-case class BruteForcePosterioriCollisionDetector[T <: Movable with Formed[_ <: Shape]]()
+case class BruteForcePosterioriCollisionDetector[T <: Movable[_ <: Shape]]()
 extends PosterioriCollisionDetector[T] {
   def detect(movables:Set[T]) = {
     val combinations = Combination2.selectFrom(movables);

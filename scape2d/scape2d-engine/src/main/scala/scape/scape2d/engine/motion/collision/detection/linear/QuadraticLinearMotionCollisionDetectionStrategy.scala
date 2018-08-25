@@ -7,7 +7,7 @@ import scape.scape2d.engine.geom.Formed
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.time.Duration
 
-case class QuadraticLinearMotionCollisionDetectionStrategy[T <: Movable with Formed[Circle]](
+case class QuadraticLinearMotionCollisionDetectionStrategy[T <: Movable[Circle]](
   closestDistance:Double = Epsilon
 ) extends LinearMotionCollisionDetectionStrategy[T] {
   def detect(s1:T, s2:T, timestep:Duration) = {

@@ -20,11 +20,12 @@ import scape.scape2d.engine.time.Millisecond
 import scape.scape2d.engine.time.Second
 import scape.scape2d.engine.motion.linear.Velocity
 import scape.scape2d.engine.geom.angle.UnboundAngle
+import scape.scape2d.engine.geom.shape.Shape
 
 class RotationalFunctionsTest {
   @Test
   def testPostRotationPositionWithoutRotatable = {
-    val movableMock = Mockito.mock(classOf[Movable]);
+    val movableMock = Mockito.mock(classOf[Movable[_ <: Shape]]);
     Mockito.when(movableMock.position).thenReturn(Point(4, 4));
     Mockito.when(movableMock.rotatable).thenReturn(None);
     Assert.assertEquals(Point(4, 4), positionForTimeOf(movableMock)(Second));
@@ -36,7 +37,7 @@ class RotationalFunctionsTest {
     Mockito.when(rotatableMock.center).thenReturn(Point.origin);
     Mockito.when(rotatableMock.angularVelocity).thenReturn(AngularVelocity.zero);
     
-    val movableMock = Mockito.mock(classOf[Movable]);
+    val movableMock = Mockito.mock(classOf[Movable[_ <: Shape]]);
     Mockito.when(movableMock.position).thenReturn(Point(0, 1));
     Mockito.when(movableMock.rotatable).thenReturn(Some(rotatableMock));
     

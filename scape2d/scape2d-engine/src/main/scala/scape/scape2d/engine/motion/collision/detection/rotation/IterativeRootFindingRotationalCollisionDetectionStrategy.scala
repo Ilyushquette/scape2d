@@ -15,7 +15,7 @@ import scape.scape2d.engine.util.comparison.min
 import scape.scape2d.engine.time.Second
 import scape.scape2d.engine.geom.angle.UnboundAngle
 
-case class IterativeRootFindingRotationalCollisionDetectionStrategy[T <: Movable with Formed[Circle]]()
+case class IterativeRootFindingRotationalCollisionDetectionStrategy[T <: Movable[Circle]]()
 extends RotationalCollisionDetectionStrategy[T] {
   def detect(P:T, Q:T, timestep:Duration) = {
     if(P.rotatable != Q.rotatable && crossPaths(P, Q)) {
@@ -25,7 +25,7 @@ extends RotationalCollisionDetectionStrategy[T] {
     }else None;
   }
   
-  private def detectBetweenRotatables[T <: Movable with Formed[Circle]](P:T, Q:T, timestep:Duration) = {
+  private def detectBetweenRotatables(P:T, Q:T, timestep:Duration) = {
     val minimalStepDistance = minNumeric(P.radius, Q.radius);
     val PminimalTimestep = timestepForRotatedLength(P, minimalStepDistance);
     val QminimalTimestep = timestepForRotatedLength(Q, minimalStepDistance);
@@ -35,7 +35,7 @@ extends RotationalCollisionDetectionStrategy[T] {
     approximateCollisionTime(ft, subTimestep, Duration.zero, timestep);
   }
   
-  private def detectBetweenRotatableAndStationary[T <: Movable with Formed[Circle]](P:T, Q:T, timestep:Duration) = {
+  private def detectBetweenRotatableAndStationary(P:T, Q:T, timestep:Duration) = {
     val minimalStepDistance = minNumeric(P.radius, Q.radius);
     val PminimalTimestep = timestepForRotatedLength(P, minimalStepDistance);
     val subTimestep = min(PminimalTimestep, timestep);
@@ -58,7 +58,7 @@ extends RotationalCollisionDetectionStrategy[T] {
       None;
   }
   
-  private def timestepForRotatedLength(movable:Movable, length:Double) = {
+  private def timestepForRotatedLength(movable:T, length:Double) = {
     val angularVelocity = movable.rotatable.get.angularVelocity;
     val angularDistance = trajectoryCircleOf(movable).forLength(length);
     val rotatedAngularDistance = angularDistance * signum(angularVelocity.angle.value);

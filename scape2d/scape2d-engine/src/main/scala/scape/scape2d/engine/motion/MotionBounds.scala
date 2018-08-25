@@ -11,7 +11,7 @@ import scape.scape2d.engine.motion.rotational.trajectory.trajectoryOf
 import scape.scape2d.engine.core.Identifiable
 import scape.scape2d.engine.time.Duration
 
-case class MotionBounds[T <: Movable with Formed[_ <: Shape] with Identifiable](
+case class MotionBounds[T <: Movable[_ <: Shape] with Identifiable](
   movable:T,
   timestep:Duration
 ) extends Formed[Shape] with Identifiable {

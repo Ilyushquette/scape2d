@@ -5,10 +5,11 @@ import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.motion.collision.CollisionEvent
 import scape.scape2d.engine.util.Combination2
 import scape.scape2d.engine.time.Duration
+import scape.scape2d.engine.geom.shape.Shape
 
-case class BruteForceLinearMotionCollisionDetector[T <: Movable](
-  val detectionStrategy:LinearMotionCollisionDetectionStrategy[T])
-extends LinearMotionCollisionDetector[T] {  
+case class BruteForceLinearMotionCollisionDetector[T <: Movable[_ <: Shape]](
+  val detectionStrategy:LinearMotionCollisionDetectionStrategy[T]
+) extends LinearMotionCollisionDetector[T] {
   def detect(movables:Set[T], timestep:Duration) = {
     val combinations = Combination2.selectFrom(movables);
     combinations.flatMap(detect(_, timestep));

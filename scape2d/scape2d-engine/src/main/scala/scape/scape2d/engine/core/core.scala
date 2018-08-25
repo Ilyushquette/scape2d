@@ -8,6 +8,7 @@ import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.deformation.elasticity.resolveFrictionalForces
 import scape.scape2d.engine.geom.Epsilon
 import scape.scape2d.engine.geom.Vector
+import scape.scape2d.engine.motion.{positionForTimeOf => postMotionPosition}
 import scape.scape2d.engine.motion.linear.{positionForTimeOf => postLinearMotionPosition}
 import scape.scape2d.engine.motion.rotational.{positionForTimeOf => postRotationPosition}
 import scape.scape2d.engine.core.matter.Body
@@ -15,19 +16,20 @@ import scape.scape2d.engine.time.Duration
 import scape.scape2d.engine.time.Second
 import scape.scape2d.engine.geom.angle.UnboundAngle
 import scape.scape2d.engine.geom.angle.Radian
+import scape.scape2d.engine.geom.shape.Shape
 
 package object core {
-  private[core] def move(movable:Movable, timestep:Duration) = {
-    moveLinear(movable, timestep);
-    rotate(movable, timestep);
+  private[core] def move(movable:Movable[_ <: Shape], timestep:Duration) = {
+    val nextPosition = postMotionPosition(movable)(timestep);
+    if(movable.position != nextPosition) movable.setPosition(nextPosition);
   }
   
-  private[core] def moveLinear(movable:Movable, timestep:Duration) = {
+  private[core] def moveLinear(movable:Movable[_ <: Shape], timestep:Duration) = {
     val nextPosition = postLinearMotionPosition(movable)(timestep);
     if(movable.position != nextPosition) movable.setPosition(nextPosition);
   }
   
-  private[core] def rotate(movable:Movable, timestep:Duration):Unit = {
+  private[core] def rotate(movable:Movable[_ <: Shape], timestep:Duration):Unit = {
     val nextPosition = postRotationPosition(movable)(timestep);
     if(movable.position != nextPosition) movable.setPosition(nextPosition);
   }

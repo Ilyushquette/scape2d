@@ -6,9 +6,9 @@ import scape.scape2d.engine.geom.Formed
 import scape.scape2d.engine.geom.shape.Shape
 import scape.scape2d.engine.motion.linear.Velocity
 
-class MovablePhantom[T <: Movable with Formed[_ <: Shape] with Identifiable](
+class MovablePhantom[T <: Movable[_ <: Shape] with Identifiable](
   val origin:T
-) extends Movable with Formed[Shape] with Identifiable {
+) extends Movable[Shape] with Identifiable {
   val id = origin.id;
   private var _phantomPosition = origin.position;
   
