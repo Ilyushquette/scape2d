@@ -1,28 +1,60 @@
 package scape.scape2d.engine.motion.rotational
 
 import java.lang.Math.PI
+
 import org.junit.Assert
 import org.junit.Test
 import org.mockito.Mockito
-import scape.scape2d.engine.core.Movable
+
 import scape.scape2d.engine.core.MovableMock
 import scape.scape2d.engine.core.Rotatable
 import scape.scape2d.engine.core.RotatableMock
 import scape.scape2d.engine.geom.Epsilon
 import scape.scape2d.engine.geom.Vector
-import scape.scape2d.engine.geom.shape.Point
-import scape.scape2d.engine.geom.angle.doubleToAngle
-import scape.scape2d.engine.geom.angle.Degree
 import scape.scape2d.engine.geom.angle.Angle
+import scape.scape2d.engine.geom.angle.AngleUnit.toAngle
+import scape.scape2d.engine.geom.angle.Degree
 import scape.scape2d.engine.geom.angle.Radian
+import scape.scape2d.engine.geom.angle.UnboundAngle
+import scape.scape2d.engine.geom.angle.doubleToAngle
+import scape.scape2d.engine.geom.shape.Point
+import scape.scape2d.engine.motion.linear.Velocity
 import scape.scape2d.engine.time.Duration
 import scape.scape2d.engine.time.Millisecond
+import scape.scape2d.engine.time.Minute
 import scape.scape2d.engine.time.Second
-import scape.scape2d.engine.motion.linear.Velocity
-import scape.scape2d.engine.geom.angle.UnboundAngle
+import scape.scape2d.engine.time.TimeUnit.toDuration
+import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.geom.shape.Shape
 
 class RotationalFunctionsTest {
+  @Test
+  def testAngularDisplacementWithoutRotatable = {
+    val movableMock = new MovableMock(Point.origin, Velocity.zero, None);
+    Assert.assertEquals(Angle.zero.unbound, angularDisplacementForTimeOf(movableMock)(Minute));
+  }
+  
+  @Test
+  def testAngularDisplacementZeroAngularVelocity = {
+    val movableMock = new MovableMock(Point(4, 4), Velocity.zero, None);
+    val rotatableMock = new RotatableMock(Point.origin, AngularVelocity.zero, Set(movableMock));
+    Assert.assertEquals(Angle.zero.unbound, angularDisplacementForTimeOf(movableMock)(Duration(5, Second)));
+  }
+  
+  @Test
+  def testAngularDisplacementCounterclockwise = {
+    val movableMock = new MovableMock(Point(4, 4), Vector(35, 90(Degree)) / Second, None);
+    val rotatableMock = new RotatableMock(Point.origin, Angle.right / Second, Set(movableMock));
+    Assert.assertEquals(UnboundAngle(450, Degree), angularDisplacementForTimeOf(movableMock)(Duration(5, Second)));
+  }
+  
+  @Test
+  def testAngularDisplacementClockwise = {
+    val movableMock = new MovableMock(Point(4, 4), Vector(35, 90(Degree)) / Second, None);
+    val rotatableMock = new RotatableMock(Point.origin, UnboundAngle(-900, Degree) / Second, Set(movableMock));
+    Assert.assertEquals(UnboundAngle(-450, Degree), angularDisplacementForTimeOf(movableMock)(Duration(500, Millisecond)));
+  }
+  
   @Test
   def testPostRotationPositionWithoutRotatable = {
     val movableMock = Mockito.mock(classOf[Movable[_ <: Shape]]);

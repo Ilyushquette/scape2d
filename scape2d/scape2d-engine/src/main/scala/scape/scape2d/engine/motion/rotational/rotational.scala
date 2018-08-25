@@ -6,6 +6,7 @@ import java.lang.Math.signum
 import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.angle.Angle
+import scape.scape2d.engine.geom.angle.UnboundAngle
 import scape.scape2d.engine.geom.angle.cos
 import scape.scape2d.engine.geom.angle.sin
 import scape.scape2d.engine.geom.shape.Point
@@ -16,21 +17,27 @@ import scape.scape2d.engine.time.TimeUnit.toDuration
 import scape.scape2d.engine.geom.shape.Shape
 
 package object rotational {
-  def positionForTimeOf(movable:Movable[_ <: Shape]):(Duration => Point) = {
-    val Mp = movable.position;
+  def angularDisplacementForTimeOf(movable:Movable[_ <: Shape]):(Duration => UnboundAngle) = {
     if(movable.isRotating) {
-      val Rc = movable.rotatable.get.center;
       val ω = movable.rotatable.get.angularVelocity;
-      val r = Rc distanceTo Mp;
-      val θ = Rc angleTo Mp;
+      ω forTime _;
+    }else _ => Angle.zero.unbound;
+  }
+  
+  def positionForTimeOf(movable:Movable[_ <: Shape]):(Duration => Point) = {
+    val p = movable.position;
+    if(movable.isRotating) {
+      val c = movable.rotatable.get.center;
+      val r = c distanceTo p;
+      val θ = c angleTo p;
+      val ωt = angularDisplacementForTimeOf(movable);
       t => {
-        val ωt = ω forTime t;
-        val θt = θ + ωt.bound;
-        val x = Rc.x + r * cos(θt);
-        val y = Rc.y + r * sin(θt);
+        val θt = θ + ωt(t).bound;
+        val x = c.x + r * cos(θt);
+        val y = c.y + r * sin(θt);
         Point(x, y);
       }
-    }else _ => Mp;
+    }else _ => p;
   }
   
   def distanceForTimeOf(movable1:Movable[_ <: Shape], movable2:Movable[_ <: Shape]):(Duration => Double) = {
