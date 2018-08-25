@@ -12,6 +12,7 @@ sealed trait Shape {
   def intersects(shape:Shape):Boolean;
   def contains(shape:Shape):Boolean;
   def displacedBy(components:Components):Shape;
+  def rotatedAround(point:Point, angle:Angle):Shape;
   def toInt:ShapeInteger[_ <: Shape];
 }
 
@@ -56,6 +57,14 @@ case class Point(x:Double, y:Double) extends Shape {
   }
   
   def displacedBy(components:Components) = this + components;
+  
+  def rotatedAround(point:Point, angle:Angle):Point = {
+    if(this != point) {
+      val vectorToThis = this - point;
+      val vectorToNewPoint = vectorToThis.copy(angle = vectorToThis.angle + angle);
+      point + vectorToNewPoint;
+    }else this;
+  }
   
   override def equals(a:Any) = a match {
     case Point(ox, oy) => fuzzyEquals(x, ox, Epsilon) && fuzzyEquals(y, oy, Epsilon);
@@ -116,6 +125,8 @@ case class Line(p1:Point, p2:Point) extends Shape {
   
   def displacedBy(components:Components) = Line(p1 + components, p2 + components);
   
+  def rotatedAround(point:Point, angle:Angle) = Line(p1.rotatedAround(point, angle), p2.rotatedAround(point, angle));
+  
   lazy val toInt = LineInteger(p1.toInt, p2.toInt);
 }
 
@@ -142,6 +153,8 @@ case class Ray(origin:Point, angle:Angle) extends Shape {
   
   def displacedBy(components:Components) = Ray(origin + components, angle);
   
+  def rotatedAround(point:Point, angle:Angle) = Ray(origin.rotatedAround(point, angle), this.angle + angle);
+  
   lazy val toInt = RayInteger(origin.toInt, angle);
 }
 
@@ -167,6 +180,8 @@ case class Segment(p1:Point, p2:Point) extends Shape {
   }
   
   def displacedBy(components:Components) = Segment(p1 + components, p2 + components);
+  
+  def rotatedAround(point:Point, angle:Angle) = Segment(p1.rotatedAround(point, angle), p2.rotatedAround(point, angle));
   
   lazy val toInt = SegmentInteger(p1.toInt, p2.toInt);
 }
@@ -200,6 +215,8 @@ case class Circle(center:Point, radius:Double) extends Sweepable[CircleSweep] {
   }
   
   def displacedBy(components:Components) = Circle(center + components, radius);
+  
+  def rotatedAround(point:Point, angle:Angle) = Circle(center.rotatedAround(point, angle), radius);
   
   override def equals(any:Any) = any match {
     case Circle(ocenter, oradius) => center == ocenter && fuzzyEquals(radius, oradius, Epsilon);
@@ -244,6 +261,11 @@ case class CustomPolygon private[shape] (segments:List[Segment]) extends Polygon
     CustomPolygon(displacedSegments);
   }
   
+  def rotatedAround(point:Point, angle:Angle) = {
+    val rotatedSegments = segments.map(_.rotatedAround(point, angle));
+    CustomPolygon(rotatedSegments);
+  }
+  
   lazy val toInt = PolygonInteger(segments.map(_.toInt));
 }
 
@@ -284,6 +306,8 @@ case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) e
   }
   
   def displacedBy(components:Components) = AxisAlignedRectangle(bottomLeft + components, width, height);
+  
+  def rotatedAround(point:Point, angle:Angle) = polygon.rotatedAround(point, angle);
   
   override def equals(any:Any) = any match {
     case AxisAlignedRectangle(obottomLeft, owidth, oheight) => bottomLeft == obottomLeft &&
@@ -333,6 +357,12 @@ case class CircleSweep(circle:Circle, sweepVector:Vector) extends Shape {
   
   def displacedBy(components:Components) = CircleSweep(circle displacedBy components, sweepVector);
   
+  def rotatedAround(point:Point, angle:Angle) = {
+    val rotatedCircle = circle.rotatedAround(point, angle);
+    val rotatedSweepVector = sweepVector.copy(angle = sweepVector.angle + angle);
+    CircleSweep(rotatedCircle, rotatedSweepVector);
+  }
+  
   lazy val toInt = CircleSweepInteger(circle.toInt, sweepVector);
 }
 
@@ -345,6 +375,8 @@ case class Ring(circle:Circle, thickness:Double) extends Shape {
   def contains(shape:Shape) = outerCircle contains shape;
   
   def displacedBy(components:Components) = Ring(circle displacedBy components, thickness);
+  
+  def rotatedAround(point:Point, angle:Angle) = Ring(circle.rotatedAround(point, angle), thickness);
   
   lazy val toInt = RingInteger(circle.toInt, thickness);
 }
