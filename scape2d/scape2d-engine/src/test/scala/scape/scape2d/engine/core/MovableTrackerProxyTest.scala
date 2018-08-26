@@ -1,21 +1,23 @@
 package scape.scape2d.engine.core
 
-import org.junit.Test
-import scape.scape2d.engine.geom.shape.Point
 import org.junit.Assert
-import scape.scape2d.engine.geom.Vector
+import org.junit.Test
+
+import scape.scape2d.engine.geom.shape.Circle
+import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.motion.linear.Velocity
+import scape.scape2d.engine.util.Proxy.autoEnhance
 
 class MovableTrackerProxyTest {
   @Test
-  def testSettingDifferingPositionEventInterception = {
+  def testSettingNewPositionEventInterception = {
     var event:Option[MotionEvent[MovableMock]] = None;
     
     val movableMock = new MovableMock(Point(5, 5), Velocity.zero, None);
     val trackedMovable = MovableTrackerProxy.track(movableMock);
     trackedMovable.onMotion(e => event = Some(e));
     
-    trackedMovable.setPosition(Point(4, 5));
+    trackedMovable.setShape(Circle(Point(6, 6), 0));
     Assert.assertTrue(event.isDefined);
   }
   
@@ -27,7 +29,7 @@ class MovableTrackerProxyTest {
     val trackedMovable = MovableTrackerProxy.track(movableMock);
     trackedMovable.onMotion(e => event = Some(e));
     
-    trackedMovable.setPosition(Point(5, 5));
+    trackedMovable.setShape(Circle(Point(5, 5), 0));
     Assert.assertTrue(event.isEmpty);
   }
 }

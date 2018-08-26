@@ -35,13 +35,13 @@ extends Movable[Circle] with Identifiable {
   
   def position = _shape.center;
   
-  private[core] def setPosition(nextPosition:Point) = _shape = _shape.copy(center = nextPosition);
-  
   def velocity = _velocity;
   
   private[core] def setVelocity(newVelocity:Velocity) = _velocity = newVelocity;
   
   def shape = _shape;
+  
+  private[core] def setShape(newShape:Circle) = _shape = newShape;
   
   /**
    * magnitude in Newtons, angle in degrees (Newtons per last integrated timestep at the direction)

@@ -8,7 +8,7 @@ import scape.scape2d.engine.geom.shape.Shape
 import scape.scape2d.engine.geom.Formed
 
 trait Movable[T <: Shape] extends Locable with Formed[T] with Volatile {
-  private[core] def setPosition(nextPosition:Point);
+  private[core] def setShape(nextShape:T);
   
   def velocity:Velocity;
   

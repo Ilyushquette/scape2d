@@ -28,10 +28,10 @@ extends Proxy[T] {
   def offMotion() = motionListeners.clear();
   
   def handle(origin:T, methodProxy:MethodProxy) = {
-    case ("setPosition", (nextPosition:Point)::Nil) =>
+    case ("setShape", (nextShape:Shape)::Nil) =>
       val old = origin.snapshot.asInstanceOf[T];
-      val result = methodProxy.invokeSuper(origin, Array(nextPosition));
-      if(old.position != nextPosition) motionListeners.foreach(_(MotionEvent(old, origin)));
+      val result = methodProxy.invokeSuper(origin, Array(nextShape));
+      if(old.shape != nextShape) motionListeners.foreach(_(MotionEvent(old, origin)));
       result;
     case (_, args) =>
       methodProxy.invokeSuper(origin, args.toArray);

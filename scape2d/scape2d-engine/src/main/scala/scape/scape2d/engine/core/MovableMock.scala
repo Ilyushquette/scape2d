@@ -29,7 +29,7 @@ extends Movable[Circle] with Identifiable {
   
   def position = shape.center;
   
-  def setPosition(nextPosition:Point) = shape = shape.copy(nextPosition, shape.radius);
+  def setShape(newShape:Circle) = shape = newShape;
   
   def setVelocity(newVelocity:Velocity) = velocity = newVelocity;
   

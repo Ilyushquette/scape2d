@@ -11,6 +11,9 @@ import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.motion.{positionForTimeOf => postMotionPosition}
 import scape.scape2d.engine.motion.linear.{positionForTimeOf => postLinearMotionPosition}
 import scape.scape2d.engine.motion.rotational.{positionForTimeOf => postRotationPosition}
+import scape.scape2d.engine.motion.shapeForTimeOf
+import scape.scape2d.engine.motion.linear.displacedShapeForTimeOf
+import scape.scape2d.engine.motion.rotational.rotatedShapeForTimeOf
 import scape.scape2d.engine.core.matter.Body
 import scape.scape2d.engine.time.Duration
 import scape.scape2d.engine.time.Second
@@ -19,23 +22,19 @@ import scape.scape2d.engine.geom.angle.Radian
 import scape.scape2d.engine.geom.shape.Shape
 
 package object core {
-  private[core] def move(movable:Movable[_ <: Shape], timestep:Duration) = {
-    val nextPosition = postMotionPosition(movable)(timestep);
-    if(movable.position != nextPosition) movable.setPosition(nextPosition);
+  private[core] def move[T <: Shape](movable:Movable[T], timestep:Duration) = {
+    val nextShape = shapeForTimeOf(movable)(timestep);
+    movable.setShape(nextShape);
   }
   
-  private[core] def moveLinear(movable:Movable[_ <: Shape], timestep:Duration) = {
-    val nextPosition = postLinearMotionPosition(movable)(timestep);
-    if(movable.position != nextPosition) movable.setPosition(nextPosition);
+  private[core] def moveLinear[T <: Shape](movable:Movable[T], timestep:Duration) = {
+    val nextShape = displacedShapeForTimeOf(movable)(timestep);
+    movable.setShape(nextShape);
   }
   
-  private[core] def rotate(movable:Movable[_ <: Shape], timestep:Duration):Unit = {
-    val nextPosition = postRotationPosition(movable)(timestep);
-    if(movable.position != nextPosition) movable.setPosition(nextPosition);
-  }
-  
-  private[core] def rotate(rotatable:Rotatable, timestep:Duration):Unit = {
-    rotatable.movables.foreach(rotate(_, timestep));
+  private[core] def rotate[T <: Shape](movable:Movable[T], timestep:Duration):Unit = {
+    val nextShape = rotatedShapeForTimeOf(movable)(timestep);
+    movable.setShape(nextShape);
   }
   
   private[core] def accelerate(particle:Particle) = {
