@@ -40,6 +40,15 @@ package object rotational {
     }else _ => p;
   }
   
+  def rotatedShapeForTimeOf[T <: Shape](movable:Movable[T]):(Duration => T) = {
+    val shape = movable.shape;
+    if(movable.isRotating) {
+      val c = movable.rotatable.get.center;
+      val ωt = angularDisplacementForTimeOf(movable);
+      t => shape.rotatedAround(c, ωt(t).bound).asInstanceOf[T];
+    }else _ => shape;
+  }
+  
   def distanceForTimeOf(movable1:Movable[_ <: Shape], movable2:Movable[_ <: Shape]):(Duration => Double) = {
     val Pft = positionForTimeOf(movable1);
     val Qft = positionForTimeOf(movable2);
