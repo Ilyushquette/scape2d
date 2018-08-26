@@ -19,4 +19,10 @@ package object linear {
     val vt = displacementForTimeOf(movable);
     t => p displacedBy vt(t);
   }
+  
+  def displacedShapeForTimeOf[T <: Shape](movable:Movable[T]):(Duration => T) = {
+    val shape = movable.shape;
+    val vt = displacementForTimeOf(movable);
+    t => shape.displacedBy(vt(t)).asInstanceOf[T];
+  }
 }
