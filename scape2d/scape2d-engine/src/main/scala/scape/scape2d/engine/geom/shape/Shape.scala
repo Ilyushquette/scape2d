@@ -179,6 +179,12 @@ case class Segment(p1:Point, p2:Point) extends Shape {
     case _:Line | _:Ray | _:Circle | _:Polygon | _:CircleSweep | _:Ring => false;
   }
   
+  override def equals(any:Any) = any match {
+    case Segment(p1, p2) => (this.p1 == p1 && this.p2 == p2) ||
+                            (this.p1 == p2 && this.p2 == p1);
+    case _ => false;
+  }
+  
   def displacedBy(components:Components) = Segment(p1 + components, p2 + components);
   
   def rotatedAround(point:Point, angle:Angle) = Segment(p1.rotatedAround(point, angle), p2.rotatedAround(point, angle));
