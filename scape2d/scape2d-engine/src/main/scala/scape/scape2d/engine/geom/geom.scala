@@ -32,4 +32,17 @@ package object geom {
   def fetchWaypoints(segmentsIterator:Iterator[Segment]) = {
     segmentsIterator.foldLeft(Set[Point]())((acc, cur) => acc + cur.p1 + cur.p2);
   }
+  
+  def centroidOf(segments:List[Segment], signedArea:Double = 0, centroid:Point = Point.origin):Point = segments match {
+    case Segment(Point(x1, y1), Point(x2, y2))::Nil =>
+      val a = (x1 * y2 - x2 * y1);
+      val updatedCentroid  = centroid displacedBy Components((x1 + x2) * a, (y1 + y2) * a);
+      val updatedSignedArea = (signedArea + a) * 3;
+      Point(updatedCentroid.x / updatedSignedArea, updatedCentroid.y / updatedSignedArea);
+    case Segment(Point(x1, y1), Point(x2, y2))::segments =>
+      val a = (x1 * y2 - x2 * y1);
+      val updatedCentroid  = centroid displacedBy Components((x1 + x2) * a, (y1 + y2) * a);
+      centroidOf(segments, signedArea + a, updatedCentroid);
+    case Nil => throw new IllegalArgumentException("No segments - no centroid");
+  }
 }
