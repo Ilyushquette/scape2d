@@ -16,6 +16,10 @@ sealed trait Shape {
   def toInt:ShapeInteger[_ <: Shape];
 }
 
+sealed trait FiniteShape extends Shape {
+  def center:Point;
+}
+
 sealed trait Sweepable[T <: Shape] extends Shape {
   def sweep(sweepVector:Vector):T;
 }
