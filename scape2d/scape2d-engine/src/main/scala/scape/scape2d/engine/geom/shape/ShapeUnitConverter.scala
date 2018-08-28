@@ -14,7 +14,8 @@ case class ShapeUnitConverter(multiplier:Double) {
       AxisAlignedRectangle(scale(bottomLeft), width * multiplier, height * multiplier);
     case polygon:Polygon =>
       val scaledSegments = polygon.segments.map(scale(_));
-      CustomPolygon(scaledSegments);
+      val scaledCenter = scale(polygon.center);
+      CustomPolygon(scaledSegments, scaledCenter);
     case CircleSweep(circle, sweepVector) =>
       CircleSweep(scale(circle), sweepVector * multiplier);
     case Ring(circle, thickness) => Ring(scale(circle), thickness * multiplier);

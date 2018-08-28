@@ -26,6 +26,24 @@ class SegmentTest {
   }
   
   @Test
+  def testCenterOfDiagonalSegment = {
+    val segment = Segment(Point.origin, Point(-4, 4));
+    Assert.assertEquals(Point(-2, 2), segment.center);
+  }
+  
+  @Test
+  def testCenterOfVerticalSegment = {
+    val segment = Segment(Point(1, 0), Point(1, 100));
+    Assert.assertEquals(Point(1, 50), segment.center);
+  }
+  
+  @Test
+  def testCenterOfHorizontalSegment = {
+    val segment = Segment(Point(-1, -1), Point(1, -1));
+    Assert.assertEquals(Point(0, -1), segment.center);
+  }
+  
+  @Test
   def testDisplacedByComponents = {
     val segment = Segment(Point(5, 5), Point(-5, -5));
     val components = Components(-4, -1);
