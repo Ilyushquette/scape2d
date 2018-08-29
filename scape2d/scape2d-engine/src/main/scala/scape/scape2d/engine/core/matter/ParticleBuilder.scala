@@ -5,22 +5,20 @@ import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.mass.Kilogram
 import scape.scape2d.engine.mass.Mass
+import scape.scape2d.engine.mass.MassUnit.toMass
 import scape.scape2d.engine.motion.linear.Velocity
 
 case class ParticleBuilder(
   shape:Circle = Circle(Point.origin, 1),
-  mass:Mass = Mass(1, Kilogram),
+  mass:Mass = Kilogram,
   velocity:Velocity = Velocity.zero,
   force:Vector = Vector.zero
 ) {
   /**
-   * position in meters, radius in meters
+   * position and radius in meters
    */
   def as(s:Circle) = copy(shape = s);
   
- /**
-  * in kilograms
-  */
   def withMass(m:Mass) = copy(mass = m);
   
   def withVelocity(v:Velocity) = copy(velocity = v);
