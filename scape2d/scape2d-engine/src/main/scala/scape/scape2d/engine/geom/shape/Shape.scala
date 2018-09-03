@@ -28,6 +28,10 @@ sealed trait Polygon extends FiniteShape {
   lazy val points = fetchWaypoints(segments.iterator);
   
   def segments:List[Segment];
+  
+  def displacedBy(components:Components):Polygon;
+  
+  def rotatedAround(point:Point, angle:Angle):Polygon;
 }
 
 object Point {
