@@ -11,6 +11,8 @@ case class Density(mass:Mass, area:Double) extends Ordered[Density] {
   
   def forArea(area:Double) = mass * (area / this.area);
   
+  def forMass(mass:Mass) = area * (mass / this.mass);
+  
   override def equals(any:Any) = any match {
     case density:Density =>
       fuzzyEquals(kilogramsPerSquareMeter, density.kilogramsPerSquareMeter, AreaEpsilon);
