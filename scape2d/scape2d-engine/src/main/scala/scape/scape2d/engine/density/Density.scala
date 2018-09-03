@@ -9,6 +9,8 @@ import scape.scape2d.engine.mass.Mass
 case class Density(mass:Mass, area:Double) extends Ordered[Density] {
   lazy val kilogramsPerSquareMeter = mass.kilograms / area;
   
+  def forArea(area:Double) = mass * (area / this.area);
+  
   override def equals(any:Any) = any match {
     case density:Density =>
       fuzzyEquals(kilogramsPerSquareMeter, density.kilogramsPerSquareMeter, AreaEpsilon);
