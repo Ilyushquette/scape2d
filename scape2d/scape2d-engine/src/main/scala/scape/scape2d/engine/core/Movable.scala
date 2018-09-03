@@ -4,14 +4,11 @@ import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.motion.linear.Velocity
 import scape.scape2d.engine.motion.rotational.AngularVelocity
+import scape.scape2d.engine.geom.shape.Shape
+import scape.scape2d.engine.geom.Formed
 
-trait Movable extends Volatile {
-  /**
-   * in meters
-   */
-  def position:Point;
-  
-  private[core] def setPosition(nextPosition:Point);
+trait Movable[T <: Shape] extends Locable with Formed[T] with Volatile {
+  private[core] def setShape(nextShape:T);
   
   def velocity:Velocity;
   

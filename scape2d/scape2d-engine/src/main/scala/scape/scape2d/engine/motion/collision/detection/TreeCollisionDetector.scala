@@ -11,7 +11,7 @@ import scape.scape2d.engine.core.Identifiable
 import scape.scape2d.engine.util.Combination2
 import scape.scape2d.engine.time.Duration
 
-case class TreeCollisionDetector[T <: Movable with Formed[_ <: Shape] with Identifiable](
+case class TreeCollisionDetector[T <: Movable[_ <: Shape] with Identifiable](
   treeFactory:() => Node[MotionBounds[T]], 
   detectionStrategy:CollisionDetectionStrategy[T]
 ) extends CollisionDetector[T] {

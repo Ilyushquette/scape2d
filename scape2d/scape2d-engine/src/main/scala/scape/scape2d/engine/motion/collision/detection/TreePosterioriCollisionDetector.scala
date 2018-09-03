@@ -10,7 +10,7 @@ import scape.scape2d.engine.motion.collision.CollisionEvent
 import scala.collection.mutable.HashSet
 import scape.scape2d.engine.time.Duration
 
-case class TreePosterioriCollisionDetector[T <: Movable with Formed[_ <: Shape]](
+case class TreePosterioriCollisionDetector[T <: Movable[_ <: Shape]](
   treeFactory:() => Node[T]
 ) extends PosterioriCollisionDetector[T] {
   private val treeCreationListeners = HashSet[Node[T] => Unit]();

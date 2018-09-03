@@ -7,16 +7,17 @@ import scape.scape2d.engine.geom.shape.Point
 import scala.collection.mutable.WeakHashMap
 import scala.ref.WeakReference
 import scape.scape2d.engine.util.ProxyCache
+import scape.scape2d.engine.geom.shape.Shape
 
 object MovableTrackerProxy {
-  val cache = new ProxyCache[Movable, MovableTrackerProxy[Movable]](new MovableTrackerProxy(_));
+  val cache = new ProxyCache[Movable[_ <: Shape], MovableTrackerProxy[Movable[_ <: Shape]]](new MovableTrackerProxy(_));
   
-  def track[T <: Movable](movable:T):MovableTrackerProxy[T] = {
+  def track[T <: Movable[_ <: Shape]](movable:T):MovableTrackerProxy[T] = {
     cache.get(movable).asInstanceOf[MovableTrackerProxy[T]];
   }
 }
 
-class MovableTrackerProxy[T <: Movable] private[MovableTrackerProxy](val origin:T)
+class MovableTrackerProxy[T <: Movable[_ <: Shape]] private[MovableTrackerProxy](val origin:T)
 extends Proxy[T] {
   private val motionListeners = HashSet[MotionEvent[T] => Unit]();
   
@@ -27,10 +28,10 @@ extends Proxy[T] {
   def offMotion() = motionListeners.clear();
   
   def handle(origin:T, methodProxy:MethodProxy) = {
-    case ("setPosition", (nextPosition:Point)::Nil) =>
+    case ("setShape", (nextShape:Shape)::Nil) =>
       val old = origin.snapshot.asInstanceOf[T];
-      val result = methodProxy.invokeSuper(origin, Array(nextPosition));
-      if(old.position != nextPosition) motionListeners.foreach(_(MotionEvent(old, origin)));
+      val result = methodProxy.invokeSuper(origin, Array(nextShape));
+      if(old.shape != nextShape) motionListeners.foreach(_(MotionEvent(old, origin)));
       result;
     case (_, args) =>
       methodProxy.invokeSuper(origin, args.toArray);

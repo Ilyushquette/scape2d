@@ -17,7 +17,7 @@ private[engine] class MovableMock(
   var shape:Circle,
   var velocity:Velocity,
   private var _rotatable:Option[Rotatable])
-extends Movable with Formed[Circle] with Identifiable {
+extends Movable[Circle] with Identifiable {
   val id = MovableMock.nextId;
   
   // this default constructor is only exists for cglib proxy support
@@ -29,7 +29,7 @@ extends Movable with Formed[Circle] with Identifiable {
   
   def position = shape.center;
   
-  def setPosition(nextPosition:Point) = shape = shape.copy(nextPosition, shape.radius);
+  def setShape(newShape:Circle) = shape = newShape;
   
   def setVelocity(newVelocity:Velocity) = velocity = newVelocity;
   

@@ -17,7 +17,7 @@ import scape.scape2d.engine.time.Duration
 import scape.scape2d.engine.time.Second
 import scape.scape2d.engine.util.comparison.min
 
-case class IterativeRootFindingCollisionDetectionStrategy[T <: Movable with Formed[Circle]](
+case class IterativeRootFindingCollisionDetectionStrategy[T <: Movable[Circle]](
   linearStrategy:LinearMotionCollisionDetectionStrategy[T] = QuadraticLinearMotionCollisionDetectionStrategy[T](),
   angularStrategy:RotationalCollisionDetectionStrategy[T] = IterativeRootFindingRotationalCollisionDetectionStrategy[T]()
 ) extends CollisionDetectionStrategy[T] {
@@ -53,12 +53,12 @@ case class IterativeRootFindingCollisionDetectionStrategy[T <: Movable with Form
       None;
   }
   
-  private def timestepForDistance(movable:Movable, distance:Double) = {
+  private def timestepForDistance(movable:T, distance:Double) = {
     val combinedVelocitiesScalar = combineAngularAndLinearVelocitiesScalar(movable);
     Duration(distance / combinedVelocitiesScalar, Second);
   }
   
-  private def combineAngularAndLinearVelocitiesScalar(movable:Movable) = {
+  private def combineAngularAndLinearVelocitiesScalar(movable:T) = {
     val linearVelocityMagnitude = movable.velocity.forTime(Second).magnitude;
     
     if(movable.isRotating) {

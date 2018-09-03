@@ -4,7 +4,6 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import scape.scape2d.engine.core.Identifiable
 import scape.scape2d.engine.core.Movable
-import scape.scape2d.engine.geom.Formed
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
@@ -31,18 +30,18 @@ class Particle private[matter] (
   private var _velocity:Velocity,
   private var _force:Vector,
   private var _bonds:Set[Bond] = Set.empty)
-extends Movable with Formed[Circle] with Identifiable {
+extends Movable[Circle] with Identifiable {
   private[matter] def this() = this(Particle.nextId, Circle(Point.origin, 1), Mass(1, Kilogram), Velocity.zero, Vector.zero);
   
   def position = _shape.center;
-  
-  private[core] def setPosition(nextPosition:Point) = _shape = _shape.copy(center = nextPosition);
   
   def velocity = _velocity;
   
   private[core] def setVelocity(newVelocity:Velocity) = _velocity = newVelocity;
   
   def shape = _shape;
+  
+  private[core] def setShape(newShape:Circle) = _shape = newShape;
   
   /**
    * magnitude in Newtons, angle in degrees (Newtons per last integrated timestep at the direction)

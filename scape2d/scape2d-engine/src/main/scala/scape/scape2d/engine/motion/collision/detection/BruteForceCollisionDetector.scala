@@ -2,10 +2,11 @@ package scape.scape2d.engine.motion.collision.detection
 
 import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.motion.collision.CollisionEvent
-import scape.scape2d.engine.util.Combination2
 import scape.scape2d.engine.time.Duration
+import scape.scape2d.engine.util.Combination2
+import scape.scape2d.engine.geom.shape.Shape
 
-case class BruteForceCollisionDetector[T <: Movable](
+case class BruteForceCollisionDetector[T <: Movable[_ <: Shape]](
   detectionStrategy:CollisionDetectionStrategy[T]
 ) extends CollisionDetector[T] {
   def detect(movables:Set[T], timestep:Duration) = {

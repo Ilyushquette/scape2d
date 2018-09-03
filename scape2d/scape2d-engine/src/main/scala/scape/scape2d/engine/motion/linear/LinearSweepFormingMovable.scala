@@ -10,12 +10,12 @@ import scape.scape2d.engine.time.Duration
 object LinearSweepFormingMovable {
   implicit def toShape(swept:LinearSweepFormingMovable[_]) = swept.shape;
   
-  implicit def toEntity[T <: Movable with Formed[_ <: Sweepable[_]]  with Identifiable](swept:LinearSweepFormingMovable[T]) = {
+  implicit def toEntity[T <: Movable[_ <: Sweepable[_]]  with Identifiable](swept:LinearSweepFormingMovable[T]) = {
     swept.entity;
   }
 }
 
-case class LinearSweepFormingMovable[T <: Movable with Formed[_ <: Sweepable[_]] with Identifiable](
+case class LinearSweepFormingMovable[T <: Movable[_ <: Sweepable[_]] with Identifiable](
   entity:T,
   timestep:Duration = Duration.zero)
 extends Formed[Shape] with Identifiable {

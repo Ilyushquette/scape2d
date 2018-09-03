@@ -2,10 +2,11 @@ package scape.scape2d.engine.motion.collision.detection.rotation
 
 import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.motion.collision.CollisionEvent
-import scape.scape2d.engine.util.Combination2
 import scape.scape2d.engine.time.Duration
+import scape.scape2d.engine.util.Combination2
+import scape.scape2d.engine.geom.shape.Shape
 
-case class BruteForceBasedRotationalCollisionDetector[T <: Movable](
+case class BruteForceBasedRotationalCollisionDetector[T <: Movable[_ <: Shape]](
   detectionStrategy:RotationalCollisionDetectionStrategy[T]
 ) extends RotationalCollisionDetector[T] {
   def detect(movables:Set[T], timestep:Duration) = {

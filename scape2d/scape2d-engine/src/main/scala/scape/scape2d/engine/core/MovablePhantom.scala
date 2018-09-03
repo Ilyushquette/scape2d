@@ -6,17 +6,20 @@ import scape.scape2d.engine.geom.Formed
 import scape.scape2d.engine.geom.shape.Shape
 import scape.scape2d.engine.motion.linear.Velocity
 
-class MovablePhantom[T <: Movable with Formed[_ <: Shape] with Identifiable](
+class MovablePhantom[T <: Movable[_ <: Shape] with Identifiable](
   val origin:T
-) extends Movable with Formed[Shape] with Identifiable {
+) extends Movable[Shape] with Identifiable {
   val id = origin.id;
   private var _phantomPosition = origin.position;
+  private var _phantomShape = origin.shape;
   
   def position = _phantomPosition;
   
   private[core] def setPosition(newPosition:Point) = _phantomPosition = newPosition;
   
-  def shape = origin.shape.displacedBy(position - origin.position);
+  def shape = _phantomShape;
+  
+  private[core] def setShape(newShape:Shape) = _phantomShape = newShape;
   
   def velocity = origin.velocity;
   
@@ -27,8 +30,7 @@ class MovablePhantom[T <: Movable with Formed[_ <: Shape] with Identifiable](
   def snapshot = {
     val snapshot = new MovablePhantom(origin);
     snapshot.setPosition(position);
+    snapshot.setShape(shape);
     snapshot;
   }
-  
-  private[core] def commitPosition() = origin.setPosition(position);
 }

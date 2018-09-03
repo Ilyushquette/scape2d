@@ -21,6 +21,12 @@ class CircleSweepTest {
   }
   
   @Test
+  def testCenterInitialization = {
+    val circleSweep = CircleSweep(Circle(Point.origin, 3), Vector.from(Components(4, -4)));
+    Assert.assertEquals(Point(2, -2), circleSweep.center);
+  }
+  
+  @Test
   def testDisplacedByComponents = {
     val circleSweep = CircleSweep(Circle(Point(3, 3), 2), Vector.from(Components(-3, -3)));
     val components = Components(1, 0);
