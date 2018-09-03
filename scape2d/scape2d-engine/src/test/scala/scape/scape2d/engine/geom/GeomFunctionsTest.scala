@@ -2,6 +2,7 @@ package scape.scape2d.engine.geom
 
 import org.junit.Assert
 import org.junit.Test
+
 import scape.scape2d.engine.geom.shape.Line
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.shape.Segment
@@ -43,33 +44,5 @@ class GeomFunctionsTest {
                          Segment(Point(0, 10), Point(0, 0)));
     val expected = Set(Point(0, 0), Point(3, 1), Point(3, 10), Point(0, 10), Point(0, 0));
     Assert.assertEquals(expected, fetchWaypoints(segments.iterator));
-  }
-  
-  /**
-   *      /\
-   *    /    \
-   *   |      |
-   *   |      |
-   *   |      |
-   *   |______|
-   *  
-   */
-  @Test
-  def testCentroidOfPentagon = {
-    val segments = List(Segment(Point.origin, Point(0, 4)),
-                        Segment(Point(0, 4), Point(2, 6)),
-                        Segment(Point(2, 6), Point(4, 4)),
-                        Segment(Point(4, 4), Point(4, 0)),
-                        Segment(Point(4, 0), Point.origin));
-    Assert.assertEquals(Point(2, 2.5333333333), centroidOf(segments));
-  }
-  
-  @Test
-  def testCentroidOfRectangle = {
-    val segments = List(Segment(Point(3.0,3.0), Point(3.0,8.0)),
-                        Segment(Point(3.0,8.0), Point(8.0,8.0)),
-                        Segment(Point(8.0,8.0), Point(8.0,3.0)),
-                        Segment(Point(8.0,3.0), Point(3.0,3.0)));
-    Assert.assertEquals(Point(5.5, 5.5), centroidOf(segments));
   }
 }

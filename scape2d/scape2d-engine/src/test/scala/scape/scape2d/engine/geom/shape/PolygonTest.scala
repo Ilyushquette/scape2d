@@ -37,4 +37,27 @@ class PolygonTest {
                   .build;
     Assert.assertEquals(26, polygon.area, AreaEpsilon);
   }
+  
+  /**
+   *      /\
+   *    /    \
+   *   |      |
+   *   |      |
+   *   |      |
+   *   |______|
+   *  
+   */
+  @Test
+  def testCentroidOfPentagon = {
+    val polygon = PolygonBuilder(Point.origin, Point(0, 4), Point(2, 6))
+                  .to(Point(4, 4)).to(Point(4, 0)).build;
+    Assert.assertEquals(Point(2, 2.5333333333), polygon.center);
+  }
+  
+  @Test
+  def testCentroidOfRectangle = {
+    val polygon = PolygonBuilder(Point(3, 3), Point(3, 8), Point(8, 8))
+                  .to(Point(8, 3)).build;
+    Assert.assertEquals(Point(5.5, 5.5), polygon.center);
+  }
 }
