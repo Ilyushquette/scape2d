@@ -11,6 +11,7 @@ import scape.scape2d.engine.geom.shape.Segment
 package object geom {
   val Epsilon = 1E-10;
   val AreaEpsilon = Epsilon * Epsilon;
+  val SecondMomentOfAreaEpsilon = Epsilon * Epsilon * Epsilon * Epsilon;
   val TwicePI = PI * 2;
   
   def findMutualX(l1:Line, l2:Line) = {
