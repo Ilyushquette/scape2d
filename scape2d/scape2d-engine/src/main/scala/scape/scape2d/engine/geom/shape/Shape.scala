@@ -18,6 +18,8 @@ sealed trait Shape {
 
 sealed trait FiniteShape extends Shape {
   def center:Point;
+  
+  def area:Double;
 }
 
 sealed trait Sweepable[T <: Shape] extends Shape {
@@ -28,6 +30,10 @@ sealed trait Polygon extends FiniteShape {
   lazy val points = fetchWaypoints(segments.iterator);
   
   def segments:List[Segment];
+  
+  def displacedBy(components:Components):Polygon;
+  
+  def rotatedAround(point:Point, angle:Angle):Polygon;
 }
 
 object Point {
@@ -36,6 +42,7 @@ object Point {
 
 case class Point(x:Double, y:Double) extends FiniteShape {
   val center = this;
+  val area = AreaEpsilon;
   
   def distanceTo(point:Point) = hypot(point.x - x, point.y - y);
   
@@ -171,6 +178,7 @@ case class Segment(p1:Point, p2:Point) extends FiniteShape {
       x = p1.x + (p2.x - p1.x) / 2,
       y = p1.y + (p2.y - p1.y) / 2
   );
+  lazy val area = Epsilon * length;
   
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
@@ -203,6 +211,9 @@ case class Segment(p1:Point, p2:Point) extends FiniteShape {
 }
 
 case class Circle(center:Point, radius:Double) extends FiniteShape with Sweepable[CircleSweep] {
+  lazy val area = PI * radius * radius;
+  lazy val diameter = radius * 2;
+  
   def sweep(sweepVector:Vector) = CircleSweep(this, sweepVector);
   
   def forLength(length:Double) = UnboundAngle(length / radius, Radian);
@@ -243,10 +254,31 @@ case class Circle(center:Point, radius:Double) extends FiniteShape with Sweepabl
 }
 
 object CustomPolygon {
-  private[shape] def apply(segments:List[Segment]) = new CustomPolygon(segments, centroidOf(segments));
+  private[shape] def apply(segments:List[Segment]) = new CustomPolygon(segments, centroidOf(segments), areaOf(segments));
+  
+  private[CustomPolygon] def areaOf(segments:List[Segment], area:Double = 0):Double = segments match {
+    case Segment(Point(x1, y1), Point(x2, y2))::Nil =>
+      abs(area + (x1 * y2 - x2 * y1)) / 2;
+    case Segment(Point(x1, y1), Point(x2, y2))::segments =>
+      areaOf(segments, area + (x1 * y2 - x2 * y1));
+    case Nil => throw new IllegalArgumentException("No segments - no area");
+  }
+  
+  private[CustomPolygon] def centroidOf(segments:List[Segment], signedArea:Double = 0, centroid:Point = Point.origin):Point = segments match {
+    case Segment(Point(x1, y1), Point(x2, y2))::Nil =>
+      val a = (x1 * y2 - x2 * y1);
+      val updatedCentroid  = centroid displacedBy Components((x1 + x2) * a, (y1 + y2) * a);
+      val updatedSignedArea = (signedArea + a) * 3;
+      Point(updatedCentroid.x / updatedSignedArea, updatedCentroid.y / updatedSignedArea);
+    case Segment(Point(x1, y1), Point(x2, y2))::segments =>
+      val a = (x1 * y2 - x2 * y1);
+      val updatedCentroid  = centroid displacedBy Components((x1 + x2) * a, (y1 + y2) * a);
+      centroidOf(segments, signedArea + a, updatedCentroid);
+    case Nil => throw new IllegalArgumentException("No segments - no centroid");
+  }
 }
 
-case class CustomPolygon private[shape] (segments:List[Segment], center:Point) extends Polygon {
+case class CustomPolygon private[shape] (segments:List[Segment], center:Point, area:Double) extends Polygon {
   override def equals(any:Any) = any match {
     case polygon:Polygon => segments == polygon.segments;
     case _ => false;
@@ -279,13 +311,13 @@ case class CustomPolygon private[shape] (segments:List[Segment], center:Point) e
   def displacedBy(components:Components) = {
     val displacedSegments = segments.map(_ displacedBy components);
     val displacedCenter = center displacedBy components;
-    CustomPolygon(displacedSegments, displacedCenter);
+    CustomPolygon(displacedSegments, displacedCenter, area);
   }
   
   def rotatedAround(point:Point, angle:Angle) = {
     val rotatedSegments = segments.map(_.rotatedAround(point, angle));
     val rotatedCenter = center.rotatedAround(point, angle);
-    CustomPolygon(rotatedSegments, rotatedCenter);
+    CustomPolygon(rotatedSegments, rotatedCenter, area);
   }
   
   lazy val toInt = PolygonInteger(segments.map(_.toInt));
@@ -297,6 +329,7 @@ case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) e
   lazy val bottomRight = Point(bottomLeft.x + width, bottomLeft.y);
   lazy val polygon = PolygonBuilder(bottomLeft, topLeft, topRight).to(bottomRight).build;
   lazy val center = Point(bottomLeft.x + width / 2, bottomLeft.y + height / 2);
+  lazy val area = width * height;
   
   def slice(pieces:Int) = {
     if(pieces < 4) throw new IllegalArgumentException("Pieces param must be greater than or equal to 4");
@@ -353,6 +386,7 @@ case class CircleSweep(circle:Circle, sweepVector:Vector) extends FiniteShape {
     (connector1, connector2);
   }
   lazy val center = circle.center + sweepVector / 2;
+  lazy val area = circle.area + circle.diameter * sweepVector.magnitude;
   
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
@@ -388,9 +422,10 @@ case class CircleSweep(circle:Circle, sweepVector:Vector) extends FiniteShape {
   lazy val toInt = CircleSweepInteger(circle.toInt, sweepVector);
 }
 
-case class Ring(circle:Circle, thickness:Double) extends Shape {
+case class Ring(circle:Circle, thickness:Double) extends FiniteShape {
   lazy val outerCircle = circle.copy(radius = circle.radius + thickness / 2);
   lazy val innerCircle = circle.copy(radius = circle.radius - thickness / 2);
+  lazy val area = outerCircle.area - innerCircle.area;
   val center = circle.center;
   
   def intersects(shape:Shape) = testIntersection(this, shape);
