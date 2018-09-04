@@ -4,6 +4,10 @@ import com.google.common.math.DoubleMath.fuzzyCompare
 import com.google.common.math.DoubleMath.fuzzyEquals
 
 case class SecondMomentOfArea(value:Double) extends Ordered[SecondMomentOfArea] {
+  def +(secondMomentOfArea:SecondMomentOfArea) = SecondMomentOfArea(value + secondMomentOfArea.value);
+  
+  def -(secondMomentOfArea:SecondMomentOfArea) = SecondMomentOfArea(value - secondMomentOfArea.value);
+  
   override def equals(any:Any) = any match {
     case SecondMomentOfArea(value) =>
       fuzzyEquals(this.value, value, SecondMomentOfAreaEpsilon);
