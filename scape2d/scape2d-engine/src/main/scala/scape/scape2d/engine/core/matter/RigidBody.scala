@@ -2,7 +2,9 @@ package scape.scape2d.engine.core.matter
 
 import scape.scape2d.engine.core.Movable
 import scape.scape2d.engine.core.Rotatable
+import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.shape.FiniteShape
+import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.mass.Kilogram
 import scape.scape2d.engine.mass.Mass
 import scape.scape2d.engine.mass.MassUnit.toMass
@@ -40,6 +42,18 @@ class RigidBody[T >: Null <: FiniteShape] private[matter](
   def angularVelocity = _angularVelocity;
   
   private[core] def setAngularVelocity(newAngularVelocity:AngularVelocity) = _angularVelocity = newAngularVelocity;
+  
+  private[core] def exertForce(force:Vector, pointOnBody:Point) = {
+    val leverArm = pointOnBody - shape.center;
+    if(pointOnBody == center) {
+      val instantAcceleration = mass forForce force;
+      _velocity += instantAcceleration.velocity;
+    }else{
+      val forceAlongLeverArm = force projection leverArm;
+      val instantAcceleration = mass forForce forceAlongLeverArm;
+      _velocity += instantAcceleration.velocity;
+    }
+  }
   
   def movables = Set(this);
   
