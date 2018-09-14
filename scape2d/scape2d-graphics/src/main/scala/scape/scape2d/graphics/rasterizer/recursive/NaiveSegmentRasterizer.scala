@@ -17,7 +17,7 @@ case class NaiveSegmentRasterizer() extends Rasterizer[Segment] {
     val segmentBounds = ShapeBounds(segment).toInt;
     val verticalRange = segmentBounds.bottomLeft.y to segmentBounds.topLeft.y - 1;
     if(!segment.line.vertical)
-      for(y <- verticalRange) yield PointInteger(segment.line.forY(y).toInt, y);
+      for(y <- verticalRange) yield PointInteger(segment.line.forY(y).solution.toInt, y);
     else
       for(y <- verticalRange) yield PointInteger(segmentBounds.bottomLeft.x, y);
   }
@@ -26,7 +26,7 @@ case class NaiveSegmentRasterizer() extends Rasterizer[Segment] {
     val segmentBounds = ShapeBounds(segment).toInt;
     val horizontalRange = segmentBounds.bottomLeft.x to segmentBounds.bottomRight.x - 1;
     if(!segment.line.horizontal)
-      for(x <- horizontalRange) yield PointInteger(x, segment.line.forX(x).toInt);
+      for(x <- horizontalRange) yield PointInteger(x, segment.line.forX(x).solution.toInt);
     else
       for(x <- horizontalRange) yield PointInteger(x, segmentBounds.bottomLeft.y);
   }

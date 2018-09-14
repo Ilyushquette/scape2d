@@ -1,12 +1,26 @@
 package scape.scape2d.engine.geom.shape
 
-import java.lang.Math._
-import com.google.common.math.DoubleMath._
-import scape.scape2d.engine.geom._
-import scape.scape2d.engine.geom.shape.intersection._
+import java.lang.Math.PI
+import java.lang.Math.abs
+import java.lang.Math.hypot
+import java.lang.Math.round
+import java.lang.Math.sqrt
+
+import com.google.common.math.DoubleMath.fuzzyEquals
+
+import scape.scape2d.engine.geom.AreaEpsilon
+import scape.scape2d.engine.geom.Components
+import scape.scape2d.engine.geom.Epsilon
+import scape.scape2d.engine.geom.Vector
+import scape.scape2d.engine.geom.Vector.toComponents
 import scape.scape2d.engine.geom.angle.Angle
-import scape.scape2d.engine.geom.angle.UnboundAngle
 import scape.scape2d.engine.geom.angle.Radian
+import scape.scape2d.engine.geom.angle.UnboundAngle
+import scape.scape2d.engine.geom.fetchWaypoints
+import scape.scape2d.engine.geom.shape.intersection.testIntersection
+import scape.scape2d.engine.util.InfiniteSolutions
+import scape.scape2d.engine.util.NoSolution
+import scape.scape2d.engine.util.SomeSolution
 
 sealed trait Shape {
   def intersects(shape:Shape):Boolean;
@@ -99,20 +113,22 @@ case class Line(p1:Point, p2:Point) extends Shape {
   def vertical = fuzzyEquals(dx, 0, Epsilon);
   
   def forX(x:Double) = {
-    if(horizontal) p1.y;
-    else if(!vertical) slope.get * x + yIntercept.get;
-    else throw new ArithmeticException("Y resolution on vertical line has either no or infinite solutions");
+    if(horizontal) SomeSolution(p1.y);
+    else if(!vertical) SomeSolution(slope.get * x + yIntercept.get);
+    else if(!fuzzyEquals(p1.x, x, Epsilon)) NoSolution;
+    else InfiniteSolutions;
   }
   
   def forY(y:Double) = {
-    if(vertical) p1.x;
-    else if(!horizontal) (y - yIntercept.get) / slope.get;
-    else throw new ArithmeticException("X resolution on horizontal line has either no or infinite solutions");
+    if(vertical) SomeSolution(p1.x);
+    else if(!horizontal) SomeSolution((y - yIntercept.get) / slope.get);
+    else if(!fuzzyEquals(p1.y, y, Epsilon)) NoSolution;
+    else InfiniteSolutions;
   }
   
-  def clampAbscissa(x1:Double, x2:Double) = Segment(Point(x1, forX(x1)), Point(x2, forX(x2)));
+  def clampAbscissa(x1:Double, x2:Double) = Segment(Point(x1, forX(x1).solution), Point(x2, forX(x2).solution));
   
-  def clampOrdinate(y1:Double, y2:Double) = Segment(Point(forY(y1), y1), Point(forY(y2), y2));
+  def clampOrdinate(y1:Double, y2:Double) = Segment(Point(forY(y1).solution, y1), Point(forY(y2).solution, y2));
   
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
