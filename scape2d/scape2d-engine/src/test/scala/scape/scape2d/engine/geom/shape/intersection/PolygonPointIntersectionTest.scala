@@ -46,7 +46,7 @@ class PolygonPointIntersectionTest {
     Assert.assertTrue(polygon.intersects(point));
   }
   
-  /**                                 
+  /**
    *         __________
    *        /          \
    *       /            \
@@ -62,6 +62,25 @@ class PolygonPointIntersectionTest {
     val polygon = PolygonBuilder(Point(0, 0), Point(5, 5), Point(10, 5))
                   .to(Point(15, 0)).to(Point(10, 3)).to(Point(5, 3)).build;
     val point = Point(0, 0);
+    Assert.assertTrue(polygon.intersects(point));
+  }
+  
+  /**
+   *         __________
+   *        /          \
+   *       /            O
+   *      /  ___________ \
+   *     / /            \ \
+   *    //                \\
+   *   
+   *   /|\- - HEXAGON
+   *   O - POINT
+   */
+  @Test
+  def testPointOnTheEdgeOfHexagonDoIntersect = {
+    val polygon = PolygonBuilder(Point(0, 0), Point(5, 5), Point(10, 5))
+                  .to(Point(15, 0)).to(Point(10, 3)).to(Point(5, 3)).build;
+    val point = Point(12, 3);
     Assert.assertTrue(polygon.intersects(point));
   }
   
