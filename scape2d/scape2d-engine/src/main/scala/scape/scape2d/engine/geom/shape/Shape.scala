@@ -60,7 +60,7 @@ object Point {
   def origin = Point(0, 0);
 }
 
-case class Point(x:Double, y:Double) extends FiniteShape {
+case class Point(x:Double, y:Double) extends ConvexShape {
   val center = this;
   val area = AreaEpsilon;
   
@@ -193,7 +193,7 @@ case class Ray(origin:Point, angle:Angle) extends Shape {
   lazy val toInt = RayInteger(origin.toInt, angle);
 }
 
-case class Segment(p1:Point, p2:Point) extends FiniteShape {
+case class Segment(p1:Point, p2:Point) extends ConvexShape {
   lazy val line = Line(p1, p2);
   lazy val length = p1 distanceTo p2;
   lazy val center = Point(
@@ -232,7 +232,7 @@ case class Segment(p1:Point, p2:Point) extends FiniteShape {
   lazy val toInt = SegmentInteger(p1.toInt, p2.toInt);
 }
 
-case class Circle(center:Point, radius:Double) extends FiniteShape with Sweepable[CircleSweep] {
+case class Circle(center:Point, radius:Double) extends ConvexShape with Sweepable[CircleSweep] {
   lazy val area = PI * radius * radius;
   lazy val diameter = radius * 2;
   
@@ -369,11 +369,13 @@ case class ConvexPolygon private[shape] (polygon:Polygon) extends Polygon with C
   lazy val toInt = PolygonInteger(segments.map(_.toInt));
 }
 
-case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) extends Polygon {
+case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) extends ConvexShape with Polygon {
   lazy val topLeft = Point(bottomLeft.x, bottomLeft.y + height);
   lazy val topRight = Point(bottomLeft.x + width, bottomLeft.y + height);
   lazy val bottomRight = Point(bottomLeft.x + width, bottomLeft.y);
-  lazy val polygon = PolygonBuilder(bottomLeft, topLeft, topRight).to(bottomRight).build;
+  lazy val polygon = ConvexPolygon(PolygonBuilder(bottomLeft, topLeft, topRight)
+                                   .to(bottomRight)
+                                   .build);
   lazy val center = Point(bottomLeft.x + width / 2, bottomLeft.y + height / 2);
   lazy val area = width * height;
   
@@ -421,7 +423,7 @@ case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) e
   lazy val toInt = AxisAlignedRectangleInteger(bottomLeft.toInt, round(width).toInt, round(height).toInt);
 }
 
-case class CircleSweep(circle:Circle, sweepVector:Vector) extends FiniteShape {
+case class CircleSweep(circle:Circle, sweepVector:Vector) extends ConvexShape {
   lazy val destinationCircle = Circle(circle.center + sweepVector, circle.radius);
   lazy val connector = {
     val radialVectorToConnector = Vector(circle.radius, sweepVector.angle + Angle.right);
@@ -468,7 +470,7 @@ case class CircleSweep(circle:Circle, sweepVector:Vector) extends FiniteShape {
   lazy val toInt = CircleSweepInteger(circle.toInt, sweepVector);
 }
 
-case class Ring(circle:Circle, thickness:Double) extends FiniteShape {
+case class Ring(circle:Circle, thickness:Double) extends ConvexShape {
   lazy val outerCircle = circle.copy(radius = circle.radius + thickness / 2);
   lazy val innerCircle = circle.copy(radius = circle.radius - thickness / 2);
   lazy val area = outerCircle.area - innerCircle.area;
