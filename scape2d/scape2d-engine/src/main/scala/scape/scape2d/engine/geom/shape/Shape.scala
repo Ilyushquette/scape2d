@@ -345,6 +345,30 @@ case class CustomPolygon private[shape] (segments:List[Segment], center:Point, a
   lazy val toInt = PolygonInteger(segments.map(_.toInt));
 }
 
+case class ConvexPolygon private[shape] (polygon:Polygon) extends Polygon with ConvexShape {
+  val segments = polygon.segments;
+  lazy val center = polygon.center;
+  lazy val area = polygon.area;
+  
+  def intersects(shape:Shape) = polygon intersects shape;
+  
+  def contains(shape:Shape) = shape match {
+    case Segment(p1, p2) => intersects(p1) && intersects(p2);
+    case polygon:Polygon => polygon.points.forall(contains);
+    case circleSweep:CircleSweep => contains(circleSweep.circle) &&
+                                    contains(circleSweep.destinationCircle) &&
+                                    contains(circleSweep.connector._1) &&
+                                    contains(circleSweep.connector._2);
+    case _:Point | _:Line | _:Ray | _:Circle | _:Ring => polygon contains shape;
+  }
+  
+  def displacedBy(components:Components) = ConvexPolygon(polygon displacedBy components);
+  
+  def rotatedAround(point:Point, angle:Angle) = ConvexPolygon(polygon.rotatedAround(point, angle));
+  
+  lazy val toInt = PolygonInteger(segments.map(_.toInt));
+}
+
 case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) extends Polygon {
   lazy val topLeft = Point(bottomLeft.x, bottomLeft.y + height);
   lazy val topRight = Point(bottomLeft.x + width, bottomLeft.y + height);
