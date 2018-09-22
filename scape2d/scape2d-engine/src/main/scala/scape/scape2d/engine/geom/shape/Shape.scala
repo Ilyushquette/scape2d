@@ -36,6 +36,12 @@ sealed trait FiniteShape extends Shape {
   def area:Double;
 }
 
+sealed trait ConvexShape extends FiniteShape {
+  def displacedBy(components:Components):ConvexShape;
+  
+  def rotatedAround(point:Point, angle:Angle):ConvexShape;
+}
+
 sealed trait Sweepable[T <: Shape] extends Shape {
   def sweep(sweepVector:Vector):T;
 }
