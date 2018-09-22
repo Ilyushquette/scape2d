@@ -25,10 +25,11 @@ import scape.scape2d.engine.time.Second
 import scape.scape2d.engine.util.Proxy.autoEnhance
 import scape.scape2d.graphics.rasterizer.UnitConvertingRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
+import scape.scape2d.engine.geom.shape.FiniteShape
 
 object EulerFirstLawRigidBody {
   def main(args:Array[String]) = {
-    val dynamics = new RigidBodyDynamics();
+    val dynamics = new RigidBodyDynamics[FiniteShape]();
     val simulation = new Simulation(dynamics);
     val simulationThread = new Thread(simulation);
     
