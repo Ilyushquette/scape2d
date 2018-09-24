@@ -54,13 +54,4 @@ package object rotational {
     val Qft = positionForTimeOf(movable2);
     t => Pft(t) distanceTo Qft(t);
   }
-  
-  def angularToLinearVelocity(movable:Movable[_ <: Shape]) = {
-    val rotatable = movable.rotatable.get;
-    val ωt = rotatable.angularVelocity.forTime(Second);
-    val length = abs(trajectoryCircleOf(movable).forAngle(ωt));
-    val radialDirection = rotatable.center angleTo movable.position;
-    val θ = radialDirection + (Angle.right * signum(rotatable.angularVelocity.angle.value));
-    Vector(length, θ) / Second;
-  }
 }
