@@ -1,5 +1,6 @@
 package scape.scape2d.engine.geom.angle
 
+import java.lang.Math.abs
 import java.lang.Math.atan2
 import com.google.common.math.DoubleMath.fuzzyCompare
 import com.google.common.math.DoubleMath.fuzzyEquals
@@ -50,6 +51,8 @@ case class Angle private[Angle](value:Double, unit:AngleUnit) extends Ordered[An
   def /(divider:Double) = Angle.bound(value / divider, unit);
   
   def /(duration:Duration) = AngularVelocity(this, duration);
+  
+  def smallestDifferenceTo(angle:Angle) = Angle(unit.middle - abs(abs(value - angle.value) - unit.middle), unit);
   
   def compare(angle:Angle) = fuzzyCompare(radians, angle.radians, Epsilon);
   
