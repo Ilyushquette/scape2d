@@ -34,6 +34,8 @@ sealed trait FiniteShape extends Shape {
   def center:Point;
   
   def area:Double;
+  
+  def perimeter:FinitePerimeter;
 }
 
 sealed trait ConvexShape extends FiniteShape {
@@ -54,6 +56,8 @@ sealed trait Polygon extends FiniteShape {
   def displacedBy(components:Components):Polygon;
   
   def rotatedAround(point:Point, angle:Angle):Polygon;
+  
+  lazy val perimeter = PolygonPerimeter(this);
 }
 
 object Point {
@@ -63,6 +67,7 @@ object Point {
 case class Point(x:Double, y:Double) extends ConvexShape {
   val center = this;
   val area = AreaEpsilon;
+  lazy val perimeter = PointPerimeter(this);
   
   def distanceTo(point:Point) = hypot(point.x - x, point.y - y);
   
@@ -201,6 +206,7 @@ case class Segment(p1:Point, p2:Point) extends ConvexShape {
       y = p1.y + (p2.y - p1.y) / 2
   );
   lazy val area = Epsilon * length;
+  lazy val perimeter = SegmentPerimeter(this);
   
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
@@ -235,6 +241,7 @@ case class Segment(p1:Point, p2:Point) extends ConvexShape {
 case class Circle(center:Point, radius:Double) extends ConvexShape with Sweepable[CircleSweep] {
   lazy val area = PI * radius * radius;
   lazy val diameter = radius * 2;
+  lazy val perimeter = CirclePerimeter(this);
   
   def sweep(sweepVector:Vector) = CircleSweep(this, sweepVector);
   
@@ -435,6 +442,7 @@ case class CircleSweep(circle:Circle, sweepVector:Vector) extends ConvexShape {
   }
   lazy val center = circle.center + sweepVector / 2;
   lazy val area = circle.area + circle.diameter * sweepVector.magnitude;
+  lazy val perimeter = CircleSweepPerimeter(this);
   
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
@@ -474,6 +482,7 @@ case class Ring(circle:Circle, thickness:Double) extends ConvexShape {
   lazy val outerCircle = circle.copy(radius = circle.radius + thickness / 2);
   lazy val innerCircle = circle.copy(radius = circle.radius - thickness / 2);
   lazy val area = outerCircle.area - innerCircle.area;
+  lazy val perimeter = RingPerimeter(this);
   val center = circle.center;
   
   def intersects(shape:Shape) = testIntersection(this, shape);
