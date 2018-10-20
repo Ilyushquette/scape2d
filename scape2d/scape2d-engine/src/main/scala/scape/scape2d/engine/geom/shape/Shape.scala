@@ -24,9 +24,15 @@ import scape.scape2d.engine.util.SomeSolution
 
 sealed trait Shape {
   def intersects(shape:Shape):Boolean;
+  
   def contains(shape:Shape):Boolean;
+  
   def displacedBy(components:Components):Shape;
+  
   def rotatedAround(point:Point, angle:Angle):Shape;
+  
+  def perimeter:Perimeter;
+  
   def toInt:ShapeInteger[_ <: Shape];
 }
 
@@ -118,6 +124,7 @@ case class Line(p1:Point, p2:Point) extends Shape {
   lazy val slope = if(dx != 0) Some(dy / dx) else None; // slope is undefined for vertical lines
   lazy val yIntercept = if(slope.isDefined) Some(p1.y - slope.get * p1.x) else None;
   lazy val angle = p1 angleTo p2;
+  lazy val perimeter = LinePerimeter(this);
   
   def horizontal = fuzzyEquals(dy, 0, Epsilon);
   
@@ -172,6 +179,7 @@ case class Line(p1:Point, p2:Point) extends Shape {
 
 case class Ray(origin:Point, angle:Angle) extends Shape {
   lazy val line = Line(origin, origin + Vector(1, angle));
+  lazy val perimeter = RayPerimeter(this);
   
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);

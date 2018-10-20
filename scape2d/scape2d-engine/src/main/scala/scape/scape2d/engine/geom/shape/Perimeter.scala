@@ -18,6 +18,12 @@ case class PointPerimeter(shape:Point) extends FinitePerimeter {
   lazy val length = Epsilon * 4;
 }
 
+case class LinePerimeter(shape:Line) extends Perimeter {
+}
+
+case class RayPerimeter(shape:Ray) extends Perimeter {
+}
+
 case class SegmentPerimeter(shape:Segment) extends FinitePerimeter {
   lazy val length = shape.p1 distanceTo shape.p2;
 }
