@@ -1,6 +1,7 @@
 package scape.scape2d.engine.geom.shape
 
 import java.lang.Math.PI
+import java.lang.Math.pow
 
 import com.google.common.math.DoubleMath.fuzzyEquals
 
@@ -83,6 +84,14 @@ object Perimeter {
   def intersectionPointBetween(s1:Segment, s2:Segment):Solution[Point] = {
     if(s1 intersects s2) intersectionPointBetween(s1.line, s2.line);
     else NoSolution;
+  }
+  
+  def intersectionPointBetween(circle:Circle, point:Point):Solution[Point] = {
+    val center = circle.center;
+    if(fuzzyEquals(pow(point.x - center.x, 2) + pow(point.y - center.y, 2), circle.radius * circle.radius, Epsilon))
+      SomeSolution(point);
+    else
+      NoSolution;
   }
 }
 
