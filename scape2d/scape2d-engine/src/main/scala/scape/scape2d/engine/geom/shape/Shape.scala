@@ -21,6 +21,7 @@ import scape.scape2d.engine.geom.shape.intersection.testIntersection
 import scape.scape2d.engine.util.InfiniteSolutions
 import scape.scape2d.engine.util.NoSolution
 import scape.scape2d.engine.util.SomeSolution
+import scape.scape2d.engine.util.Solution
 
 sealed trait Shape {
   def intersects(shape:Shape):Boolean;
@@ -252,6 +253,23 @@ case class Circle(center:Point, radius:Double) extends ConvexShape with Sweepabl
   lazy val perimeter = CirclePerimeter(this);
   
   def sweep(sweepVector:Vector) = CircleSweep(this, sweepVector);
+  
+  def forX(x:Double):Set[Solution[Double]] = {
+    val a = center.x;
+    val b = center.y;
+    val r = radius;
+    val B = -2 * b;
+    val C = x * x + a * a + b * b - 2 * a * x - r * r;
+    val discriminant = B * B - 4 * C;
+    if(discriminant > 0) {
+      val solutionY1 = SomeSolution((-B + sqrt(discriminant)) / 2);
+      val solutionY2 = SomeSolution((-B - sqrt(discriminant)) / 2);
+      Set(solutionY1, solutionY2);
+    }else if(discriminant == 0) {
+      val solutionY = SomeSolution(-B / 2);
+      Set(solutionY);
+    }else Set.empty;
+  }
   
   def forLength(length:Double) = UnboundAngle(length / radius, Radian);
   
