@@ -3,6 +3,9 @@ package scape.scape2d.engine.geom.shape
 import java.lang.Math.PI
 
 import scape.scape2d.engine.geom.Epsilon
+import scape.scape2d.engine.util.NoSolution
+import scape.scape2d.engine.util.Solution
+import scape.scape2d.engine.util.SomeSolution
 
 sealed trait Perimeter {
   def shape:Shape;
@@ -12,6 +15,13 @@ sealed trait FinitePerimeter extends Perimeter {
   def shape:FiniteShape;
   
   def length:Double;
+}
+
+object Perimeter {
+  def intersectionPointBetween(p1:Point, p2:Point):Solution[Point] = {
+    if(p1 == p2) SomeSolution(p1);
+    else NoSolution;
+  }
 }
 
 case class PointPerimeter(shape:Point) extends FinitePerimeter {
