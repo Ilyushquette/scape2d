@@ -7,6 +7,9 @@ import java.lang.Math.sqrt
 import com.google.common.math.DoubleMath.fuzzyEquals
 
 import scape.scape2d.engine.geom.Epsilon
+import scape.scape2d.engine.geom.Vector
+import scape.scape2d.engine.geom.Vector.toComponents
+import scape.scape2d.engine.geom.angle.Angle
 import scape.scape2d.engine.util.InfiniteSolutions
 import scape.scape2d.engine.util.NoSolution
 import scape.scape2d.engine.util.Solution
@@ -132,6 +135,26 @@ object Perimeter {
     val segmentBounds = ShapeBounds(segment);
     val circleLineIntersectionPoints = intersectionPointsBetween(circle, segment.line);
     circleLineIntersectionPoints.filter(_.map(segmentBounds intersects _).solutionOrElse(false));
+  }
+  
+  def intersectionPointsBetween(c1:Circle, c2:Circle):Set[Solution[Point]] = {
+    val r1 = c1.radius;
+    val r2 = c2.radius;
+    val radii = r1 + r2;
+    val θ = c1.center angleTo c2.center;
+    val d = c1.center distanceTo c2.center;
+    if(fuzzyEquals(d, radii, Epsilon)) {
+      Set(SomeSolution(c1.center displacedBy Vector(r1, θ)));
+    }else if(d < radii && d + r2 > r1 && d + r1 > r2) {
+      val b1 = (r1 * r1 - r2 * r2 + d * d) / (2 * d);
+      val a = sqrt(r1 * r1 - b1 * b1);
+      val vectorToRadicalLine = Vector(b1, θ);
+      val c1solution1 = vectorToRadicalLine + Vector(a, θ + Angle.right);
+      val c1solution2 = vectorToRadicalLine + Vector(a, θ - Angle.right);
+      Set(SomeSolution(c1.center displacedBy c1solution1), SomeSolution(c1.center displacedBy c1solution2));
+    }else if(fuzzyEquals(d, 0, Epsilon) && fuzzyEquals(r1, r2, Epsilon)) {
+      Set(InfiniteSolutions);
+    }else Set.empty;
   }
 }
 
