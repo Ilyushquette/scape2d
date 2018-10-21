@@ -45,6 +45,11 @@ object Perimeter {
     else if(!fuzzyEquals(l1.p1.x, l2.p2.x, Epsilon)) NoSolution;
     else InfiniteSolutions;
   }
+  
+  def intersectionPointBetween(ray:Ray, point:Point):Solution[Point] = {
+    if(ray intersects point) SomeSolution(point);
+    else NoSolution;
+  }
 }
 
 case class PointPerimeter(shape:Point) extends FinitePerimeter {
