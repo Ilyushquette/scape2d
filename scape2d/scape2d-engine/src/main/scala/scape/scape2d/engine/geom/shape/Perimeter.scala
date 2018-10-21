@@ -79,6 +79,11 @@ object Perimeter {
     if(segment intersects ray) intersectionPointBetween(segment.line, ray.line);
     else NoSolution;
   }
+  
+  def intersectionPointBetween(s1:Segment, s2:Segment):Solution[Point] = {
+    if(s1 intersects s2) intersectionPointBetween(s1.line, s2.line);
+    else NoSolution;
+  }
 }
 
 case class PointPerimeter(shape:Point) extends FinitePerimeter {
