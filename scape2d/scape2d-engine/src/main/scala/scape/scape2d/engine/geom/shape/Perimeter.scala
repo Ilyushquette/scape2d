@@ -127,6 +127,12 @@ object Perimeter {
     val circleLineIntersectionPoints = intersectionPointsBetween(circle, ray.line);
     circleLineIntersectionPoints.filter(_.map(ray intersects _).solutionOrElse(false));
   }
+  
+  def intersectionPointsBetween(circle:Circle, segment:Segment):Set[Solution[Point]] = {
+    val segmentBounds = ShapeBounds(segment);
+    val circleLineIntersectionPoints = intersectionPointsBetween(circle, segment.line);
+    circleLineIntersectionPoints.filter(_.map(segmentBounds intersects _).solutionOrElse(false));
+  }
 }
 
 case class PointPerimeter(shape:Point) extends FinitePerimeter {
