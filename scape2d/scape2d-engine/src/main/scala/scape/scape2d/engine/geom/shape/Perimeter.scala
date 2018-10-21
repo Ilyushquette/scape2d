@@ -50,6 +50,15 @@ object Perimeter {
     if(ray intersects point) SomeSolution(point);
     else NoSolution;
   }
+  
+  def intersectionPointBetween(ray:Ray, line:Line):Solution[Point] = {
+    val intersectionPointBetweenLines = intersectionPointBetween(ray.line, line);
+    if(intersectionPointBetweenLines.hasSolution)
+      if(ray.intersects(intersectionPointBetweenLines.solution))
+        intersectionPointBetweenLines;
+      else NoSolution;
+    else intersectionPointBetweenLines;
+  }
 }
 
 case class PointPerimeter(shape:Point) extends FinitePerimeter {
