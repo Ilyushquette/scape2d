@@ -271,6 +271,23 @@ case class Circle(center:Point, radius:Double) extends ConvexShape with Sweepabl
     }else Set.empty;
   }
   
+  def forY(y:Double):Set[Solution[Double]] = {
+    val a = center.x;
+    val b = center.y;
+    val r = radius;
+    val B = -2 * a;
+    val C = y * y + a * a + b * b - 2 * b * y - r * r;
+    val discriminant = B * B - 4 * C;
+    if(discriminant > 0) {
+      val solutionX1 = SomeSolution((-B + sqrt(discriminant)) / 2);
+      val solutionX2 = SomeSolution((-B - sqrt(discriminant)) / 2);
+      Set(solutionX1, solutionX2);
+    }else if(discriminant == 0) {
+      val solutionX = SomeSolution(-B / 2);
+      Set(solutionX);
+    }else Set.empty;
+  }
+  
   def forLength(length:Double) = UnboundAngle(length / radius, Radian);
   
   def forAngle(angle:UnboundAngle) = angle.radians * radius;

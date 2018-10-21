@@ -40,6 +40,25 @@ class CircleTest {
   }
   
   @Test
+  def testXForYResolutionFromCircleNoSolutions = {
+    val circle = Circle(Point.origin, 3);
+    val solutions = circle forY -4;
+    Assert.assertTrue(solutions.isEmpty);
+  }
+  
+  @Test
+  def testXForYResolutionFromCircleOneSolution = {
+    val circle = Circle(Point(2, 2), 1);
+    Assert.assertEquals(Set(SomeSolution(2)), circle forY 3);
+  }
+  
+  @Test
+  def testXForYResolutionFromCircleTwoSolutions = {
+    val circle = Circle(Point(5, 5), 5);
+    Assert.assertEquals(Set(SomeSolution(1d), SomeSolution(9d)), circle forY 2);
+  }
+  
+  @Test
   def testAngleResolutionForLength = {
     val circle = Circle(Point(5, 10), 3);
     Assert.assertEquals(UnboundAngle(7, Radian), circle forLength 21);
