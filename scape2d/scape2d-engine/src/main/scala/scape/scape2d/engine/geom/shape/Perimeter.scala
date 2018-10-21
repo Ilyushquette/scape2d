@@ -2,7 +2,10 @@ package scape.scape2d.engine.geom.shape
 
 import java.lang.Math.PI
 
+import com.google.common.math.DoubleMath.fuzzyEquals
+
 import scape.scape2d.engine.geom.Epsilon
+import scape.scape2d.engine.util.InfiniteSolutions
 import scape.scape2d.engine.util.NoSolution
 import scape.scape2d.engine.util.Solution
 import scape.scape2d.engine.util.SomeSolution
@@ -26,6 +29,21 @@ object Perimeter {
   def intersectionPointBetween(line:Line, point:Point):Solution[Point] = {
     if(line intersects point) SomeSolution(point);
     else NoSolution;
+  }
+  
+  def intersectionPointBetween(l1:Line, l2:Line):Solution[Point] = {
+    if(!l1.vertical && !l2.vertical) {
+      if(!fuzzyEquals(l1.slope.get, l2.slope.get, Epsilon)) {
+        val x = (l2.yIntercept.get - l1.yIntercept.get) / (l1.slope.get - l2.slope.get);
+        l1.forX(x).map(Point(x, _));
+      }
+      else if(!fuzzyEquals(l1.yIntercept.get, l2.yIntercept.get, Epsilon)) NoSolution;
+      else InfiniteSolutions;
+    }
+    else if(!l1.vertical && l2.vertical) SomeSolution(Point(l2.p1.x, l1.forX(l2.p1.x).solution));
+    else if(l1.vertical && !l2.vertical) SomeSolution(Point(l1.p1.x, l2.forX(l1.p1.x).solution));
+    else if(!fuzzyEquals(l1.p1.x, l2.p2.x, Epsilon)) NoSolution;
+    else InfiniteSolutions;
   }
 }
 

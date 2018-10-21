@@ -40,7 +40,7 @@ package object intersection {
     if(ray.line.vertical && line.vertical) fuzzyEquals(ray.origin.x, line.p1.x, Epsilon);
     else if(!line.vertical && !ray.line.vertical && fuzzyEquals(line.slope.get, ray.line.slope.get, Epsilon))
       fuzzyEquals(ray.line.yIntercept.get, line.yIntercept.get, Epsilon);
-    else ray.intersects(intersectionPointBetween(ray.line, line).solution);
+    else ray.intersects(Perimeter.intersectionPointBetween(ray.line, line).solution);
   }
   
   def testIntersection(r1:Ray, r2:Ray):Boolean = {
@@ -82,7 +82,8 @@ package object intersection {
     val r1r2s2orientation = TripletOrientation(ray.line.p1, ray.line.p2, segment.p2);
     if(r1r2s1orientation == Collinear && r1r2s1orientation == r1r2s2orientation)
       ray.intersects(segment.p1) || ray.intersects(segment.p2);
-    else r1r2s1orientation != r1r2s2orientation && ray.intersects(intersectionPointBetween(segment.line, ray.line).solution);
+    else r1r2s1orientation != r1r2s2orientation &&
+         ray.intersects(Perimeter.intersectionPointBetween(segment.line, ray.line).solution);
   }
   
   def testIntersection(circle:Circle, point:Point):Boolean = circle.center.distanceTo(point) <= circle.radius;
@@ -217,20 +218,5 @@ package object intersection {
   
   def testIntersection(ring:Ring, shape:Shape):Boolean = {
     ring.outerCircle.intersects(shape) && !ring.innerCircle.contains(shape);
-  }
-  
-  def intersectionPointBetween(l1:Line, l2:Line):Solution[Point] = {
-    if(!l1.vertical && !l2.vertical) {
-      if(!fuzzyEquals(l1.slope.get, l2.slope.get, Epsilon)) {
-        val x = (l2.yIntercept.get - l1.yIntercept.get) / (l1.slope.get - l2.slope.get);
-        l1.forX(x).map(Point(x, _));
-      }
-      else if(!fuzzyEquals(l1.yIntercept.get, l2.yIntercept.get, Epsilon)) NoSolution;
-      else InfiniteSolutions;
-    }
-    else if(!l1.vertical && l2.vertical) SomeSolution(Point(l2.p1.x, l1.forX(l2.p1.x).solution));
-    else if(l1.vertical && !l2.vertical) SomeSolution(Point(l1.p1.x, l2.forX(l1.p1.x).solution));
-    else if(!fuzzyEquals(l1.p1.x, l2.p2.x, Epsilon)) NoSolution;
-    else InfiniteSolutions;
   }
 }

@@ -121,7 +121,7 @@ case class Point(x:Double, y:Double) extends ConvexShape {
 case class Line(p1:Point, p2:Point) extends Shape {
   private lazy val dx = p2.x - p1.x;
   private lazy val dy = p2.y - p1.y;
-  lazy val slope = if(dx != 0) Some(dy / dx) else None; // slope is undefined for vertical lines
+  lazy val slope = if(!vertical) Some(dy / dx) else None; // slope is undefined for vertical lines
   lazy val yIntercept = if(slope.isDefined) Some(p1.y - slope.get * p1.x) else None;
   lazy val angle = p1 angleTo p2;
   lazy val perimeter = LinePerimeter(this);
