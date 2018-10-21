@@ -2,6 +2,7 @@ package scape.scape2d.engine.geom.shape
 
 import java.lang.Math.PI
 import java.lang.Math.pow
+import java.lang.Math.sqrt
 
 import com.google.common.math.DoubleMath.fuzzyEquals
 
@@ -92,6 +93,34 @@ object Perimeter {
       SomeSolution(point);
     else
       NoSolution;
+  }
+  
+  def intersectionPointsBetween(circle:Circle, line:Line):Set[Solution[Point]] = {
+    if(!line.vertical) {
+      val a = circle.center.x;
+      val b = circle.center.y;
+      val r = circle.radius;
+      val m = line.slope.get;
+      val c = line.yIntercept.get;
+      val A = m * m + 1;
+      val B = 2 * (m * c - m * b - a);
+      val C = c * c + a * a + b * b - 2 * b * c - r * r;
+      val discriminant = (B * B) - 4 * A * C;
+      if(discriminant > 0) {
+        val solution1x = (-B + sqrt(discriminant)) / (2 * A);
+        val solution2x = (-B - sqrt(discriminant)) / (2 * A);
+        val solution1 = line.forX(solution1x).map(Point(solution1x, _));
+        val solution2 = line.forX(solution2x).map(Point(solution2x, _));
+        Set(solution1, solution2);
+      }else if(discriminant == 0) {
+        val solutionX = -B / (2 * A);
+        val solution = line.forX(solutionX).map(Point(solutionX, _));
+        Set(solution);
+      }else Set.empty;
+    }else {
+      val solutions = circle forX line.p1.x;
+      solutions.map(_.map(Point(line.p1.x, _)));
+    }
   }
 }
 
