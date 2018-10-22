@@ -20,7 +20,7 @@ object SecondMomentOfArea {
   def apply(shape:FiniteShape):SecondMomentOfArea = shape match {
     case _:Point => pointSecondMomentOfArea;
     case segment:Segment =>
-      SecondMomentOfArea(AxisAlignedRectangle(Point.origin, segment.length, Epsilon));
+      SecondMomentOfArea(AxisAlignedRectangle(Point.origin, segment.perimeter.length, Epsilon));
     case Circle(_, r) =>
       SecondMomentOfArea((PI * r * r * r * r) / 2);
     case AxisAlignedRectangle(_, w, h) =>

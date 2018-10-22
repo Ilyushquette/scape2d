@@ -209,12 +209,11 @@ case class Ray(origin:Point, angle:Angle) extends Shape {
 
 case class Segment(p1:Point, p2:Point) extends ConvexShape {
   lazy val line = Line(p1, p2);
-  lazy val length = p1 distanceTo p2;
   lazy val center = Point(
       x = p1.x + (p2.x - p1.x) / 2,
       y = p1.y + (p2.y - p1.y) / 2
   );
-  lazy val area = Epsilon * length;
+  lazy val area = Epsilon * perimeter.length;
   lazy val perimeter = SegmentPerimeter(this);
   
   def intersects(shape:Shape) = shape match {
