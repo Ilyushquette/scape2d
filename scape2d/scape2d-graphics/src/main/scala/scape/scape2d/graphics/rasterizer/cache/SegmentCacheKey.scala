@@ -5,7 +5,7 @@ import java.lang.Math.round
 import scape.scape2d.engine.geom.shape.Segment
 
 private[cache] class SegmentCacheKey(segment:Segment) {
-  val truncatedLength = round(segment.length * 10000000000d) / 10000000000d;
+  val truncatedLength = round(segment.perimeter.length * 10000000000d) / 10000000000d;
   val truncatedSlope = segment.line.slope.map(slope => round(slope * 1000d) / 1000d);
   
   override def hashCode = truncatedSlope.hashCode + truncatedLength.hashCode;

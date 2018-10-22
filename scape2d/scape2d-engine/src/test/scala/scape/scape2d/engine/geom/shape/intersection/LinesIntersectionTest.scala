@@ -1,9 +1,10 @@
 package scape.scape2d.engine.geom.shape.intersection
 
+import org.junit.Assert
 import org.junit.Test
+
 import scape.scape2d.engine.geom.shape.Line
 import scape.scape2d.engine.geom.shape.Point
-import org.junit.Assert
 
 class LinesIntersectionTest {
   @Test

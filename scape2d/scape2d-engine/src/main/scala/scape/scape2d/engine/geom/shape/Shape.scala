@@ -1,18 +1,39 @@
 package scape.scape2d.engine.geom.shape
 
-import java.lang.Math._
-import com.google.common.math.DoubleMath._
-import scape.scape2d.engine.geom._
-import scape.scape2d.engine.geom.shape.intersection._
+import java.lang.Math.PI
+import java.lang.Math.abs
+import java.lang.Math.hypot
+import java.lang.Math.round
+import java.lang.Math.sqrt
+
+import com.google.common.math.DoubleMath.fuzzyEquals
+
+import scape.scape2d.engine.geom.AreaEpsilon
+import scape.scape2d.engine.geom.Components
+import scape.scape2d.engine.geom.Epsilon
+import scape.scape2d.engine.geom.Vector
+import scape.scape2d.engine.geom.Vector.toComponents
 import scape.scape2d.engine.geom.angle.Angle
-import scape.scape2d.engine.geom.angle.UnboundAngle
 import scape.scape2d.engine.geom.angle.Radian
+import scape.scape2d.engine.geom.angle.UnboundAngle
+import scape.scape2d.engine.geom.fetchWaypoints
+import scape.scape2d.engine.geom.shape.intersection.testIntersection
+import scape.scape2d.engine.util.InfiniteSolutions
+import scape.scape2d.engine.util.NoSolution
+import scape.scape2d.engine.util.SomeSolution
+import scape.scape2d.engine.util.Solution
 
 sealed trait Shape {
   def intersects(shape:Shape):Boolean;
+  
   def contains(shape:Shape):Boolean;
+  
   def displacedBy(components:Components):Shape;
+  
   def rotatedAround(point:Point, angle:Angle):Shape;
+  
+  def perimeter:Perimeter;
+  
   def toInt:ShapeInteger[_ <: Shape];
 }
 
@@ -20,6 +41,14 @@ sealed trait FiniteShape extends Shape {
   def center:Point;
   
   def area:Double;
+  
+  def perimeter:FinitePerimeter;
+}
+
+sealed trait ConvexShape extends FiniteShape {
+  def displacedBy(components:Components):ConvexShape;
+  
+  def rotatedAround(point:Point, angle:Angle):ConvexShape;
 }
 
 sealed trait Sweepable[T <: Shape] extends Shape {
@@ -34,15 +63,18 @@ sealed trait Polygon extends FiniteShape {
   def displacedBy(components:Components):Polygon;
   
   def rotatedAround(point:Point, angle:Angle):Polygon;
+  
+  lazy val perimeter = PolygonPerimeter(this);
 }
 
 object Point {
   def origin = Point(0, 0);
 }
 
-case class Point(x:Double, y:Double) extends FiniteShape {
+case class Point(x:Double, y:Double) extends ConvexShape {
   val center = this;
   val area = AreaEpsilon;
+  lazy val perimeter = PointPerimeter(this);
   
   def distanceTo(point:Point) = hypot(point.x - x, point.y - y);
   
@@ -90,29 +122,32 @@ case class Point(x:Double, y:Double) extends FiniteShape {
 case class Line(p1:Point, p2:Point) extends Shape {
   private lazy val dx = p2.x - p1.x;
   private lazy val dy = p2.y - p1.y;
-  lazy val slope = if(dx != 0) Some(dy / dx) else None; // slope is undefined for vertical lines
+  lazy val slope = if(!vertical) Some(dy / dx) else None; // slope is undefined for vertical lines
   lazy val yIntercept = if(slope.isDefined) Some(p1.y - slope.get * p1.x) else None;
   lazy val angle = p1 angleTo p2;
+  lazy val perimeter = LinePerimeter(this);
   
   def horizontal = fuzzyEquals(dy, 0, Epsilon);
   
   def vertical = fuzzyEquals(dx, 0, Epsilon);
   
   def forX(x:Double) = {
-    if(horizontal) p1.y;
-    else if(!vertical) slope.get * x + yIntercept.get;
-    else throw new ArithmeticException("Y resolution on vertical line has either no or infinite solutions");
+    if(horizontal) SomeSolution(p1.y);
+    else if(!vertical) SomeSolution(slope.get * x + yIntercept.get);
+    else if(!fuzzyEquals(p1.x, x, Epsilon)) NoSolution;
+    else InfiniteSolutions;
   }
   
   def forY(y:Double) = {
-    if(vertical) p1.x;
-    else if(!horizontal) (y - yIntercept.get) / slope.get;
-    else throw new ArithmeticException("X resolution on horizontal line has either no or infinite solutions");
+    if(vertical) SomeSolution(p1.x);
+    else if(!horizontal) SomeSolution((y - yIntercept.get) / slope.get);
+    else if(!fuzzyEquals(p1.y, y, Epsilon)) NoSolution;
+    else InfiniteSolutions;
   }
   
-  def clampAbscissa(x1:Double, x2:Double) = Segment(Point(x1, forX(x1)), Point(x2, forX(x2)));
+  def clampAbscissa(x1:Double, x2:Double) = Segment(Point(x1, forX(x1).solution), Point(x2, forX(x2).solution));
   
-  def clampOrdinate(y1:Double, y2:Double) = Segment(Point(forY(y1), y1), Point(forY(y2), y2));
+  def clampOrdinate(y1:Double, y2:Double) = Segment(Point(forY(y1).solution, y1), Point(forY(y2).solution, y2));
   
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
@@ -145,6 +180,7 @@ case class Line(p1:Point, p2:Point) extends Shape {
 
 case class Ray(origin:Point, angle:Angle) extends Shape {
   lazy val line = Line(origin, origin + Vector(1, angle));
+  lazy val perimeter = RayPerimeter(this);
   
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
@@ -171,14 +207,14 @@ case class Ray(origin:Point, angle:Angle) extends Shape {
   lazy val toInt = RayInteger(origin.toInt, angle);
 }
 
-case class Segment(p1:Point, p2:Point) extends FiniteShape {
+case class Segment(p1:Point, p2:Point) extends ConvexShape {
   lazy val line = Line(p1, p2);
-  lazy val length = p1 distanceTo p2;
   lazy val center = Point(
       x = p1.x + (p2.x - p1.x) / 2,
       y = p1.y + (p2.y - p1.y) / 2
   );
-  lazy val area = Epsilon * length;
+  lazy val area = Epsilon * perimeter.length;
+  lazy val perimeter = SegmentPerimeter(this);
   
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
@@ -210,11 +246,46 @@ case class Segment(p1:Point, p2:Point) extends FiniteShape {
   lazy val toInt = SegmentInteger(p1.toInt, p2.toInt);
 }
 
-case class Circle(center:Point, radius:Double) extends FiniteShape with Sweepable[CircleSweep] {
+case class Circle(center:Point, radius:Double) extends ConvexShape with Sweepable[CircleSweep] {
   lazy val area = PI * radius * radius;
   lazy val diameter = radius * 2;
+  lazy val perimeter = CirclePerimeter(this);
   
   def sweep(sweepVector:Vector) = CircleSweep(this, sweepVector);
+  
+  def forX(x:Double):Set[Solution[Double]] = {
+    val a = center.x;
+    val b = center.y;
+    val r = radius;
+    val B = -2 * b;
+    val C = x * x + a * a + b * b - 2 * a * x - r * r;
+    val discriminant = B * B - 4 * C;
+    if(discriminant > 0) {
+      val solutionY1 = SomeSolution((-B + sqrt(discriminant)) / 2);
+      val solutionY2 = SomeSolution((-B - sqrt(discriminant)) / 2);
+      Set(solutionY1, solutionY2);
+    }else if(discriminant == 0) {
+      val solutionY = SomeSolution(-B / 2);
+      Set(solutionY);
+    }else Set.empty;
+  }
+  
+  def forY(y:Double):Set[Solution[Double]] = {
+    val a = center.x;
+    val b = center.y;
+    val r = radius;
+    val B = -2 * a;
+    val C = y * y + a * a + b * b - 2 * b * y - r * r;
+    val discriminant = B * B - 4 * C;
+    if(discriminant > 0) {
+      val solutionX1 = SomeSolution((-B + sqrt(discriminant)) / 2);
+      val solutionX2 = SomeSolution((-B - sqrt(discriminant)) / 2);
+      Set(solutionX1, solutionX2);
+    }else if(discriminant == 0) {
+      val solutionX = SomeSolution(-B / 2);
+      Set(solutionX);
+    }else Set.empty;
+  }
   
   def forLength(length:Double) = UnboundAngle(length / radius, Radian);
   
@@ -323,11 +394,37 @@ case class CustomPolygon private[shape] (segments:List[Segment], center:Point, a
   lazy val toInt = PolygonInteger(segments.map(_.toInt));
 }
 
-case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) extends Polygon {
+case class ConvexPolygon private[shape] (polygon:Polygon) extends Polygon with ConvexShape {
+  val segments = polygon.segments;
+  lazy val center = polygon.center;
+  lazy val area = polygon.area;
+  
+  def intersects(shape:Shape) = polygon intersects shape;
+  
+  def contains(shape:Shape) = shape match {
+    case Segment(p1, p2) => intersects(p1) && intersects(p2);
+    case polygon:Polygon => polygon.points.forall(contains);
+    case circleSweep:CircleSweep => contains(circleSweep.circle) &&
+                                    contains(circleSweep.destinationCircle) &&
+                                    contains(circleSweep.connector._1) &&
+                                    contains(circleSweep.connector._2);
+    case _:Point | _:Line | _:Ray | _:Circle | _:Ring => polygon contains shape;
+  }
+  
+  def displacedBy(components:Components) = ConvexPolygon(polygon displacedBy components);
+  
+  def rotatedAround(point:Point, angle:Angle) = ConvexPolygon(polygon.rotatedAround(point, angle));
+  
+  lazy val toInt = PolygonInteger(segments.map(_.toInt));
+}
+
+case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) extends ConvexShape with Polygon {
   lazy val topLeft = Point(bottomLeft.x, bottomLeft.y + height);
   lazy val topRight = Point(bottomLeft.x + width, bottomLeft.y + height);
   lazy val bottomRight = Point(bottomLeft.x + width, bottomLeft.y);
-  lazy val polygon = PolygonBuilder(bottomLeft, topLeft, topRight).to(bottomRight).build;
+  lazy val polygon = ConvexPolygon(PolygonBuilder(bottomLeft, topLeft, topRight)
+                                   .to(bottomRight)
+                                   .build);
   lazy val center = Point(bottomLeft.x + width / 2, bottomLeft.y + height / 2);
   lazy val area = width * height;
   
@@ -375,7 +472,7 @@ case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) e
   lazy val toInt = AxisAlignedRectangleInteger(bottomLeft.toInt, round(width).toInt, round(height).toInt);
 }
 
-case class CircleSweep(circle:Circle, sweepVector:Vector) extends FiniteShape {
+case class CircleSweep(circle:Circle, sweepVector:Vector) extends ConvexShape {
   lazy val destinationCircle = Circle(circle.center + sweepVector, circle.radius);
   lazy val connector = {
     val radialVectorToConnector = Vector(circle.radius, sweepVector.angle + Angle.right);
@@ -387,6 +484,7 @@ case class CircleSweep(circle:Circle, sweepVector:Vector) extends FiniteShape {
   }
   lazy val center = circle.center + sweepVector / 2;
   lazy val area = circle.area + circle.diameter * sweepVector.magnitude;
+  lazy val perimeter = CircleSweepPerimeter(this);
   
   def intersects(shape:Shape) = shape match {
     case point:Point => testIntersection(this, point);
@@ -422,10 +520,11 @@ case class CircleSweep(circle:Circle, sweepVector:Vector) extends FiniteShape {
   lazy val toInt = CircleSweepInteger(circle.toInt, sweepVector);
 }
 
-case class Ring(circle:Circle, thickness:Double) extends FiniteShape {
+case class Ring(circle:Circle, thickness:Double) extends ConvexShape {
   lazy val outerCircle = circle.copy(radius = circle.radius + thickness / 2);
   lazy val innerCircle = circle.copy(radius = circle.radius - thickness / 2);
   lazy val area = outerCircle.area - innerCircle.area;
+  lazy val perimeter = RingPerimeter(this);
   val center = circle.center;
   
   def intersects(shape:Shape) = testIntersection(this, shape);

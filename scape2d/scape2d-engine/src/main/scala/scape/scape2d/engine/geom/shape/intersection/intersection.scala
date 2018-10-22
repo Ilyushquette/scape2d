@@ -1,16 +1,27 @@
 package scape.scape2d.engine.geom.shape
 
-import java.lang.Math._
-import scape.scape2d.engine.geom._
-import com.google.common.math.DoubleMath._
+import java.lang.Math.max
+import java.lang.Math.min
+
+import com.google.common.math.DoubleMath.fuzzyEquals
+
+import scape.scape2d.engine.geom.Collinear
+import scape.scape2d.engine.geom.Epsilon
+import scape.scape2d.engine.geom.TripletOrientation
+import scape.scape2d.engine.geom.Vector
+import scape.scape2d.engine.geom.Vector.toComponents
 import scape.scape2d.engine.geom.angle.Angle
+import scape.scape2d.engine.util.InfiniteSolutions
+import scape.scape2d.engine.util.NoSolution
+import scape.scape2d.engine.util.Solution
+import scape.scape2d.engine.util.SomeSolution
 
 package object intersection {
   def testIntersection(p1:Point, p2:Point) = p1 == p2;
   
   def testIntersection(line:Line, point:Point):Boolean = {
-    if(line.vertical) fuzzyEquals(point.x, line.forY(point.y), Epsilon);
-    else fuzzyEquals(point.y, line.forX(point.x), Epsilon);
+    val x = line.forY(point.y);
+    (x.hasSolution && fuzzyEquals(point.x, x.solution, Epsilon)) || x.hasInfiniteSolutions;
   }
   
   def testIntersection(l1:Line, l2:Line):Boolean = {
@@ -29,7 +40,7 @@ package object intersection {
     if(ray.line.vertical && line.vertical) fuzzyEquals(ray.origin.x, line.p1.x, Epsilon);
     else if(!line.vertical && !ray.line.vertical && fuzzyEquals(line.slope.get, ray.line.slope.get, Epsilon))
       fuzzyEquals(ray.line.yIntercept.get, line.yIntercept.get, Epsilon);
-    else ray.intersects(findMutualPoint(ray.line, line));
+    else ray.intersects(Perimeter.intersectionPointBetween(ray.line, line).solution);
   }
   
   def testIntersection(r1:Ray, r2:Ray):Boolean = {
@@ -71,7 +82,8 @@ package object intersection {
     val r1r2s2orientation = TripletOrientation(ray.line.p1, ray.line.p2, segment.p2);
     if(r1r2s1orientation == Collinear && r1r2s1orientation == r1r2s2orientation)
       ray.intersects(segment.p1) || ray.intersects(segment.p2);
-    else r1r2s1orientation != r1r2s2orientation && ray.intersects(findMutualPoint(ray.line, segment.line));
+    else r1r2s1orientation != r1r2s2orientation &&
+         ray.intersects(Perimeter.intersectionPointBetween(segment.line, ray.line).solution);
   }
   
   def testIntersection(circle:Circle, point:Point):Boolean = circle.center.distanceTo(point) <= circle.radius;
@@ -114,11 +126,19 @@ package object intersection {
   }
   
   def testIntersection(polygon:Polygon, point:Point):Boolean = {
-    val onTheVertex = polygon.segments.exists(s => s.p1 == point || s.p2 == point);
-    if(!onTheVertex) {
+    val onTheEdge = polygon.segments.exists(_ intersects point);
+    if(!onTheEdge) {
       val ray = Ray(point, Angle.straight);
-      val intersectedSegments = polygon.segments.filter(_.intersects(ray));
-      (intersectedSegments.size & 1) == 1;
+      val crossedSegmentsCount = polygon.segments.count(segment => {
+        val intersectionPointSolution = Perimeter.intersectionPointBetween(segment, ray);
+        if(intersectionPointSolution.hasSolution) {
+          val intersectionPoint = intersectionPointSolution.solution;
+          if(intersectionPoint == segment.p1) segment.p2.y <= point.y - Epsilon;
+          else if(intersectionPoint == segment.p2) segment.p1.y <= point.y - Epsilon;
+          else true;
+        }else false;
+      });
+      (crossedSegmentsCount & 1) == 1;
     }else true;
   }
   

@@ -9,8 +9,8 @@ import scape.scape2d.engine.time.Duration
 import scape.scape2d.engine.time.IoCDeferred
 import scape.scape2d.engine.geom.shape.FiniteShape
 
-class RigidBodyDynamics extends Dynamics {
-  private var _rigidBodies = Set[RigidBody[_ <: FiniteShape]]();
+class RigidBodyDynamics[T >: Null <: FiniteShape] extends Dynamics {
+  private var _rigidBodies = Set[RigidBody[_ <: T]]();
   private var _temporals = Set[Temporal]();
   
   def movables = _rigidBodies;
@@ -18,7 +18,7 @@ class RigidBodyDynamics extends Dynamics {
   def temporals = _temporals;
   
   @IoCDeferred
-  def add(rigidBody:RigidBody[_ <: FiniteShape]):Unit = _rigidBodies += rigidBody;
+  def add(rigidBody:RigidBody[_ <: T]):Unit = _rigidBodies += rigidBody;
   
   @IoCDeferred
   def add(timeDependent:TimeDependent):Unit = _temporals += new Temporal(timeDependent);

@@ -8,8 +8,8 @@ import scape.scape2d.engine.geom.angle.cos
 import scape.scape2d.engine.geom.angle.sin
 import scape.scape2d.engine.motion.collision.CollisionEvent
 import scape.scape2d.engine.motion.positionForTimeOf
-import scape.scape2d.engine.motion.rotational.angularToLinearVelocity
 import scape.scape2d.engine.time.Second
+import scape.scape2d.engine.motion.linear.Velocity
 
 case class MomentumDeltaActionReactionalCollisionForcesResolver() extends ParticleCollisionForcesResolver {
   def resolve(collision:CollisionEvent[Particle]) = {
@@ -49,7 +49,9 @@ case class MomentumDeltaActionReactionalCollisionForcesResolver() extends Partic
   }
   
   private def combineAngularAndLinearVelocitiesOf(particle:Particle) = {
-    if(particle.rotatable.isDefined) particle.velocity + angularToLinearVelocity(particle);
+    val rotatable = particle.rotatable;
+    if(rotatable.isDefined)
+      particle.velocity + rotatable.get.angularVelocity.toLinearVelocity(rotatable.get.center, particle.position);
     else particle.velocity;
   }
 }

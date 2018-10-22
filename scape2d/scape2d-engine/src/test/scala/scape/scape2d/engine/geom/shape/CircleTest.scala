@@ -2,11 +2,13 @@ package scape.scape2d.engine.geom.shape
 
 import org.junit.Assert
 import org.junit.Test
-import scape.scape2d.engine.geom.Epsilon
+
 import scape.scape2d.engine.geom.Components
+import scape.scape2d.engine.geom.Epsilon
 import scape.scape2d.engine.geom.angle.Angle
-import scape.scape2d.engine.geom.angle.UnboundAngle
 import scape.scape2d.engine.geom.angle.Radian
+import scape.scape2d.engine.geom.angle.UnboundAngle
+import scape.scape2d.engine.util.SomeSolution
 
 class CircleTest {
   @Test
@@ -17,6 +19,44 @@ class CircleTest {
   
   @Test
   def testCircleEqual = Assert.assertEquals(Circle(Point(-5, -5), 10), Circle(Point(-5, -5), 10));
+  
+  @Test
+  def testYForXResolutionFromCircleNoSolutions = {
+    val circle = Circle(Point.origin, 3);
+    val solutions = circle forX 4;
+    Assert.assertTrue(solutions.isEmpty);
+  }
+  
+  @Test
+  def testYForXResolutionFromCircleOneSolution = {
+    val circle = Circle(Point(2, 2), 1);
+    Assert.assertEquals(Set(SomeSolution(2d)), circle forX 1);
+  }
+  
+  @Test
+  def testYForXResolutionFromCircleTwoSolutions = {
+    val circle = Circle(Point(2, 2), 2);
+    Assert.assertEquals(Set(SomeSolution(0d), SomeSolution(4d)), circle forX 2);
+  }
+  
+  @Test
+  def testXForYResolutionFromCircleNoSolutions = {
+    val circle = Circle(Point.origin, 3);
+    val solutions = circle forY -4;
+    Assert.assertTrue(solutions.isEmpty);
+  }
+  
+  @Test
+  def testXForYResolutionFromCircleOneSolution = {
+    val circle = Circle(Point(2, 2), 1);
+    Assert.assertEquals(Set(SomeSolution(2)), circle forY 3);
+  }
+  
+  @Test
+  def testXForYResolutionFromCircleTwoSolutions = {
+    val circle = Circle(Point(5, 5), 5);
+    Assert.assertEquals(Set(SomeSolution(1d), SomeSolution(9d)), circle forY 2);
+  }
   
   @Test
   def testAngleResolutionForLength = {

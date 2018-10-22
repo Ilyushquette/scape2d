@@ -24,5 +24,5 @@ case class RigidBodyBuilder[T >: Null <: FiniteShape](
   
   def withAngularVelocity(av:AngularVelocity) = copy(angularVelocity = av);
   
-  def build() = new RigidBody(shape, mass, velocity, angularVelocity);
+  def build() = new RigidBody(RigidBody.nextId, shape, mass, velocity, angularVelocity);
 }
