@@ -167,6 +167,10 @@ object Perimeter {
   def intersectionPointsBetween(polygon:Polygon, line:Line):Set[Solution[Point]] = {
     polygon.segments.map(intersectionPointBetween(_, line)).toSet;
   }
+  
+  def intersectionPointsBetween(polygon:Polygon, ray:Ray):Set[Solution[Point]] = {
+    polygon.segments.map(intersectionPointBetween(_, ray)).toSet;
+  }
 }
 
 case class PointPerimeter(shape:Point) extends FinitePerimeter {
