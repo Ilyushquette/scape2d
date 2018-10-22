@@ -156,6 +156,13 @@ object Perimeter {
       Set(InfiniteSolutions);
     }else Set.empty;
   }
+  
+  def intersectionPointBetween(polygon:Polygon, point:Point):Solution[Point] = {
+    if(polygon.segments.exists(_ intersects point))
+      SomeSolution(point);
+    else
+      NoSolution;
+  }
 }
 
 case class PointPerimeter(shape:Point) extends FinitePerimeter {
