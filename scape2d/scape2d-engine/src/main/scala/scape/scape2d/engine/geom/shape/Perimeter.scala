@@ -17,6 +17,8 @@ import scape.scape2d.engine.util.SomeSolution
 
 sealed trait Perimeter {
   def shape:Shape;
+  
+  def intersectionPointsWith(perimeter:Perimeter):Set[Solution[Point]];
 }
 
 sealed trait FinitePerimeter extends Perimeter {
@@ -187,34 +189,96 @@ object Perimeter {
     ) yield intersectionPointBetween(s1, s2);
     intersectionPoints.toSet;
   }
+  
+  def intersectionPointsBetween(circleSweep:CircleSweep, shape:Shape):Set[Solution[Point]] = {
+    circleSweep.circle.perimeter.intersectionPointsWith(shape.perimeter) ++
+    circleSweep.destinationCircle.perimeter.intersectionPointsWith(shape.perimeter) ++
+    circleSweep.connector._1.perimeter.intersectionPointsWith(shape.perimeter) ++
+    circleSweep.connector._2.perimeter.intersectionPointsWith(shape.perimeter);
+  }
+  
+  def intersectionPointsBetween(ring:Ring, shape:Shape):Set[Solution[Point]] = {
+    ring.outerCircle.perimeter.intersectionPointsWith(shape.perimeter) ++
+    ring.innerCircle.perimeter.intersectionPointsWith(shape.perimeter);
+  }
 }
 
 case class PointPerimeter(shape:Point) extends FinitePerimeter {
   lazy val length = Epsilon * 4;
+  
+  def intersectionPointsWith(perimeter:Perimeter) = perimeter.shape match {
+    case point:Point => Set(Perimeter.intersectionPointBetween(shape, point));
+    case _:Line | _:Ray | _:Segment | _:Circle | _:Polygon | _:CircleSweep | _:Ring =>
+      perimeter intersectionPointsWith this;
+  }
 }
 
 case class LinePerimeter(shape:Line) extends Perimeter {
+  def intersectionPointsWith(perimeter:Perimeter) = perimeter.shape match {
+    case point:Point => Set(Perimeter.intersectionPointBetween(shape, point));
+    case line:Line => Set(Perimeter.intersectionPointBetween(shape, line));
+    case _:Ray | _:Segment | _:Circle | _:Polygon | _:CircleSweep | _:Ring =>
+      perimeter intersectionPointsWith this;
+  }
 }
 
 case class RayPerimeter(shape:Ray) extends Perimeter {
+  def intersectionPointsWith(perimeter:Perimeter) = perimeter.shape match {
+    case point:Point => Set(Perimeter.intersectionPointBetween(shape, point));
+    case line:Line => Set(Perimeter.intersectionPointBetween(shape, line));
+    case ray:Ray => Set(Perimeter.intersectionPointBetween(shape, ray));
+    case _:Segment | _:Circle | _:Polygon | _:CircleSweep | _:Ring =>
+      perimeter intersectionPointsWith this;
+  }
 }
 
 case class SegmentPerimeter(shape:Segment) extends FinitePerimeter {
   lazy val length = shape.p1 distanceTo shape.p2;
+  
+  def intersectionPointsWith(perimeter:Perimeter) = perimeter.shape match {
+    case point:Point => Set(Perimeter.intersectionPointBetween(shape, point));
+    case line:Line => Set(Perimeter.intersectionPointBetween(shape, line));
+    case ray:Ray => Set(Perimeter.intersectionPointBetween(shape, ray));
+    case segment:Segment => Set(Perimeter.intersectionPointBetween(shape, segment));
+    case _:Circle | _:Polygon | _:CircleSweep | _:Ring => perimeter intersectionPointsWith this;
+  }
 }
 
 case class CirclePerimeter(shape:Circle) extends FinitePerimeter {
   lazy val length = 2 * PI * shape.radius;
+  
+  def intersectionPointsWith(perimeter:Perimeter) = perimeter.shape match {
+    case point:Point => Set(Perimeter.intersectionPointBetween(shape, point));
+    case line:Line => Perimeter.intersectionPointsBetween(shape, line);
+    case ray:Ray => Perimeter.intersectionPointsBetween(shape, ray);
+    case segment:Segment => Perimeter.intersectionPointsBetween(shape, segment);
+    case circle:Circle => Perimeter.intersectionPointsBetween(shape, circle);
+    case _:Polygon | _:CircleSweep | _:Ring => perimeter intersectionPointsWith this;
+  }
 }
 
 case class PolygonPerimeter(shape:Polygon) extends FinitePerimeter {
   lazy val length = shape.segments.foldLeft(0d)(_ + _.perimeter.length);
+  
+  def intersectionPointsWith(perimeter:Perimeter) = perimeter.shape match {
+    case point:Point => Set(Perimeter.intersectionPointBetween(shape, point));
+    case line:Line => Perimeter.intersectionPointsBetween(shape, line);
+    case ray:Ray => Perimeter.intersectionPointsBetween(shape, ray);
+    case segment:Segment => Perimeter.intersectionPointsBetween(shape, segment);
+    case circle:Circle => Perimeter.intersectionPointsBetween(shape, circle);
+    case polygon:Polygon => Perimeter.intersectionPointsBetween(shape, polygon);
+    case _:CircleSweep | _:Ring => perimeter intersectionPointsWith this;
+  }
 }
 
 case class CircleSweepPerimeter(shape:CircleSweep) extends FinitePerimeter {
   lazy val length = shape.circle.perimeter.length + shape.sweepVector.magnitude * 2;
+  
+  def intersectionPointsWith(perimeter:Perimeter) = Perimeter.intersectionPointsBetween(shape, perimeter.shape);
 }
 
 case class RingPerimeter(shape:Ring) extends FinitePerimeter {
   lazy val length = shape.outerCircle.perimeter.length + shape.innerCircle.perimeter.length;
+  
+  def intersectionPointsWith(perimeter:Perimeter) = Perimeter.intersectionPointsBetween(shape, perimeter.shape);
 }
