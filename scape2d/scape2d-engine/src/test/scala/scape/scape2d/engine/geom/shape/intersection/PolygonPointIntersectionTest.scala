@@ -1,14 +1,13 @@
 package scape.scape2d.engine.geom.shape.intersection
 
-import org.junit.Test
-import scape.scape2d.engine.geom.shape.Polygon
-import scape.scape2d.engine.geom.shape.Segment
-import scape.scape2d.engine.geom.shape.Point
 import org.junit.Assert
+import org.junit.Test
+
+import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.shape.PolygonBuilder
 
 class PolygonPointIntersectionTest {
-  /**                                 
+  /**
    *         __________
    *        /          \
    *       /            \
@@ -27,7 +26,7 @@ class PolygonPointIntersectionTest {
     Assert.assertFalse(polygon.intersects(point));
   }
   
-  /**                                 
+  /**
    *         __________
    *        /          \
    *       /            \
@@ -80,11 +79,11 @@ class PolygonPointIntersectionTest {
   def testPointOnTheEdgeOfHexagonDoIntersect = {
     val polygon = PolygonBuilder(Point(0, 0), Point(5, 5), Point(10, 5))
                   .to(Point(15, 0)).to(Point(10, 3)).to(Point(5, 3)).build;
-    val point = Point(12, 3);
+    val point = Point(11, 4);
     Assert.assertTrue(polygon.intersects(point));
   }
   
-  /**                                 
+  /**
    *         __________
    *        /          \
    *       /            \
@@ -101,5 +100,47 @@ class PolygonPointIntersectionTest {
                   .to(Point(15, 0)).to(Point(10, 3)).to(Point(5, 3)).build;
     val point = Point(18, 2);
     Assert.assertFalse(polygon.intersects(point));
+  }
+  
+  /**
+   *       /\       o
+   *      /  \
+   *     /    \
+   *    /      \
+   *    \      /
+   *     \    /
+   *      \  /
+   *       \/
+   *   
+   *   /|\- - RHOMBUS
+   *   o - POINT
+   */
+  @Test
+  def testPointOutsideOfRhombusDontIntersect = {
+    val polygon = PolygonBuilder(Point(0, 0), Point(4, 4), Point(8, 0))
+                  .to(Point(4, -4)).build;
+    val point = Point(12, 4);
+    Assert.assertFalse(polygon intersects point);
+  }
+  
+  /**
+   *       /\
+   *      /  \
+   *     /    \
+   *    /   o  \
+   *    \      /
+   *     \    /
+   *      \  /
+   *       \/
+   *   
+   *   /|\- - RHOMBUS
+   *   o - POINT
+   */
+  @Test
+  def testPointInTheMiddleOfRhombusDoIntersect = {
+    val polygon = PolygonBuilder(Point(0, 0), Point(4, 4), Point(8, 0))
+                  .to(Point(4, -4)).build;
+    val point = Point(4, 0);
+    Assert.assertTrue(polygon intersects point);
   }
 }

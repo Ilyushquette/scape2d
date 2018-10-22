@@ -126,11 +126,19 @@ package object intersection {
   }
   
   def testIntersection(polygon:Polygon, point:Point):Boolean = {
-    val onTheVertex = polygon.segments.exists(s => s.p1 == point || s.p2 == point);
-    if(!onTheVertex) {
+    val onTheEdge = polygon.segments.exists(_ intersects point);
+    if(!onTheEdge) {
       val ray = Ray(point, Angle.straight);
-      val intersectedSegments = polygon.segments.filter(_.intersects(ray));
-      (intersectedSegments.size & 1) == 1;
+      val crossedSegmentsCount = polygon.segments.count(segment => {
+        val intersectionPointSolution = Perimeter.intersectionPointBetween(segment, ray);
+        if(intersectionPointSolution.hasSolution) {
+          val intersectionPoint = intersectionPointSolution.solution;
+          if(intersectionPoint == segment.p1) segment.p2.y <= point.y - Epsilon;
+          else if(intersectionPoint == segment.p2) segment.p1.y <= point.y - Epsilon;
+          else true;
+        }else false;
+      });
+      (crossedSegmentsCount & 1) == 1;
     }else true;
   }
   
