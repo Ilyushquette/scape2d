@@ -179,6 +179,14 @@ object Perimeter {
   def intersectionPointsBetween(polygon:Polygon, circle:Circle):Set[Solution[Point]] = {
     polygon.segments.flatMap(intersectionPointsBetween(circle, _)).toSet;
   }
+  
+  def intersectionPointsBetween(p1:Polygon, p2:Polygon):Set[Solution[Point]] = {
+    val intersectionPoints = for(
+      s1 <- p1.segments;
+      s2 <- p2.segments
+    ) yield intersectionPointBetween(s1, s2);
+    intersectionPoints.toSet;
+  }
 }
 
 case class PointPerimeter(shape:Point) extends FinitePerimeter {
