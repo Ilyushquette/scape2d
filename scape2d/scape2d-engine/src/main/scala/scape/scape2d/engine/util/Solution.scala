@@ -1,5 +1,9 @@
 package scape.scape2d.engine.util
 
+object Solution {
+  implicit def solution2Iterable[A](solution:Solution[A]) = solution.toList;
+}
+
 sealed trait Solution[+A] {
   def hasSolution:Boolean;
   
@@ -16,6 +20,8 @@ sealed trait Solution[+A] {
     else if(hasNoSolution) NoSolution;
     else InfiniteSolutions;
   }
+  
+  def toList = if(hasSolution) List(solution) else List.empty;
 }
 
 case class SomeSolution[A](solution:A) extends Solution[A] {
