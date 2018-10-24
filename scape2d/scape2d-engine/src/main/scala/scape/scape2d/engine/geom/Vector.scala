@@ -19,6 +19,8 @@ object Vector {
     Vector(magnitude, Angle.from(components));
   }
   
+  def unit(angle:Angle) = Vector(1, angle);
+  
   implicit def toComponents(vector:Vector) = vector.components;
 }
 

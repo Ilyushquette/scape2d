@@ -27,6 +27,6 @@ case class TorqueImpulseOntoRigidBody[T >: Null <: FiniteShape](
   
   private def directionVector(pointOnBody:Point) = {
     val radialDirection = rigidBody.center angleTo pointOnBody;
-    Vector(1, radialDirection + Angle.right);
+    Vector.unit(radialDirection + Angle.right);
   }
 }

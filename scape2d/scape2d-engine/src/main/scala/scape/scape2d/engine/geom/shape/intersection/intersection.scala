@@ -99,7 +99,7 @@ package object intersection {
   def testIntersection(circle:Circle, ray:Ray):Boolean = {
     if(!circle.intersects(ray.origin)) {
       val sc = circle.center - ray.origin;
-      val rayUnitVector = Vector(1, ray.angle);
+      val rayUnitVector = Vector.unit(ray.angle);
       val projectionVector = sc.projection(rayUnitVector);
       if(projectionVector.angle == ray.angle) {
         val nearestPoint = ray.origin + projectionVector;
