@@ -351,7 +351,7 @@ object CustomPolygon {
 
 case class CustomPolygon private[shape] (segments:List[Segment], center:Point, area:Double) extends Polygon {
   override def equals(any:Any) = any match {
-    case polygon:Polygon => segments == polygon.segments;
+    case polygon:Polygon => segments.toSet == polygon.segments.toSet;
     case _ => false;
   }
   
@@ -466,6 +466,7 @@ case class AxisAlignedRectangle(bottomLeft:Point, width:Double, height:Double) e
     case AxisAlignedRectangle(obottomLeft, owidth, oheight) => bottomLeft == obottomLeft &&
                                                                fuzzyEquals(width, owidth, Epsilon) &&
                                                                fuzzyEquals(height, oheight, Epsilon);
+    case polygon:Polygon => this.polygon == polygon;
     case _ => false;
   }
   

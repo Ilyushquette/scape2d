@@ -21,4 +21,6 @@ trait Movable[T <: Shape] extends Locable with Formed[T] with Volatile {
   def isRotating = rotatable.map(_.angularVelocity != AngularVelocity.zero).getOrElse(false);
   
   def isStationary = !isMovingLinearly && !isRotating;
+  
+  def snapshot:Movable[T];
 }

@@ -22,7 +22,7 @@ object Combination2 {
   }
 }
 
-case class Combination2[T1, T2](_1:T1, _2:T2) {
+case class Combination2[+T1, +T2](_1:T1, _2:T2) {
   lazy val reversed = Combination2(_2, _1);
   
   override def hashCode = _1.hashCode + _2.hashCode;

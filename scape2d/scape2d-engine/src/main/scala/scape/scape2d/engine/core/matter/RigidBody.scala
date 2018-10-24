@@ -29,10 +29,10 @@ object RigidBody {
  */
 class RigidBody[T >: Null <: FiniteShape] private[matter](
   val id:Int,
-  var _shape:T,
+  private var _shape:T,
   val mass:Mass,
-  var _velocity:Velocity,
-  var _angularVelocity:AngularVelocity
+  private var _velocity:Velocity,
+  private var _angularVelocity:AngularVelocity
 ) extends Movable[T] with Rotatable with Identifiable {
   lazy val density = Density(mass, shape.area);
   
