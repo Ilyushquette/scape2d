@@ -3,22 +3,27 @@ package scape.scape2d.engine.core.dynamics.soft.linear
 import scape.scape2d.engine.core.dynamics.Dynamics
 import scape.scape2d.engine.core.dynamics.soft.ParticleCollisionResolver
 import scape.scape2d.engine.core.matter.Particle
-import scape.scape2d.engine.motion.collision.detection.linear.BruteForceLinearMotionCollisionDetector
-import scape.scape2d.engine.motion.collision.detection.linear.LinearMotionCollisionDetector
+import scape.scape2d.engine.motion.collision.CollisionEvent
+import scape.scape2d.engine.motion.collision.detection.broad.BruteForceContinuousBroadPhaseCollisionDetectionStrategy
+import scape.scape2d.engine.motion.collision.detection.broad.ContinuousBroadPhaseCollisionDetectionStrategy
+import scape.scape2d.engine.motion.collision.detection.linear.LinearMotionCollisionDetectionStrategy
 import scape.scape2d.engine.motion.collision.detection.linear.QuadraticLinearMotionCollisionDetectionStrategy
 import scape.scape2d.engine.time.Duration
+import scape.scape2d.engine.util.Combination2
 
 case class ContinuousDetectionCollidingLinearSoftBodyDynamics(
-  collisionDetector:LinearMotionCollisionDetector[Particle] = BruteForceLinearMotionCollisionDetector(
-      detectionStrategy = QuadraticLinearMotionCollisionDetectionStrategy()
-  ),
+  broadPhaseDetectionStrategy:ContinuousBroadPhaseCollisionDetectionStrategy[Particle] =
+    BruteForceContinuousBroadPhaseCollisionDetectionStrategy(),
+  detectionStrategy:LinearMotionCollisionDetectionStrategy[Particle] =
+    QuadraticLinearMotionCollisionDetectionStrategy(),
   collisionResolver:ParticleCollisionResolver = ParticleCollisionResolver(),
   linearSoftBodyDynamics:LinearSoftBodyDynamics = new LinearSoftBodyDynamics()
 ) extends Dynamics {
   def movables = linearSoftBodyDynamics.movables;
   
   def integrate(timestep:Duration) = {
-    val collisions = collisionDetector.detect(linearSoftBodyDynamics.movables, timestep);
+    val suspectedCollidingParticles = broadPhaseDetectionStrategy.prune(movables, timestep);
+    val collisions = suspectedCollidingParticles.flatMap(detectCollision(_, timestep));
     if(!collisions.isEmpty) {
       val earliestCollision = collisions.minBy(_.time);
       if(earliestCollision.time > Duration.zero)
@@ -28,5 +33,10 @@ case class ContinuousDetectionCollidingLinearSoftBodyDynamics(
       if(remainingTime > Duration.zero)
         integrate(remainingTime);
     }else linearSoftBodyDynamics.integrate(timestep);
+  }
+  
+  private def detectCollision(particles:Combination2[Particle, Particle], timestep:Duration) = {
+    val detection = detectionStrategy.detect(particles._1, particles._2, timestep);
+    detection.map(CollisionEvent(particles, _));
   }
 }

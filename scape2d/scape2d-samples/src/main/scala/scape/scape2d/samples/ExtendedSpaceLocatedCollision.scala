@@ -8,7 +8,6 @@ import javax.swing.JFrame
 import javax.swing.JLayeredPane
 import javax.swing.JPanel
 import scape.scape2d.debugger.ParticleDebugger
-import scape.scape2d.debugger.TreeLinearMotionCollisionDetectorDebugger
 import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
 import scape.scape2d.debugger.view.ShapeDrawingTreeNodesView
 import scape.scape2d.debugger.view.swing.SwingBuffer
@@ -29,7 +28,6 @@ import scape.scape2d.engine.mass.Kilogram
 import scape.scape2d.engine.mass.MassUnit.toMass
 import scape.scape2d.engine.mass.doubleToMass
 import scape.scape2d.engine.motion.collision.detection.linear.QuadraticLinearMotionCollisionDetectionStrategy
-import scape.scape2d.engine.motion.collision.detection.linear.TreeLinearMotionCollisionDetector
 import scape.scape2d.engine.motion.linear.LinearSweepFormingMovable
 import scape.scape2d.engine.motion.linear.Velocity
 import scape.scape2d.engine.process.simulation.Simulation
@@ -42,17 +40,19 @@ import scape.scape2d.graphics.rasterizer.cache.CachingRasterizers
 import scape.scape2d.graphics.rasterizer.recursive.MidpointCircleRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.NaiveSegmentRasterizer
 import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
+import scape.scape2d.engine.motion.MotionBounds
+import scape.scape2d.engine.motion.collision.detection.broad.TreeContinuousBroadPhaseCollisionDetectionStrategy
+import scape.scape2d.debugger.TreeBroadPhaseCollisionDetectionDebugger
 
 object ExtendedSpaceLocatedCollision {
   def main(args:Array[String]):Unit = {
     val bounds = AxisAlignedRectangle(Point(0, 0), 22.32, 13.36);
-    val detectionStrategy = QuadraticLinearMotionCollisionDetectionStrategy[Particle]();
     val treeFactory = () => new ExpandedTree(
-        coreNode = new QuadTree[LinearSweepFormingMovable[Particle]](bounds, 4),
+        coreNode = new QuadTree[MotionBounds[Particle]](bounds, 4),
         expansion = 5
     );
-    val collisionDetector = TreeLinearMotionCollisionDetector[Particle](treeFactory, detectionStrategy);
-    val dynamics = ContinuousDetectionCollidingLinearSoftBodyDynamics(collisionDetector);
+    val broadPhaseDetectionStrategy = new TreeContinuousBroadPhaseCollisionDetectionStrategy(treeFactory);
+    val dynamics = ContinuousDetectionCollidingLinearSoftBodyDynamics(broadPhaseDetectionStrategy);
     val simulation = new Simulation(dynamics);
     val simulationThread = new Thread(simulation);
     val trackedMetalParticles = prepareTrackedMetalParticles();
@@ -61,8 +61,8 @@ object ExtendedSpaceLocatedCollision {
     
     val quadTreeNodesDrawer = prepareShapeDrawer();
     val quadTreeNodesView = new ShapeDrawingTreeNodesView(quadTreeNodesDrawer);
-    val collisionDetectorDebugger = new TreeLinearMotionCollisionDetectorDebugger(quadTreeNodesView);
-    collisionDetectorDebugger.trackNodes(collisionDetector);
+    val broadPhaseDetectionDebugger = TreeBroadPhaseCollisionDetectionDebugger(quadTreeNodesView);
+    broadPhaseDetectionDebugger.trackNodes(broadPhaseDetectionStrategy);
     
     val particlesDrawer = prepareShapeDrawer();
     val particleTrackingView = new ShapeDrawingParticleTrackingView(particlesDrawer);
