@@ -18,6 +18,7 @@ import scape.scape2d.engine.motion.collision.Contact
 import scape.scape2d.engine.motion.collision.ContactContainer
 import scape.scape2d.engine.motion.linear.Velocity
 import scape.scape2d.engine.motion.rotational.AngularVelocity
+import scape.scape2d.engine.motion.shapeForTimeOf
 import scape.scape2d.engine.time.Duration
 import scape.scape2d.engine.time.Millisecond
 import scape.scape2d.engine.time.Second
@@ -37,6 +38,8 @@ class BinarySearchDiscreteConvexesContactDetectionStrategyTest {
         velocity = Vector(10, Angle.right) / Second,
         angularVelocity = Angle.full / Second
     );
+    movable1.shape = shapeForTimeOf(movable1)(Second);
+    movable2.shape = shapeForTimeOf(movable2)(Second);
     val detection = detectionStrategy.detect(movable1, movable2, Second);
     Assert.assertTrue(detection.isEmpty);
   }
@@ -54,6 +57,8 @@ class BinarySearchDiscreteConvexesContactDetectionStrategyTest {
         velocity = Vector.from(Components(-2, -2)) / Second,
         angularVelocity = AngularVelocity.zero
     );
+    movable.shape = shapeForTimeOf(movable)(Second);
+    stationary.shape = shapeForTimeOf(stationary)(Second);
     val detection = detectionStrategy.detect(movable, stationary, Second);
     val expectedDetection = ContactContainer(
         shape1 = AxisAlignedRectangle(Point.origin, 4, 4),
@@ -77,6 +82,8 @@ class BinarySearchDiscreteConvexesContactDetectionStrategyTest {
         velocity = Velocity.zero,
         angularVelocity = Angle.straight / Second
     );
+    movableRhombus.shape = shapeForTimeOf(movableRhombus)(Second);
+    rotatingRhombus.shape = shapeForTimeOf(rotatingRhombus)(Second);
     val detection = detectionStrategy.detect(movableRhombus, rotatingRhombus, Second);
     val expectedDetection = ContactContainer(
         shape1 = ConvexPolygonBuilder(Point(0, 7), Point(3, 10), Point(6, 7)).to(Point(3, 4)).build(),
@@ -100,6 +107,8 @@ class BinarySearchDiscreteConvexesContactDetectionStrategyTest {
         velocity = Velocity.zero,
         angularVelocity = Angle.full / Second
     );
+    movingRectangle.shape = shapeForTimeOf(movingRectangle)(Second);
+    rotatingRectangle.shape = shapeForTimeOf(rotatingRectangle)(Second);
     val detection = detectionStrategy.detect(movingRectangle, rotatingRectangle, Second);
     val expectedDetection = ContactContainer(
         shape1 = AxisAlignedRectangle(Point(2, 1), 2, 2),

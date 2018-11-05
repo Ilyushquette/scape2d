@@ -24,7 +24,7 @@ import scape.scape2d.engine.geom.shape.ShapeUnitConverter
 import scape.scape2d.engine.mass.Kilogram
 import scape.scape2d.engine.mass.Mass
 import scape.scape2d.engine.motion.collision.detection.BinarySearchDiscreteConvexesContactDetectionStrategy
-import scape.scape2d.engine.motion.collision.detection.BruteForcePosterioriRichCollisionDetector
+import scape.scape2d.engine.motion.collision.detection.broad.BruteForceDiscreteBroadPhaseCollisionDetectionStrategy
 import scape.scape2d.engine.motion.collision.resolution.RestitutionalActionReactionalCollisionForcesResolver
 import scape.scape2d.engine.process.simulation.Simulation
 import scape.scape2d.engine.time.Second
@@ -36,9 +36,8 @@ import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
 object PolygonRigidBodiesDiagonalCollision {
   def main(args:Array[String]) = {
     val dynamics = DiscreteDetectionCollidingRigidBodyDynamics[ConvexShape](
-      collisionDetector = BruteForcePosterioriRichCollisionDetector(
-        detectionStrategy = BinarySearchDiscreteConvexesContactDetectionStrategy()
-      ),
+      broadPhaseCollisionDetectionStrategy = BruteForceDiscreteBroadPhaseCollisionDetectionStrategy(),
+      contactDetectionStrategy = BinarySearchDiscreteConvexesContactDetectionStrategy(),
       collisionForcesResolver = RestitutionalActionReactionalCollisionForcesResolver(),
       rigidBodyDynamics = new RigidBodyDynamics()
     );

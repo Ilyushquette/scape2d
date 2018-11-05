@@ -14,10 +14,8 @@ import scape.scape2d.engine.time.Duration
 case class BinarySearchDiscreteConvexesContactDetectionStrategy()
 extends DiscreteContactDetectionStrategy[ConvexShape] {
   def detect(movable1:Movable[_ <: ConvexShape], movable2:Movable[_ <: ConvexShape], timestep:Duration) = {
-    val shape1ForTime = shapeForTimeOf(movable1);
-    val shape2ForTime = shapeForTimeOf(movable2);
-    val shape1 = shape1ForTime(timestep);
-    val shape2 = shape2ForTime(timestep);
+    val shape1 = movable1.shape;
+    val shape2 = movable2.shape;
     if(!shape2.contains(shape1.center)) {
       val intersectionPointSolutions = shape1.perimeter intersectionPointsWith shape2.perimeter;
       val intersectionPoints = intersectionPointSolutions.flatten.toList;
@@ -26,7 +24,10 @@ extends DiscreteContactDetectionStrategy[ConvexShape] {
         val contact = makeContact(shape1, pointsCloserToShape1(0), pointsCloserToShape1(1));
         Some(ContactContainer(shape1, shape2, List(contact), timestep));
       }else None;
-    }else Some(binarySearchContact(shape1ForTime, shape2ForTime, Duration.zero, timestep));
+    }else{
+      val contact = binarySearchContact(shapeForTimeOf(movable1), shapeForTimeOf(movable2), Duration.zero, timestep);
+      Some(contact.copy(time = contact.time + timestep));
+    }
   }
   
   private def binarySearchContact(shape1ForTime:Duration => ConvexShape,
@@ -34,7 +35,7 @@ extends DiscreteContactDetectionStrategy[ConvexShape] {
                                   offset:Duration,
                                   timestep:Duration):ContactContainer = {
     val halvedTimestep = timestep / 2;
-    val targetTime = offset + halvedTimestep;
+    val targetTime = offset - halvedTimestep;
     val shape1 = shape1ForTime(targetTime);
     val shape2 = shape2ForTime(targetTime);
     if(!shape2.contains(shape1.center)) {
@@ -44,8 +45,8 @@ extends DiscreteContactDetectionStrategy[ConvexShape] {
         val pointsCloserToShape1 = intersectionPoints.sortBy(_ distanceTo shape1.center);
         val contact = makeContact(shape1, pointsCloserToShape1(0), pointsCloserToShape1(1));
         ContactContainer(shape1, shape2, List(contact), targetTime);
-      }else binarySearchContact(shape1ForTime, shape2ForTime, targetTime, halvedTimestep);
-    }else binarySearchContact(shape1ForTime, shape2ForTime, offset, halvedTimestep);
+      }else binarySearchContact(shape1ForTime, shape2ForTime, offset, halvedTimestep);
+    }else binarySearchContact(shape1ForTime, shape2ForTime, targetTime, halvedTimestep);
   }
   
   private def makeContact(shape1:ConvexShape, intersectionPoint1:Point, intersectionPoint2:Point) = {
