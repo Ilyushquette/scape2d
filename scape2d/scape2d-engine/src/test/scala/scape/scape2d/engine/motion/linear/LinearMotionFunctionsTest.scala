@@ -33,6 +33,12 @@ class LinearMotionFunctionsTest {
   }
   
   @Test
+  def testLinearDisplacementNegativeDuration = {
+    val movableMock = new MovableMock(Point(3, 5), Vector.from(Components(5, 5)) / Second, None);
+    Assert.assertEquals(Vector.from(Components(-2.5, -2.5)), displacementForTimeOf(movableMock)(Duration(-500, Millisecond)));
+  }
+  
+  @Test
   def testPostLinearMotionPositionZeroDisplacement = {
     val movableMock = new MovableMock(Point(3, 5), Velocity.zero, None);
     Assert.assertEquals(Point(3, 5), positionForTimeOf(movableMock)(Duration(100, Millisecond)));
@@ -45,11 +51,20 @@ class LinearMotionFunctionsTest {
   }
   
   @Test
+  def testPostLinearMotionPositionNegativeDuration = {
+    val movableMock = new MovableMock(Point.origin, Vector.from(Components(0, 6)) / Second, None);
+    Assert.assertEquals(Point(0, -12), positionForTimeOf(movableMock)(Duration(-2, Second)));
+  }
+  
+  @Test
   def testPostLinearMotionShape = {
-    val movableMock = mock(classOf[Movable[Circle]]);
-    when(movableMock.shape).thenReturn(Circle(Point.origin, 2));
-    when(movableMock.velocity).thenReturn(Vector.from(Components(-10, 10)) / Second);
-    when(movableMock.isMovingLinearly).thenReturn(true);
+    val movableMock = new MovableMock(Circle(Point.origin, 2), Vector.from(Components(-10, 10)) / Second, None);
     Assert.assertEquals(Circle(Point(-5, 5), 2), displacedShapeForTimeOf(movableMock)(Duration(500, Millisecond)));
+  }
+  
+  @Test
+  def testPostLinearMotionShapeNegativeDuration = {
+    val movableMock = new MovableMock(Circle(Point(-3, 3), 2), Vector.from(Components(-6, 6)) / Second, None);
+    Assert.assertEquals(Circle(Point.origin, 2), displacedShapeForTimeOf(movableMock)(Duration(-500, Millisecond)));
   }
 }

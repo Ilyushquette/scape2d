@@ -14,7 +14,7 @@ package object motion {
     val position = movable.position;
     val rotatedPositionForTime = rotatedPositionForTimeOf(movable);
     val linearDisplacementForTime = displacementForTimeOf(movable);
-    t => if(t > Duration.zero) rotatedPositionForTime(t) + linearDisplacementForTime(t);
+    t => if(t != Duration.zero) rotatedPositionForTime(t) + linearDisplacementForTime(t);
          else position;
   }
   

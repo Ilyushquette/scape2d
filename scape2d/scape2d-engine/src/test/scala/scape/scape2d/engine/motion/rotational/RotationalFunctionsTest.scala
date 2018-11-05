@@ -62,6 +62,13 @@ class RotationalFunctionsTest {
   }
   
   @Test
+  def testAngularDisplacementNegativeDuration = {
+    val movableMock = new MovableMock(Point(4, 4), Vector(35, 90(Degree)) / Second, None);
+    val rotatableMock = new RotatableMock(Point.origin, Angle.right / Second, Set(movableMock));
+    Assert.assertEquals(UnboundAngle(-90, Degree), angularDisplacementForTimeOf(movableMock)(Duration(-1, Second)));
+  }
+  
+  @Test
   def testPostRotationPositionWithoutRotatable = {
     val movableMock = mock(classOf[Movable[_ <: Shape]]);
     when(movableMock.position).thenReturn(Point(4, 4));
@@ -98,6 +105,15 @@ class RotationalFunctionsTest {
     
     val postRotationPosition = positionForTimeOf(movableMock)(Second);
     Assert.assertEquals(Point(0.7071067811, -0.7071067811), postRotationPosition);
+  }
+  
+  @Test
+  def testPostRotationPositionNegativeDuration = {
+    val movableMock = new MovableMock(Point(1, 0), Velocity.zero, None);
+    val rotatableMock = new RotatableMock(Point.origin, UnboundAngle(-45, Degree) / Second, Set(movableMock));
+    
+    val postRotationPosition = positionForTimeOf(movableMock)(Duration(-6, Second));
+    Assert.assertEquals(Point(0, -1), postRotationPosition);
   }
   
   @Test
@@ -148,6 +164,21 @@ class RotationalFunctionsTest {
     val rotatedSegment = rotatedShapeForTimeOf(movableMock)(Duration(3, Second));
     val expectedSegment = Segment(Point(-1, 0), Point(1, 0));
     Assert.assertEquals(expectedSegment, rotatedSegment);
+  }
+  
+  @Test
+  def testPostRotationShapeNegativeDuration = {
+    val movableMock = mock(classOf[Movable[Segment]]);
+    when(movableMock.shape).thenReturn(Segment(Point(0, 1), Point(0, -1)));
+    when(movableMock.isRotating).thenReturn(true);
+    val rotatableMock = mock(classOf[Rotatable]);
+    when(rotatableMock.center).thenReturn(Point.origin);
+    when(rotatableMock.angularVelocity).thenReturn(UnboundAngle(45, Degree) / Second);
+    when(movableMock.rotatable).thenReturn(Some(rotatableMock));
+    
+    val rotatedSegment = rotatedShapeForTimeOf(movableMock)(Duration(-3, Second));
+    val expectedSegment = Segment(Point(0.7071067811, -0.7071067811), Point(-0.7071067811, 0.7071067811));
+    Assert.assertEquals(rotatedSegment, expectedSegment);
   }
   
   @Test

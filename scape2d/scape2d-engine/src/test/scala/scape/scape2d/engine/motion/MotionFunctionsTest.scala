@@ -21,6 +21,7 @@ import scape.scape2d.engine.geom.angle.UnboundAngle
 import scape.scape2d.engine.geom.shape.AxisAlignedRectangle
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.geom.shape.PolygonBuilder
+import scape.scape2d.engine.geom.shape.Segment
 import scape.scape2d.engine.time.Duration
 import scape.scape2d.engine.time.Millisecond
 import scape.scape2d.engine.time.Second
@@ -34,6 +35,13 @@ class MotionFunctionsTest {
     val movable = new MovableMock(Point(-1, 0), Vector.from(Components(3, 1)) / Second, None);
     val rotatable = new RotatableMock(Point.origin, UnboundAngle(-PI, Radian) / Second, Set(movable));
     Assert.assertEquals(Point(4, 1), positionForTimeOf(movable)(Second));
+  }
+  
+  @Test
+  def testPositionForNegativeTime = {
+    val movable = new MovableMock(Point(0, -1), Vector.from(Components(-6, 0)) / Second, None);
+    val rotatable = new RotatableMock(Point.origin, UnboundAngle(-PI, Radian) / Second, Set(movable));
+    Assert.assertEquals(Point(4, 0), positionForTimeOf(movable)(Duration(-500, Millisecond)));
   }
   
   /**
@@ -58,6 +66,22 @@ class MotionFunctionsTest {
                                          Point(12.7243730865, -0.0480110663))
                                         .to(Point(8.9201470213, -1.2840790438)).build;
     Assert.assertEquals(expectedPolygon, movedPolygon);
+  }
+  
+  @Test
+  def testShapeForNegativeTime = {
+    val movableMock = mock(classOf[Movable[Segment]]);
+    when(movableMock.shape).thenReturn(Segment(Point(-1, 0), Point(3, 0)));
+    when(movableMock.velocity).thenReturn(Vector(5, Angle.right) / Second);
+    when(movableMock.isMovingLinearly).thenReturn(true);
+    when(movableMock.isRotating).thenReturn(true);
+    val rotatableMock = mock(classOf[Rotatable]);
+    when(rotatableMock.center).thenReturn(Point.origin);
+    when(rotatableMock.angularVelocity).thenReturn(UnboundAngle(-PI, Radian) / Second);
+    when(movableMock.rotatable).thenReturn(Some(rotatableMock));
+    
+    val movedSegment = shapeForTimeOf(movableMock)(Duration(-500, Millisecond));
+    Assert.assertEquals(Segment(Point(0, -3.5), Point(0, 0.5)), movedSegment);
   }
   
   @Test
