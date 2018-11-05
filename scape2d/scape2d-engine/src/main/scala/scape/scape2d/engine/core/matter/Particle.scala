@@ -99,12 +99,12 @@ extends Movable[Circle] with Identifiable {
     snapshot;
   }
   
-  private def snapshotExcludingBonds:Particle = snapshotExcludingBonds();
+  def snapshotExcludingBonds:Particle = snapshotExcludingBonds();
   
-  private def snapshotExcludingBonds(shape:Circle = this.shape,
-                                     mass:Mass = this.mass,
-                                     velocity:Velocity = this.velocity,
-                                     force:Vector = this.force):Particle = {
+  def snapshotExcludingBonds(shape:Circle = this.shape,
+                             mass:Mass = this.mass,
+                             velocity:Velocity = this.velocity,
+                             force:Vector = this.force):Particle = {
     new Particle(id, shape, mass, velocity, force);
   }
 }
