@@ -10,7 +10,6 @@ import scape.scape2d.debugger.ParticleDebugger
 import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
 import scape.scape2d.debugger.view.swing.SwingBuffer
 import scape.scape2d.debugger.view.swing.SwingMixingRastersShapeDrawer
-import scape.scape2d.engine.core.MovablePhantom
 import scape.scape2d.engine.core.MovableTrackerProxy
 import scape.scape2d.engine.core.dynamics.soft.DiscreteDetectionCollidingSoftBodyDynamics
 import scape.scape2d.engine.core.dynamics.soft.ParticleGravityResolver
@@ -33,11 +32,10 @@ import scape.scape2d.engine.gravity.PlanetaryNetGravitationalForcesResolver
 import scape.scape2d.engine.mass.Kilogram
 import scape.scape2d.engine.mass.MassUnit.toMass
 import scape.scape2d.engine.mass.doubleToMass
-import scape.scape2d.engine.motion.collision.detection.TreePosterioriCollisionDetector
+import scape.scape2d.engine.motion.collision.detection.broad.TreeDiscreteBroadPhaseCollisionDetectionStrategy
 import scape.scape2d.engine.process.simulation.Simulation
 import scape.scape2d.engine.process.simulation.Timescale
 import scape.scape2d.engine.time.Frequency
-import scape.scape2d.engine.time.IoCDeferred
 import scape.scape2d.engine.time.Second
 import scape.scape2d.engine.time.TimeUnit.toDuration
 import scape.scape2d.engine.util.Proxy.autoEnhance
@@ -56,7 +54,7 @@ object EarthRectangularBodyGravitation {
     val particleGravityResolver = createEarthParticleGravityResolver(earth);
     val softBodyDynamics = new SoftBodyDynamics(particleGravityResolver);
     val dynamics = DiscreteDetectionCollidingSoftBodyDynamics(
-        collisionDetector = createExpandedTreePosterioriCollisionDetector(),
+        broadPhaseCollisionDetectionStrategy = createExpandedTreeDiscreteBroadPhaseCollisionDetectionStrategy(),
         softBodyDynamics = softBodyDynamics
     );
     val simulation = new Simulation(dynamics, Timescale(Frequency(240, Second)));
@@ -81,12 +79,12 @@ object EarthRectangularBodyGravitation {
     simulationThread.start();
   }
   
-  private def createExpandedTreePosterioriCollisionDetector() = {
-    val treeFactory = () => new ExpandedTree[MovablePhantom[Particle]](
+  private def createExpandedTreeDiscreteBroadPhaseCollisionDetectionStrategy() = {
+    val treeFactory = () => new ExpandedTree[Particle](
         coreNode = new QuadTree(AxisAlignedRectangle(Point(0, 0), 27.32, 15.36), 4),
         expansion = 50000000
     );
-    TreePosterioriCollisionDetector(treeFactory);
+    new TreeDiscreteBroadPhaseCollisionDetectionStrategy(treeFactory);
   }
   
   private def createEarthParticleGravityResolver(earth:Particle) = {

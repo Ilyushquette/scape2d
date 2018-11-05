@@ -9,12 +9,11 @@ import javax.swing.JLayeredPane
 import javax.swing.JPanel
 import scape.scape2d.debugger.BodyDebugger
 import scape.scape2d.debugger.ParticleDebugger
-import scape.scape2d.debugger.TreePosterioriCollisionDetectorDebugger
+import scape.scape2d.debugger.TreeBroadPhaseCollisionDetectionDebugger
 import scape.scape2d.debugger.view.ShapeDrawingParticleTrackingView
 import scape.scape2d.debugger.view.ShapeDrawingTreeNodesView
 import scape.scape2d.debugger.view.swing.SwingBuffer
 import scape.scape2d.debugger.view.swing.SwingMixingRastersShapeDrawer
-import scape.scape2d.engine.core.MovablePhantom
 import scape.scape2d.engine.core.MovableTrackerProxy
 import scape.scape2d.engine.core.dynamics.soft.DiscreteDetectionCollidingSoftBodyDynamics
 import scape.scape2d.engine.core.matter.BodyBuilder
@@ -35,7 +34,7 @@ import scape.scape2d.engine.geom.shape.ShapeUnitConverter
 import scape.scape2d.engine.mass.Kilogram
 import scape.scape2d.engine.mass.MassUnit.toMass
 import scape.scape2d.engine.mass.doubleToMass
-import scape.scape2d.engine.motion.collision.detection.TreePosterioriCollisionDetector
+import scape.scape2d.engine.motion.collision.detection.broad.TreeDiscreteBroadPhaseCollisionDetectionStrategy
 import scape.scape2d.engine.process.simulation.Simulation
 import scape.scape2d.engine.process.simulation.Timescale
 import scape.scape2d.engine.time.Frequency
@@ -50,9 +49,9 @@ import scape.scape2d.graphics.rasterizer.recursive.RecursiveRasterizer
 object RectangularBodiesDiagonalCollision {
   def main(args:Array[String]):Unit = {
     val bounds = AxisAlignedRectangle(Point(0, 0), 27.32, 15.36);
-    val treeFactory = () => new QuadTree[MovablePhantom[Particle]](bounds, 4);
-    val collisionDetector = TreePosterioriCollisionDetector(treeFactory);
-    val dynamics = DiscreteDetectionCollidingSoftBodyDynamics(collisionDetector);
+    val treeFactory = () => new QuadTree[Particle](bounds, 4);
+    val broadPhaseCollisionDetectionStrategy = new TreeDiscreteBroadPhaseCollisionDetectionStrategy(treeFactory);
+    val dynamics = DiscreteDetectionCollidingSoftBodyDynamics(broadPhaseCollisionDetectionStrategy);
     val simulation = new Simulation(dynamics, Timescale(Frequency(120, Second)));
     val simulationThread = new Thread(simulation);
     
@@ -61,9 +60,9 @@ object RectangularBodiesDiagonalCollision {
     val bodyDebugger = new BodyDebugger(particleDebugger);
     
     val quadTreeNodesDrawer = createShapeDrawer();
-    val shapeDrawingQuadTreeNodesView = new ShapeDrawingTreeNodesView(quadTreeNodesDrawer); 
-    val collisionDetectorDebugger = new TreePosterioriCollisionDetectorDebugger(shapeDrawingQuadTreeNodesView);
-    collisionDetectorDebugger.trackNodes(collisionDetector);
+    val shapeDrawingQuadTreeNodesView = new ShapeDrawingTreeNodesView(quadTreeNodesDrawer);
+    val broadPhaseDetectionDebugger = TreeBroadPhaseCollisionDetectionDebugger(shapeDrawingQuadTreeNodesView);
+    broadPhaseDetectionDebugger.trackNodes(broadPhaseCollisionDetectionStrategy);
     
     val body1 = RectangularBodyBuilder()
                 .withBodyBuilder(BodyBuilder()
