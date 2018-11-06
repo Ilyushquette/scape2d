@@ -35,7 +35,10 @@ case class ContinuousDetectionCollidingSoftBodyDynamics(
   }
   
   private def detectCollision(particles:Combination2[Particle, Particle], timestep:Duration) = {
-    val detection = detectionStrategy.detect(particles._1, particles._2, timestep);
-    detection.map(CollisionEvent(particles, _));
+    val constituteSameBody = particles._1.rotatable.isDefined && particles._1.rotatable == particles._2.rotatable;
+    if(!constituteSameBody) {
+      val detection = detectionStrategy.detect(particles._1, particles._2, timestep);
+      detection.map(CollisionEvent(particles, _));
+    }else None;
   }
 }

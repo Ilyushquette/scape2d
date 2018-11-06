@@ -41,9 +41,10 @@ case class DiscreteDetectionCollidingSoftBodyDynamics(
   }
   
   private def detectCollision(particles:Map[Int, Particle], phantomParticles:Combination2[Particle, Particle], timestep:Duration) = {
-    if(phantomParticles._1.shape intersects phantomParticles._2.shape) {
-      val particle1 = particles.get(phantomParticles._1.id);
-      val particle2 = particles.get(phantomParticles._2.id);
+    val particle1 = particles.get(phantomParticles._1.id);
+    val particle2 = particles.get(phantomParticles._2.id);
+    val constituteSameBody = particle1.rotatable.isDefined && particle1.rotatable == particle2.rotatable;
+    if(!constituteSameBody && phantomParticles._1.shape.intersects(phantomParticles._2.shape)) {
       Some(CollisionEvent(particle1, particle2, timestep));
     }else None;
   }
