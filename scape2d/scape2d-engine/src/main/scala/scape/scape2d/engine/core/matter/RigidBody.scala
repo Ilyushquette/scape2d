@@ -15,6 +15,7 @@ import scape.scape2d.engine.mass.MassUnit.toMass
 import scape.scape2d.engine.mass.angular.MomentOfInertia
 import scape.scape2d.engine.motion.linear.Velocity
 import scape.scape2d.engine.motion.rotational.AngularVelocity
+import scape.scape2d.engine.core.Matter
 
 object RigidBody {
   private val idGenerator = new AtomicInteger(1);
@@ -33,7 +34,7 @@ class RigidBody[T >: Null <: FiniteShape] private[matter](
   val mass:Mass,
   private var _velocity:Velocity,
   private var _angularVelocity:AngularVelocity
-) extends Movable[T] with Rotatable with Identifiable {
+) extends Matter[T] with Rotatable with Identifiable {
   lazy val density = Density(mass, shape.area);
   
   // this package private default constructor exists only for cglib proxy support

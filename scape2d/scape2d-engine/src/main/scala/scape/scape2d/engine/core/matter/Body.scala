@@ -24,7 +24,7 @@ class Body private[matter] (
   
   private[core] def resetTorque() = _torque = 0;
   
-  def momentsOfInertia = movables.foldLeft(MomentOfInertia.zero)(_ + _.momentOfInertia.get);
+  def momentsOfInertia = movables.foldLeft(MomentOfInertia.zero)(_ + _.momentOfInertia);
   
   def snapshot = snapshot();
   

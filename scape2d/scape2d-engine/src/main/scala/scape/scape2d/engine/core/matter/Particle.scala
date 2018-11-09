@@ -3,7 +3,7 @@ package scape.scape2d.engine.core.matter
 import java.util.concurrent.atomic.AtomicInteger
 
 import scape.scape2d.engine.core.Identifiable
-import scape.scape2d.engine.core.Movable
+import scape.scape2d.engine.core.Matter
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
@@ -30,7 +30,7 @@ class Particle private[matter] (
   private var _velocity:Velocity,
   private var _force:Vector,
   private var _bonds:Set[Bond] = Set.empty)
-extends Movable[Circle] with Identifiable {
+extends Matter[Circle] with Identifiable {
   private[matter] def this() = this(Particle.nextId, Circle(Point.origin, 1), Mass(1, Kilogram), Velocity.zero, Vector.zero);
   
   def position = _shape.center;
@@ -66,7 +66,10 @@ extends Movable[Circle] with Identifiable {
   
   def rotatable = bonds.headOption.flatMap(_.body);
   
-  def momentOfInertia = rotatable.map(r => MomentOfInertia(mass, r.center distanceTo position));
+  def momentOfInertia = {
+    if(rotatable.isDefined) MomentOfInertia(mass, rotatable.get.center distanceTo position)
+    else MomentOfInertia.zero;
+  }
   
   def gravitationalForceOnto(particle:Particle, timestep:Duration) = {
     val r = position distanceTo particle.position;
