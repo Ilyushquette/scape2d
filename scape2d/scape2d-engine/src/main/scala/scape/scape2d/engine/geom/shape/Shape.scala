@@ -68,7 +68,7 @@ sealed trait Polygon extends FiniteShape {
 }
 
 object Point {
-  def origin = Point(0, 0);
+  val origin = Point(0, 0);
 }
 
 case class Point(x:Double, y:Double) extends ConvexShape {
