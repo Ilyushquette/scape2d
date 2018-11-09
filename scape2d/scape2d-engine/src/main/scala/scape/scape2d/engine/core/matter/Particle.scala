@@ -71,16 +71,6 @@ extends Matter[Circle] with Identifiable {
     else MomentOfInertia.zero;
   }
   
-  def gravitationalForceOnto(particle:Particle, timestep:Duration) = {
-    val r = position distanceTo particle.position;
-    if(r != 0) {
-      val m1 = mass.kilograms;
-      val m2 = particle.mass.kilograms;
-      val gravitationalForcePerSecond = Vector(G * ((m1 * m2) / (r * r)), particle.position angleTo position);
-      gravitationalForcePerSecond * (timestep / Second);
-    }else Vector.zero;
-  }
-  
   override def hashCode = id;
   
   override def equals(any:Any) = any match {

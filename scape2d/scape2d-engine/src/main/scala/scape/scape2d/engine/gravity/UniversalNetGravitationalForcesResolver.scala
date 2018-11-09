@@ -3,15 +3,18 @@ package scape.scape2d.engine.gravity
 import scape.scape2d.engine.core.matter.Particle
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.time.Duration
+import scape.scape2d.engine.time.Second
 
 case class UniversalNetGravitationalForcesResolver() extends NetGravitationalForcesResolver {
   def resolve(particles:Set[Particle], timestep:Duration) = {
     val mapBuilder = Map.newBuilder[Particle, Vector];
-    for(particle <- particles) mapBuilder += (particle -> resolve(particle, particles, timestep));
+    val timestepMultiplier = timestep / Second;
+    for(particle <- particles)
+      mapBuilder += (particle -> resolve(particle, particles, timestepMultiplier));
     mapBuilder.result();
   }
   
-  def resolve(particle:Particle, particles:Set[Particle], timestep:Duration) = {
-    particles.foldLeft(Vector.zero)(_ + _.gravitationalForceOnto(particle, timestep));
+  def resolve(particle:Particle, particles:Set[Particle], timestepMultiplier:Double) = {
+    particles.foldLeft(Vector.zero)(_ + _.gravitationalForceOnto(particle) * timestepMultiplier);
   }
 }
