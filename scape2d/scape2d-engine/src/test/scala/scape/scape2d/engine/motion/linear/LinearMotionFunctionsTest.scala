@@ -6,7 +6,7 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.when
 
 import scape.scape2d.engine.core.Movable
-import scape.scape2d.engine.core.MovableMock
+import scape.scape2d.engine.core.mock.MovableMock
 import scape.scape2d.engine.geom.Components
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.angle.AngleUnit.toAngle

@@ -1,10 +1,12 @@
-package scape.scape2d.engine.core
+package scape.scape2d.engine.core.mock
 
-import scape.scape2d.engine.geom.Vector
-import scape.scape2d.engine.geom.shape.Point
-import scape.scape2d.engine.geom.Formed
-import scape.scape2d.engine.geom.shape.Circle
 import java.util.concurrent.atomic.AtomicInteger
+
+import scape.scape2d.engine.core.Identifiable
+import scape.scape2d.engine.core.Movable
+import scape.scape2d.engine.core.Rotatable
+import scape.scape2d.engine.geom.shape.Circle
+import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.motion.linear.Velocity
 
 object MovableMock {

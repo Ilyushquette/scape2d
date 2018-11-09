@@ -3,8 +3,8 @@ package scape.scape2d.engine.motion.rotational.trajectory
 import java.util.NoSuchElementException
 import org.junit.Assert
 import org.junit.Test
-import scape.scape2d.engine.core.MovableMock
-import scape.scape2d.engine.core.RotatableMock
+import scape.scape2d.engine.core.mock.MovableMock
+import scape.scape2d.engine.core.mock.RotatableMock
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.angle.doubleToAngle
 import scape.scape2d.engine.geom.shape.Circle

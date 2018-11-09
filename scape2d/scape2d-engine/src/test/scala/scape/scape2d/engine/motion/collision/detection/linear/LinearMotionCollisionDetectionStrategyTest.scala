@@ -7,7 +7,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
 
-import scape.scape2d.engine.core.MovableMock
+import scape.scape2d.engine.core.mock.MovableMock
 import scape.scape2d.engine.motion.collision.detection.IterativeRootFindingCollisionDetectionStrategy
 import scape.scape2d.engine.motion.collision.detection.linear.{LinearMotionCollisionDetectionStrategyValidator => DetectionStrategyValidator}
 

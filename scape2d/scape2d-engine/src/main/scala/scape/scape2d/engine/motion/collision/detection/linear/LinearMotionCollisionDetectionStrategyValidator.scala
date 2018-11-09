@@ -1,18 +1,19 @@
 package scape.scape2d.engine.motion.collision.detection.linear
 
-import com.google.common.math.DoubleMath
+import scape.scape2d.engine.core.mock.MovableMock
+import scape.scape2d.engine.geom.Vector
+import scape.scape2d.engine.geom.angle.AngleUnit.toAngle
 import scape.scape2d.engine.geom.angle.Degree
 import scape.scape2d.engine.geom.angle.doubleToAngle
-import scape.scape2d.engine.geom.shape.Point
-import scape.scape2d.engine.geom.Vector
-import scape.scape2d.engine.core.Movable
-import scape.scape2d.engine.geom.Formed
 import scape.scape2d.engine.geom.shape.Circle
-import scape.scape2d.engine.motion.collision.detection._
-import scape.scape2d.engine.core.MovableMock
-import scape.scape2d.engine.time.Second
+import scape.scape2d.engine.geom.shape.Point
+import scape.scape2d.engine.motion.collision.detection.ContactTimePredictionException
+import scape.scape2d.engine.motion.collision.detection.NoDetectionException
+import scape.scape2d.engine.motion.collision.detection.UnexpectedDetectionException
 import scape.scape2d.engine.time.Duration
 import scape.scape2d.engine.time.Millisecond
+import scape.scape2d.engine.time.Second
+import scape.scape2d.engine.time.TimeUnit.toDuration
 
 object LinearMotionCollisionDetectionStrategyValidator {
   def check(detectionStrategy:LinearMotionCollisionDetectionStrategy[MovableMock]) = {

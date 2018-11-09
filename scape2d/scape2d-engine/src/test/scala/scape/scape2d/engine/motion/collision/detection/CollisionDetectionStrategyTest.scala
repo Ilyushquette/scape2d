@@ -7,7 +7,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
 
-import scape.scape2d.engine.core.MovableMock
+import scape.scape2d.engine.core.mock.MovableMock
 
 object CollisionDetectionStrategyTest {
   @Parameterized.Parameters

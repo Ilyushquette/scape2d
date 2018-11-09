@@ -8,9 +8,9 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.when
 
 import scape.scape2d.engine.core.Movable
-import scape.scape2d.engine.core.MovableMock
 import scape.scape2d.engine.core.Rotatable
-import scape.scape2d.engine.core.RotatableMock
+import scape.scape2d.engine.core.mock.MovableMock
+import scape.scape2d.engine.core.mock.RotatableMock
 import scape.scape2d.engine.geom.Epsilon
 import scape.scape2d.engine.geom.Vector
 import scape.scape2d.engine.geom.angle.Angle

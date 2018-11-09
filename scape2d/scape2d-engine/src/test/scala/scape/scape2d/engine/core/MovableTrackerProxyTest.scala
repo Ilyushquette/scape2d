@@ -7,6 +7,7 @@ import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
 import scape.scape2d.engine.motion.linear.Velocity
 import scape.scape2d.engine.util.Proxy.autoEnhance
+import scape.scape2d.engine.core.mock.MovableMock
 
 class MovableTrackerProxyTest {
   @Test

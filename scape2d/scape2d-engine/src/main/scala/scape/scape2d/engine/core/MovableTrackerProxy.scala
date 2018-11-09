@@ -1,13 +1,11 @@
 package scape.scape2d.engine.core
 
-import net.sf.cglib.proxy.MethodProxy
-import scape.scape2d.engine.util.Proxy
 import scala.collection.mutable.HashSet
-import scape.scape2d.engine.geom.shape.Point
-import scala.collection.mutable.WeakHashMap
-import scala.ref.WeakReference
-import scape.scape2d.engine.util.ProxyCache
+
+import net.sf.cglib.proxy.MethodProxy
 import scape.scape2d.engine.geom.shape.Shape
+import scape.scape2d.engine.util.Proxy
+import scape.scape2d.engine.util.ProxyCache
 
 object MovableTrackerProxy {
   val cache = new ProxyCache[Movable[_ <: Shape], MovableTrackerProxy[Movable[_ <: Shape]]](new MovableTrackerProxy(_));

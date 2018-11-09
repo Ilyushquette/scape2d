@@ -1,24 +1,22 @@
 package scape.scape2d.engine.motion.collision.detection.rotation
 
-import scape.scape2d.engine.core.MovableMock
-import scape.scape2d.engine.geom.TwicePI
-import scape.scape2d.engine.geom.Vector
+import org.apache.log4j.Logger
+
+import scape.scape2d.engine.core.mock.MovableMock
+import scape.scape2d.engine.core.mock.RotatableMock
+import scape.scape2d.engine.geom.angle.Angle
+import scape.scape2d.engine.geom.angle.Radian
+import scape.scape2d.engine.geom.angle.UnboundAngle
 import scape.scape2d.engine.geom.shape.Circle
 import scape.scape2d.engine.geom.shape.Point
-import scape.scape2d.engine.motion.collision.detection.UnexpectedDetectionException
-import scape.scape2d.engine.core.RotatableMock
-import com.google.common.math.DoubleMath
-import scape.scape2d.engine.motion.collision.detection.NoDetectionException
 import scape.scape2d.engine.motion.collision.detection.ContactTimePredictionException
-import scape.scape2d.engine.motion.rotational.distanceForTimeOf
-import org.apache.log4j.Logger
-import scape.scape2d.engine.time.doubleToTime
-import scape.scape2d.engine.time.Second
-import scape.scape2d.engine.time.Millisecond
+import scape.scape2d.engine.motion.collision.detection.NoDetectionException
+import scape.scape2d.engine.motion.collision.detection.UnexpectedDetectionException
 import scape.scape2d.engine.motion.linear.Velocity
-import scape.scape2d.engine.geom.angle.UnboundAngle
-import scape.scape2d.engine.geom.angle.Radian
-import scape.scape2d.engine.geom.angle.Angle
+import scape.scape2d.engine.time.Millisecond
+import scape.scape2d.engine.time.Second
+import scape.scape2d.engine.time.TimeUnit.toDuration
+import scape.scape2d.engine.time.doubleToTime
 
 object RotationalCollisionDetectionStrategyValidator {
   private val log = Logger.getLogger(getClass);

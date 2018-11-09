@@ -1,24 +1,27 @@
 package scape.scape2d.engine.motion.collision.detection
 
 import java.lang.Math.PI
-import scape.scape2d.engine.core.MovableMock
-import scape.scape2d.engine.core.RotatableMock
+
+import scape.scape2d.engine.core.mock.MovableMock
+import scape.scape2d.engine.core.mock.RotatableMock
 import scape.scape2d.engine.geom.TwicePI
-import scape.scape2d.engine.geom.angle.Degree
-import scape.scape2d.engine.geom.angle.doubleToAngle
 import scape.scape2d.engine.geom.Vector
-import scape.scape2d.engine.geom.shape.Point
-import scape.scape2d.engine.geom.shape.Circle
-import scape.scape2d.engine.motion.collision.detection.rotation.RotationalCollisionDetectionStrategyValidator
-import scape.scape2d.engine.motion.collision.detection.linear.LinearMotionCollisionDetectionStrategyValidator
 import scape.scape2d.engine.geom.angle.Angle
-import scape.scape2d.engine.time.Second
+import scape.scape2d.engine.geom.angle.AngleUnit.toAngle
+import scape.scape2d.engine.geom.angle.Degree
+import scape.scape2d.engine.geom.angle.Radian
+import scape.scape2d.engine.geom.angle.UnboundAngle
+import scape.scape2d.engine.geom.angle.doubleToAngle
+import scape.scape2d.engine.geom.shape.Circle
+import scape.scape2d.engine.geom.shape.Point
+import scape.scape2d.engine.motion.collision.detection.linear.LinearMotionCollisionDetectionStrategyValidator
+import scape.scape2d.engine.motion.collision.detection.rotation.RotationalCollisionDetectionStrategyValidator
+import scape.scape2d.engine.motion.linear.Velocity
+import scape.scape2d.engine.motion.rotational.AngularVelocity
 import scape.scape2d.engine.time.Duration
 import scape.scape2d.engine.time.Millisecond
-import scape.scape2d.engine.motion.linear.Velocity
-import scape.scape2d.engine.geom.angle.UnboundAngle
-import scape.scape2d.engine.geom.angle.Radian
-import scape.scape2d.engine.motion.rotational.AngularVelocity
+import scape.scape2d.engine.time.Second
+import scape.scape2d.engine.time.TimeUnit.toDuration
 
 object CollisionDetectionStrategyValidator {
   def check(detectionStrategy:CollisionDetectionStrategy[MovableMock]) = {
