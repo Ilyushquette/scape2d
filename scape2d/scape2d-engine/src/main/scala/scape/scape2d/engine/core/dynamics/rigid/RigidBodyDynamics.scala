@@ -8,8 +8,12 @@ import scape.scape2d.engine.core.move
 import scape.scape2d.engine.time.Duration
 import scape.scape2d.engine.time.IoCDeferred
 import scape.scape2d.engine.geom.shape.FiniteShape
+import scape.scape2d.engine.gravity.NetGravitationalForcesResolver
+import scape.scape2d.engine.gravity.UniversalNetGravitationalForcesResolver
 
-class RigidBodyDynamics[T >: Null <: FiniteShape] extends Dynamics {
+class RigidBodyDynamics[T >: Null <: FiniteShape](
+  val netGravitationalForcesResolver:NetGravitationalForcesResolver = UniversalNetGravitationalForcesResolver()
+) extends Dynamics {
   private var _rigidBodies = Set[RigidBody[_ <: T]]();
   private var _temporals = Set[Temporal]();
   
@@ -25,7 +29,15 @@ class RigidBodyDynamics[T >: Null <: FiniteShape] extends Dynamics {
   
   def integrate(timestep:Duration) = {
     _rigidBodies.foreach(move(_, timestep));
+    exertGravitationalForces(timestep);
     _temporals.foreach(_ integrate timestep);
     _temporals = _temporals.filter(_.timeleft > Duration.zero);
+  }
+  
+  def exertGravitationalForces(timestep:Duration) = {
+    val netGravitationalForces = netGravitationalForcesResolver.resolve(_rigidBodies, timestep);
+    netGravitationalForces foreach {
+      case (rigidBody, netGravitationalForce) => rigidBody.exertForce(netGravitationalForce, rigidBody.center);
+    }
   }
 }
