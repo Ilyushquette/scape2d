@@ -10,6 +10,10 @@ import scape.scape2d.engine.motion.linear.Velocity
 import scape.scape2d.engine.time.Second
 import scape.scape2d.engine.time.TimeUnit.toDuration
 
+object Mass {
+  val zero = Mass(0, Kilogram);
+}
+
 case class Mass(value:Double, unit:MassUnit) extends Ordered[Mass] {
   lazy val kilograms = value * unit.kilograms;
   
