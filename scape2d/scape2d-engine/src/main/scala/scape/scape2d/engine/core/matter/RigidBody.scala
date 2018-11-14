@@ -33,12 +33,13 @@ class RigidBody[T >: Null <: FiniteShape] private[matter](
   private var _shape:T,
   val mass:Mass,
   private var _velocity:Velocity,
-  private var _angularVelocity:AngularVelocity
+  private var _angularVelocity:AngularVelocity,
+  val restitutionCoefficient:Double
 ) extends Matter[T] with Rotatable with Identifiable {
   lazy val density = Density(mass, shape.area);
   
   // this package private default constructor exists only for cglib proxy support
-  private[matter] def this() = this(RigidBody.nextId, null, Kilogram, Velocity.zero, AngularVelocity.zero);
+  private[matter] def this() = this(RigidBody.nextId, null, Kilogram, Velocity.zero, AngularVelocity.zero, 0);
   
   def position = _shape.center;
   
@@ -85,7 +86,8 @@ class RigidBody[T >: Null <: FiniteShape] private[matter](
   def snapshot(shape:T = _shape,
                mass:Mass = this.mass,
                velocity:Velocity = _velocity,
-               angularVelocity:AngularVelocity = _angularVelocity) = {
-    new RigidBody(id, shape, mass, velocity, angularVelocity);
+               angularVelocity:AngularVelocity = _angularVelocity,
+               restitutionCoefficient:Double = this.restitutionCoefficient) = {
+    new RigidBody(id, shape, mass, velocity, angularVelocity, restitutionCoefficient);
   }
 }

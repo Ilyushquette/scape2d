@@ -1,5 +1,6 @@
 package scape.scape2d.engine.motion.collision.resolution
 
+import java.lang.Math.min
 import java.lang.Math.pow
 
 import scape.scape2d.engine.core.matter.RigidBody
@@ -34,14 +35,15 @@ case class RestitutionalActionReactionalCollisionForcesResolver() extends RigidB
     val r1 = contact.point - p1;
     val r2 = contact.point - p2;
     val n = Vector.unit(contact.angle.opposite);
-    val force = resolveForce(vr, m1, m2, I1, I2, r1, r2, n);
+    val e = min(rigidBody1.restitutionCoefficient, rigidBody2.restitutionCoefficient);
+    val force = resolveForce(vr, m1, m2, I1, I2, r1, r2, n, e);
     (force, force.opposite);
   }
   
-  private def resolveForce(vr:Vector, m1:Double, m2:Double, I1:Double, I2:Double, r1:Vector, r2:Vector, n:Vector) = {
+  private def resolveForce(vr:Vector, m1:Double, m2:Double, I1:Double, I2:Double, r1:Vector, r2:Vector, n:Vector, e:Double) = {
     val vrn = vr * n;
     if(vrn < 0) {
-      val numerator = -2 * vrn;
+      val numerator = -(1 + e) * vrn;
       val denominator = n * n * ((1 / m1) + (1 / m2)) + pow(r1 x n, 2) / I1 + pow(r2 x n, 2) / I2;
       n * numerator / denominator;
     }else Vector.zero;

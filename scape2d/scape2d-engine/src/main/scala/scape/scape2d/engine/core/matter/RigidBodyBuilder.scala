@@ -14,7 +14,8 @@ case class RigidBodyBuilder[T >: Null <: FiniteShape](
   shape:T,
   mass:Mass = Kilogram,
   velocity:Velocity = Velocity.zero,
-  angularVelocity:AngularVelocity = AngularVelocity.zero
+  angularVelocity:AngularVelocity = AngularVelocity.zero,
+  restitutionCoefficient:Double = 0.5
 ) {
   def as(s:T) = copy(shape = s);
   
@@ -24,5 +25,7 @@ case class RigidBodyBuilder[T >: Null <: FiniteShape](
   
   def withAngularVelocity(av:AngularVelocity) = copy(angularVelocity = av);
   
-  def build() = new RigidBody(RigidBody.nextId, shape, mass, velocity, angularVelocity);
+  def withRestitutionCoefficient(rc:Double) = copy(restitutionCoefficient = rc);
+  
+  def build() = new RigidBody(RigidBody.nextId, shape, mass, velocity, angularVelocity, restitutionCoefficient);
 }
