@@ -2,8 +2,6 @@ package scape.scape2d.engine.core.dynamics.rigid
 
 import java.util.HashMap
 
-import scala.annotation.migration
-
 import scape.scape2d.engine.core.dynamics.Dynamics
 import scape.scape2d.engine.core.matter.RigidBody
 import scape.scape2d.engine.core.move
@@ -27,8 +25,8 @@ case class DiscreteDetectionCollidingRigidBodyDynamics[T >: Null <: FiniteShape]
   def integrate(timestep:Duration) = {
     val collisions = detectCollisions(timestep);
     if(!collisions.isEmpty) {
-      val configurationBalanced = collisions.exists(resolveCollision);
-      if(configurationBalanced) integrate(timestep);
+      val resolvedCollisions = collisions.count(resolveCollision);
+      if(resolvedCollisions > 0) integrate(timestep);
       else rigidBodyDynamics.integrate(timestep);
     }else rigidBodyDynamics.integrate(timestep);
   }
@@ -54,7 +52,8 @@ case class DiscreteDetectionCollidingRigidBodyDynamics[T >: Null <: FiniteShape]
   
   private def resolveCollision(collision:RichCollisionEvent[RigidBody[_ <: T]]) = {
     val contactForcesResolutions = collisionForcesResolver.resolve(collision);
-    contactForcesResolutions.exists(r => resolveContact(collision, r._1, r._2));
+    val resolvedContacts = contactForcesResolutions.count(r => resolveContact(collision, r._1, r._2));
+    resolvedContacts > 0;
   }
   
   private def resolveContact(collision:RichCollisionEvent[RigidBody[_ <: T]], contact:Contact, forces:(Vector, Vector)) = {
