@@ -16,4 +16,10 @@ class AccelerationTest {
     val acceleration = Vector(5, Angle.right) / Second / Second;
     Assert.assertEquals(500(Millisecond), acceleration.forScalarVelocityChange(150, Minute));
   }
+  
+  @Test
+  def testVelocityChangeForTimeResolution = {
+    val acceleration = Vector(3, Angle.zero) / Second / Second;
+    Assert.assertEquals(Vector(9, Angle.zero) / Second, acceleration forTime 3(Second));
+  }
 }
