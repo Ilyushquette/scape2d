@@ -28,6 +28,10 @@ case class Velocity(vector:Vector, time:Duration) extends Ordered[Velocity] {
     Velocity(vector - vectorToSubtract, time);
   }
   
+  def *(multiplier:Double) = Velocity(vector * multiplier, time);
+  
+  def /(divider:Double) = Velocity(vector / divider, time);
+  
   def compare(velocity:Velocity) = vectorPerMillisecond compareTo velocity.vectorPerMillisecond;
   
   override def equals(any:Any) = any match {

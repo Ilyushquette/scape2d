@@ -53,4 +53,14 @@ class VelocityTest {
     val velocity2 = Vector.from(Components(-1, 0)) / Duration(30, Second);
     Assert.assertEquals(Vector.from(Components(-1, 0)) / Minute, velocity1 - velocity2);
   }
+  
+  @Test
+  def testVelocityMultiplicationByNumber = {
+    Assert.assertEquals(Vector(30, 45(Degree)) / Second, Vector(10, 45(Degree)) / Second * 3);
+  }
+  
+  @Test
+  def testVelocityDivisionByNumber = {
+    Assert.assertEquals(Vector(100, Angle.straight) / Second, Vector(1000, Angle.straight) / Second / 10);
+  }
 }
