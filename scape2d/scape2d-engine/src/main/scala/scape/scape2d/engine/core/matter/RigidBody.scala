@@ -3,7 +3,7 @@ package scape.scape2d.engine.core.matter
 import java.util.concurrent.atomic.AtomicInteger
 
 import scape.scape2d.engine.core.Identifiable
-import scape.scape2d.engine.core.Movable
+import scape.scape2d.engine.core.Matter
 import scape.scape2d.engine.core.Rotatable
 import scape.scape2d.engine.density.Density
 import scape.scape2d.engine.geom.Vector
@@ -15,7 +15,6 @@ import scape.scape2d.engine.mass.MassUnit.toMass
 import scape.scape2d.engine.mass.angular.MomentOfInertia
 import scape.scape2d.engine.motion.linear.Velocity
 import scape.scape2d.engine.motion.rotational.AngularVelocity
-import scape.scape2d.engine.core.Matter
 
 object RigidBody {
   private val idGenerator = new AtomicInteger(1);
@@ -77,6 +76,14 @@ class RigidBody[T >: Null <: FiniteShape] private[matter](
   private[core] def exertTorque(torque:Double) = {
     val instantAngularAcceleration = momentOfInertia forTorque torque;
     _angularVelocity += instantAngularAcceleration.angularVelocity;
+  }
+  
+  def accelerationForForce(force:Vector, pointOnBody:Point) = {
+    if(pointOnBody != center) {
+      val leverArm = pointOnBody - shape.center;
+      val forceAlongLeverArm = force projection leverArm;
+      mass forForce forceAlongLeverArm;
+    }else mass forForce force;
   }
   
   def movables = Set(this);
