@@ -34,12 +34,14 @@ class RigidBody[T >: Null <: FiniteShape] private[matter](
   val mass:Mass,
   private var _velocity:Velocity,
   private var _angularVelocity:AngularVelocity,
-  val restitutionCoefficient:Double
+  val restitutionCoefficient:Double,
+  val staticFrictionCoefficient:Double,
+  val kineticFrictionCoefficient:Double
 ) extends Matter[T] with Rotatable with Identifiable {
   lazy val density = Density(mass, shape.area);
   
   // this package private default constructor exists only for cglib proxy support
-  private[matter] def this() = this(RigidBody.nextId, null, Kilogram, Velocity.zero, AngularVelocity.zero, 0);
+  private[matter] def this() = this(RigidBody.nextId, null, Kilogram, Velocity.zero, AngularVelocity.zero, 0, 0, 0);
   
   def position = _shape.center;
   
@@ -97,7 +99,9 @@ class RigidBody[T >: Null <: FiniteShape] private[matter](
                mass:Mass = this.mass,
                velocity:Velocity = _velocity,
                angularVelocity:AngularVelocity = _angularVelocity,
-               restitutionCoefficient:Double = this.restitutionCoefficient) = {
-    new RigidBody(id, shape, mass, velocity, angularVelocity, restitutionCoefficient);
+               restitutionCoefficient:Double = this.restitutionCoefficient,
+               staticFrictionCoefficient:Double = this.staticFrictionCoefficient,
+               kineticFrictionCoefficient:Double = this.kineticFrictionCoefficient) = {
+    new RigidBody(id, shape, mass, velocity, angularVelocity, restitutionCoefficient, staticFrictionCoefficient, kineticFrictionCoefficient);
   }
 }
