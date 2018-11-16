@@ -15,6 +15,7 @@ import scape.scape2d.engine.mass.MassUnit.toMass
 import scape.scape2d.engine.mass.angular.MomentOfInertia
 import scape.scape2d.engine.motion.linear.Velocity
 import scape.scape2d.engine.motion.rotational.AngularVelocity
+import scape.scape2d.engine.motion.rotational.InstantAngularAcceleration
 
 object RigidBody {
   private val idGenerator = new AtomicInteger(1);
@@ -61,16 +62,10 @@ class RigidBody[T >: Null <: FiniteShape] private[matter](
   lazy val momentOfInertia = MomentOfInertia(density, shape);
   
   private[core] def exertForce(force:Vector, pointOnBody:Point) = {
-    val leverArm = pointOnBody - shape.center;
-    if(pointOnBody == center) {
-      val instantAcceleration = mass forForce force;
-      _velocity += instantAcceleration.velocity;
-    }else{
-      val forceAlongLeverArm = force projection leverArm;
-      val instantAcceleration = mass forForce forceAlongLeverArm;
-      _velocity += instantAcceleration.velocity;
-      exertTorque(leverArm x force);
-    }
+    val instantAcceleration = accelerationForForce(force, pointOnBody);
+    val instantAngularAcceleration = angularAccelerationForForce(force, pointOnBody);
+    _velocity += instantAcceleration.velocity;
+    _angularVelocity += instantAngularAcceleration.angularVelocity;
   }
   
   private[core] def exertTorque(torque:Double) = {
@@ -84,6 +79,14 @@ class RigidBody[T >: Null <: FiniteShape] private[matter](
       val forceAlongLeverArm = force projection leverArm;
       mass forForce forceAlongLeverArm;
     }else mass forForce force;
+  }
+  
+  def angularAccelerationForForce(force:Vector, pointOnBody:Point) = {
+    if(pointOnBody != center) {
+      val leverArm = pointOnBody - shape.center;
+      val torque = leverArm x force;
+      momentOfInertia forTorque torque;
+    }else InstantAngularAcceleration(AngularVelocity.zero);
   }
   
   def movables = Set(this);
