@@ -71,4 +71,6 @@ case class Vector(magnitude:Double, angle:Angle) extends Ordered[Vector] {
       (fuzzyEquals(magnitude, omagnitude, Epsilon) && angle == oangle);
     case _ => false;
   }
+  
+  lazy val toUnit = Vector(1, angle);
 }
