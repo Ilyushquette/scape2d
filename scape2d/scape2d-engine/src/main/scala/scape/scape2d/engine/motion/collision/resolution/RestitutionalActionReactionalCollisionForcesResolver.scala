@@ -11,7 +11,9 @@ import scape.scape2d.engine.time.Second
 import scape.scape2d.engine.time.TimeUnit.toDuration
 import scape.scape2d.engine.geom.shape.FiniteShape
 
-case class RestitutionalActionReactionalCollisionForcesResolver() extends RigidBodyCollisionForcesResolver {
+case class RestitutionalActionReactionalCollisionForcesResolver(
+  frictionForcesResolver:RigidBodyFrictionForcesResolver = CoulombModelRigidBodyFrictionForcesResolver()
+) extends RigidBodyCollisionForcesResolver {
   def resolve(collision:RichCollisionEvent[RigidBody[_ <: FiniteShape]]) = {
     val collisionForcesResolutions = Map.newBuilder[Contact, (Vector, Vector)];
     for(contact <- collision.contactContainer.contacts) collisionForcesResolutions += contact -> resolveForContact(collision, contact);
@@ -37,7 +39,9 @@ case class RestitutionalActionReactionalCollisionForcesResolver() extends RigidB
     val n = Vector.unit(contact.angle.opposite);
     val e = min(rigidBody1.restitutionCoefficient, rigidBody2.restitutionCoefficient);
     val force = resolveForce(vr, m1, m2, I1, I2, r1, r2, n, e);
-    (force, force.opposite);
+    val forces = (force, force.opposite);
+    val frictionForces = frictionForcesResolver.resolve(collision, contact, forces);
+    (forces._1 + frictionForces._1, forces._2 + frictionForces._2);
   }
   
   private def resolveForce(vr:Vector, m1:Double, m2:Double, I1:Double, I2:Double, r1:Vector, r2:Vector, n:Vector, e:Double) = {
