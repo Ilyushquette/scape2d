@@ -3,7 +3,7 @@ package scape.scape2d.engine.core.matter
 import java.util.concurrent.atomic.AtomicInteger
 
 import scape.scape2d.engine.core.Identifiable
-import scape.scape2d.engine.core.Movable
+import scape.scape2d.engine.core.Matter
 import scape.scape2d.engine.core.Rotatable
 import scape.scape2d.engine.density.Density
 import scape.scape2d.engine.geom.Vector
@@ -15,7 +15,7 @@ import scape.scape2d.engine.mass.MassUnit.toMass
 import scape.scape2d.engine.mass.angular.MomentOfInertia
 import scape.scape2d.engine.motion.linear.Velocity
 import scape.scape2d.engine.motion.rotational.AngularVelocity
-import scape.scape2d.engine.core.Matter
+import scape.scape2d.engine.motion.rotational.InstantAngularAcceleration
 
 object RigidBody {
   private val idGenerator = new AtomicInteger(1);
@@ -34,12 +34,14 @@ class RigidBody[T >: Null <: FiniteShape] private[matter](
   val mass:Mass,
   private var _velocity:Velocity,
   private var _angularVelocity:AngularVelocity,
-  val restitutionCoefficient:Double
+  val restitutionCoefficient:Double,
+  val staticFrictionCoefficient:Double,
+  val kineticFrictionCoefficient:Double
 ) extends Matter[T] with Rotatable with Identifiable {
   lazy val density = Density(mass, shape.area);
   
   // this package private default constructor exists only for cglib proxy support
-  private[matter] def this() = this(RigidBody.nextId, null, Kilogram, Velocity.zero, AngularVelocity.zero, 0);
+  private[matter] def this() = this(RigidBody.nextId, null, Kilogram, Velocity.zero, AngularVelocity.zero, 0, 0, 0);
   
   def position = _shape.center;
   
@@ -62,21 +64,31 @@ class RigidBody[T >: Null <: FiniteShape] private[matter](
   lazy val momentOfInertia = MomentOfInertia(density, shape);
   
   private[core] def exertForce(force:Vector, pointOnBody:Point) = {
-    val leverArm = pointOnBody - shape.center;
-    if(pointOnBody == center) {
-      val instantAcceleration = mass forForce force;
-      _velocity += instantAcceleration.velocity;
-    }else{
-      val forceAlongLeverArm = force projection leverArm;
-      val instantAcceleration = mass forForce forceAlongLeverArm;
-      _velocity += instantAcceleration.velocity;
-      exertTorque(leverArm x force);
-    }
+    val instantAcceleration = accelerationForForce(force, pointOnBody);
+    val instantAngularAcceleration = angularAccelerationForForce(force, pointOnBody);
+    _velocity += instantAcceleration.velocity;
+    _angularVelocity += instantAngularAcceleration.angularVelocity;
   }
   
   private[core] def exertTorque(torque:Double) = {
     val instantAngularAcceleration = momentOfInertia forTorque torque;
     _angularVelocity += instantAngularAcceleration.angularVelocity;
+  }
+  
+  def accelerationForForce(force:Vector, pointOnBody:Point) = {
+    if(pointOnBody != center) {
+      val leverArm = pointOnBody - shape.center;
+      val forceAlongLeverArm = force projection leverArm;
+      mass forForce forceAlongLeverArm;
+    }else mass forForce force;
+  }
+  
+  def angularAccelerationForForce(force:Vector, pointOnBody:Point) = {
+    if(pointOnBody != center) {
+      val leverArm = pointOnBody - shape.center;
+      val torque = leverArm x force;
+      momentOfInertia forTorque torque;
+    }else InstantAngularAcceleration(AngularVelocity.zero);
   }
   
   def movables = Set(this);
@@ -87,7 +99,9 @@ class RigidBody[T >: Null <: FiniteShape] private[matter](
                mass:Mass = this.mass,
                velocity:Velocity = _velocity,
                angularVelocity:AngularVelocity = _angularVelocity,
-               restitutionCoefficient:Double = this.restitutionCoefficient) = {
-    new RigidBody(id, shape, mass, velocity, angularVelocity, restitutionCoefficient);
+               restitutionCoefficient:Double = this.restitutionCoefficient,
+               staticFrictionCoefficient:Double = this.staticFrictionCoefficient,
+               kineticFrictionCoefficient:Double = this.kineticFrictionCoefficient) = {
+    new RigidBody(id, shape, mass, velocity, angularVelocity, restitutionCoefficient, staticFrictionCoefficient, kineticFrictionCoefficient);
   }
 }

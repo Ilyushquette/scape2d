@@ -15,7 +15,9 @@ case class RigidBodyBuilder[T >: Null <: FiniteShape](
   mass:Mass = Kilogram,
   velocity:Velocity = Velocity.zero,
   angularVelocity:AngularVelocity = AngularVelocity.zero,
-  restitutionCoefficient:Double = 0.5
+  restitutionCoefficient:Double = 0.5,
+  staticFrictionCoefficient:Double = 0.5,
+  kineticFrictionCoefficient:Double = 0.4
 ) {
   def as(s:T) = copy(shape = s);
   
@@ -25,7 +27,12 @@ case class RigidBodyBuilder[T >: Null <: FiniteShape](
   
   def withAngularVelocity(av:AngularVelocity) = copy(angularVelocity = av);
   
-  def withRestitutionCoefficient(rc:Double) = copy(restitutionCoefficient = rc);
+  def withStaticFrictionCoefficient(sfc:Double) = copy(staticFrictionCoefficient = sfc);
   
-  def build() = new RigidBody(RigidBody.nextId, shape, mass, velocity, angularVelocity, restitutionCoefficient);
+  def withKineticFrictionCoefficient(kfc:Double) = copy(kineticFrictionCoefficient = kfc);
+  
+  def build() = {
+    val id = RigidBody.nextId;
+    new RigidBody(id, shape, mass, velocity, angularVelocity, restitutionCoefficient, staticFrictionCoefficient, kineticFrictionCoefficient);
+  }
 }
